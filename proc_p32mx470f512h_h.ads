@@ -1,4 +1,7 @@
-pragma Ada_2012;
+--  Obtained via:
+--  sudo gcc -c -fdump-ada-spec -C /Volumes/MPLAB/microchip/mplabx/v6.15/packs/Microchip/PIC32MX_DFP/1.5.259/include/proc/p32mx470f512h.h
+
+--pragma Ada_2012;
 
 pragma Style_Checks (Off);
 pragma Warnings (Off, "-gnatwu");
