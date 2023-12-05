@@ -37,7 +37,7 @@ begin
    Keyboard.Init_Keyboard;
 
    if Flash.Option.RTC_Data /= 0 then
-      I2C.RTC_Get_Time;
+      I2C.RTC_Get_Time
    end if;
 
 
