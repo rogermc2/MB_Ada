@@ -1,10 +1,16 @@
+
+with Exceptions;
+
 package Main_Support is
 
    type Setup_Exception is (Cause_Nothing, Cause_Display, Cause_File_IO,
                             Cause_Keyboard, Cause_RTC, Cause_Touch,
                             Cause_MM_Startup);
 
-   procedure Restart;
+   Except_Cause : Setup_Exception := Cause_Nothing;
+
    procedure Do_PIN;
+   procedure Process_Commands (Except_Code : in out Exceptions.Exception_Code);
+   procedure Restart (Except_Code : in out Exceptions.Exception_Code);
 
 end Main_Support;
