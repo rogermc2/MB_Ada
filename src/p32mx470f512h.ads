@@ -10267,7 +10267,8 @@ package P32mx470f512h is
    type uu_DCH2INTbits_t (discr : unsigned := 0) is record
       case discr is
          when 0 => anon6305 : aliased uu_DCH2INTbits_t_struct1880;  -- p32mx470f512.h:4051
-         when 0 => anon6309 : aliased uu_DCH2INTbits_t_struct1881;  -- p32mx470f512.h:4054
+         when 1 => anon6309 : aliased uu_DCH2INTbits_t_struct1881;  -- p32mx470f512.h:4054
+      when others => null;
       end case;
    end record
      with Convention => C_Pass_By_Copy,
@@ -10500,7 +10501,8 @@ package P32mx470f512h is
    type uu_DCH3CONbits_t (discr : unsigned := 0) is record
       case discr is
          when 0 => anon6365 : aliased uu_DCH3CONbits_t_struct1886;  -- p32mx470f512.h:4109
-         when 0 => anon6369 : aliased uu_DCH3CONbits_t_struct1887;  -- p32mx470f512.h:4112
+         when 1 => anon6369 : aliased uu_DCH3CONbits_t_struct1887;  -- p32mx470f512.h:4112
+      when others => null;
       end case;
    end record
      with Convention => C_Pass_By_Copy,
@@ -10552,7 +10554,7 @@ package P32mx470f512h is
       case discr is
          when 0 => anon6387 : aliased uu_DCH3ECONbits_t_struct1892;  -- p32mx470f512.h:4129
          when 1 => anon6391 : aliased uu_DCH3ECONbits_t_struct1893;  -- p32mx470f512.h:4132
-      
+      when others => null;
       end case;
    end record
      with Convention => C_Pass_By_Copy,
@@ -10612,7 +10614,8 @@ package P32mx470f512h is
    type uu_DCH3INTbits_t (discr : unsigned := 0) is record
       case discr is
          when 0 => anon6418 : aliased uu_DCH3INTbits_t_struct1898;  -- p32mx470f512.h:4158
-         when 0 => anon6422 : aliased uu_DCH3INTbits_t_struct1899;  -- p32mx470f512.h:4161
+         when 1 => anon6422 : aliased uu_DCH3INTbits_t_struct1899;  -- p32mx470f512.h:4161
+      when others => null;
       end case;
    end record
      with Convention => C_Pass_By_Copy,
@@ -10842,7 +10845,8 @@ package P32mx470f512h is
    type uu_CHECONbits_t (discr : unsigned := 0) is record
       case discr is
          when 0 => anon6475 : aliased uu_CHECONbits_t_struct1904;  -- p32mx470f512.h:4213
-         when 0 => anon6479 : aliased uu_CHECONbits_t_struct1905;  -- p32mx470f512.h:4216
+         when 1 => anon6479 : aliased uu_CHECONbits_t_struct1905;  -- p32mx470f512.h:4216
+      when others => null;
       end case;
    end record
      with Convention => C_Pass_By_Copy,
@@ -10926,7 +10930,8 @@ package P32mx470f512h is
    type uu_CHETAGbits_t (discr : unsigned := 0) is record
       case discr is
          when 0 => anon6507 : aliased uu_CHETAGbits_t_struct1915;  -- p32mx470f512.h:4242
-         when 0 => anon6511 : aliased uu_CHETAGbits_t_struct1917;  -- p32mx470f512.h:4245
+         when 1 => anon6511 : aliased uu_CHETAGbits_t_struct1917;  -- p32mx470f512.h:4245
+      when others => null;
       end case;
    end record
      with Convention => C_Pass_By_Copy,
@@ -11314,8 +11319,9 @@ package P32mx470f512h is
    type uu_U1IRbits_t (discr : unsigned := 0) is record
       case discr is
          when 0 => anon6662 : aliased uu_U1IRbits_t_struct1979;  -- p32mx470f512.h:4381
-         when 0 => anon6666 : aliased uu_U1IRbits_t_struct1980;  -- p32mx470f512.h:4384
-         when 0 => anon6670 : aliased uu_U1IRbits_t_struct1981;  -- p32mx470f512.h:4387
+         when 1 => anon6666 : aliased uu_U1IRbits_t_struct1980;  -- p32mx470f512.h:4384
+         when 2 => anon6670 : aliased uu_U1IRbits_t_struct1981;  -- p32mx470f512.h:4387
+      when others => null;
       end case;
    end record
      with Convention => C_Pass_By_Copy,
@@ -11364,8 +11370,9 @@ package P32mx470f512h is
    type uu_U1IEbits_t (discr : unsigned := 0) is record
       case discr is
          when 0 => anon6686 : aliased uu_U1IEbits_t_struct1986;  -- p32mx470f512.h:4402
-         when 0 => anon6690 : aliased uu_U1IEbits_t_struct1987;  -- p32mx470f512.h:4405
-         when 0 => anon6694 : aliased uu_U1IEbits_t_struct1988;  -- p32mx470f512.h:4408
+         when 1 => anon6690 : aliased uu_U1IEbits_t_struct1987;  -- p32mx470f512.h:4405
+         when 2 => anon6694 : aliased uu_U1IEbits_t_struct1988;  -- p32mx470f512.h:4408
+      when others => null;
       end case;
    end record
      with Convention => C_Pass_By_Copy,
@@ -11426,8 +11433,9 @@ package P32mx470f512h is
    type uu_U1EIRbits_t (discr : unsigned := 0) is record
       case discr is
          when 0 => anon6712 : aliased uu_U1EIRbits_t_struct1993;  -- p32mx470f512.h:4425
-         when 0 => anon6717 : aliased uu_U1EIRbits_t_struct1994;  -- p32mx470f512.h:4429
-         when 0 => anon6722 : aliased uu_U1EIRbits_t_struct1995;  -- p32mx470f512.h:4433
+         when 1 => anon6717 : aliased uu_U1EIRbits_t_struct1994;  -- p32mx470f512.h:4429
+         when 2 => anon6722 : aliased uu_U1EIRbits_t_struct1995;  -- p32mx470f512.h:4433
+      when others => null;
       end case;
    end record
      with Convention => C_Pass_By_Copy,
@@ -11478,8 +11486,9 @@ package P32mx470f512h is
    type uu_U1EIEbits_t (discr : unsigned := 0) is record
       case discr is
          when 0 => anon6738 : aliased uu_U1EIEbits_t_struct2000;  -- p32mx470f512.h:4448
-         when 0 => anon6743 : aliased uu_U1EIEbits_t_struct2001;  -- p32mx470f512.h:4452
-         when 0 => anon6748 : aliased uu_U1EIEbits_t_struct2002;  -- p32mx470f512.h:4456
+         when 1 => anon6743 : aliased uu_U1EIEbits_t_struct2001;  -- p32mx470f512.h:4452
+         when 2 => anon6748 : aliased uu_U1EIEbits_t_struct2002;  -- p32mx470f512.h:4456
+      when others => null;
       end case;
    end record
      with Convention => C_Pass_By_Copy,
@@ -11532,7 +11541,8 @@ package P32mx470f512h is
    type uu_U1STATbits_t (discr : unsigned := 0) is record
       case discr is
          when 0 => anon6762 : aliased uu_U1STATbits_t_struct2007;  -- p32mx470f512.h:4469
-         when 0 => anon6770 : aliased uu_U1STATbits_t_struct2008;  -- p32mx470f512.h:4476
+         when 1 => anon6770 : aliased uu_U1STATbits_t_struct2008;  -- p32mx470f512.h:4476
+      when others => null;
       end case;
    end record
      with Convention => C_Pass_By_Copy,
@@ -11641,7 +11651,8 @@ package P32mx470f512h is
    type uu_U1ADDRbits_t (discr : unsigned := 0) is record
       case discr is
          when 0 => anon6812 : aliased uu_U1ADDRbits_t_struct2021;  -- p32mx470f512.h:4513
-         when 0 => anon6822 : aliased uu_U1ADDRbits_t_struct2022;  -- p32mx470f512.h:4522
+         when 1 => anon6822 : aliased uu_U1ADDRbits_t_struct2022;  -- p32mx470f512.h:4522
+      when others => null;
       end case;
    end record
      with Convention => C_Pass_By_Copy,
@@ -11725,7 +11736,8 @@ package P32mx470f512h is
    type uu_U1FRMLbits_t (discr : unsigned := 0) is record
       case discr is
          when 0 => anon6843 : aliased uu_U1FRMLbits_t_struct2031;  -- p32mx470f512.h:4541
-         when 0 => anon6854 : aliased uu_U1FRMLbits_t_struct2032;  -- p32mx470f512.h:4551
+         when 1 => anon6854 : aliased uu_U1FRMLbits_t_struct2032;  -- p32mx470f512.h:4551
+      when others => null;
       end case;
    end record
      with Convention => C_Pass_By_Copy,
@@ -11758,7 +11770,8 @@ package P32mx470f512h is
    type uu_U1FRMHbits_t (discr : unsigned := 0) is record
       case discr is
          when 0 => anon6862 : aliased uu_U1FRMHbits_t_struct2037;  -- p32mx470f512.h:4558
-         when 0 => anon6868 : aliased uu_U1FRMHbits_t_struct2038;  -- p32mx470f512.h:4563
+         when 1 => anon6868 : aliased uu_U1FRMHbits_t_struct2038;  -- p32mx470f512.h:4563
+      when others => null;
       end case;
    end record
      with Convention => C_Pass_By_Copy,
@@ -11809,9 +11822,10 @@ package P32mx470f512h is
    type uu_U1TOKbits_t (discr : unsigned := 0) is record
       case discr is
          when 0 => anon6877 : aliased uu_U1TOKbits_t_struct2043;  -- p32mx470f512.h:4571
-         when 0 => anon6881 : aliased uu_U1TOKbits_t_struct2044;  -- p32mx470f512.h:4574
-         when 0 => anon6889 : aliased uu_U1TOKbits_t_struct2045;  -- p32mx470f512.h:4581
-         when 0 => anon6896 : aliased uu_U1TOKbits_t_struct2046;  -- p32mx470f512.h:4587
+         when 1 => anon6881 : aliased uu_U1TOKbits_t_struct2044;  -- p32mx470f512.h:4574
+         when 2 => anon6889 : aliased uu_U1TOKbits_t_struct2045;  -- p32mx470f512.h:4581
+         when 3 => anon6896 : aliased uu_U1TOKbits_t_struct2046;  -- p32mx470f512.h:4587
+      when others => null;
       end case;
    end record
      with Convention => C_Pass_By_Copy,
@@ -12576,7 +12590,8 @@ package P32mx470f512h is
    type uu_ANSELBbits_t (discr : unsigned := 0) is record
       case discr is
          when 0 => anon7174 : aliased uu_ANSELBbits_t_struct2131;  -- p32mx470f512.h:4844
-         when 0 => anon7178 : aliased uu_ANSELBbits_t_struct2132;  -- p32mx470f512.h:4847
+         when 1 => anon7178 : aliased uu_ANSELBbits_t_struct2132;  -- p32mx470f512.h:4847
+      when others => null;
       end case;
    end record
      with Convention => C_Pass_By_Copy,
@@ -12635,7 +12650,8 @@ package P32mx470f512h is
    type uu_TRISBbits_t (discr : unsigned := 0) is record
       case discr is
          when 0 => anon7204 : aliased uu_TRISBbits_t_struct2137;  -- p32mx470f512.h:4872
-         when 0 => anon7208 : aliased uu_TRISBbits_t_struct2138;  -- p32mx470f512.h:4875
+         when 1 => anon7208 : aliased uu_TRISBbits_t_struct2138;  -- p32mx470f512.h:4875
+      when others => null;
       end case;
    end record
      with Convention => C_Pass_By_Copy,
@@ -12694,7 +12710,8 @@ package P32mx470f512h is
    type uu_PORTBbits_t (discr : unsigned := 0) is record
       case discr is
          when 0 => anon7234 : aliased uu_PORTBbits_t_struct2143;  -- p32mx470f512.h:4900
-         when 0 => anon7238 : aliased uu_PORTBbits_t_struct2144;  -- p32mx470f512.h:4903
+         when 1 => anon7238 : aliased uu_PORTBbits_t_struct2144;  -- p32mx470f512.h:4903
+      when others => null;
       end case;
    end record
      with Convention => C_Pass_By_Copy,
@@ -12753,7 +12770,8 @@ package P32mx470f512h is
    type uu_LATBbits_t (discr : unsigned := 0) is record
       case discr is
          when 0 => anon7264 : aliased uu_LATBbits_t_struct2149;  -- p32mx470f512.h:4928
-         when 0 => anon7268 : aliased uu_LATBbits_t_struct2150;  -- p32mx470f512.h:4931
+         when 1 => anon7268 : aliased uu_LATBbits_t_struct2150;  -- p32mx470f512.h:4931
+      when others => null;
       end case;
    end record
      with Convention => C_Pass_By_Copy,
@@ -12812,7 +12830,8 @@ package P32mx470f512h is
    type uu_ODCBbits_t (discr : unsigned := 0) is record
       case discr is
          when 0 => anon7294 : aliased uu_ODCBbits_t_struct2155;  -- p32mx470f512.h:4956
-         when 0 => anon7298 : aliased uu_ODCBbits_t_struct2156;  -- p32mx470f512.h:4959
+         when 1 => anon7298 : aliased uu_ODCBbits_t_struct2156;  -- p32mx470f512.h:4959
+      when others => null;
       end case;
    end record
      with Convention => C_Pass_By_Copy,
@@ -12871,7 +12890,8 @@ package P32mx470f512h is
    type uu_CNPUBbits_t (discr : unsigned := 0) is record
       case discr is
          when 0 => anon7324 : aliased uu_CNPUBbits_t_struct2161;  -- p32mx470f512.h:4984
-         when 0 => anon7328 : aliased uu_CNPUBbits_t_struct2162;  -- p32mx470f512.h:4987
+         when 1 => anon7328 : aliased uu_CNPUBbits_t_struct2162;  -- p32mx470f512.h:4987
+      when others => null;
       end case;
    end record
      with Convention => C_Pass_By_Copy,
@@ -12930,7 +12950,8 @@ package P32mx470f512h is
    type uu_CNPDBbits_t (discr : unsigned := 0) is record
       case discr is
          when 0 => anon7354 : aliased uu_CNPDBbits_t_struct2167;  -- p32mx470f512.h:5012
-         when 0 => anon7358 : aliased uu_CNPDBbits_t_struct2168;  -- p32mx470f512.h:5015
+         when 1 => anon7358 : aliased uu_CNPDBbits_t_struct2168;  -- p32mx470f512.h:5015
+      when others => null;
       end case;
    end record
      with Convention => C_Pass_By_Copy,
@@ -12977,7 +12998,8 @@ package P32mx470f512h is
    type uu_CNCONBbits_t (discr : unsigned := 0) is record
       case discr is
          when 0 => anon7372 : aliased uu_CNCONBbits_t_struct2173;  -- p32mx470f512.h:5028
-         when 0 => anon7376 : aliased uu_CNCONBbits_t_struct2174;  -- p32mx470f512.h:5031
+         when 1 => anon7376 : aliased uu_CNCONBbits_t_struct2174;  -- p32mx470f512.h:5031
+      when others => null;
       end case;
    end record
      with Convention => C_Pass_By_Copy,
@@ -13036,7 +13058,8 @@ package P32mx470f512h is
    type uu_CNENBbits_t (discr : unsigned := 0) is record
       case discr is
          when 0 => anon7402 : aliased uu_CNENBbits_t_struct2179;  -- p32mx470f512.h:5056
-         when 0 => anon7406 : aliased uu_CNENBbits_t_struct2180;  -- p32mx470f512.h:5059
+         when 1 => anon7406 : aliased uu_CNENBbits_t_struct2180;  -- p32mx470f512.h:5059
+      when others => null;
       end case;
    end record
      with Convention => C_Pass_By_Copy,
@@ -13095,7 +13118,8 @@ package P32mx470f512h is
    type uu_CNSTATBbits_t (discr : unsigned := 0) is record
       case discr is
          when 0 => anon7432 : aliased uu_CNSTATBbits_t_struct2185;  -- p32mx470f512.h:5084
-         when 0 => anon7436 : aliased uu_CNSTATBbits_t_struct2186;  -- p32mx470f512.h:5087
+         when 1 => anon7436 : aliased uu_CNSTATBbits_t_struct2186;  -- p32mx470f512.h:5087
+      when others => null;
       end case;
    end record
      with Convention => C_Pass_By_Copy,
@@ -13143,7 +13167,8 @@ package P32mx470f512h is
    type uu_ANSELCbits_t (discr : unsigned := 0) is record
       case discr is
          when 0 => anon7451 : aliased uu_ANSELCbits_t_struct2191;  -- p32mx470f512.h:5101
-         when 0 => anon7455 : aliased uu_ANSELCbits_t_struct2193;  -- p32mx470f512.h:5104
+         when 1 => anon7455 : aliased uu_ANSELCbits_t_struct2193;  -- p32mx470f512.h:5104
+      when others => null;
       end case;
    end record
      with Convention => C_Pass_By_Copy,
@@ -13191,7 +13216,8 @@ package P32mx470f512h is
    type uu_TRISCbits_t (discr : unsigned := 0) is record
       case discr is
          when 0 => anon7470 : aliased uu_TRISCbits_t_struct2198;  -- p32mx470f512.h:5118
-         when 0 => anon7474 : aliased uu_TRISCbits_t_struct2199;  -- p32mx470f512.h:5121
+         when 1 => anon7474 : aliased uu_TRISCbits_t_struct2199;  -- p32mx470f512.h:5121
+      when others => null;
       end case;
    end record
      with Convention => C_Pass_By_Copy,
@@ -13239,7 +13265,8 @@ package P32mx470f512h is
    type uu_PORTCbits_t (discr : unsigned := 0) is record
       case discr is
          when 0 => anon7489 : aliased uu_PORTCbits_t_struct2204;  -- p32mx470f512.h:5135
-         when 0 => anon7493 : aliased uu_PORTCbits_t_struct2205;  -- p32mx470f512.h:5138
+         when 1 => anon7493 : aliased uu_PORTCbits_t_struct2205;  -- p32mx470f512.h:5138
+      when others => null;
       end case;
    end record
      with Convention => C_Pass_By_Copy,
@@ -13287,7 +13314,8 @@ package P32mx470f512h is
    type uu_LATCbits_t (discr : unsigned := 0) is record
       case discr is
          when 0 => anon7508 : aliased uu_LATCbits_t_struct2210;  -- p32mx470f512.h:5152
-         when 0 => anon7512 : aliased uu_LATCbits_t_struct2211;  -- p32mx470f512.h:5155
+         when 1 => anon7512 : aliased uu_LATCbits_t_struct2211;  -- p32mx470f512.h:5155
+      when others => null;
       end case;
    end record
      with Convention => C_Pass_By_Copy,
@@ -13335,7 +13363,8 @@ package P32mx470f512h is
    type uu_ODCCbits_t (discr : unsigned := 0) is record
       case discr is
          when 0 => anon7527 : aliased uu_ODCCbits_t_struct2216;  -- p32mx470f512.h:5169
-         when 0 => anon7531 : aliased uu_ODCCbits_t_struct2217;  -- p32mx470f512.h:5172
+         when 1 => anon7531 : aliased uu_ODCCbits_t_struct2217;  -- p32mx470f512.h:5172
+      when others => null;
       end case;
    end record
      with Convention => C_Pass_By_Copy,
@@ -13383,7 +13412,8 @@ package P32mx470f512h is
    type uu_CNPUCbits_t (discr : unsigned := 0) is record
       case discr is
          when 0 => anon7546 : aliased uu_CNPUCbits_t_struct2222;  -- p32mx470f512.h:5186
-         when 0 => anon7550 : aliased uu_CNPUCbits_t_struct2223;  -- p32mx470f512.h:5189
+         when 1 => anon7550 : aliased uu_CNPUCbits_t_struct2223;  -- p32mx470f512.h:5189
+      when others => null;
       end case;
    end record
      with Convention => C_Pass_By_Copy,
@@ -13431,7 +13461,8 @@ package P32mx470f512h is
    type uu_CNPDCbits_t (discr : unsigned := 0) is record
       case discr is
          when 0 => anon7565 : aliased uu_CNPDCbits_t_struct2228;  -- p32mx470f512.h:5203
-         when 0 => anon7569 : aliased uu_CNPDCbits_t_struct2229;  -- p32mx470f512.h:5206
+         when 1 => anon7569 : aliased uu_CNPDCbits_t_struct2229;  -- p32mx470f512.h:5206
+      when others => null;
       end case;
    end record
      with Convention => C_Pass_By_Copy,
@@ -13478,7 +13509,8 @@ package P32mx470f512h is
    type uu_CNCONCbits_t (discr : unsigned := 0) is record
       case discr is
          when 0 => anon7583 : aliased uu_CNCONCbits_t_struct2234;  -- p32mx470f512.h:5219
-         when 0 => anon7587 : aliased uu_CNCONCbits_t_struct2235;  -- p32mx470f512.h:5222
+         when 1 => anon7587 : aliased uu_CNCONCbits_t_struct2235;  -- p32mx470f512.h:5222
+      when others => null;
       end case;
    end record
      with Convention => C_Pass_By_Copy,
@@ -13526,7 +13558,8 @@ package P32mx470f512h is
    type uu_CNENCbits_t (discr : unsigned := 0) is record
       case discr is
          when 0 => anon7602 : aliased uu_CNENCbits_t_struct2240;  -- p32mx470f512.h:5236
-         when 0 => anon7606 : aliased uu_CNENCbits_t_struct2241;  -- p32mx470f512.h:5239
+         when 1 => anon7606 : aliased uu_CNENCbits_t_struct2241;  -- p32mx470f512.h:5239
+      when others => null;
       end case;
    end record
      with Convention => C_Pass_By_Copy,
@@ -13574,7 +13607,8 @@ package P32mx470f512h is
    type uu_CNSTATCbits_t (discr : unsigned := 0) is record
       case discr is
          when 0 => anon7621 : aliased uu_CNSTATCbits_t_struct2246;  -- p32mx470f512.h:5253
-         when 0 => anon7625 : aliased uu_CNSTATCbits_t_struct2247;  -- p32mx470f512.h:5256
+         when 1 => anon7625 : aliased uu_CNSTATCbits_t_struct2247;  -- p32mx470f512.h:5256
+      when others => null;
       end case;
    end record
      with Convention => C_Pass_By_Copy,
@@ -13621,7 +13655,8 @@ package P32mx470f512h is
    type uu_ANSELDbits_t (discr : unsigned := 0) is record
       case discr is
          when 0 => anon7639 : aliased uu_ANSELDbits_t_struct2252;  -- p32mx470f512.h:5269
-         when 0 => anon7643 : aliased uu_ANSELDbits_t_struct2253;  -- p32mx470f512.h:5272
+         when 1 => anon7643 : aliased uu_ANSELDbits_t_struct2253;  -- p32mx470f512.h:5272
+      when others => null;
       end case;
    end record
      with Convention => C_Pass_By_Copy,
@@ -13676,7 +13711,8 @@ package P32mx470f512h is
    type uu_TRISDbits_t (discr : unsigned := 0) is record
       case discr is
          when 0 => anon7665 : aliased uu_TRISDbits_t_struct2258;  -- p32mx470f512.h:5293
-         when 0 => anon7669 : aliased uu_TRISDbits_t_struct2259;  -- p32mx470f512.h:5296
+         when 1 => anon7669 : aliased uu_TRISDbits_t_struct2259;  -- p32mx470f512.h:5296
+      when others => null;
       end case;
    end record
      with Convention => C_Pass_By_Copy,
@@ -13731,7 +13767,8 @@ package P32mx470f512h is
    type uu_PORTDbits_t (discr : unsigned := 0) is record
       case discr is
          when 0 => anon7691 : aliased uu_PORTDbits_t_struct2264;  -- p32mx470f512.h:5317
-         when 0 => anon7695 : aliased uu_PORTDbits_t_struct2265;  -- p32mx470f512.h:5320
+         when 1 => anon7695 : aliased uu_PORTDbits_t_struct2265;  -- p32mx470f512.h:5320
+      when others => null;
       end case;
    end record
      with Convention => C_Pass_By_Copy,
@@ -13786,7 +13823,8 @@ package P32mx470f512h is
    type uu_LATDbits_t (discr : unsigned := 0) is record
       case discr is
          when 0 => anon7717 : aliased uu_LATDbits_t_struct2270;  -- p32mx470f512.h:5341
-         when 0 => anon7721 : aliased uu_LATDbits_t_struct2271;  -- p32mx470f512.h:5344
+         when 1 => anon7721 : aliased uu_LATDbits_t_struct2271;  -- p32mx470f512.h:5344
+      when others => null;
       end case;
    end record
      with Convention => C_Pass_By_Copy,
@@ -13841,7 +13879,8 @@ package P32mx470f512h is
    type uu_ODCDbits_t (discr : unsigned := 0) is record
       case discr is
          when 0 => anon7743 : aliased uu_ODCDbits_t_struct2276;  -- p32mx470f512.h:5365
-         when 0 => anon7747 : aliased uu_ODCDbits_t_struct2277;  -- p32mx470f512.h:5368
+         when 1 => anon7747 : aliased uu_ODCDbits_t_struct2277;  -- p32mx470f512.h:5368
+      when others => null;
       end case;
    end record
      with Convention => C_Pass_By_Copy,
@@ -13896,7 +13935,8 @@ package P32mx470f512h is
    type uu_CNPUDbits_t (discr : unsigned := 0) is record
       case discr is
          when 0 => anon7769 : aliased uu_CNPUDbits_t_struct2282;  -- p32mx470f512.h:5389
-         when 0 => anon7773 : aliased uu_CNPUDbits_t_struct2283;  -- p32mx470f512.h:5392
+         when 1 => anon7773 : aliased uu_CNPUDbits_t_struct2283;  -- p32mx470f512.h:5392
+      when others => null;
       end case;
    end record
      with Convention => C_Pass_By_Copy,
@@ -13951,7 +13991,8 @@ package P32mx470f512h is
    type uu_CNPDDbits_t (discr : unsigned := 0) is record
       case discr is
          when 0 => anon7795 : aliased uu_CNPDDbits_t_struct2288;  -- p32mx470f512.h:5413
-         when 0 => anon7799 : aliased uu_CNPDDbits_t_struct2289;  -- p32mx470f512.h:5416
+         when 1 => anon7799 : aliased uu_CNPDDbits_t_struct2289;  -- p32mx470f512.h:5416
+      when others => null;
       end case;
    end record
      with Convention => C_Pass_By_Copy,
@@ -13998,7 +14039,8 @@ package P32mx470f512h is
    type uu_CNCONDbits_t (discr : unsigned := 0) is record
       case discr is
          when 0 => anon7813 : aliased uu_CNCONDbits_t_struct2294;  -- p32mx470f512.h:5429
-         when 0 => anon7817 : aliased uu_CNCONDbits_t_struct2295;  -- p32mx470f512.h:5432
+         when 1 => anon7817 : aliased uu_CNCONDbits_t_struct2295;  -- p32mx470f512.h:5432
+      when others => null;
       end case;
    end record
      with Convention => C_Pass_By_Copy,
@@ -14053,7 +14095,8 @@ package P32mx470f512h is
    type uu_CNENDbits_t (discr : unsigned := 0) is record
       case discr is
          when 0 => anon7839 : aliased uu_CNENDbits_t_struct2300;  -- p32mx470f512.h:5453
-         when 0 => anon7843 : aliased uu_CNENDbits_t_struct2301;  -- p32mx470f512.h:5456
+         when 1 => anon7843 : aliased uu_CNENDbits_t_struct2301;  -- p32mx470f512.h:5456
+      when others => null;
       end case;
    end record
      with Convention => C_Pass_By_Copy,
@@ -14108,7 +14151,8 @@ package P32mx470f512h is
    type uu_CNSTATDbits_t (discr : unsigned := 0) is record
       case discr is
          when 0 => anon7865 : aliased uu_CNSTATDbits_t_struct2306;  -- p32mx470f512.h:5477
-         when 0 => anon7869 : aliased uu_CNSTATDbits_t_struct2307;  -- p32mx470f512.h:5480
+         when 1 => anon7869 : aliased uu_CNSTATDbits_t_struct2307;  -- p32mx470f512.h:5480
+      when others => null;
       end case;
    end record
      with Convention => C_Pass_By_Copy,
@@ -14158,7 +14202,8 @@ package P32mx470f512h is
    type uu_ANSELEbits_t (discr : unsigned := 0) is record
       case discr is
          when 0 => anon7886 : aliased uu_ANSELEbits_t_struct2312;  -- p32mx470f512.h:5496
-         when 0 => anon7890 : aliased uu_ANSELEbits_t_struct2313;  -- p32mx470f512.h:5499
+         when 1 => anon7890 : aliased uu_ANSELEbits_t_struct2313;  -- p32mx470f512.h:5499
+      when others => null;
       end case;
    end record
      with Convention => C_Pass_By_Copy,
@@ -14209,7 +14254,8 @@ package P32mx470f512h is
    type uu_TRISEbits_t (discr : unsigned := 0) is record
       case discr is
          when 0 => anon7908 : aliased uu_TRISEbits_t_struct2318;  -- p32mx470f512.h:5516
-         when 0 => anon7912 : aliased uu_TRISEbits_t_struct2319;  -- p32mx470f512.h:5519
+         when 1 => anon7912 : aliased uu_TRISEbits_t_struct2319;  -- p32mx470f512.h:5519
+      when others => null;
       end case;
    end record
      with Convention => C_Pass_By_Copy,
@@ -14260,7 +14306,8 @@ package P32mx470f512h is
    type uu_PORTEbits_t (discr : unsigned := 0) is record
       case discr is
          when 0 => anon7930 : aliased uu_PORTEbits_t_struct2324;  -- p32mx470f512.h:5536
-         when 0 => anon7934 : aliased uu_PORTEbits_t_struct2325;  -- p32mx470f512.h:5539
+         when 1 => anon7934 : aliased uu_PORTEbits_t_struct2325;  -- p32mx470f512.h:5539
+      when others => null;
       end case;
    end record
      with Convention => C_Pass_By_Copy,
@@ -14311,7 +14358,8 @@ package P32mx470f512h is
    type uu_LATEbits_t (discr : unsigned := 0) is record
       case discr is
          when 0 => anon7952 : aliased uu_LATEbits_t_struct2330;  -- p32mx470f512.h:5556
-         when 0 => anon7956 : aliased uu_LATEbits_t_struct2331;  -- p32mx470f512.h:5559
+         when 1 => anon7956 : aliased uu_LATEbits_t_struct2331;  -- p32mx470f512.h:5559
+      when others => null;
       end case;
    end record
      with Convention => C_Pass_By_Copy,
@@ -14362,7 +14410,8 @@ package P32mx470f512h is
    type uu_ODCEbits_t (discr : unsigned := 0) is record
       case discr is
          when 0 => anon7974 : aliased uu_ODCEbits_t_struct2336;  -- p32mx470f512.h:5576
-         when 0 => anon7978 : aliased uu_ODCEbits_t_struct2337;  -- p32mx470f512.h:5579
+         when 1 => anon7978 : aliased uu_ODCEbits_t_struct2337;  -- p32mx470f512.h:5579
+      when others => null;
       end case;
    end record
      with Convention => C_Pass_By_Copy,
@@ -14413,7 +14462,8 @@ package P32mx470f512h is
    type uu_CNPUEbits_t (discr : unsigned := 0) is record
       case discr is
          when 0 => anon7996 : aliased uu_CNPUEbits_t_struct2342;  -- p32mx470f512.h:5596
-         when 0 => anon8000 : aliased uu_CNPUEbits_t_struct2343;  -- p32mx470f512.h:5599
+         when 1 => anon8000 : aliased uu_CNPUEbits_t_struct2343;  -- p32mx470f512.h:5599
+      when others => null;
       end case;
    end record
      with Convention => C_Pass_By_Copy,
@@ -14464,7 +14514,8 @@ package P32mx470f512h is
    type uu_CNPDEbits_t (discr : unsigned := 0) is record
       case discr is
          when 0 => anon8018 : aliased uu_CNPDEbits_t_struct2348;  -- p32mx470f512.h:5616
-         when 0 => anon8022 : aliased uu_CNPDEbits_t_struct2349;  -- p32mx470f512.h:5619
+         when 1 => anon8022 : aliased uu_CNPDEbits_t_struct2349;  -- p32mx470f512.h:5619
+      when others => null;
       end case;
    end record
      with Convention => C_Pass_By_Copy,
@@ -14511,7 +14562,8 @@ package P32mx470f512h is
    type uu_CNCONEbits_t (discr : unsigned := 0) is record
       case discr is
          when 0 => anon8036 : aliased uu_CNCONEbits_t_struct2354;  -- p32mx470f512.h:5632
-         when 0 => anon8040 : aliased uu_CNCONEbits_t_struct2355;  -- p32mx470f512.h:5635
+         when 1 => anon8040 : aliased uu_CNCONEbits_t_struct2355;  -- p32mx470f512.h:5635
+      when others => null;
       end case;
    end record
      with Convention => C_Pass_By_Copy,
@@ -14562,7 +14614,8 @@ package P32mx470f512h is
    type uu_CNENEbits_t (discr : unsigned := 0) is record
       case discr is
          when 0 => anon8058 : aliased uu_CNENEbits_t_struct2360;  -- p32mx470f512.h:5652
-         when 0 => anon8062 : aliased uu_CNENEbits_t_struct2361;  -- p32mx470f512.h:5655
+         when 1 => anon8062 : aliased uu_CNENEbits_t_struct2361;  -- p32mx470f512.h:5655
+      when others => null;
       end case;
    end record
      with Convention => C_Pass_By_Copy,
@@ -14613,7 +14666,8 @@ package P32mx470f512h is
    type uu_CNSTATEbits_t (discr : unsigned := 0) is record
       case discr is
          when 0 => anon8080 : aliased uu_CNSTATEbits_t_struct2366;  -- p32mx470f512.h:5672
-         when 0 => anon8084 : aliased uu_CNSTATEbits_t_struct2367;  -- p32mx470f512.h:5675
+         when 1 => anon8084 : aliased uu_CNSTATEbits_t_struct2367;  -- p32mx470f512.h:5675
+      when others => null;
       end case;
    end record
      with Convention => C_Pass_By_Copy,
@@ -14692,7 +14746,8 @@ package P32mx470f512h is
    type uu_TRISFbits_t (discr : unsigned := 0) is record
       case discr is
          when 0 => anon8109 : aliased uu_TRISFbits_t_struct2376;  -- p32mx470f512.h:5698
-         when 0 => anon8113 : aliased uu_TRISFbits_t_struct2377;  -- p32mx470f512.h:5701
+         when 1 => anon8113 : aliased uu_TRISFbits_t_struct2377;  -- p32mx470f512.h:5701
+      when others => null;
       end case;
    end record
      with Convention => C_Pass_By_Copy,
@@ -14741,7 +14796,8 @@ package P32mx470f512h is
    type uu_PORTFbits_t (discr : unsigned := 0) is record
       case discr is
          when 0 => anon8129 : aliased uu_PORTFbits_t_struct2382;  -- p32mx470f512.h:5716
-         when 0 => anon8133 : aliased uu_PORTFbits_t_struct2383;  -- p32mx470f512.h:5719
+         when 1 => anon8133 : aliased uu_PORTFbits_t_struct2383;  -- p32mx470f512.h:5719
+      when others => null;
       end case;
    end record
      with Convention => C_Pass_By_Copy,
@@ -14790,7 +14846,8 @@ package P32mx470f512h is
    type uu_LATFbits_t (discr : unsigned := 0) is record
       case discr is
          when 0 => anon8149 : aliased uu_LATFbits_t_struct2388;  -- p32mx470f512.h:5734
-         when 0 => anon8153 : aliased uu_LATFbits_t_struct2389;  -- p32mx470f512.h:5737
+         when 1 => anon8153 : aliased uu_LATFbits_t_struct2389;  -- p32mx470f512.h:5737
+      when others => null;
       end case;
    end record
      with Convention => C_Pass_By_Copy,
@@ -14839,7 +14896,8 @@ package P32mx470f512h is
    type uu_ODCFbits_t (discr : unsigned := 0) is record
       case discr is
          when 0 => anon8169 : aliased uu_ODCFbits_t_struct2394;  -- p32mx470f512.h:5752
-         when 0 => anon8173 : aliased uu_ODCFbits_t_struct2395;  -- p32mx470f512.h:5755
+         when 1 => anon8173 : aliased uu_ODCFbits_t_struct2395;  -- p32mx470f512.h:5755
+      when others => null;
       end case;
    end record
      with Convention => C_Pass_By_Copy,
@@ -14888,7 +14946,8 @@ package P32mx470f512h is
    type uu_CNPUFbits_t (discr : unsigned := 0) is record
       case discr is
          when 0 => anon8189 : aliased uu_CNPUFbits_t_struct2400;  -- p32mx470f512.h:5770
-         when 0 => anon8193 : aliased uu_CNPUFbits_t_struct2401;  -- p32mx470f512.h:5773
+         when 1 => anon8193 : aliased uu_CNPUFbits_t_struct2401;  -- p32mx470f512.h:5773
+      when others => null;
       end case;
    end record
      with Convention => C_Pass_By_Copy,
@@ -14937,7 +14996,8 @@ package P32mx470f512h is
    type uu_CNPDFbits_t (discr : unsigned := 0) is record
       case discr is
          when 0 => anon8209 : aliased uu_CNPDFbits_t_struct2406;  -- p32mx470f512.h:5788
-         when 0 => anon8213 : aliased uu_CNPDFbits_t_struct2407;  -- p32mx470f512.h:5791
+         when 1 => anon8213 : aliased uu_CNPDFbits_t_struct2407;  -- p32mx470f512.h:5791
+      when others => null;
       end case;
    end record
      with Convention => C_Pass_By_Copy,
@@ -14984,7 +15044,8 @@ package P32mx470f512h is
    type uu_CNCONFbits_t (discr : unsigned := 0) is record
       case discr is
          when 0 => anon8227 : aliased uu_CNCONFbits_t_struct2412;  -- p32mx470f512.h:5804
-         when 0 => anon8231 : aliased uu_CNCONFbits_t_struct2413;  -- p32mx470f512.h:5807
+         when 1 => anon8231 : aliased uu_CNCONFbits_t_struct2413;  -- p32mx470f512.h:5807
+      when others => null;
       end case;
    end record
      with Convention => C_Pass_By_Copy,
@@ -15033,7 +15094,8 @@ package P32mx470f512h is
    type uu_CNENFbits_t (discr : unsigned := 0) is record
       case discr is
          when 0 => anon8247 : aliased uu_CNENFbits_t_struct2418;  -- p32mx470f512.h:5822
-         when 0 => anon8251 : aliased uu_CNENFbits_t_struct2419;  -- p32mx470f512.h:5825
+         when 1 => anon8251 : aliased uu_CNENFbits_t_struct2419;  -- p32mx470f512.h:5825
+      when others => null;
       end case;
    end record
      with Convention => C_Pass_By_Copy,
@@ -15082,7 +15144,8 @@ package P32mx470f512h is
    type uu_CNSTATFbits_t (discr : unsigned := 0) is record
       case discr is
          when 0 => anon8267 : aliased uu_CNSTATFbits_t_struct2424;  -- p32mx470f512.h:5840
-         when 0 => anon8271 : aliased uu_CNSTATFbits_t_struct2425;  -- p32mx470f512.h:5843
+         when 1 => anon8271 : aliased uu_CNSTATFbits_t_struct2425;  -- p32mx470f512.h:5843
+      when others => null;
       end case;
    end record
      with Convention => C_Pass_By_Copy,
@@ -15130,7 +15193,8 @@ package P32mx470f512h is
    type uu_ANSELGbits_t (discr : unsigned := 0) is record
       case discr is
          when 0 => anon8286 : aliased uu_ANSELGbits_t_struct2430;  -- p32mx470f512.h:5857
-         when 0 => anon8290 : aliased uu_ANSELGbits_t_struct2431;  -- p32mx470f512.h:5860
+         when 1 => anon8290 : aliased uu_ANSELGbits_t_struct2431;  -- p32mx470f512.h:5860
+      when others => null;
       end case;
    end record
      with Convention => C_Pass_By_Copy,
@@ -15181,7 +15245,8 @@ package P32mx470f512h is
    type uu_TRISGbits_t (discr : unsigned := 0) is record
       case discr is
          when 0 => anon8308 : aliased uu_TRISGbits_t_struct2436;  -- p32mx470f512.h:5877
-         when 0 => anon8312 : aliased uu_TRISGbits_t_struct2437;  -- p32mx470f512.h:5880
+         when 1 => anon8312 : aliased uu_TRISGbits_t_struct2437;  -- p32mx470f512.h:5880
+      when others => null;
       end case;
    end record
      with Convention => C_Pass_By_Copy,
@@ -15232,7 +15297,8 @@ package P32mx470f512h is
    type uu_PORTGbits_t (discr : unsigned := 0) is record
       case discr is
          when 0 => anon8330 : aliased uu_PORTGbits_t_struct2442;  -- p32mx470f512.h:5897
-         when 0 => anon8334 : aliased uu_PORTGbits_t_struct2443;  -- p32mx470f512.h:5900
+         when 1 => anon8334 : aliased uu_PORTGbits_t_struct2443;  -- p32mx470f512.h:5900
+      when others => null;
       end case;
    end record
      with Convention => C_Pass_By_Copy,
@@ -15283,7 +15349,8 @@ package P32mx470f512h is
    type uu_LATGbits_t (discr : unsigned := 0) is record
       case discr is
          when 0 => anon8352 : aliased uu_LATGbits_t_struct2448;  -- p32mx470f512.h:5917
-         when 0 => anon8356 : aliased uu_LATGbits_t_struct2449;  -- p32mx470f512.h:5920
+         when 1 => anon8356 : aliased uu_LATGbits_t_struct2449;  -- p32mx470f512.h:5920
+      when others => null;
       end case;
    end record
      with Convention => C_Pass_By_Copy,
@@ -15334,7 +15401,8 @@ package P32mx470f512h is
    type uu_ODCGbits_t (discr : unsigned := 0) is record
       case discr is
          when 0 => anon8374 : aliased uu_ODCGbits_t_struct2454;  -- p32mx470f512.h:5937
-         when 0 => anon8378 : aliased uu_ODCGbits_t_struct2455;  -- p32mx470f512.h:5940
+         when 1 => anon8378 : aliased uu_ODCGbits_t_struct2455;  -- p32mx470f512.h:5940
+      when others => null;
       end case;
    end record
      with Convention => C_Pass_By_Copy,
@@ -15385,7 +15453,8 @@ package P32mx470f512h is
    type uu_CNPUGbits_t (discr : unsigned := 0) is record
       case discr is
          when 0 => anon8396 : aliased uu_CNPUGbits_t_struct2460;  -- p32mx470f512.h:5957
-         when 0 => anon8400 : aliased uu_CNPUGbits_t_struct2461;  -- p32mx470f512.h:5960
+         when 1 => anon8400 : aliased uu_CNPUGbits_t_struct2461;  -- p32mx470f512.h:5960
+      when others => null;
       end case;
    end record
      with Convention => C_Pass_By_Copy,
@@ -15436,7 +15505,8 @@ package P32mx470f512h is
    type uu_CNPDGbits_t (discr : unsigned := 0) is record
       case discr is
          when 0 => anon8418 : aliased uu_CNPDGbits_t_struct2466;  -- p32mx470f512.h:5977
-         when 0 => anon8422 : aliased uu_CNPDGbits_t_struct2467;  -- p32mx470f512.h:5980
+         when 1 => anon8422 : aliased uu_CNPDGbits_t_struct2467;  -- p32mx470f512.h:5980
+      when others => null;
       end case;
    end record
      with Convention => C_Pass_By_Copy,
@@ -15483,7 +15553,8 @@ package P32mx470f512h is
    type uu_CNCONGbits_t (discr : unsigned := 0) is record
       case discr is
          when 0 => anon8436 : aliased uu_CNCONGbits_t_struct2472;  -- p32mx470f512.h:5993
-         when 0 => anon8440 : aliased uu_CNCONGbits_t_struct2473;  -- p32mx470f512.h:5996
+         when 1 => anon8440 : aliased uu_CNCONGbits_t_struct2473;  -- p32mx470f512.h:5996
+      when others => null;
       end case;
    end record
      with Convention => C_Pass_By_Copy,
@@ -15534,7 +15605,8 @@ package P32mx470f512h is
    type uu_CNENGbits_t (discr : unsigned := 0) is record
       case discr is
          when 0 => anon8458 : aliased uu_CNENGbits_t_struct2478;  -- p32mx470f512.h:6013
-         when 0 => anon8462 : aliased uu_CNENGbits_t_struct2479;  -- p32mx470f512.h:6016
+         when 1 => anon8462 : aliased uu_CNENGbits_t_struct2479;  -- p32mx470f512.h:6016
+      when others => null;
       end case;
    end record
      with Convention => C_Pass_By_Copy,
@@ -15585,7 +15657,8 @@ package P32mx470f512h is
    type uu_CNSTATGbits_t (discr : unsigned := 0) is record
       case discr is
          when 0 => anon8480 : aliased uu_CNSTATGbits_t_struct2484;  -- p32mx470f512.h:6033
-         when 0 => anon8484 : aliased uu_CNSTATGbits_t_struct2485;  -- p32mx470f512.h:6036
+         when 1 => anon8484 : aliased uu_CNSTATGbits_t_struct2485;  -- p32mx470f512.h:6036
+      when others => null;
       end case;
    end record
      with Convention => C_Pass_By_Copy,
@@ -15635,7 +15708,8 @@ package P32mx470f512h is
    type uu_DEVCFG3bits_t (discr : unsigned := 0) is record
       case discr is
          when 0 => anon8501 : aliased uu_DEVCFG3bits_t_struct2490;  -- p32mx470f512.h:6052
-         when 0 => anon8505 : aliased uu_DEVCFG3bits_t_struct2491;  -- p32mx470f512.h:6055
+         when 1 => anon8505 : aliased uu_DEVCFG3bits_t_struct2491;  -- p32mx470f512.h:6055
+      when others => null;
       end case;
    end record
      with Convention => C_Pass_By_Copy,
@@ -15671,7 +15745,8 @@ package P32mx470f512h is
    type uu_DEVCFG2bits_t (discr : unsigned := 0) is record
       case discr is
          when 0 => anon8520 : aliased uu_DEVCFG2bits_t_struct2496;  -- p32mx470f512.h:6069
-         when 0 => anon8524 : aliased uu_DEVCFG2bits_t_struct2497;  -- p32mx470f512.h:6072
+         when 1 => anon8524 : aliased uu_DEVCFG2bits_t_struct2497;  -- p32mx470f512.h:6072
+      when others => null;
       end case;
    end record
      with Convention => C_Pass_By_Copy,
@@ -15714,7 +15789,8 @@ package P32mx470f512h is
    type uu_DEVCFG1bits_t (discr : unsigned := 0) is record
       case discr is
          when 0 => anon8546 : aliased uu_DEVCFG1bits_t_struct2502;  -- p32mx470f512.h:6093
-         when 0 => anon8550 : aliased uu_DEVCFG1bits_t_struct2503;  -- p32mx470f512.h:6096
+         when 1 => anon8550 : aliased uu_DEVCFG1bits_t_struct2503;  -- p32mx470f512.h:6096
+      when others => null;
       end case;
    end record
      with Convention => C_Pass_By_Copy,
