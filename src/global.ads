@@ -1,8 +1,10 @@
 
 with Configuration;
+with Exceptions;
 
 package Global is
 
+   Except_Code    : Exceptions.Exception_Code := Exceptions.EXCEP_IRQ;
    Break_Key      : Integer := Configuration.BREAK_KEY;
    Ignore_PIN     : Boolean := False;
    MM_Abort       : Boolean := False;

@@ -22,7 +22,6 @@ with Touch;
 with Watchdog_Timer;
 
 procedure Main is
-   Except_Code     : Exceptions.Exception_Code := Exceptions.EXCEP_IRQ;
    Saved_Cause     : Setup_Exception := Cause_Nothing;
    Watchdog_Set    : Boolean := False;
    Basic_Running   : Boolean := True;
@@ -44,7 +43,7 @@ begin
    end if;
 
    if P32mx470f512h.RCON = 64 then
-      Restart (Except_Code);
+      Restart;
    else
       --        if Debug_Mode then
       --           null;
@@ -75,6 +74,6 @@ begin
    --  Autorun code
 
    Except_Cause := Cause_Nothing;
-   Process_Commands (Except_Code);
+   Process_Commands;
 
 end Main;

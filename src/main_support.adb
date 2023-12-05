@@ -10,7 +10,7 @@ with M_Misc;
 
 package body Main_Support is
 
-   procedure Restart (Except_Code : in out Exceptions.Exception_Code) is
+   procedure Restart is
    begin
       null;
    end Restart;
@@ -20,8 +20,7 @@ package body Main_Support is
       null;
    end Do_PIN;
 
-   procedure Process_Commands
-     (Except_Code : in out Exceptions.Exception_Code) is
+   procedure Process_Commands is
    begin
       loop
       if Flash.Option.DISPLAY_CONSOLE then
@@ -55,7 +54,7 @@ package body Main_Support is
          Do_PIN;
       end loop;
 
-      Except_Code := Exceptions.EXCEP_IRQ;
+      Global.Except_Code := Exceptions.EXCEP_IRQ;
       M_Basic.Prepare_Program (False);
 
       declare
@@ -65,8 +64,10 @@ package body Main_Support is
          if Line_Length > 0 then
            M_Basic.Execute_Program (M_Basic.Tokenize (aLine));
          end if;
-      end;
-   end loop;
+         end;
+
+      end loop;
+
    end Process_Commands;
 
 end Main_Support;
