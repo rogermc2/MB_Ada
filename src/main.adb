@@ -2,6 +2,7 @@
 with Interfaces.C; use Interfaces.C;
 
 with Audio;
+with Commands;
 with Configuration;
 with Draw;
 with Exceptions;
@@ -115,6 +116,14 @@ begin
       Except_Code := Exceptions.EXCEP_IRQ;
       M_Basic.Prepare_Program (False);
 
+      declare
+         aLine       : constant String := Commands.MM_Get_Line;
+         Line_Length : constant Natural := aLine'Length;
+      begin
+         if Line_Length > 0 then
+           M_Basic.Execute_Program (M_Basic.Tokenize (aLine));
+         end if;
+      end;
    end loop;
 
 
