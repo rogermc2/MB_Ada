@@ -8,7 +8,7 @@ pragma Warnings ("U");
 with Interfaces.C; use Interfaces.C;
 with Interfaces.C.Extensions;
 
-package p32mx470f512 is
+package P32mx470f512h is
 
    ---------------------------------------------------------------------------
    -- * PIC32MX470F512H processor header
@@ -11479,10 +11479,11 @@ package p32mx470f512 is
      Alignment => 4;
    type uu_U1CONbits_t (discr : unsigned := 0) is record
       case discr is
-         when 0 => when 0 => anon6785 : aliased uu_U1CONbits_t_struct2013;  -- p32mx470f512.h:4490
-         when 0 => anon6789 : aliased uu_U1CONbits_t_struct2014;  -- p32mx470f512.h:4493
-         when 0 => anon6795 : aliased uu_U1CONbits_t_struct2015;  -- p32mx470f512.h:4498
-         when 0 => anon6800 : aliased uu_U1CONbits_t_struct2016;  -- p32mx470f512.h:4502
+         when 0 => anon6785 : aliased uu_U1CONbits_t_struct2013;  -- p32mx470f512.h:4490
+         when 1 => anon6789 : aliased uu_U1CONbits_t_struct2014;  -- p32mx470f512.h:4493
+         when 2 => anon6795 : aliased uu_U1CONbits_t_struct2015;  -- p32mx470f512.h:4498
+         when 3 => anon6800 : aliased uu_U1CONbits_t_struct2016;  -- p32mx470f512.h:4502
+         when others => null;
       end case;
    end record
      with Convention => C_Pass_By_Copy,
@@ -15667,4 +15668,4 @@ package p32mx470f512 is
    -- IRQ Numbers  
    -- Device Peripherals  
    -- Base Addresses for Peripherals  
-end p32mx470f512;
+end P32mx470f512h;
