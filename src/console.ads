@@ -9,8 +9,8 @@ package Console is
    Console_Tx_Buf_Head          : Integer := -1;
    Console_Tx_Buf_Tail          : Integer := -1;
 
-   procedure Check_Abort;
-   function Get_Console return Character;
+   function Check_Abort return Boolean;
+   function Get_Console (aChar : out Character) return Boolean;
    function MM_Get_Character return Character;
 
 end Console;

@@ -8,7 +8,7 @@ package Main_Support is
    Except_Cause : Setup_Exception := Cause_Nothing;
 
    procedure Do_PIN;
-   function MM_Inkey return Character;
+   function MM_Inkey (Out_String : out String) return Boolean;
    procedure Process_Commands;
    procedure Restart;
 

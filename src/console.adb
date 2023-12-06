@@ -1,25 +1,46 @@
 
+with Audio;
 with File_IO;
+with Global;
 with Main_Support;
 with SSD_1963;
+with Timers;
+with USB;
 
 package body Console is
 
    Console_Receive_Buffer : String (1 .. Console_Receive_Buffer_Size);
    Prev_Char              : Character := Character'Val (0);
 
-   procedure Check_Abort is
+   function Check_Abort return Boolean is
+      OK : Boolean := True;
    begin
-      null;
+      USB.USB_Service;
+      OK := not Global.MM_Abort;
+      if not OK then
+         Audio.Close_Audio;
+         SSD_1963.Show_Cursor (False);
+         Console_Rx_Buf_Head := Console_Rx_Buf_Tail;
+         Timers.WD_Timer := 0;
+      end if;
+
+      return OK;
+
    end Check_Abort;
 
-   function Get_Console return Character is
-      aChar : Character := Character'Val (0);
+   function Get_Console (aChar : out Character) return Boolean is
+      OK : constant Boolean := Check_Abort;
    begin
-         Check_Abort;
-         aChar := Console_Receive_Buffer (Console_Rx_Buf_Tail);
+      aChar := Character'Val (0);
 
-      return aChar;
+      if OK and then Console_Rx_Buf_Head < Console_Tx_Buf_Tail then
+         aChar := Console_Receive_Buffer (Console_Rx_Buf_Tail);
+         --  Advance the head of the queue.
+         Console_Rx_Buf_Tail :=
+           (Console_Rx_Buf_Tail + 1) mod Console_Receive_Buffer_Size;
+      end if;
+
+      return OK;
 
    end Get_Console;
 
