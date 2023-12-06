@@ -40,5 +40,4 @@ package Configuration is
  SCREENWIDTH      : constant Integer := 80;
  SCREENHEIGHT     : constant Integer := 24;       --  this is the default and it can be changed using the OPTION command
 
-
 end Configuration;

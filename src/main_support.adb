@@ -11,6 +11,15 @@ with Serial_File_IO;
 
 package body Main_Support is
 
+   C1    : Boolean := False;
+   C2    : Boolean := False;
+   C3    : Boolean := False;
+   C4    : Boolean := False;
+   Char1 : Character := Character'Val (0);
+   Char2 : Character := Character'Val (0);
+   Char3 : Character := Character'Val (0);
+   Char4 : Character := Character'Val (0);
+
    procedure Restart is
    begin
       null;
@@ -20,6 +29,28 @@ package body Main_Support is
    begin
       null;
    end Do_PIN;
+
+   function MM_Inkey return Character is
+      aChar : Character := Character'Val (0);
+   begin
+      --  Check if there are discarded chars from a previous sequence.
+      if C1 then
+         C1 := C2;
+         C2 := C3;
+         C3 := C4;
+         C4 := False;
+         aChar := Char1;
+         Char1 := Char2;
+         Char2 := Char3;
+         Char3 := Char4;
+         Char4 := Character'Val (0);
+      end if;
+
+      aChar := Get_Console;;
+
+      return aChar;
+
+   end MM_Inkey;
 
    procedure Process_Commands is
    begin
