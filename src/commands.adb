@@ -5,13 +5,12 @@ with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 
 package body Commands is
 
-   function MM_Get_Line return String is
+   procedure Command_Input is
       use Ada.Command_Line;
       use Ada.Strings;
       Parsed_Line : Unbounded_String;
       Num_Args    : Natural;
       anArg       : Unbounded_String;
-      Pos         : Natural;
    begin
       Num_Args := Argument_Count;
       if Num_Args > 0 then
@@ -28,8 +27,12 @@ package body Commands is
          end loop;
       end if;
 
-      return To_String (Parsed_Line);
+   end Command_Input;
 
-   end MM_Get_Line;
+   procedure Execute_One_Line is
+   begin
+      null;
+
+   end Execute_One_Line;
 
 end Commands;

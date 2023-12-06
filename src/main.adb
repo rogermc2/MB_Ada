@@ -2,7 +2,6 @@
 with Interfaces.C; use Interfaces.C;
 
 with Audio;
-with Commands;
 with Configuration;
 with Draw;
 with Exceptions;

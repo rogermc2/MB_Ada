@@ -1,6 +1,7 @@
 
 package Commands is
 
-   function MM_Get_Line return String;
+   procedure Command_Input;
+   procedure Execute_One_Line ;
 
 end Commands;

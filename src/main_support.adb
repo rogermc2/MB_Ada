@@ -1,12 +1,13 @@
 
 with Audio;
-with Commands;
 with Configuration;
 with Draw;
+with Exceptions;
 with Flash;
 with Global;
 with M_Basic;
 with M_Misc;
+with Serial_File_IO;
 
 package body Main_Support is
 
@@ -58,7 +59,7 @@ package body Main_Support is
       M_Basic.Prepare_Program (False);
 
       declare
-         aLine       : constant String := Commands.MM_Get_Line;
+         aLine       : constant String := Serial_File_IO.MM_Get_Line;
          Line_Length : constant Natural := aLine'Length;
       begin
          if Line_Length > 0 then
