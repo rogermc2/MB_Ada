@@ -2,20 +2,9 @@
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Ada.Text_IO; use Ada.Text_IO;
 
+with Commands_And_Tokens_Tables; use Commands_And_Tokens_Tables;
+
 package body M_Basic is
-
-   type Token_Table_Item is record
-      Name       : Unbounded_String;
-      Precedence : Positive := 1;
-      Token_Type : Integer;
---        function
-   end record;
-
-   Command_Table_Size : constant Positive := 100;
-   Token_Table_Size   : constant Positive := 100;
-
-   Command_Table : array (1 .. Command_Table_Size) of Token_Table_Item;
-   Token_Table   : array (1 .. Token_Table_Size) of Token_Table_Item;
 
    Start_Edit_Point : Positive := 1;
    Start_Edit_Char  : Positive := 1;
