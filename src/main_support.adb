@@ -15,21 +15,10 @@ with Timers;
 
 package body Main_Support is
 
---     subtype String1 is String (1 .. 1);
-   subtype String3 is String (1 .. 3);
---     subtype String4 is String (1 .. 4);
---     subtype String5 is String (1 .. 5);
-
-   --  vt100 escape code sequences
-   Up    : constant String3 := (Character'Val (27),  '[', 'A');
-   Down  : constant String3 := (Character'Val (27),  '[', 'B');
-   Right : constant String3 := (Character'Val (27),  '[', 'C');
-   Left  : constant String3 := (Character'Val (27),  '[', 'D');
-
---     F1    : constant String5 := (Character'Val (27),  '[', '1', '1', '~');
---     F2    : constant String5 := (Character'Val (27),  '[', '1', '1', '~');
---     F3    : constant String5 := (Character'Val (27),  '[', '1', '1', '~');
---     F4    : constant String5 := (Character'Val (27),  '[', '1', '1', '~');
+   --     subtype String1 is String (1 .. 1);
+   --     subtype String3 is String (1 .. 3);
+   --     subtype String4 is String (1 .. 4);
+   --     subtype String5 is String (1 .. 5);
 
    C1    : Boolean := False;
    C2    : Boolean := False;
@@ -50,10 +39,81 @@ package body Main_Support is
       null;
    end Do_PIN;
 
+--     function Linux (aChar : in out Character; Out_String : in out String)
+--                     return Boolean is
+   --  vt100 escape code sequences
+--     Up    : constant String3 := (Character'Val (27),  '[', 'A');
+--     Down  : constant String3 := (Character'Val (27),  '[', 'B');
+--     Right : constant String3 := (Character'Val (27),  '[', 'C');
+--     Left  : constant String3 := (Character'Val (27),  '[', 'D');
+
+   --     F1    : constant String5 := (Character'Val (27),  '[', '1', '1', '~');
+   --     F2    : constant String5 := (Character'Val (27),  '[', '1', '1', '~');
+   --     F3    : constant String5 := (Character'Val (27),  '[', '1', '1', '~');
+   --     F4    : constant String5 := (Character'Val (27),  '[', '1', '1', '~');
+--        Arrow_Key : String3;
+--        UB_String : Unbounded_String := Null_Unbounded_String;
+--        OK        : Boolean := True;
+--     begin
+--        if aChar /= 'O' then
+--           --  Delay o allow the final characters to arrive even at 1200 baud.
+--           while OK and then Timers.Inkey_Timer < 50 and then
+--             aChar = Character'Val (0) loop
+--              OK := Console.Get_Console (aChar);
+--           end loop;
+--
+--           if aChar = 'P' then
+--              aChar := Character'Val (241);  --  F1
+--           elsif aChar = 'Q' then
+--              aChar := Character'Val (242);  --  F2
+--           elsif aChar = 'R' then
+--              aChar := Character'Val (243);  --  F3
+--           elsif aChar = 'S' then
+--              aChar := Character'Val (244);  --  F4
+--           else
+--              C1 := True;
+--              Char1 := 'O';
+--              C2 := True;
+--              Char2 := aChar;
+--              aChar := Character'Val (27);  --  escape character
+--           end if;
+--        elsif aChar /= '[' then
+--           C1 := True;
+--           Char1 := aChar;
+--        else
+--           --  Get the third character after delay
+--           while OK and then Timers.Inkey_Timer < 50 and then
+--             aChar = Character'Val (0) loop
+--              OK := Console.Get_Console (aChar);
+--           end loop;
+--
+--           if aChar = 'A' then
+--              Arrow_Key := Up;    --  Up
+--           elsif aChar = 'B' then
+--              Arrow_Key := Down;  --  Down
+--           elsif aChar = 'C' then
+--              Arrow_Key := Right;  --  Right
+--           elsif aChar = 'D' then
+--              Arrow_Key := Left;   --  Left
+--           elsif aChar < '1' then
+--              null;
+--           end if;
+--
+--           UB_String := To_Unbounded_String (Arrow_Key);
+--           if UB_String = Null_Unbounded_String then
+--              Out_String := aChar'Image;
+--           else
+--              Out_String := To_String (UB_String);
+--           end if;
+--        end if;
+--
+--        return OK;
+--
+--     end Linux;
+
    function MM_Inkey (Out_String : out String) return Boolean is
       aChar     : Character;
-      Arrow_Key : String3;
-      UB_String : Unbounded_String := Null_Unbounded_String;
+      UB_String : constant Unbounded_String := Null_Unbounded_String;
       OK        : Boolean;
    begin
       aChar := Character'Val (0);
@@ -75,7 +135,6 @@ package body Main_Support is
          if aChar = Character'Val (27) then
             --  Escape character
             Timers.Inkey_Timer := 0;
-
             --  get the second character with a delay of 30mS to allow the next
             --  character to arrive.
             while OK and then Timers.Inkey_Timer < 30 and then
@@ -83,61 +142,12 @@ package body Main_Support is
                OK := Console.Get_Console (aChar);
             end loop;
 
-            --  Delay some more to allow the final characters to arrive,
-            --  even at 1200 baud
-            if OK then
-               if aChar = 'O' then
-                  while OK and then Timers.Inkey_Timer < 50 and then
-                    aChar = Character'Val (0) loop
-                     OK := Console.Get_Console (aChar);
-                  end loop;
-
-                  if aChar = 'P' then
-                     aChar := Character'Val (241);  --  F1
-                  elsif aChar = 'Q' then
-                     aChar := Character'Val (242);  --  F2
-                  elsif aChar = 'R' then
-                     aChar := Character'Val (243);  --  F3
-                  elsif aChar = 'S' then
-                     aChar := Character'Val (244);  --  F4
-                  else
-                     C1 := True;
-                     Char1 := 'O';
-                     C2 := True;
-                     Char2 := aChar;
-                     aChar := Character'Val (27);  --  escape character
-                  end if;
-               elsif aChar /= '[' then
-                     C1 := True;
-                  Char1 := aChar;
-               else
-                  --  Get the third character after delay
-                  while OK and then Timers.Inkey_Timer < 50 and then
-                    aChar = Character'Val (0) loop
-                     OK := Console.Get_Console (aChar);
-                  end loop;
-
-                  if aChar = 'A' then
-                     Arrow_Key := Up;    --  Up
-                  elsif aChar = 'B' then
-                     Arrow_Key := Down;  --  Down
-                  elsif aChar = 'C' then
-                     Arrow_Key := Right;  --  Right
-                  elsif aChar = 'D' then
-                     Arrow_Key := Left;   --  Left
-                  end if;
-
-                  UB_String := To_Unbounded_String (Arrow_Key);
-               end if;
-            end if;
+--              if OK then
+--                 OK := Linux (aChar, Out_String);
+--              end if;
 
          end if;
-
-         if UB_String = Null_Unbounded_String then
-            Out_String := aChar'Image;
-         else
-            Out_String := To_String (UB_String);
-         end if;
+         Out_String := To_String (UB_String);
       end if;
 
       return OK;
