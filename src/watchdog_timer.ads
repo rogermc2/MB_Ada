@@ -5,6 +5,6 @@ package Watchdog_Timer is
    procedure Clear_WDT;
    procedure Disable_WDT;
    procedure Enable_WDT;
-   procedure Reada_Event_WDT;
+   procedure Read_Event_WDT;
 
 end Watchdog_Timer;

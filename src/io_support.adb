@@ -54,11 +54,13 @@ package body IO_Support is
 
    end Arrow_Keys;
 
-   procedure Char_Wait (OK        : in out Boolean; aChar : in out Character;
-                        Wait_Time : Natural) is
+   procedure Char_Wait (OK       : in out Boolean; aChar : in out Character;
+                        MS_Delay : Natural) is
    begin
-      while OK and then Timers.Inkey_Timer < Wait_Time and then
+      Timers.Inkey_Timer := 0;
+      while OK and then Timers.Inkey_Timer < MS_Delay and then
         aChar = Null_Char loop
+         Timers.Inkey_Timer := Timers.Inkey_Timer + 1;
          OK := Console.Get_Console (aChar);
       end loop;
    end Char_Wait;

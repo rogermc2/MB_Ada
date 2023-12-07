@@ -33,13 +33,14 @@ package body Serial_File_IO is
       Done  : Boolean := False;
    begin
       while not Done loop
-         Console.Check_Abort;
-
-         Done := File_Table (File_Num).Com > Max_Com_Ports or
-           End_Of_File (File_Table (File_Num).File_ID);
+         Done := Console.Check_Abort;
          if not Done then
-            Append (aLine,
-                    Serial.Seral_Get_Caracter(File_Table (File_Num).Com));
+            Done := File_Table (File_Num).Com > Max_Com_Ports or
+              End_Of_File (File_Table (File_Num).File_ID);
+            if not Done then
+               Append (aLine,
+                       Serial.Seral_Get_Caracter(File_Table (File_Num).Com));
+            end if;
          end if;
       end loop;
 

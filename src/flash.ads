@@ -35,9 +35,9 @@ package Flash is
       Default_Font         : Natural := 0;
       Keyboard_Config      : Natural := 0;
       Prog_Flash_Size      : Positive;
-      -- general use storage for CFunctions written by PeterM
+      --  general use storage for CFunctions written by PeterM
       Pins                 : Pins_Array := (others => 0);
-      -- default colours
+      --  default colours
       Default_FC           : Natural := 0;
       Default_BC           : Natural := 0;
       --  default backlight brightness

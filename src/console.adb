@@ -47,19 +47,27 @@ package body Console is
    function MM_Get_Character return Character is
       aChar : Character := Character'Val (0);
       Done  : Boolean := False;
+      OK    : Boolean := True;
    begin
       while not Done loop
          --           Process_Touch;
          File_IO.Check_SDCard;
          SSD_1963.Show_Cursor (True);
          declare
-            aChar : constant String := IO_Support.MM_Inkey;
+            In_Code : constant String := IO_Support.MM_Inkey (OK);
          begin
-            Done := aChar /= Character'Val (0);
+            if OK then
+               Done := In_Code (1) /= Character'Val (0);
+            end if;
+
+            if In_Code'Length = 1 then
+               aChar := In_Code (1);
+            end if;
          end;
       end loop;
 
       if aChar = Character'Val (10) or aChar = Character'Val (13) then
+         --  CR or LF
          Prev_Char := Character'Val (0);
       end if;
 

@@ -4,11 +4,10 @@ package Configuration is
 --  The main clock frequency for the chip at bootup, it can be changed by the CPU command
  CLOCKFREQ        : Long_Integer := 100000000;  --  This is set in in Configuration Bits.h
 
- DEFAULT_CONSOLE  : Natural := 0;--  0 = SERIAL, 1 = USB
- CONSOLE_BAUDRATE : Natural :=         38400;               --  only applies to the serial console
+ DEFAULT_CONSOLE  : Natural := 0;      --  0 = SERIAL, 1 = USB
+ CONSOLE_BAUDRATE : Natural := 38400;  --  only applies to the serial console
 
 --   nop __asm__ ("NOP")
-
 
 --  defines for double precision floats
  subtype MMFLOAT is Long_Float;              --  precision of all floating point operations
