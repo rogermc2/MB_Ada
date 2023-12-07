@@ -20,14 +20,14 @@ package body Main_Support is
    --     subtype String4 is String (1 .. 4);
    --     subtype String5 is String (1 .. 5);
 
-   C1    : Boolean := False;
-   C2    : Boolean := False;
-   C3    : Boolean := False;
-   C4    : Boolean := False;
-   Char1 : Character := Character'Val (0);
-   Char2 : Character := Character'Val (0);
-   Char3 : Character := Character'Val (0);
-   Char4 : Character := Character'Val (0);
+   type Prev_Chars_Data is record
+      State          : Boolean := False;
+      Prev_Character : Character := Character'Val (0);
+   end record;
+
+   type Prev_Array is array (1 .. 4) of Prev_Chars_Data;
+
+   Prev_Chars :  Prev_Array;
 
    procedure Restart is
    begin
@@ -112,22 +112,17 @@ package body Main_Support is
 --     end Linux;
 
    function MM_Inkey (Out_String : out String) return Boolean is
-      aChar     : Character;
+      aChar     : Character := Character'Val (0);
       UB_String : constant Unbounded_String := Null_Unbounded_String;
       OK        : Boolean;
    begin
-      aChar := Character'Val (0);
       --  Check if there are discarded chars from a previous sequence.
-      if C1 then
-         C1 := C2;
-         C2 := C3;
-         C3 := C4;
-         C4 := False;
-         aChar := Char1;
-         Char1 := Char2;
-         Char2 := Char3;
-         Char3 := Char4;
-         Char4 := Character'Val (0);
+      if Prev_Chars (1).State then
+         Prev_Chars (1) := Prev_Chars (2);
+         Prev_Chars (2) := Prev_Chars (3);
+         Prev_Chars (3) := Prev_Chars (4);
+         Prev_Chars (4).State := False;
+          Prev_Chars (4).Prev_Character := Character'Val (0);
       end if;
 
       OK := Console.Get_Console (aChar);
