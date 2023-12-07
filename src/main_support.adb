@@ -36,6 +36,29 @@ package body Main_Support is
    Left       : constant String3 := (Esc_Char,  '[', 'D');
    Prev_Chars :  Prev_Array;
 
+   function Arrow_Keys (aChar : Character) return Unbounded_String is
+      Arrow_Key : String3 := (others => Null_Char);
+   begin
+      if aChar = 'A' then
+         Arrow_Key := Up;    --  Up
+      elsif aChar = 'B' then
+         Arrow_Key := Down;  --  Down
+      elsif aChar = 'C' then
+         Arrow_Key := Right;  --  Right
+      elsif aChar = 'D' then
+         Arrow_Key := Left;   --  Left
+      elsif aChar < '1' then
+         null;
+      end if;
+
+      if Arrow_Key (1) = Null_Char then
+         return Null_Unbounded_String;
+      else
+         return To_Unbounded_String (Arrow_Key);
+      end if;
+
+   end Arrow_Keys;
+
    procedure Char_Wait (OK        : in out Boolean; aChar : in out Character;
                         Wait_Time : Natural) is
    begin
@@ -74,10 +97,10 @@ package body Main_Support is
    --           elsif aChar = 'S' then
    --              aChar := Character'Val (244);  --  F4
    --           else
-   --              C1 := True;
-   --              Char1 := 'O';
-   --              C2 := True;
-   --              Char2 := aChar;
+   --               Prev_Chars (1).State := True;
+   --                    Prev_Chars (1).Prev_Character := 'O';
+   --               Prev_Chars (2).State := True;
+   --                    Prev_Chars (1).Prev_Character := aChar;
    --              aChar := Esc_Char;  --  escape character
    --           end if;
    --        end if;
@@ -87,8 +110,8 @@ package body Main_Support is
    --     end Linux;
 
    function MM_Inkey (Out_String : in out String) return Boolean is
-      aChar     : Character := Character'Val (0);
-      Arrow_Key : String3;
+      aChar     : Character := Null_Char;
+      T_Char    : Character := Null_Char;
       UB_String : Unbounded_String := Null_Unbounded_String;
       OK        : Boolean;
    begin
@@ -118,26 +141,24 @@ package body Main_Support is
                if aChar /= '[' then
                   Prev_Chars (1).State := True;
                   Prev_Chars (1).Prev_Character := aChar;
-                  UB_String := To_Unbounded_String (Esc_Image);  --  escape character;
+                  Out_String := Esc_Image;  --  escape character;
                else
                   --  Get the third character after delay
                   Char_Wait (OK, aChar, 50);
+                  UB_String := Arrow_Keys (aChar);
 
-                  if aChar = 'A' then
-                     Arrow_Key := Up;    --  Up
-                  elsif aChar = 'B' then
-                     Arrow_Key := Down;  --  Down
-                  elsif aChar = 'C' then
-                     Arrow_Key := Right;  --  Right
-                  elsif aChar = 'D' then
-                     Arrow_Key := Left;   --  Left
-                  elsif aChar < '1' then
-                     null;
-                  end if;
-
-                  UB_String := To_Unbounded_String (Arrow_Key);
                   if UB_String = Null_Unbounded_String then
-                     Out_String := aChar'Image;
+                     if aChar < '1' or else aChar < '6' then
+                        Prev_Chars (1).State := True;
+                        Prev_Chars (1).Prev_Character := '[';
+                        Prev_Chars (2).State := True;
+                        Prev_Chars (2).Prev_Character := aChar;
+                        Out_String := Esc_Image;
+                     else
+                        --  allow the final chars to arrive, even at 1200 baud
+                        Char_Wait (OK, T_Char, 70);
+                        Out_String := T_Char'Image;
+                     end if;
                   else
                      Out_String := To_String (UB_String);
                   end if;
@@ -151,6 +172,31 @@ package body Main_Support is
       return OK;
 
    end MM_Inkey;
+
+function Page_Keys (aChar : Character) return Unbounded_String is
+      Page_Key : String3 := (others => Null_Char);
+   begin
+      if aChar = '1' then
+         Page_Key := Up;    --  Home
+      elsif aChar = '2' then
+         Page_Key := Down;  --  Insert
+      elsif aChar = '3' then
+         Page_Key := Right;  --  Del
+      elsif aChar = '4' then
+         Page_Key := Left;   --  End
+      elsif aChar = '5' then
+         Page_Key := Left;   --  Page Up
+      elsif aChar = '6' then
+         Page_Key := Left;   --  Page Down
+      end if;
+
+      if Page_Key (1) = Null_Char then
+         return Null_Unbounded_String;
+      else
+         return To_Unbounded_String (Page_Key);
+      end if;
+
+   end Page_Keys;
 
    procedure Process_Commands is
    begin
