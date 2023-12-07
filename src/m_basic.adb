@@ -5,7 +5,10 @@ with Ada.Text_IO; use Ada.Text_IO;
 package body M_Basic is
 
    type Token_Table_Item is record
-      Token : Unbounded_String;
+      Name       : Unbounded_String;
+      Precedence : Positive := 1;
+      Token_Type : Integer;
+--        function
    end record;
 
    Command_Table_Size : constant Positive := 100;
