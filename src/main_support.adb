@@ -16,7 +16,7 @@ with Timers;
 package body Main_Support is
 
    --     subtype String1 is String (1 .. 1);
-      subtype String3 is String (1 .. 3);
+   subtype String3 is String (1 .. 3);
    --     subtype String4 is String (1 .. 4);
    --     subtype String5 is String (1 .. 5);
 
@@ -36,10 +36,14 @@ package body Main_Support is
    Left       : constant String3 := (Esc_Char,  '[', 'D');
    Prev_Chars :  Prev_Array;
 
-   procedure Restart is
+   procedure Char_Wait (OK        : in out Boolean; aChar : in out Character;
+                        Wait_Time : Natural) is
    begin
-      null;
-   end Restart;
+      while OK and then Timers.Inkey_Timer < Wait_Time and then
+        aChar = Null_Char loop
+         OK := Console.Get_Console (aChar);
+      end loop;
+   end Char_Wait;
 
    procedure Do_PIN is
    begin
@@ -59,10 +63,7 @@ package body Main_Support is
    --     begin
    --        if aChar /= 'O' then
    --           --  Delay o allow the final characters to arrive even at 1200 baud.
-   --           while OK and then Timers.Inkey_Timer < 50 and then
-   --             aChar = Character'Val (0) loop
-   --              OK := Console.Get_Console (aChar);
-   --           end loop;
+   --           Char_Wait (OK, aChar, 50);
    --
    --           if aChar = 'P' then
    --              aChar := Character'Val (241);  --  F1
@@ -107,10 +108,7 @@ package body Main_Support is
             Timers.Inkey_Timer := 0;
             --  get the second character with a delay of 30mS to allow the next
             --  character to arrive.
-            while OK and then Timers.Inkey_Timer < 30 and then
-              aChar = Null_Char loop
-               OK := Console.Get_Console (aChar);
-            end loop;
+            Char_Wait (OK, aChar, 30);
 
             --              if OK then
             --                 OK := Linux (aChar, Out_String);
@@ -123,10 +121,7 @@ package body Main_Support is
                   UB_String := To_Unbounded_String (Esc_Image);  --  escape character;
                else
                   --  Get the third character after delay
-                  while OK and then Timers.Inkey_Timer < 50 and then
-                    aChar = Null_Char loop
-                     OK := Console.Get_Console (aChar);
-                  end loop;
+                  Char_Wait (OK, aChar, 50);
 
                   if aChar = 'A' then
                      Arrow_Key := Up;    --  Up
@@ -206,5 +201,10 @@ package body Main_Support is
       end loop;
 
    end Process_Commands;
+
+   procedure Restart is
+   begin
+      null;
+   end Restart;
 
 end Main_Support;
