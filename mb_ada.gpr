@@ -8,5 +8,10 @@ project Mb_Ada is
       for Switches ("ada") use ("-gnatw.ofkmru", "-gnatybcu");
    end Compiler;
 
+   package Linker is
+   end Linker;
+
+   for Exec_Dir use ".";
+
 end Mb_Ada;
 

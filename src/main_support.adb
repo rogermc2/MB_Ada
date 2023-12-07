@@ -1,4 +1,6 @@
 
+with Ada.Text_IO; use Ada.Text_IO;
+
 with Audio;
 with Configuration;
 with Draw;
@@ -58,6 +60,7 @@ package body Main_Support is
             Line_Length : constant Natural := aLine'Length;
          begin
             if Line_Length > 0 then
+               Put_Line ("Process_Commands  " & aLine);
                M_Basic.Execute_Program (M_Basic.Tokenize (aLine));
             end if;
          end;

@@ -6650,10 +6650,10 @@ package P32mx470f512h is
      Convention => C, 
      External_Name => "NVMSRCADDR";
 
-   RCON : aliased unsigned  -- p32mx470f512.h:2768
-     with Import => True, 
-     Convention => C, 
-     External_Name => "RCON";
+   RCON : aliased unsigned;  -- p32mx470f512.h:2768
+--       with Import => True, 
+--       Convention => C, 
+--       External_Name => "RCON";
 
    type uu_RCONbits_t_struct1401 is record
       POR      : Extensions.Unsigned_1;  -- p32mx470f512.h:2771
