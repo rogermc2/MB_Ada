@@ -20,7 +20,8 @@ package body IO_Support is
 
    Null_Char  : constant Character := Character'Val (0);
    Esc_Char   : constant Character := Character'Val (27);
-   Esc_Image  : constant String := Esc_Char'Image;
+   Esc_Image  : constant Unbounded_String :=
+                  To_Unbounded_String (Esc_Char'Image);
    Up         : constant String3 := (Esc_Char,  '[', 'A');
    Down       : constant String3 := (Esc_Char,  '[', 'B');
    Right      : constant String3 := (Esc_Char,  '[', 'C');
@@ -98,12 +99,11 @@ package body IO_Support is
    --
    --     end Linux;
 
-   function MM_Inkey (Out_String : in out String) return Boolean is
+   function MM_Inkey (OK : in out Boolean) return String is
       aChar     : Character := Null_Char;
       T_Char    : Character := Null_Char;
       TT_Char   : Character := Null_Char;
       UB_String : Unbounded_String := Null_Unbounded_String;
-      OK        : Boolean;
    begin
       --  Check if there are discarded chars from a previous sequence.
       if Prev_Chars (1).State then
@@ -131,7 +131,7 @@ package body IO_Support is
                if aChar /= '[' then
                   Prev_Chars (1).State := True;
                   Prev_Chars (1).Prev_Character := aChar;
-                  Out_String := Esc_Image;  --  escape character;
+                  UB_String := Esc_Image;  --  escape character;
                else
                   --  Get the third character after delay
                   Char_Wait (OK, aChar, 50);
@@ -143,11 +143,11 @@ package body IO_Support is
                         Prev_Chars (1).Prev_Character := '[';
                         Prev_Chars (2).State := True;
                         Prev_Chars (2).Prev_Character := aChar;
-                        Out_String := Esc_Image;
+                        UB_String := Esc_Image;
                      else
                         --  allow the final chars to arrive, even at 1200 baud
                         Char_Wait (OK, T_Char, 70);
-                        Out_String := T_Char'Image;
+                        UB_String := To_Unbounded_String (T_Char'Image);
                         if T_Char = '~' then
                            UB_String := Null_Unbounded_String;
                            --   UB_String := Page_Keys (T_Char);
@@ -157,7 +157,7 @@ package body IO_Support is
                            Prev_Chars (2).Prev_Character := aChar;
                            Prev_Chars (3).State := True;
                            Prev_Chars (3).Prev_Character := T_Char;
-                           Out_String := Esc_Image;
+                           UB_String := Esc_Image;
                         else  --  get the fifth character
                            Char_Wait (OK, TT_Char, 90);
                            if T_Char = '~' then
@@ -166,23 +166,19 @@ package body IO_Support is
                            --   UB_String := Function_Keys (T_Char);
                               end if;
                            else
-                              Out_String := Esc_Image;
+                              UB_String := Esc_Image;
                            end if;
                         end if;
                      end if;
-                  else
-                     Out_String := To_String (UB_String);
                   end if;
                end if;
             end if;
          end if;
 
-         Out_String := To_String (UB_String);
+         return To_String (UB_String);
       else
-         Out_String := aChar'Image;
+         return aChar'Image;
       end if;
-
-      return OK;
 
    end MM_Inkey;
 

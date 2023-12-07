@@ -2,7 +2,7 @@
 with Audio;
 with File_IO;
 with Global;
-with Main_Support;
+with IO_Support;
 with SSD_1963;
 with Timers;
 with USB;
@@ -52,8 +52,11 @@ package body Console is
          --           Process_Touch;
          File_IO.Check_SDCard;
          SSD_1963.Show_Cursor (True);
-         aChar := Main_Support.MM_Inkey;
-         Done := aChar /= Character'Val (0);
+         declare
+            aChar : constant String := IO_Support.MM_Inkey;
+         begin
+            Done := aChar /= Character'Val (0);
+         end;
       end loop;
 
       if aChar = Character'Val (10) or aChar = Character'Val (13) then

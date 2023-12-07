@@ -1,6 +1,6 @@
 
 package IO_Support is
 
-   function MM_Inkey (Out_String : in out String) return Boolean;
+   function MM_Inkey (OK : in out Boolean) return String;
 
 end IO_Support;
