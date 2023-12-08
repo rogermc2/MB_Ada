@@ -1,4 +1,6 @@
 
+with Global;
+
 with System;
 
 with Configuration;
@@ -12,9 +14,9 @@ package M_Basic is
    Subfunctions     : array (1 .. Configuration.MAXSUBFUN) of System.Address;
 
    procedure Clear_Program;
-   procedure Execute_Program (Token_Buffer : System.Address);
-   function Find_Subfunction (Token_Buffer : System.Address;
-                              Fun_Type     : Integer) return System.Address;
+   procedure Execute_Program (Tokens : Global.Token_Buffer);
+   function Find_Subfunction (Tokens : Global.Token_Buffer; Fun_Type : Integer)
+                              return System.Address;
    procedure Init_Basic;
    procedure Print_String (theString : String);
    procedure Prepare_Program (State : Boolean);

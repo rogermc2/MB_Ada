@@ -24,7 +24,7 @@ with Watchdog_Timer;
 
 procedure Main is
    use System;
-   Token_Buffer    : System.Address;
+   Tokens          : Global.Token_Buffer;
    Saved_Cause     : Setup_Exception := Cause_Nothing;
    Watchdog_Set    : Boolean := False;
    Basic_Running   : Boolean := True;
@@ -69,14 +69,14 @@ begin
    if Except_Cause /= Cause_MM_Startup then
       M_Basic.Clear_Program;
       M_Basic.Prepare_Program (True);
-      if M_Basic.Find_Subfunction (Token_Buffer, 0) /= Null_Address then
-         M_Basic.Execute_Program (Token_Buffer);
+      if M_Basic.Find_Subfunction (Tokens, 0) /= Null_Address then
+         M_Basic.Execute_Program (Tokens);
       end if;
    end if;
 
    --  Autorun code
 
    Except_Cause := Cause_Nothing;
-   Process_Commands (Token_Buffer);
+   Process_Commands (Tokens);
 
 end Main;

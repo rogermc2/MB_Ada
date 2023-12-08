@@ -60,14 +60,14 @@ package body M_Basic is
 
    end Defined_Subfunction;
 
-   procedure Execute_Program (Token_Buffer : System.Address) is
+   procedure Execute_Program (Tokens : Global.Token_Buffer) is
    begin
       Put_Line ("M_Basic.Execute_Program ");
       null;
    end Execute_Program;
 
-   function Find_Subfunction (Token_Buffer : System.Address;
-                              Fun_Type     : Integer) return System.Address is
+   function Find_Subfunction (Tokens : Global.Token_Buffer; Fun_Type : Integer)
+                              return System.Address is
       use System;
 --        Sub_Name : constant Unbounded_String := To_Unbounded_String (Name);
       Index    : Natural := 0;

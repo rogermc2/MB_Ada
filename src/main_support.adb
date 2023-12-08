@@ -6,7 +6,6 @@ with Configuration;
 with Draw;
 with Exceptions;
 with Flash;
-with Global;
 with M_Basic;
 with M_Misc;
 with Serial_File_IO;
@@ -18,7 +17,7 @@ package body Main_Support is
       null;
    end Do_PIN;
 
-   procedure Process_Commands (Token_Buffer : System.Address) is
+   procedure Process_Commands (Tokens : Global.Token_Buffer) is
    begin
       loop
          if Flash.Option.DISPLAY_CONSOLE then
@@ -61,7 +60,7 @@ package body Main_Support is
          begin
             if Line_Length > 0 then
                Put_Line ("Process_Commands  " & aLine);
-               M_Basic.Execute_Program (M_Basic.Tokenize (aLine));
+               M_Basic.Execute_Program (Tokens);
             end if;
          end;
 
