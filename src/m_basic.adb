@@ -60,14 +60,14 @@ package body M_Basic is
 
    end Defined_Subfunction;
 
-   procedure Execute_Program (Name : String) is
+   procedure Execute_Program (Token_Buffer : System.Address) is
    begin
-      Put_Line ("M_Basic.Execute_Program " & Name);
+      Put_Line ("M_Basic.Execute_Program ");
       null;
    end Execute_Program;
 
-   function Find_Subfunction (Name : String; Fun_Type : Integer)
-                              return Integer is
+   function Find_Subfunction (Token_Buffer : System.Address;
+                              Fun_Type     : Integer) return System.Address is
       use System;
 --        Sub_Name : constant Unbounded_String := To_Unbounded_String (Name);
       Index    : Natural := 0;
@@ -79,7 +79,8 @@ package body M_Basic is
 --           Done := Subfunctions (Index) = Sub_Address;
       end loop;
 
-      return 0;
+      return System.Null_Address;
+
    end Find_Subfunction;
 
    function Get_Command_Value (Token : String) return Integer is

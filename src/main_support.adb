@@ -18,7 +18,7 @@ package body Main_Support is
       null;
    end Do_PIN;
 
-   procedure Process_Commands is
+   procedure Process_Commands (Token_Buffer : System.Address) is
    begin
       loop
          if Flash.Option.DISPLAY_CONSOLE then

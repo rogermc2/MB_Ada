@@ -1,4 +1,6 @@
 
+with System;
+
 with Interfaces.C; use Interfaces.C;
 
 with Audio;
@@ -21,6 +23,8 @@ with Touch;
 with Watchdog_Timer;
 
 procedure Main is
+   use System;
+   Token_Buffer    : System.Address;
    Saved_Cause     : Setup_Exception := Cause_Nothing;
    Watchdog_Set    : Boolean := False;
    Basic_Running   : Boolean := True;
@@ -65,14 +69,14 @@ begin
    if Except_Cause /= Cause_MM_Startup then
       M_Basic.Clear_Program;
       M_Basic.Prepare_Program (True);
-      if M_Basic.Find_Subfunction ("MM_Startup", 0) >= 0 then
-         M_Basic.Execute_Program ("MM_Startup");
+      if M_Basic.Find_Subfunction (Token_Buffer, 0) /= Null_Address then
+         M_Basic.Execute_Program (Token_Buffer);
       end if;
    end if;
 
    --  Autorun code
 
    Except_Cause := Cause_Nothing;
-   Process_Commands;
+   Process_Commands (Token_Buffer);
 
 end Main;

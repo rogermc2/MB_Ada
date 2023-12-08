@@ -1,4 +1,6 @@
 
+with System;
+
 package Main_Support is
 
    type Setup_Exception is (Cause_Nothing, Cause_Display, Cause_File_IO,
@@ -8,7 +10,7 @@ package Main_Support is
    Except_Cause : Setup_Exception := Cause_Nothing;
 
    procedure Do_PIN;
-   procedure Process_Commands;
+   procedure Process_Commands (Token_Buffer : System.Address);
    procedure Restart;
 
 end Main_Support;
