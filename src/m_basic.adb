@@ -49,13 +49,24 @@ package body M_Basic is
 
    end Clear_Runtime;
 
+   procedure Defined_Subfunction (Is_Fun : Boolean; Command : Unbounded_String;
+                                 Index  : Positive; Fa : Configuration.MMFLOAT;
+                                 Sa     : String; SF_Type : Fun_Type) is
+      --        use System;
+--        Sub_Name : constant Unbounded_String := To_Unbounded_String (Name);
+--        Done     : Boolean := False;
+   begin
+      null;
+
+   end Defined_Subfunction;
+
    procedure Execute_Program (Name : String) is
    begin
       Put_Line ("M_Basic.Execute_Program " & Name);
       null;
    end Execute_Program;
 
-   function Find_Subfunction (Sub_Address : System.Address; Fun_Type : Integer)
+   function Find_Subfunction (Name : String; Fun_Type : Integer)
                               return Integer is
       use System;
 --        Sub_Name : constant Unbounded_String := To_Unbounded_String (Name);
@@ -64,7 +75,8 @@ package body M_Basic is
    begin
       Put_Line ("M_Basic.Find_Subfunction ");
       while index <= Configuration.MAXSUBFUN and not Done loop
-         Done := Subfunctions (Index) = Sub_Address;
+         Done := True;
+--           Done := Subfunctions (Index) = Sub_Address;
       end loop;
 
       return 0;

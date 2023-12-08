@@ -13,7 +13,7 @@ package M_Basic is
 
    procedure Clear_Program;
    procedure Execute_Program (Name : String);
-   function Find_Subfunction (Sub_Address : System.Address; Fun_Type : Integer)
+   function Find_Subfunction (Name : String; Fun_Type : Integer)
                               return Integer;
    procedure Init_Basic;
    procedure Print_String (theString : String);

@@ -23,8 +23,9 @@ package Commands_And_Tokens_Tables is
       Token_Type   : Integer := 0;
       Function_Ptr : Address := Null_Address;
    end record;
+
    Command_Table_Size : constant Positive := 46;
-   Token_Table_Size   : constant Positive := 44 + 37 + 20 + 1;
+   Token_Table_Size   : constant Positive := 101;
 
    fun_acos              : constant Address := Null_Address;
    fun_abs               : constant Address := Null_Address;
