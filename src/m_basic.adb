@@ -43,7 +43,10 @@ package body M_Basic is
 
    procedure Clear_Runtime is
    begin
-      null;
+      for index in Subfunctions'Range loop
+         Subfunctions (Index) := System.Null_Address;
+      end loop;
+
    end Clear_Runtime;
 
    procedure Execute_Program (Name : String) is
@@ -52,10 +55,17 @@ package body M_Basic is
       null;
    end Execute_Program;
 
-   function Find_Subfunction (Name : String; Fun_Type : Integer)
+   function Find_Subfunction (Sub_Address : System.Address; Fun_Type : Integer)
                               return Integer is
+      use System;
+--        Sub_Name : constant Unbounded_String := To_Unbounded_String (Name);
+      Index    : Natural := 0;
+      Done     : Boolean := False;
    begin
-      Put_Line ("M_Basic.Find_Subfunction " & Name);
+      Put_Line ("M_Basic.Find_Subfunction ");
+      while index <= Configuration.MAXSUBFUN and not Done loop
+         Done := Subfunctions (Index) = Sub_Address;
+      end loop;
 
       return 0;
    end Find_Subfunction;
@@ -85,17 +95,15 @@ package body M_Basic is
       tokenGOSUB := Get_Token_Value ("GoSub");
       tokenAS := Get_Token_Value ("As");
       tokenFOR := Get_Token_Value ("For");
-      cmdSELECT_CASE := GetCommandValue ("Select Case");
-      cmdCASE := GetCommandValue ("Case");
-      cmdCASE_ELSE := GetCommandValue ("Case Else");
-      cmdEND_SELECT := GetCommandValue ("End Select");
-      cmdSUB := GetCommandValue ("Sub");
-      cmdFUN := GetCommandValue ("Function");
-      cmdIRET := GetCommandValue ("IReturn");
-      cmdCFUN := GetCommandValue ("CFunction");
-      cmdCSUB := GetCommandValue ("CSub");
-
-      return 0;
+      cmdSELECT_CASE := Get_Command_Value ("Select Case");
+      cmdCASE := Get_Command_Value ("Case");
+      cmdCASE_ELSE := Get_Command_Value ("Case Else");
+      cmdEND_SELECT := Get_Command_Value ("End Select");
+      cmdSUB := Get_Command_Value ("Sub");
+      cmdFUN := Get_Command_Value ("Function");
+      cmdIRET := Get_Command_Value ("IReturn");
+      cmdCFUN := Get_Command_Value ("CFunction");
+      cmdCSUB := Get_Command_Value ("CSub");
 
    end Init_Basic;
 
