@@ -64,7 +64,7 @@ package body M_Basic is
       Put_Line ("M_Basic.Execute_Program " & To_String (Tokens));
       if Length (Tokens) > 0 then
          while (Element (Tokens, 1) /= '0' and Element (Tokens, 2) /= '0') and
-         (Element (Tokens, 1) /= '255' and Element (Tokens, 2) /= '255') loop
+         (Element (Tokens, 1) /= '255' and Element (Tokens, 2) /= '255") loop
             null;
          end loop;
       end if;
