@@ -28,7 +28,7 @@ package body Serial_File_IO is
 
    end MMF_Get_Character;
 
-   procedure MM_Get_Line (File_Num : Natural; aLine : String) is
+   procedure MM_Get_Line (File_Num : Integer; aLine : String) is
       use Ada.Strings;
       use M_Basic;
       use M_Basic.UB_String_Buffer_Package;
@@ -58,7 +58,8 @@ package body Serial_File_IO is
          if M_Misc.Echo_Option then
             Put_Line (To_String (Last_Element (In_Buffer)));
          end if;
-      else
+
+      elsif File_Num > 0 then
          while not Done loop
             Done := Console.Check_Abort;
             if not Done then

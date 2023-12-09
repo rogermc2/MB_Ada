@@ -13,6 +13,6 @@ package Serial_File_IO is
 
    File_Table     : array (1 .. Max_Open_Files) of File_Data;
 
-   procedure MM_Get_Line (File_Num : Natural; aLine : String);
+   procedure MM_Get_Line (File_Num : Integer; aLine : String);
 
 end Serial_File_IO;
