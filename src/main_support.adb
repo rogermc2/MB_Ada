@@ -62,7 +62,9 @@ package body Main_Support is
          if not Global.Error_In_Prompt and M_Basic.Find_Subfunction
            (To_Unbounded_String ("MM.PROMPT"), 0) /= System.Null_Address then
             Global.Error_In_Prompt := True;
-            M_Basic.Execute_Program (To_Unbounded_String ("MM.PROMPT\0"));
+            Tokens.Clear;
+            Tokens (1) := To_Unbounded_String ("MM.PROMPT\0");
+            M_Basic.Execute_Program (Tokens);
          else
             M_Basic.Print_String ("> ");
          end if;
