@@ -35,17 +35,17 @@ package body Serial_File_IO is
    begin
       if File_Num = 0 then
          tp := To_Unbounded_String (Get_Line);
-         if Slice (tp, 1, 5) = F2 then
+         if tp = F2 then
            tp := To_Unbounded_String ("RUN");
-         elsif Slice (tp, 1, 5) = F3 then
+         elsif tp = F3 then
            tp := To_Unbounded_String ("LIST");
-         elsif Slice (tp, 1, 5) = F4 then
+         elsif tp = F4 then
            tp := To_Unbounded_String ("EDIT");
-         elsif Slice (tp, 1, 5) = F10 then
+         elsif tp = F10 then
            tp := To_Unbounded_String ("AUTOSAVE");
-         elsif Slice (tp, 1, 5) = F3 then
+         elsif tp = F3 then
            tp := To_Unbounded_String ("XMODEM RECEIVE");
-         elsif Slice (tp, 1, 5) = F3 then
+         elsif tp = F3 then
            tp := To_Unbounded_String ("XMODEM SEND");
          end if;
       else
