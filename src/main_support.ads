@@ -12,7 +12,7 @@ package Main_Support is
    Except_Cause : Setup_Exception := Cause_Nothing;
 
    procedure Do_PIN;
-   procedure Process_Commands (Tokens : in out Global.Token_Buffer);
+   procedure Process_Commands (Tokens : in out Global.UB_String_Buffer);
    procedure Restart;
 
 end Main_Support;

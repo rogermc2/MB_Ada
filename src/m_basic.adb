@@ -1,4 +1,5 @@
 
+with Ada.Strings;
 with Ada.Text_IO; use Ada.Text_IO;
 
 with Commands_And_Tokens_Tables; use Commands_And_Tokens_Tables;
@@ -60,9 +61,9 @@ package body M_Basic is
 
    end Defined_Subfunction;
 
-   procedure Execute_Program (Tokens : Global.Token_Buffer) is
+   procedure Execute_Program (Tokens : Global.UB_String_Buffer) is
       use Global;
-      use Global.Token_Buffer_Package;
+      use Global.UB_String_Buffer_Package;
       Done      : Boolean := False;
       Token_Ptr : Natural := 0;
    begin
@@ -81,7 +82,7 @@ package body M_Basic is
             Done :=  (Element (Tokens, 1) /= "0" and
                         Element (Tokens, 2) /= "0") and
               (Element (Tokens, 1) /= "255"  and
-                 Element (Tokens, 2) /= "255") ;
+                   Element (Tokens, 2) /= "255") ;
          end loop;
       end if;
    end Execute_Program;
@@ -152,10 +153,13 @@ package body M_Basic is
       null;
    end Prepare_Program;
 
-      function Tokenize (aLine : String) return Global.Token_Buffer is
+   function Tokenize (aLine : String) return Global.UB_String_Buffer is
+      use Ada.Strings;
+      In_Buf : Unbounded_String  := To_Unbounded_String (aLine);
       aChar  : Character;
-            Tokens :  Global.Token_Buffer;
+      Tokens :  Global.UB_String_Buffer;
    begin
+      Trim (In_Buf, Both);
       --  make sure that only printable characters are in the line
       for index in aLine'Range loop
          aChar := aLine (index);

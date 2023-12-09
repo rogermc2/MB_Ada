@@ -29,7 +29,7 @@ procedure Main is
    use System;
    Startup_Token   : constant Unbounded_String :=
                        To_Unbounded_String ("MM.Startup");
-   Tokens          : Global.Token_Buffer;
+   Tokens          : Global.UB_String_Buffer;
    Saved_Cause     : Setup_Exception := Cause_Nothing;
    Watchdog_Set    : Boolean := False;
    Basic_Running   : Boolean := True;
@@ -56,8 +56,9 @@ begin
       --        if Debug_Mode then
       --           null;
       --        else
-      M_Basic.Print_String ("Ada Port Of Micromite Plus MMBasic");
-      M_Basic.Print_String ("\r\n");
+      Put_Line ("Ada Port Of Micromite Plus MMBasic");
+--        M_Basic.Print_String ("Ada Port Of Micromite Plus MMBasic");
+--        M_Basic.Print_String ("\r\n");
       --        end if;
    end if;
 

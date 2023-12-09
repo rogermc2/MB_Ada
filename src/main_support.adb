@@ -11,7 +11,7 @@ with Flash;
 with M_Basic;
 with M_Misc;
 with Memory;
-with Serial_File_IO;
+--  with Serial_File_IO;
 
 package body Main_Support is
 
@@ -20,7 +20,7 @@ package body Main_Support is
       null;
    end Do_PIN;
 
-   procedure Process_Commands (Tokens : in out Global.Token_Buffer) is
+   procedure Process_Commands (Tokens : in out Global.UB_String_Buffer) is
       use System;
    begin
       loop
@@ -30,7 +30,8 @@ package body Main_Support is
             Draw.GUI_Bcolour := Global.Prompt_Bcolour;
             if Draw.Current_X /= 0 then
                --  Prompt should be on a new line.
-               M_Basic.Print_String ("\r\n");
+               --                 M_Basic.Print_String ("\r\n");
+               New_Line;
             end if;
          end if;
 
@@ -49,7 +50,8 @@ package body Main_Support is
 
          if Global.MM_Char_Pos > 1 then
             --  Prompt should be on a new line.
-            M_Basic.Print_String ("\r\n");
+--              M_Basic.Print_String ("\r\n");
+            New_Line;
          end if;
 
          while Flash.Option.PIN /= 0 and not Global.Ignore_PIN loop
@@ -63,7 +65,9 @@ package body Main_Support is
            (To_Unbounded_String ("MM.PROMPT"), 0) /= System.Null_Address then
             Global.Error_In_Prompt := True;
             Tokens.Clear;
-            Tokens (1) := To_Unbounded_String ("MM.PROMPT\0");
+            Tokens (1) := To_Unbounded_String ("MM.PROMPT");
+            Tokens (2) := To_Unbounded_String ("\");
+            Tokens (4) := To_Unbounded_String ("0");
             M_Basic.Execute_Program (Tokens);
          else
             M_Basic.Print_String ("> ");
@@ -71,7 +75,8 @@ package body Main_Support is
 
          Global.Error_In_Prompt := False;
          declare
-            aLine       : constant String := Serial_File_IO.MM_Get_Line (1);
+--              aLine       : constant String := Serial_File_IO.MM_Get_Line (1);
+            aLine       : constant String := Get_Line;
             Line_Length : constant Natural := aLine'Length;
          begin
             if Line_Length > 0 then
