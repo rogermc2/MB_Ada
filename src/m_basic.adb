@@ -130,9 +130,11 @@ package body M_Basic is
       null;
    end Prepare_Program;
 
-   function Tokenize (aLine : String) return String is
+   function Tokenize (aLine : String) return Global.Token_Buffer is
+      Tokens :  Global.Token_Buffer;
    begin
-      return "";
+      return Tokens;
+
    end Tokenize;
 
 end M_Basic;
