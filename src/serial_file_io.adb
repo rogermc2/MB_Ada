@@ -4,7 +4,6 @@ with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Console;
 with File_IO;
 with IO_Support;
-with M_Basic;
 with M_Misc;
 with Serial;
 
@@ -28,7 +27,8 @@ package body Serial_File_IO is
 
    end MMF_Get_Character;
 
-   procedure MM_Get_Line (File_Num : Integer; aLine : String) is
+   procedure MM_Get_Line (File_Num : Integer;
+                          Buffer   : M_Basic. UB_String_Buffer) is
       use Ada.Strings;
       use M_Basic;
       use M_Basic.UB_String_Buffer_Package;

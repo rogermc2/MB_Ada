@@ -1,6 +1,8 @@
 
 with Ada.Text_IO; use Ada.Text_IO;
 
+with M_Basic;
+
 package Serial_File_IO is
 
    type File_Data is record
@@ -13,6 +15,7 @@ package Serial_File_IO is
 
    File_Table     : array (1 .. Max_Open_Files) of File_Data;
 
-   procedure MM_Get_Line (File_Num : Integer; aLine : String);
+   procedure MM_Get_Line (File_Num : Integer;
+                          Buffer   : M_Basic. UB_String_Buffer);
 
 end Serial_File_IO;
