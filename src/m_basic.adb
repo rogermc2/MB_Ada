@@ -49,11 +49,11 @@ package body M_Basic is
    end Clear_Runtime;
 
    procedure Defined_Subfunction (Is_Fun : Boolean; Command : Unbounded_String;
-                                 Index  : Positive; Fa : Configuration.MMFLOAT;
-                                 Sa     : String; SF_Type : Fun_Type) is
+                                  Index  : Positive; Fa : Configuration.MMFLOAT;
+                                  Sa     : String; SF_Type : Fun_Type) is
       --        use System;
---        Sub_Name : constant Unbounded_String := To_Unbounded_String (Name);
---        Done     : Boolean := False;
+      --        Sub_Name : constant Unbounded_String := To_Unbounded_String (Name);
+      --        Done     : Boolean := False;
    begin
       null;
 
@@ -62,21 +62,26 @@ package body M_Basic is
    procedure Execute_Program (Tokens : Unbounded_String) is
    begin
       Put_Line ("M_Basic.Execute_Program " & To_String (Tokens));
-      null;
+      if Length (Tokens) > 0 then
+         while (Element (Tokens, 1) /= '0' and Element (Tokens, 2) /= '0') and
+         (Element (Tokens, 1) /= '255' and Element (Tokens, 2) /= '255') loop
+            null;
+         end loop;
+      end if;
    end Execute_Program;
 
    function Find_Subfunction (Token : Unbounded_String; Fun_Type : Integer)
                               return System.Address is
       use System;
---        Sub_Name : constant Unbounded_String := To_Unbounded_String (Name);
+      --        Sub_Name : constant Unbounded_String := To_Unbounded_String (Name);
       Index    : Natural := 0;
       Done     : Boolean := False;
    begin
---        Put_Line ("M_Basic.Find_Subfunction ");
+      --        Put_Line ("M_Basic.Find_Subfunction ");
       while index <= Configuration.MAXSUBFUN and not Done loop
          Index := Index + 1;
          Done := True;
---           Done := Subfunctions (Index) = Sub_Address;
+         --           Done := Subfunctions (Index) = Sub_Address;
       end loop;
 
       return System.Null_Address;
@@ -122,7 +127,8 @@ package body M_Basic is
 
    procedure Print_String (theString : String) is
    begin
-      null;
+      Put_Line (theString);
+
    end Print_String;
 
    procedure Prepare_Program (State : Boolean) is
@@ -130,10 +136,10 @@ package body M_Basic is
       null;
    end Prepare_Program;
 
---     function Tokenize (aLine : String) return Global.Token_Buffer is
+   --     function Tokenize (aLine : String) return Global.Token_Buffer is
    function Tokenize (aLine : String) return Unbounded_String is
       aChar  : Character;
---        Tokens :  Global.Token_Buffer;
+      --        Tokens :  Global.Token_Buffer;
       Tokens :  Unbounded_String;
    begin
       --  make sure that only printable characters are in the line
