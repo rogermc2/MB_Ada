@@ -2,6 +2,7 @@
 with Ada.Text_IO; use Ada.Text_IO;
 
 with Commands_And_Tokens_Tables; use Commands_And_Tokens_Tables;
+with Global;
 
 package body M_Basic is
 
@@ -29,28 +30,6 @@ package body M_Basic is
    cmdIRET          : Integer;
    cmdCFUN          : Integer;
    cmdCSUB          : Integer;
-   --     lags used in the program lines
-   T_CMDEND         : constant Natural:= 0;                               --  end of a command
-   T_NEWLINE        : constant Natural:= 1;                             --  Single byte indicating the start of a new line
-   T_LINENBR        : constant Natural:= 2;                               --  three bytes for a line number
-   T_LABEL          : constant Natural:=  3;                           --  variable length indicating a label
-
-   E_END            : constant Natural:= 255;                --  dummy last operator in an expression
-
-   --  these constants are used in the second argument of the findvar() function, they should be or'd together
-   V_FIND              : constant Natural:= 16#0000#;                   --  a straight forward find, if the variable is not found it is created and set to zero
-   V_NOFIND_ERR        : constant Natural:= 16#0200#;                   --  throw an error if not found
-   V_NOFIND_NULL       : constant Natural:= 16#0400#;                   --  return a null pointer if not found
-   V_DIM_VAR            : constant Natural:= 16#0800#;                  --  dimension an array
-   --     V_LOCAL              : constant Natural:= 16#1000#;
-   --  create a local variable
-   V_EMPTY_OK          : constant Natural:= 16#2000#;                   --  allow an empty array variable.  ie, var()
-   V_FUNCT             : constant Natural:= 16#4000#;     --  we are defining the name of a function
-
-   --  these flags are used in the last argument in expression()
-   E_NOERROR           : Boolean := True;
-   E_ERROR              : constant Natural:= 0;
-   E_DONE_GETVAL        : constant Natural:= 2;
 
    procedure Clear_Runtime;
 
@@ -82,6 +61,7 @@ package body M_Basic is
    end Defined_Subfunction;
 
    procedure Execute_Program (Tokens : Unbounded_String) is
+      use Global;
       Done      : Boolean := False;
       Token_Ptr : Natural := 0;
    begin
@@ -97,7 +77,8 @@ package body M_Basic is
                Token_Ptr := Token_Ptr + 1;
             end if;
 
-            Done :=  (Element (Tokens, 1) /= '0' and Element (Tokens, 2) /= '0') and
+            Done :=  (Element (Tokens, 1) /= '0' and
+                        Element (Tokens, 2) /= '0') and
               (Character'Pos (Element (Tokens, 1)) /= 255  and
                  Character'Pos (Element (Tokens, 2)) /= 255) ;
          end loop;
