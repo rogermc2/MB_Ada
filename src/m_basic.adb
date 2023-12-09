@@ -1,5 +1,4 @@
 
-with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Ada.Text_IO; use Ada.Text_IO;
 
 with Commands_And_Tokens_Tables; use Commands_And_Tokens_Tables;
@@ -66,15 +65,16 @@ package body M_Basic is
       null;
    end Execute_Program;
 
-   function Find_Subfunction (Tokens : Global.Token_Buffer; Fun_Type : Integer)
+   function Find_Subfunction (Token : Unbounded_String; Fun_Type : Integer)
                               return System.Address is
       use System;
 --        Sub_Name : constant Unbounded_String := To_Unbounded_String (Name);
       Index    : Natural := 0;
       Done     : Boolean := False;
    begin
-      Put_Line ("M_Basic.Find_Subfunction ");
+--        Put_Line ("M_Basic.Find_Subfunction ");
       while index <= Configuration.MAXSUBFUN and not Done loop
+         Index := Index + 1;
          Done := True;
 --           Done := Subfunctions (Index) = Sub_Address;
       end loop;
@@ -131,8 +131,17 @@ package body M_Basic is
    end Prepare_Program;
 
    function Tokenize (aLine : String) return Global.Token_Buffer is
+      aChar  : Character;
       Tokens :  Global.Token_Buffer;
    begin
+      --  make sure that only printable characters are in the line
+      for index in aLine'Range loop
+         aChar := aLine (index);
+         if Character'Pos (aChar) < 128 then
+            aChar := ' ';
+         end if;
+      end loop;
+
       return Tokens;
 
    end Tokenize;

@@ -1,9 +1,10 @@
 
-with Global;
-
 with System;
 
+with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
+
 with Configuration;
+with Global;
 
 package M_Basic is
 
@@ -15,7 +16,7 @@ package M_Basic is
 
    procedure Clear_Program;
    procedure Execute_Program (Tokens : Global.Token_Buffer);
-   function Find_Subfunction (Tokens : Global.Token_Buffer; Fun_Type : Integer)
+   function Find_Subfunction (Token : Unbounded_String; Fun_Type : Integer)
                               return System.Address;
    procedure Init_Basic;
    procedure Print_String (theString : String);

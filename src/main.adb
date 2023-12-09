@@ -3,6 +3,8 @@ with System;
 
 with Interfaces.C; use Interfaces.C;
 
+with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
+
 with Audio;
 with Configuration;
 with Draw;
@@ -24,6 +26,7 @@ with Watchdog_Timer;
 
 procedure Main is
    use System;
+   Startup_Token   : constant Unbounded_String := To_Unbounded_String ("MM.Startup");
    Tokens          : Global.Token_Buffer;
    Saved_Cause     : Setup_Exception := Cause_Nothing;
    Watchdog_Set    : Boolean := False;
@@ -69,7 +72,7 @@ begin
    if Except_Cause /= Cause_MM_Startup then
       M_Basic.Clear_Program;
       M_Basic.Prepare_Program (True);
-      if M_Basic.Find_Subfunction (Tokens, 0) /= Null_Address then
+      if M_Basic.Find_Subfunction (Startup_Token, 0) /= Null_Address then
          M_Basic.Execute_Program (Tokens);
       end if;
    end if;

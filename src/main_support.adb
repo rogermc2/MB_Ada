@@ -1,4 +1,7 @@
 
+with System;
+
+with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Ada.Text_IO; use Ada.Text_IO;
 
 with Audio;
@@ -18,6 +21,7 @@ package body Main_Support is
    end Do_PIN;
 
    procedure Process_Commands (Tokens : Global.Token_Buffer) is
+      use System;
    begin
       loop
          if Flash.Option.DISPLAY_CONSOLE then
@@ -53,6 +57,12 @@ package body Main_Support is
 
          Global.Except_Code := Exceptions.EXCEP_IRQ;
          M_Basic.Prepare_Program (False);
+
+         if not Global.Error_In_Prompt and
+           M_Basic.Find_Subfunction
+             (To_Unbounded_String ("MM.PROMPT"), 0) /= System.Null_Address then
+            Global.Error_In_Prompt := True;
+         end if;
 
          declare
             aLine       : constant String := Serial_File_IO.MM_Get_Line (1);
