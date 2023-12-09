@@ -1,9 +1,9 @@
 
-with Ada.Strings;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 
 with Console;
 with File_IO;
+with IO_Support;
 with Serial;
 
 package body Serial_File_IO is
@@ -26,25 +26,43 @@ package body Serial_File_IO is
 
    end MMF_Get_Character;
 
-   function MM_Get_Line (File_Num : Positive) return String is
+   function MM_Get_Line (File_Num : Natural) return String is
       use Ada.Strings;
+      use IO_Support;
       aChar : Character := ' ';
-      aLine : Unbounded_String;
+      tp    : Unbounded_String;
       Done  : Boolean := False;
    begin
-      while not Done loop
-         Done := Console.Check_Abort;
-         if not Done then
-            Done := File_Table (File_Num).Com > Max_Com_Ports or
-              End_Of_File (File_Table (File_Num).File_ID);
-            if not Done then
-               Append (aLine,
-                       Serial.Seral_Get_Caracter(File_Table (File_Num).Com));
-            end if;
+      if File_Num = 0 then
+         tp := To_Unbounded_String (Get_Line);
+         if Slice (tp, 1, 5) = F2 then
+           tp := To_Unbounded_String ("RUN");
+         elsif Slice (tp, 1, 5) = F3 then
+           tp := To_Unbounded_String ("LIST");
+         elsif Slice (tp, 1, 5) = F4 then
+           tp := To_Unbounded_String ("EDIT");
+         elsif Slice (tp, 1, 5) = F10 then
+           tp := To_Unbounded_String ("AUTOSAVE");
+         elsif Slice (tp, 1, 5) = F3 then
+           tp := To_Unbounded_String ("XMODEM RECEIVE");
+         elsif Slice (tp, 1, 5) = F3 then
+           tp := To_Unbounded_String ("XMODEM SEND");
          end if;
-      end loop;
+      else
+         while not Done loop
+            Done := Console.Check_Abort;
+            if not Done then
+               Done := File_Table (File_Num).Com > Max_Com_Ports or
+                 End_Of_File (File_Table (File_Num).File_ID);
+               if not Done then
+                  Append (tp,
+                          Serial.Seral_Get_Caracter(File_Table (File_Num).Com));
+               end if;
+            end if;
+         end loop;
+      end if;
 
-      return To_String (aLine);
+      return To_String (tp);
 
    end MM_Get_Line;
 

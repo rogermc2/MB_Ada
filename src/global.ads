@@ -56,4 +56,7 @@ package Global is
    Prompt_Bcolour  : Natural := 0;
    Error_In_Prompt : Boolean := False;
 
+   In_Buffer       : UB_String_Buffer;
+   Out_Buffer      : UB_String_Buffer;
+
 end Global;

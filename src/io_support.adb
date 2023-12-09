@@ -6,11 +6,6 @@ with Timers;
 
 package body IO_Support is
 
-   --     subtype String1 is String (1 .. 1);
-   subtype String3 is String (1 .. 3);
-   --     subtype String4 is String (1 .. 4);
-   --     subtype String5 is String (1 .. 5);
-
    type Prev_Chars_Data is record
       State          : Boolean := False;
       Prev_Character : Character := Character'Val (0);
@@ -19,7 +14,6 @@ package body IO_Support is
    type Prev_Array is array (1 .. 4) of Prev_Chars_Data;
 
    Null_Char  : constant Character := Character'Val (0);
-   Esc_Char   : constant Character := Character'Val (27);
    Esc_Image  : constant Unbounded_String :=
                   To_Unbounded_String (Esc_Char'Image);
    Up         : constant String3 := (Esc_Char,  '[', 'A');
@@ -65,14 +59,7 @@ package body IO_Support is
       end loop;
    end Char_Wait;
 
-   --     function Linux (aChar : in out Character; Out_String : in out String)
-   --                     return Boolean is
-   --  vt100 escape code sequences
 
-   --     F1    : constant String5 := (Esc_Char,  '[', '1', '1', '~');
-   --     F2    : constant String5 := (Esc_Char,  '[', '1', '1', '~');
-   --     F3    : constant String5 := (Esc_Char,  '[', '1', '1', '~');
-   --     F4    : constant String5 := (Esc_Char,  '[', '1', '1', '~');
    --        UB_String : Unbounded_String := Null_Unbounded_String;
    --        OK        : Boolean := True;
    --     begin
