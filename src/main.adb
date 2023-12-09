@@ -27,9 +27,9 @@ with Watchdog_Timer;
 
 procedure Main is
    use System;
-   Startup_Token   : constant Unbounded_String := To_Unbounded_String ("MM.Startup");
---     Tokens          : Global.Token_Buffer;
-   Tokens          : Unbounded_String;
+   Startup_Token   : constant Unbounded_String :=
+                       To_Unbounded_String ("MM.Startup");
+   Tokens          : Global.Token_Buffer;
    Saved_Cause     : Setup_Exception := Cause_Nothing;
    Watchdog_Set    : Boolean := False;
    Basic_Running   : Boolean := True;
@@ -83,6 +83,6 @@ begin
 
    Except_Cause := Cause_Nothing;
    Process_Commands (Tokens);
-   Put_Line (To_String (Tokens));
+   Put_Line (To_String (Tokens (1)));
 
 end Main;

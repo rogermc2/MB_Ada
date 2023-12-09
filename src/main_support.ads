@@ -1,6 +1,8 @@
 
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 
+with Global;
+
 package Main_Support is
 
    type Setup_Exception is (Cause_Nothing, Cause_Display, Cause_File_IO,
@@ -10,8 +12,7 @@ package Main_Support is
    Except_Cause : Setup_Exception := Cause_Nothing;
 
    procedure Do_PIN;
---     procedure Process_Commands (Tokens : in out Global.Token_Buffer);
-   procedure Process_Commands (Tokens : in out Unbounded_String);
+   procedure Process_Commands (Tokens : in out Global.Token_Buffer);
    procedure Restart;
 
 end Main_Support;

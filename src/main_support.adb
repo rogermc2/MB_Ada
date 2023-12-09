@@ -3,8 +3,6 @@ with System;
 
 with Ada.Text_IO; use Ada.Text_IO;
 
-with Global;
-
 with Audio;
 with Configuration;
 with Draw;
@@ -22,8 +20,7 @@ package body Main_Support is
       null;
    end Do_PIN;
 
---     procedure Process_Commands (Tokens : in out Global.Token_Buffer) is
-   procedure Process_Commands (Tokens : in out Unbounded_String) is
+   procedure Process_Commands (Tokens : in out Global.Token_Buffer) is
       use System;
    begin
       loop

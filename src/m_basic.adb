@@ -2,7 +2,7 @@
 with Ada.Text_IO; use Ada.Text_IO;
 
 with Commands_And_Tokens_Tables; use Commands_And_Tokens_Tables;
-with Global;
+--  with Global;
 
 package body M_Basic is
 
@@ -60,16 +60,17 @@ package body M_Basic is
 
    end Defined_Subfunction;
 
-   procedure Execute_Program (Tokens : Unbounded_String) is
+   procedure Execute_Program (Tokens : Global.Token_Buffer) is
       use Global;
+      use Global.Token_Buffer_Package;
       Done      : Boolean := False;
       Token_Ptr : Natural := 0;
    begin
-      Put_Line ("M_Basic.Execute_Program " & To_String (Tokens));
-      if Length (Tokens) > 0 then
+      Put_Line ("M_Basic.Execute_Program ");
+      if not Is_Empty (Tokens) then
          while not Done loop
             Token_Ptr := Token_Ptr + 1;
-            if Element (Tokens, Token_Ptr) = '0' then
+            if Element (Tokens, Token_Ptr) = "0" then
                Token_Ptr := Token_Ptr + 1;
             end if;
 
@@ -77,10 +78,10 @@ package body M_Basic is
                Token_Ptr := Token_Ptr + 1;
             end if;
 
-            Done :=  (Element (Tokens, 1) /= '0' and
-                        Element (Tokens, 2) /= '0') and
-              (Character'Pos (Element (Tokens, 1)) /= 255  and
-                 Character'Pos (Element (Tokens, 2)) /= 255) ;
+            Done :=  (Element (Tokens, 1) /= "0" and
+                        Element (Tokens, 2) /= "0") and
+              (Element (Tokens, 1) /= "255"  and
+                 Element (Tokens, 2) /= "255") ;
          end loop;
       end if;
    end Execute_Program;
@@ -151,11 +152,9 @@ package body M_Basic is
       null;
    end Prepare_Program;
 
-   --     function Tokenize (aLine : String) return Global.Token_Buffer is
-   function Tokenize (aLine : String) return Unbounded_String is
+      function Tokenize (aLine : String) return Global.Token_Buffer is
       aChar  : Character;
-      --        Tokens :  Global.Token_Buffer;
-      Tokens :  Unbounded_String;
+            Tokens :  Global.Token_Buffer;
    begin
       --  make sure that only printable characters are in the line
       for index in aLine'Range loop
