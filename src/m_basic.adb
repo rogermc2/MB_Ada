@@ -59,9 +59,9 @@ package body M_Basic is
 
    end Defined_Subfunction;
 
-   procedure Execute_Program (Tokens : Global.Token_Buffer) is
+   procedure Execute_Program (Tokens : Unbounded_String) is
    begin
-      Put_Line ("M_Basic.Execute_Program ");
+      Put_Line ("M_Basic.Execute_Program " & To_String (Tokens));
       null;
    end Execute_Program;
 
@@ -130,9 +130,11 @@ package body M_Basic is
       null;
    end Prepare_Program;
 
-   function Tokenize (aLine : String) return Global.Token_Buffer is
+--     function Tokenize (aLine : String) return Global.Token_Buffer is
+   function Tokenize (aLine : String) return Unbounded_String is
       aChar  : Character;
-      Tokens :  Global.Token_Buffer;
+--        Tokens :  Global.Token_Buffer;
+      Tokens :  Unbounded_String;
    begin
       --  make sure that only printable characters are in the line
       for index in aLine'Range loop

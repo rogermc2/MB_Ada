@@ -4,6 +4,7 @@ with System;
 with Interfaces.C; use Interfaces.C;
 
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
+with Ada.Text_IO; use Ada.Text_IO;
 
 with Audio;
 with Configuration;
@@ -27,7 +28,8 @@ with Watchdog_Timer;
 procedure Main is
    use System;
    Startup_Token   : constant Unbounded_String := To_Unbounded_String ("MM.Startup");
-   Tokens          : Global.Token_Buffer;
+--     Tokens          : Global.Token_Buffer;
+   Tokens          : Unbounded_String;
    Saved_Cause     : Setup_Exception := Cause_Nothing;
    Watchdog_Set    : Boolean := False;
    Basic_Running   : Boolean := True;
@@ -81,5 +83,6 @@ begin
 
    Except_Cause := Cause_Nothing;
    Process_Commands (Tokens);
+   Put_Line (To_String (Tokens));
 
 end Main;

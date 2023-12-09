@@ -1,5 +1,5 @@
 
-with Global;
+with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 
 package Main_Support is
 
@@ -10,7 +10,8 @@ package Main_Support is
    Except_Cause : Setup_Exception := Cause_Nothing;
 
    procedure Do_PIN;
-   procedure Process_Commands (Tokens : Global.Token_Buffer);
+--     procedure Process_Commands (Tokens : in out Global.Token_Buffer);
+   procedure Process_Commands (Tokens : in out Unbounded_String);
    procedure Restart;
 
 end Main_Support;
