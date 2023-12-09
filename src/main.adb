@@ -29,7 +29,7 @@ procedure Main is
    use System;
    Startup_Token   : constant Unbounded_String :=
                        To_Unbounded_String ("MM.Startup");
-   Tokens          : Global.UB_String_Buffer;
+   Tokens          : M_Basic.UB_String_Buffer;
    Saved_Cause     : Setup_Exception := Cause_Nothing;
    Watchdog_Set    : Boolean := False;
    Basic_Running   : Boolean := True;
@@ -75,15 +75,21 @@ begin
    if Except_Cause /= Cause_MM_Startup then
       M_Basic.Clear_Program;
       M_Basic.Prepare_Program (True);
+      M_Basic.Token_Buffer.Clear;
+      M_Basic.Token_Buffer.Append (Startup_Token);
       if M_Basic.Find_Subfunction (Startup_Token, 0) /= Null_Address then
-         M_Basic.Execute_Program (Tokens);
+         M_Basic.Token_Buffer.Append (Startup_Token);
+         M_Basic.Token_Buffer.Append (To_Unbounded_String ("/"));
+         M_Basic.Token_Buffer.Append (To_Unbounded_String ("0"));
+         M_Basic.Token_Buffer.Append (Startup_Token);
+         M_Basic.Execute_Program (M_Basic.Token_Buffer);
       end if;
    end if;
 
    --  Autorun code
 
    Except_Cause := Cause_Nothing;
-   Process_Commands (Tokens);
+   Process_Commands (M_Basic.Token_Buffer);
    Put_Line (To_String (Tokens (1)));
 
 end Main;

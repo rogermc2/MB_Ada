@@ -4,6 +4,8 @@ with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Console;
 with File_IO;
 with IO_Support;
+with M_Basic;
+with M_Misc;
 with Serial;
 
 package body Serial_File_IO is
@@ -26,8 +28,10 @@ package body Serial_File_IO is
 
    end MMF_Get_Character;
 
-   function MM_Get_Line (File_Num : Natural) return String is
+   procedure MM_Get_Line (File_Num : Natural; aLine : String) is
       use Ada.Strings;
+      use M_Basic;
+      use M_Basic.UB_String_Buffer_Package;
       use IO_Support;
       aChar : Character := ' ';
       tp    : Unbounded_String;
@@ -48,6 +52,12 @@ package body Serial_File_IO is
          elsif tp = F3 then
            tp := To_Unbounded_String ("XMODEM SEND");
          end if;
+
+         In_Buffer.Clear;
+         In_Buffer.Append (tp);
+         if M_Misc.Echo_Option then
+            Put_Line (To_String (Last_Element (In_Buffer)));
+         end if;
       else
          while not Done loop
             Done := Console.Check_Abort;
@@ -61,8 +71,6 @@ package body Serial_File_IO is
             end if;
          end loop;
       end if;
-
-      return To_String (tp);
 
    end MM_Get_Line;
 

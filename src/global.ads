@@ -1,15 +1,10 @@
 
-with Ada.Containers.Vectors;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 
 with Configuration;
 with Exceptions;
 
 package Global is
-
-   package UB_String_Buffer_Package is
-     new Ada.Containers.Vectors (Positive, Unbounded_String);
-   subtype UB_String_Buffer is UB_String_Buffer_Package.Vector;
 
    --   Flags used in the program lines--  end of a command
    T_CMDEND         : constant Unbounded_String:= To_Unbounded_String ("0");
@@ -55,8 +50,5 @@ package Global is
    Prompt_Fcolour  : Natural := 0;
    Prompt_Bcolour  : Natural := 0;
    Error_In_Prompt : Boolean := False;
-
-   In_Buffer       : UB_String_Buffer;
-   Out_Buffer      : UB_String_Buffer;
 
 end Global;

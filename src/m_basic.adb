@@ -3,7 +3,7 @@ with Ada.Strings;
 with Ada.Text_IO; use Ada.Text_IO;
 
 with Commands_And_Tokens_Tables; use Commands_And_Tokens_Tables;
---  with Global;
+with Global;
 
 package body M_Basic is
 
@@ -61,9 +61,9 @@ package body M_Basic is
 
    end Defined_Subfunction;
 
-   procedure Execute_Program (Tokens : Global.UB_String_Buffer) is
+   procedure Execute_Program (Tokens : UB_String_Buffer) is
       use Global;
-      use Global.UB_String_Buffer_Package;
+      use UB_String_Buffer_Package;
       Done      : Boolean := False;
       Token_Ptr : Natural := 0;
    begin
@@ -153,22 +153,19 @@ package body M_Basic is
       null;
    end Prepare_Program;
 
-   function Tokenize (aLine : String) return Global.UB_String_Buffer is
+   procedure Tokenize (aLine : String) is
       use Ada.Strings;
-      In_Buf : Unbounded_String  := To_Unbounded_String (aLine);
+      UB_Line : Unbounded_String  := To_Unbounded_String (aLine);
       aChar  : Character;
-      Tokens :  Global.UB_String_Buffer;
    begin
-      Trim (In_Buf, Both);
+      Trim (UB_Line, Both);
       --  make sure that only printable characters are in the line
-      for index in aLine'Range loop
-         aChar := aLine (index);
+      for index in 1 .. Length (UB_Line) loop
+         aChar := Element (UB_Line, index);
          if Character'Pos (aChar) < 128 then
             aChar := ' ';
          end if;
       end loop;
-
-      return Tokens;
 
    end Tokenize;
 

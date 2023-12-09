@@ -1,7 +1,7 @@
 
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 
-with Global;
+with M_Basic;
 
 package Main_Support is
 
@@ -12,7 +12,7 @@ package Main_Support is
    Except_Cause : Setup_Exception := Cause_Nothing;
 
    procedure Do_PIN;
-   procedure Process_Commands (Tokens : in out Global.UB_String_Buffer);
+   procedure Process_Commands (Tokens : in out M_Basic.UB_String_Buffer);
    procedure Restart;
 
 end Main_Support;

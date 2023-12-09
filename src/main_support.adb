@@ -8,7 +8,7 @@ with Configuration;
 with Draw;
 with Exceptions;
 with Flash;
-with M_Basic;
+with Global;
 with M_Misc;
 with Memory;
 --  with Serial_File_IO;
@@ -20,7 +20,7 @@ package body Main_Support is
       null;
    end Do_PIN;
 
-   procedure Process_Commands (Tokens : in out Global.UB_String_Buffer) is
+   procedure Process_Commands (Tokens : in out M_Basic.UB_String_Buffer) is
       use System;
    begin
       loop
