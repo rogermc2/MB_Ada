@@ -12,7 +12,7 @@ package M_Basic is
      new Ada.Containers.Vectors (Positive, Unbounded_String);
    subtype UB_String_Buffer is UB_String_Buffer_Package.Vector;
 
-   In_Buffer        : UB_String_Buffer;
+   In_Buffer        : Unbounded_String;
    Token_Buffer     : UB_String_Buffer;
    In_Buffer_Ptr    : Positive := 1;
    Token_Buffer_Ptr : Positive := 1;

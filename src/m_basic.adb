@@ -155,14 +155,13 @@ package body M_Basic is
 
    procedure Tokenize (From_Console : Boolean) is
       use Ada.Strings;
-      UB_Line : Unbounded_String  := To_Unbounded_String (aLine);
       aChar  : Character;
    begin
       --  make sure that only printable characters are in the line
-      for index in In_Buffer.First_Index .. In_Buffer.Last_Index loop
+      for index in 1 .. Length (In_Buffer) loop
          aChar := Element (In_Buffer, index);
          if Character'Pos (aChar) < 32 or Character'Pos (aChar) > 127 then
-            In_Buffer.Replace_Element (index, ' ');
+            Replace_Element (In_Buffer, index, ' ');
          end if;
       end loop;
 

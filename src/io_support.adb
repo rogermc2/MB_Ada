@@ -59,7 +59,6 @@ package body IO_Support is
       end loop;
    end Char_Wait;
 
-
    --        UB_String : Unbounded_String := Null_Unbounded_String;
    --        OK        : Boolean := True;
    --     begin

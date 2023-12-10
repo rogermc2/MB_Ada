@@ -77,7 +77,7 @@ package body Main_Support is
 
          Global.Error_In_Prompt := False;
          Serial_File_IO.MM_Get_Line (0, In_Buffer);
-         if not Is_Empty (In_Buffer) then
+         if Length (In_Buffer) > 0 then
             Put_Line ("Process_Commands  ");
             M_Basic.Tokenize (True);
             M_Basic.Execute_Program (Tokens);

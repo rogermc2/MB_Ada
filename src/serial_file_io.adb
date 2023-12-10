@@ -34,9 +34,7 @@ package body Serial_File_IO is
    --  MM_Get_Line gets a line from the keyboard or a serial file handle
    --  File_Num == 0 means console input
    procedure MM_Get_Line (File_Num : Integer;
-                          Buffer   : in out M_Basic.UB_String_Buffer) is
-      use M_Basic;
-      use M_Basic.UB_String_Buffer_Package;
+                          Buffer   : in out Unbounded_String) is
       use M_Misc;
       use IO_Support;
       Routine_Name : constant String := "Serial_File_IO.MM_Get_Line ";
@@ -62,10 +60,9 @@ package body Serial_File_IO is
            tp := To_Unbounded_String ("XMODEM SEND");
          end if;
 
-         Buffer.Clear;
-         Buffer.Append (tp);
+         Buffer := tp;
          if M_Misc.Echo_Option then
-            Put_Line (To_String (Last_Element (Buffer)));
+            Put_Line (To_String (Buffer));
          end if;
 
       elsif File_Num > 0 then

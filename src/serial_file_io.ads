@@ -1,8 +1,6 @@
 
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 
-with M_Basic;
-
 package Serial_File_IO is
 
    type File_Data is record
@@ -16,6 +14,6 @@ package Serial_File_IO is
    File_Table     : array (1 .. Max_Open_Files) of File_Data;
 
    procedure MM_Get_Line (File_Num : Integer;
-                          Buffer   : in out M_Basic. UB_String_Buffer);
+                          Buffer   : in out Unbounded_String);
 
 end Serial_File_IO;
