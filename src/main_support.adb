@@ -22,6 +22,7 @@ package body Main_Support is
 
    procedure Process_Commands (Tokens : in out M_Basic.UB_String_Buffer) is
       use System;
+      use M_Basic;
    begin
       loop
          if Flash.Option.DISPLAY_CONSOLE then
@@ -59,15 +60,15 @@ package body Main_Support is
          end loop;
 
          Global.Except_Code := Exceptions.EXCEP_IRQ;
-         M_Basic.Prepare_Program (False);
+         Prepare_Program (False);
 
          if not Global.Error_In_Prompt and M_Basic.Find_Subfunction
            (To_Unbounded_String ("MM.PROMPT"), 0) /= System.Null_Address then
             Global.Error_In_Prompt := True;
-            Tokens.Clear;
-            Tokens (1) := To_Unbounded_String ("MM.PROMPT");
-            Tokens (2) := To_Unbounded_String ("\");
-            Tokens (4) := To_Unbounded_String ("0");
+            Token_Buffer.Clear;
+            Token_Buffer.Append (To_Unbounded_String ("MM.PROMPT"));
+            Token_Buffer.Append (To_Unbounded_String ("\"));
+            Token_Buffer.Append (To_Unbounded_String ("0"));
             M_Basic.Execute_Program (Tokens);
          else
             M_Basic.Print_String ("> ");
@@ -81,7 +82,7 @@ package body Main_Support is
          begin
             if Line_Length > 0 then
                Put_Line ("Process_Commands  " & aLine);
-               Tokens := M_Basic.Tokenize (aLine);
+               M_Basic.Tokenize (aLine);
                M_Basic.Execute_Program (Tokens);
             end if;
          end;

@@ -33,9 +33,11 @@ package body Serial_File_IO is
       use M_Basic;
       use M_Basic.UB_String_Buffer_Package;
       use IO_Support;
-      aChar : Character := ' ';
-      tp    : Unbounded_String;
-      Done  : Boolean := False;
+      type File_Type_Access is access File_Type;
+      File_ID : File_Type;
+      aChar   : Character := ' ';
+      tp      : Unbounded_String;
+      Done    : Boolean := False;
    begin
       if File_Num = 0 then
          tp := To_Unbounded_String (Get_Line);
@@ -60,6 +62,7 @@ package body Serial_File_IO is
          end if;
 
       elsif File_Num > 0 then
+         File_ID := new File_Table (File_Num).File_ID'Access;
          while not Done loop
             Done := Console.Check_Abort;
             if not Done then
