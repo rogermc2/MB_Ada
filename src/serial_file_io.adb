@@ -1,26 +1,31 @@
 
-with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
+with Ada.Text_IO; use Ada.Text_IO;
 
+with Configuration;
 with Console;
-with File_IO;
+--  with File_IO;
+with Flash;
 with IO_Support;
 with M_Misc;
 with Serial;
 
 package body Serial_File_IO is
 
-   function MMF_Get_Character (File_Num : Natural) return Character is
-      aChar : Character;
+   function MMF_Get_Character (File_Num  : Integer; File_ID : File_Type;
+                              isConsole : Boolean := False) return Character is
+
+      Routine_Name : constant String := "Serial_File_IO.MMF_Get_Character ";
+      aChar        : Character;
    begin
-      if File_Num = 0 then
+      if isConsole then
          aChar := Console.MM_Get_Character;
-      elsif File_Table (File_Num).Com < 1 then
+      elsif not Is_Open (File_ID) then
          --          Error ("file number is not open");
-         null;
+         Put_Line (Routine_Name & "File is not open");
       elsif File_Table (File_Num).Com > Max_Com_Ports then
-         aChar := File_IO.File_Get_Character (File_Num);
+         Get (File_ID, aChar);
       else
-         aChar := Serial.Seral_Get_Caracter (File_Table (File_Num).Com);
+         aChar := Serial.Serial_Get_Caracter (File_Table (File_Num).Com);
       end if;
 
       return aChar;
@@ -28,16 +33,18 @@ package body Serial_File_IO is
    end MMF_Get_Character;
 
    procedure MM_Get_Line (File_Num : Integer;
-                          Buffer   : M_Basic. UB_String_Buffer) is
-      use Ada.Strings;
+                          Buffer   : in out M_Basic.UB_String_Buffer) is
+--        use Ada.Strings;
       use M_Basic;
       use M_Basic.UB_String_Buffer_Package;
+      use M_Misc;
       use IO_Support;
-      type File_Type_Access is access File_Type;
-      File_ID : File_Type;
-      aChar   : Character := ' ';
-      tp      : Unbounded_String;
-      Done    : Boolean := False;
+      Routine_Name : constant String := "Serial_File_IO.MM_Get_Line ";
+      File_ID   : File_Type;
+      aChar     : Character := ' ';
+      Num_Chars : Natural := 0;
+      tp        : Unbounded_String;
+      Done      : Boolean := False;
    begin
       if File_Num = 0 then
          tp := To_Unbounded_String (Get_Line);
@@ -55,25 +62,46 @@ package body Serial_File_IO is
            tp := To_Unbounded_String ("XMODEM SEND");
          end if;
 
-         In_Buffer.Clear;
-         In_Buffer.Append (tp);
+         Buffer.Clear;
+         Buffer.Append (tp);
          if M_Misc.Echo_Option then
-            Put_Line (To_String (Last_Element (In_Buffer)));
+            Put_Line (To_String (Last_Element (Buffer)));
          end if;
 
       elsif File_Num > 0 then
-         File_ID := new File_Table (File_Num).File_ID'Access;
+         Open (File_ID, In_File, To_String (File_Table (File_Num).Name));
          while not Done loop
             Done := Console.Check_Abort;
             if not Done then
                Done := File_Table (File_Num).Com > Max_Com_Ports or
-                 End_Of_File (File_Table (File_Num).File_ID);
+                 End_Of_File (File_ID);
+
                if not Done then
-                  Append (tp,
-                          Serial.Seral_Get_Caracter(File_Table (File_Num).Com));
+                  aChar := MMF_Get_Character (File_Num, File_ID);
+                  if aChar = Character'Val (9) then
+                     --  expand tabs to spaces.
+                     while Num_Chars <= Configuration.MAXSTRLEN and
+                       Num_Chars mod Flash.Option.Tab loop
+                        Num_Chars := Num_Chars + 1;
+                        if Num_Chars < Configuration.MAXSTRLEN then
+                           Put_Line (Routine_Name & "Line is too long");
+                        else
+                           Append (tp, ' ');
+                           if File_Num = 0 and Echo_Option then
+                              Put (' ');
+                           end if;
+                        end if;
+                     end loop;
+                  end if;
+
+                  Append (tp, aChar);
+                  Append (tp, Serial.Serial_Get_Caracter
+                          (File_Table (File_Num).Com));
                end if;
             end if;
          end loop;
+
+         Close (File_ID);
       end if;
 
    end MM_Get_Line;
