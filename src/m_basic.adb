@@ -153,17 +153,16 @@ package body M_Basic is
       null;
    end Prepare_Program;
 
-   procedure Tokenize (aLine : String) is
+   procedure Tokenize (From_Console : Boolean) is
       use Ada.Strings;
       UB_Line : Unbounded_String  := To_Unbounded_String (aLine);
       aChar  : Character;
    begin
-      Trim (UB_Line, Both);
       --  make sure that only printable characters are in the line
-      for index in 1 .. Length (UB_Line) loop
-         aChar := Element (UB_Line, index);
-         if Character'Pos (aChar) < 128 then
-            aChar := ' ';
+      for index in In_Buffer.First_Index .. In_Buffer.Last_Index loop
+         aChar := Element (In_Buffer, index);
+         if Character'Pos (aChar) < 32 or Character'Pos (aChar) > 127 then
+            In_Buffer.Replace_Element (index, ' ');
          end if;
       end loop;
 

@@ -11,7 +11,7 @@ with Flash;
 with Global;
 with M_Misc;
 with Memory;
---  with Serial_File_IO;
+with Serial_File_IO;
 
 package body Main_Support is
 
@@ -23,6 +23,7 @@ package body Main_Support is
    procedure Process_Commands (Tokens : in out M_Basic.UB_String_Buffer) is
       use System;
       use M_Basic;
+      use M_Basic.UB_String_Buffer_Package;
    begin
       loop
          if Flash.Option.DISPLAY_CONSOLE then
@@ -51,7 +52,7 @@ package body Main_Support is
 
          if Global.MM_Char_Pos > 1 then
             --  Prompt should be on a new line.
---              M_Basic.Print_String ("\r\n");
+            --              M_Basic.Print_String ("\r\n");
             New_Line;
          end if;
 
@@ -75,17 +76,12 @@ package body Main_Support is
          end if;
 
          Global.Error_In_Prompt := False;
-         declare
---              aLine       : constant String := Serial_File_IO.MM_Get_Line (1);
-            aLine       : constant String := Get_Line;
-            Line_Length : constant Natural := aLine'Length;
-         begin
-            if Line_Length > 0 then
-               Put_Line ("Process_Commands  " & aLine);
-               M_Basic.Tokenize (aLine);
-               M_Basic.Execute_Program (Tokens);
-            end if;
-         end;
+         Serial_File_IO.MM_Get_Line (0, In_Buffer);
+         if not Is_Empty (In_Buffer) then
+            Put_Line ("Process_Commands  ");
+            M_Basic.Tokenize (True);
+            M_Basic.Execute_Program (Tokens);
+         end if;
 
       end loop;
 

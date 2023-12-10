@@ -30,6 +30,6 @@ package M_Basic is
    procedure Init_Basic;
    procedure Print_String (theString : String);
    procedure Prepare_Program (State : Boolean);
-   procedure Tokenize (aLine : String);
+   procedure Tokenize (From_Console : Boolean);
 
 end M_Basic;

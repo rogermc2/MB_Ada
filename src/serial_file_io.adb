@@ -3,7 +3,6 @@ with Ada.Text_IO; use Ada.Text_IO;
 
 with Configuration;
 with Console;
---  with File_IO;
 with Flash;
 with IO_Support;
 with M_Misc;
@@ -32,9 +31,10 @@ package body Serial_File_IO is
 
    end MMF_Get_Character;
 
+   --  MM_Get_Line gets a line from the keyboard or a serial file handle
+   --  File_Num == 0 means console input
    procedure MM_Get_Line (File_Num : Integer;
                           Buffer   : in out M_Basic.UB_String_Buffer) is
---        use Ada.Strings;
       use M_Basic;
       use M_Basic.UB_String_Buffer_Package;
       use M_Misc;
