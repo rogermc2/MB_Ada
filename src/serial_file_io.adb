@@ -81,7 +81,7 @@ package body Serial_File_IO is
                   if aChar = Character'Val (9) then
                      --  expand tabs to spaces.
                      while Num_Chars <= Configuration.MAXSTRLEN and
-                       Num_Chars mod Flash.Option.Tab loop
+                       Num_Chars mod Flash.Option.Tab > 0 loop
                         Num_Chars := Num_Chars + 1;
                         if Num_Chars < Configuration.MAXSTRLEN then
                            Put_Line (Routine_Name & "Line is too long");
@@ -92,11 +92,13 @@ package body Serial_File_IO is
                            end if;
                         end if;
                      end loop;
+
+                  elsif aChar = Character'Val (10) then  -- newline
+                     Done := True;
+                  else
+                     Append (tp, aChar);
                   end if;
 
-                  Append (tp, aChar);
-                  Append (tp, Serial.Serial_Get_Caracter
-                          (File_Table (File_Num).Com));
                end if;
             end if;
          end loop;
