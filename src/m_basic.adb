@@ -155,6 +155,7 @@ package body M_Basic is
 
    procedure Tokenize (From_Console : Boolean) is
       use Ada.Strings;
+      use M_Basic.UB_String_Buffer_Package;
       aChar  : Character;
    begin
       --  make sure that only printable characters are in the line
@@ -164,6 +165,12 @@ package body M_Basic is
             Replace_Element (In_Buffer, index, ' ');
          end if;
       end loop;
+
+      Token_Buffer.Clear;
+      if not From_Console then
+         Token_Buffer.Append (Global.T_NEWLINE);
+      end if;
+      Trim (In_Buffer, Left);
 
    end Tokenize;
 
