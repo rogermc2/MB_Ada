@@ -30,6 +30,7 @@ package M_Basic is
    function Find_Subfunction (Token : Unbounded_String; Fun_Type : Integer)
                               return System.Address;
    procedure Init_Basic;
+   function Is_Name_Start (aChar : Character) return Boolean;
    procedure Print_String (theString : String);
    procedure Prepare_Program (State : Boolean);
    procedure Tokenize (From_Console : Boolean);

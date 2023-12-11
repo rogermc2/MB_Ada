@@ -145,6 +145,13 @@ package body M_Basic is
 
    end Init_Basic;
 
+   function Is_Name_Start (aChar : Character) return Boolean is
+      use Ada.Characters.Handling;
+   begin
+      return Is_Alphanumeric (aChar) or aChar = '_';
+
+   end Is_Name_Start;
+
    procedure Parse_Line (Pos : Positive) is
       use Ada.Characters.Handling;
       use M_Basic.UB_String_Buffer_Package;
@@ -196,7 +203,7 @@ package body M_Basic is
       use M_Basic.UB_String_Buffer_Package;
       aChar    : Character;
       In_Ptr   : Positive := 1;
-      Line_Num : Unsigned_128;
+      Line_Num : Unsigned_64;
       OK       : Boolean := True;
    begin
       --  make sure that only printable characters are in the line
@@ -221,13 +228,13 @@ package body M_Basic is
       end loop;
 
       if Is_Digit (Element (In_Buffer, 1)) and In_Ptr <= 8 then
-         Line_Num := Unsigned_128'Value (Slice (In_Buffer, 1, In_Ptr - 1));
+         Line_Num := Unsigned_64'Value (Slice (In_Buffer, 1, In_Ptr - 1));
          if not From_Console and Line_Num > 1 and
-           Line_Num <= Unsigned_128 (MAXLINENBR) then
+           Line_Num <= Unsigned_64 (MAXLINENBR) then
             Token_Buffer.Append (Global.T_LINENBR);
-            Token_Buffer.Append (To_Unbounded_String ((Unsigned_128'Image
+            Token_Buffer.Append (To_Unbounded_String ((Unsigned_64'Image
                                  (Shift_Right (Line_Num, 8)))));
-            Token_Buffer.Append (To_Unbounded_String ((Unsigned_128'Image
+            Token_Buffer.Append (To_Unbounded_String ((Unsigned_64'Image
                                  (Line_Num and 16#FF#))));
          end if;
       end if;
