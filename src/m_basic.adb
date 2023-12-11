@@ -9,7 +9,7 @@ with Global;
 
 package body M_Basic is
 
---     type Unsigned_Integer is mod 2 ** Integer'Size;
+   --     type Unsigned_Integer is mod 2 ** Integer'Size;
 
    Start_Edit_Point : Positive := 1;
    Start_Edit_Char  : Positive := 1;
@@ -146,9 +146,93 @@ package body M_Basic is
 
    end Init_Basic;
 
-   procedure Parse_Line (Start_Index : Positive) is
+   procedure Process_Colon (Pos : in out Positive) is
    begin
       null;
+
+   end Process_Colon;
+
+   procedure Process_Command (Pos : in out Positive) is
+   begin
+      null;
+
+   end Process_Command;
+
+   procedure Process_Double_Quote (Pos : in out Positive; aChar : Character) is
+   begin
+      while aChar /= '"' and Pos <= Length (In_Buffer) loop
+         Pos := Pos + 1;
+      end loop;
+
+      Token_Buffer.Append (To_Unbounded_String (""""));
+      Pos := Pos + 1;
+      if  Element (In_Buffer, Pos) = '"' then
+         Pos := Pos + 1;
+      end if;
+
+   end Process_Double_Quote;
+
+   procedure Process_Name_Start (Pos : in out Positive) is
+   begin
+      null;
+
+   end Process_Name_Start;
+
+   procedure Process_First_Nonwhite
+     (Pos  : in out Positive; Label_Valid : Boolean) is
+      Match_I : Integer := -1;
+      Match_L : Integer := -1;
+   begin
+         if Match_I > -1 then
+            Process_Command (Pos);
+         elsif Label_Valid and Is_Name_Start (Pos) then
+            Process_Name_Start (Pos);
+      end if;
+
+   end Process_First_Nonwhite;
+
+   procedure Process_Try_Number (Pos : in out Positive) is
+   begin
+      null;
+
+   end Process_Try_Number;
+
+   procedure Process_Quote (Pos : in out Positive) is
+   begin
+      null;
+
+   end Process_Quote;
+
+   procedure Parse_Line (Pos : Positive) is
+      use Ada.Characters.Handling;
+      use M_Basic.UB_String_Buffer_Package;
+      Buff_Length    : constant Positive := Length (In_Buffer);
+      Ptr            : Positive := Pos;
+      aChar          : Character;
+      First_Nonwhite : Boolean := True;
+      Label_Valid    : Boolean := True;
+   begin
+      while Ptr <= Buff_Length loop
+         aChar := Element (In_Buffer, Ptr);
+         if aChar = ' ' then
+            Ptr := Ptr + 1;
+         elsif aChar = '"' then
+            Process_Double_Quote (Ptr, aChar);
+         elsif aChar = ''' then
+            Process_Quote (Ptr);
+         elsif aChar = ':' then
+            Process_Colon (Ptr);
+         elsif Is_Digit (aChar) or aChar = '.' then
+            --  not white space or string or comment so try a number
+            Process_Try_Number (Ptr);
+         elsif First_Nonwhite then
+            Process_First_Nonwhite (Ptr, Label_Valid, Match_I);
+         else
+            null;
+         end if;
+
+      end loop;
+
    end Parse_Line;
 
    procedure Print_String (theString : String) is
