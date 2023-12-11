@@ -1,10 +1,10 @@
 
+with Ada.Characters.Handling;
 with Ada.Strings;
 with Ada.Text_IO; use Ada.Text_IO;
 
 with Commands_And_Tokens_Tables; use Commands_And_Tokens_Tables;
 with Global;
-with Support;
 
 package body M_Basic is
 
@@ -155,9 +155,11 @@ package body M_Basic is
    end Prepare_Program;
 
    procedure Tokenize (From_Console : Boolean) is
+      use Ada.Characters.Handling;
       use Ada.Strings;
       use M_Basic.UB_String_Buffer_Package;
       aChar  : Character;
+      OK     : Boolean := True;
    begin
       --  make sure that only printable characters are in the line
       for index in 1 .. Length (In_Buffer) loop
@@ -172,6 +174,13 @@ package body M_Basic is
          Token_Buffer.Append (Global.T_NEWLINE);
       end if;
       Trim (In_Buffer, Left);
+
+      for index in 1 .. 8 loop
+         OK := OK and Is_Hexadecimal_Digit (Element (In_Buffer, index));
+         OK := OK and then index <= 8 and then
+           Is_Digit (First_Element (In_Buffer));
+
+      end loop;
 
    end Tokenize;
 

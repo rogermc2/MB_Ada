@@ -20,20 +20,6 @@ package body Support is
       null;
    end Do_PIN;
 
-   function Is_X_Digit (aChar : Character) return Boolean is
-      X_Digits : constant array (1 .. 16) of Character :=
-                   ('0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
-                   'A', 'B', 'C', 'D', 'E', 'F');
-      Match    : Boolean := False;
-   begin
-      for ch in X_Digits'Range loop
-         Match := Match or aChar = X_Digits (ch);
-      end loop;
-
-      return Match;
-
-   end Is_X_Digit;
-
    procedure Process_Commands (Tokens : in out M_Basic.UB_String_Buffer) is
       use System;
       use M_Basic;
