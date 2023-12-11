@@ -4,32 +4,31 @@
 
 int main(void)
 {
-  char tp[] = {'0' , '2', 'C' , '4','F' , '2', '3' , '4'};
-  char* start;
-  char* current;
+  char tp[] = {"C2C4FZ34"};
+  char* p;
   int i;
-  current = tp;
-  start = current;
+  p = tp;
 
   for (i = 0; i < 8; i++)
     // is this eight hex digits
     {
-      if(!isxdigit(tp[i]))
+      if (!isxdigit(p[i]))
 	{
-	  printf ("x test %d is not a x digit\n",tp[i]);
+	  printf ("hex test,%d: %d is not a hex digit\n\n", i, p[i]);
 	  break;
 	}
       else
-	printf ("x test %d is a x digit\n",tp[i]);
+	printf ("hex test %d: %d is a hex digit\n", i, p[i]);
 
-/*       *tp = start; */
-
-      if(isdigit(*tp) && i < 8)
+      if (isdigit (*p) && i < 8)
 	{   // if it a digit and not an 8 digit hex number (ie, it is CFUNCTION data) then try for a line number
-	  printf ("digit test %d: %d is a digit\n", i, *tp);
+	  printf ("digit test %d: %d is a digit\n", i, *p);
 	}
       else
-	printf ("digit test %d: %d is not a digit\n", i, *tp);
+	{
+	  printf ("\n");
+	  printf ("digit test %d: %d is not a digit\n\n", i, p);
+	}
     }
 
   printf ("%d:\n", i, *tp);
