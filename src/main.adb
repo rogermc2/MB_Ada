@@ -15,13 +15,13 @@ with Flash;
 with Global;
 with I2C;
 with Keyboard;
-with Main_Support; use Main_Support;
 with M_Basic;
 with M_Misc;
 with Misc_MX470;
 with P32mx470f512h;
 with SPI_LCD;
 with SSD_1963;
+with Support; use Support;
 with Touch;
 with Watchdog_Timer;
 
