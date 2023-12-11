@@ -164,7 +164,8 @@ package body M_Basic is
       use Ada.Strings;
       use M_Basic.UB_String_Buffer_Package;
       aChar  : Character;
-      Ptr    : Natural := 0;
+      Ptr    : Positive := 1;
+      Int_Val : Integer;
       OK     : Boolean := True;
    begin
       --  make sure that only printable characters are in the line
@@ -184,12 +185,12 @@ package body M_Basic is
       --  if it a digit and not an 8 digit hex number
       --  (ie, it is CFUNCTION data) then try for a line number
       while OK and then Ptr <= 8 loop
-         Ptr := Ptr + 1;
          OK := OK and Is_Hexadecimal_Digit (Element (In_Buffer, Ptr));
+         Ptr := Ptr + 1;
       end loop;
 
       if Is_Digit (Element (In_Buffer, 1)) and Ptr <= 8 then
-          null;
+          Int_Val := Integer'Value (Slice (In_Buffer, 1, Ptr));
       end if;
 
       --  Process the rest of the line
