@@ -143,6 +143,11 @@ package body M_Basic is
 
    end Init_Basic;
 
+   procedure Parse_Line (Start_Index : Positive) is
+   begin
+      null;
+   end Parse_Line;
+
    procedure Print_String (theString : String) is
    begin
       Put (theString);
@@ -186,6 +191,9 @@ package body M_Basic is
       if Is_Digit (Element (In_Buffer, 1)) and Ptr <= 8 then
           null;
       end if;
+
+      --  Process the rest of the line
+      Parse_Line (Ptr);
 
    end Tokenize;
 
