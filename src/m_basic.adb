@@ -1,12 +1,15 @@
 
+with Interfaces;
 with Ada.Characters.Handling;
 with Ada.Strings;
 with Ada.Text_IO; use Ada.Text_IO;
-
+--  with Ada.Text_IO.Modular_IO;
 with Commands_And_Tokens_Tables; use Commands_And_Tokens_Tables;
 with Global;
 
 package body M_Basic is
+
+--     type Unsigned_Integer is mod 2 ** Integer'Size;
 
    Start_Edit_Point : Positive := 1;
    Start_Edit_Char  : Positive := 1;
@@ -160,13 +163,14 @@ package body M_Basic is
    end Prepare_Program;
 
    procedure Tokenize (From_Console : Boolean) is
+      use Interfaces;
       use Ada.Characters.Handling;
       use Ada.Strings;
       use M_Basic.UB_String_Buffer_Package;
-      aChar  : Character;
-      Ptr    : Positive := 1;
-      Int_Val : Integer;
-      OK     : Boolean := True;
+      aChar    : Character;
+      In_Ptr   : Positive := 1;
+      Line_Num : Unsigned_128;
+      OK       : Boolean := True;
    begin
       --  make sure that only printable characters are in the line
       for index in 1 .. Length (In_Buffer) loop
@@ -184,17 +188,25 @@ package body M_Basic is
 
       --  if it a digit and not an 8 digit hex number
       --  (ie, it is CFUNCTION data) then try for a line number
-      while OK and then Ptr <= 8 loop
-         OK := OK and Is_Hexadecimal_Digit (Element (In_Buffer, Ptr));
-         Ptr := Ptr + 1;
+      while OK and then In_Ptr <= 8 loop
+         OK := OK and Is_Hexadecimal_Digit (Element (In_Buffer, In_Ptr));
+         In_Ptr := In_Ptr + 1;
       end loop;
 
-      if Is_Digit (Element (In_Buffer, 1)) and Ptr <= 8 then
-          Int_Val := Integer'Value (Slice (In_Buffer, 1, Ptr));
+      if Is_Digit (Element (In_Buffer, 1)) and In_Ptr <= 8 then
+         Line_Num := Unsigned_128'Value (Slice (In_Buffer, 1, In_Ptr - 1));
+         if not From_Console and Line_Num > 1 and
+           Line_Num <= Unsigned_128 (MAXLINENBR) then
+            Token_Buffer.Append (Global.T_LINENBR);
+            Token_Buffer.Append (To_Unbounded_String ((Unsigned_128'Image
+                                 (Shift_Right (Line_Num, 8)))));
+            Token_Buffer.Append (To_Unbounded_String ((Unsigned_128'Image
+                                 (Line_Num and 16#FF#))));
+         end if;
       end if;
 
       --  Process the rest of the line
-      Parse_Line (Ptr);
+      Parse_Line (In_Ptr);
 
    end Tokenize;
 
