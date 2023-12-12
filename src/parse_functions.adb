@@ -87,10 +87,13 @@ package body Parse_Functions is
             Pos2 := Pos;
             Command := Command_Table (index).Name;
             while Pos > 0 and To_Upper (Element (In_Buffer, Pos2)) =
-            To_Upper (Element (In_Buffer, Pos)) loop
-               if Element (In_Buffer, Pos) = ' ' then
-                  Skip_Spaces (Pos);
+            To_Upper (Element (In_Buffer, Pos2)) loop
+               if Element (In_Buffer, Pos2) = ' ' then
+                  Skip_Spaces (Pos2);
+               else
+                  Pos2 := Pos2 + 1;
                end if;
+               Pos := Pos + 1;
             end loop;
          end loop;
 
