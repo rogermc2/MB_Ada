@@ -196,6 +196,14 @@ package body M_Basic is
       null;
    end Prepare_Program;
 
+   procedure Skip_Spaces (Pos : in out Positive) is
+   begin
+      while  Element (In_Buffer, Pos) = ' ' loop
+          Pos := Pos + 1;
+      end loop;
+
+   end Skip_Spaces;
+
    procedure Tokenize (From_Console : Boolean) is
       use Interfaces;
       use Ada.Characters.Handling;

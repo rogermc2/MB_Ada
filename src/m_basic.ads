@@ -31,8 +31,10 @@ package M_Basic is
                               return System.Address;
    procedure Init_Basic;
    function Is_Name_Start (aChar : Character) return Boolean;
+   pragma Inline (Init_Basic);
    procedure Print_String (theString : String);
    procedure Prepare_Program (State : Boolean);
+   procedure Skip_Spaces (Pos : in out Positive);
    procedure Tokenize (From_Console : Boolean);
 
 end M_Basic;
