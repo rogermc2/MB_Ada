@@ -1,6 +1,9 @@
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <ctype.h>
+
+#include <defs.h>
 
 #include "setjmp.h"
 #include "Configuration.h"
@@ -10,8 +13,8 @@
 #define INCLUDE_COMMAND_TABLE
 const struct s_tokentbl commandtbl[] = {
     #include "Functions.h"
-    #include "Commands.h"
-    #include "Operators.h"
+/*     #include "Commands.h" */
+/*     #include "Operators.h" */
  {"", 0, 0, cmd_null}
 };
 #undef INCLUDE_COMMAND_TABLE
