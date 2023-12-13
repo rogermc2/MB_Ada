@@ -1,25 +1,4 @@
-/***********************************************************************************************************************
-MMBasic
-
-commands.c
-
-Handles all the commands in MMBasic
-
-Copyright 2011 - 2021 Geoff Graham.  All Rights Reserved.
-
-This file and modified versions of this file are supplied to specific individuals or organisations under the following
-provisions:
-
-- This file, or any files that comprise the MMBasic source (modified or not), may not be distributed or copied to any other
-  person or organisation without written permission.
-
-- Object files (.o and .hex files) generated using this file (modified or not) may not be distributed or copied to any other
-  person or organisation without written permission.
-
-- This file is provided in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
-
-************************************************************************************************************************/
+/* MMBasic  commands.c */
 
 #include "Version.h"
 
@@ -27,18 +6,13 @@ void flist(int, int, int);
 void clearprog(void);
 void execute_one_command(char *p);
 
-
-
 // stack to keep track of nested FOR/NEXT loops
 struct s_forstack forstack[MAXFORLOOPS + 1];
 int forindex;
 
-
-
 // stack to keep track of nested DO/LOOP loops
 struct s_dostack dostack[MAXDOLOOPS];
 int doindex;                                                        // counts the number of nested DO/LOOP loops
-
 
 // stack to keep track of GOSUBs, SUBs and FUNCTIONs
 char *gosubstack[MAXGOSUB];
@@ -48,20 +22,14 @@ int gosubindex;
 char DimUsed = false;                                               // used to catch OPTION BASE after DIM has been used
 
 int TraceOn;                                                        // used to track the state of TRON/TROFF
-#if !defined(MX170)
-  char *TraceBuff[TRACE_BUFF_SIZE];
-  int TraceBuffIndex;                                               // used for listing the contents of the trace buffer
-#endif
 
 int OptionErrorSkip;                                                // how to handle an error
 int MMerrno;                                                        // the error number
 char MMErrMsg[MAXERRMSG];                                           // the error message
 
-
 void cmd_null(void) {
   // do nothing (this is just a placeholder for commands that have no action)
 }
-
 
 // the PRINT command
 void cmd_print(void) {
@@ -74,8 +42,6 @@ void cmd_print(void) {
     docrlf = true;
                              // print the terminating cr/lf unless it has been suppressed
 }
-
-
 
 // the LET command
 // because the LET is implied (ie, line does not have a recognisable command)

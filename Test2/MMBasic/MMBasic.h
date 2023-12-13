@@ -1,23 +1,3 @@
-/***********************************************************************************************************************
-MMBasic.h
-
-Include file that contains the globals and defines for MMBasic.c in MMBasic.
-
-Copyright 2011 - 2021 Geoff Graham.  All Rights Reserved.
-
-This file and modified versions of this file are supplied to specific individuals or organisations under the following
-provisions:
-
-- This file, or any files that comprise the MMBasic source (modified or not), may not be distributed or copied to any other
-  person or organisation without written permission.
-
-- Object files (.o and .hex files) generated using this file (modified or not) may not be distributed or copied to any other
-  person or organisation without written permission.
-
-- This file is provided in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
-
-************************************************************************************************************************/
 
 #include <stdio.h>
 #include "Configuration.h"
@@ -92,7 +72,6 @@ extern int LocalIndex;                                // used to track the level
 extern int OptionBase;                                // value of OPTION BASE
 extern char OptionExplicit;                           // true if OPTION EXPLICIT has been used
 extern char DefaultType;                              // the default type if a variable is not specifically typed
-
 
 //#if !defined(BOOL_ALREADY_DEFINED)
 //    #define BOOL_ALREADY_DEFINED

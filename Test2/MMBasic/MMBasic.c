@@ -1,31 +1,3 @@
-/***********************************************************************************************************************
-  MMBasic
-
-  MMBasic.c
-
-  Provides the core functions used in MMBasic.  These include parsing the command line and converting the key
-  words into tokens, storage and management of the program in memory, storage and management of variables,
-  the expression execution engine and other useful functions.
-
-  Copyright 2011 - 2021 Geoff Graham.  All Rights Reserved.
-
-  This file and modified versions of this file are supplied to specific individuals or organisations under the following
-  provisions:
-
-  - This file, or any files that comprise the MMBasic source (modified or not), may not be distributed or copied to any other
-  person or organisation without written permission.
-
-  - Object files (.o and .hex files) generated using this file (modified or not) may not be distributed or copied to any other
-  person or organisation without written permission.
-
-  - This file is provided in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
-
-  ************************************************************************************************************************/
-
-//#include <stdio.h>
-//#include <limits.h>
-//#include <stdarg.h>
 
 #include "Version.h"
 
@@ -36,34 +8,32 @@ extern int MMCharPos;
 // most of them are listed in the .h files so you should not add your own here but instead add
 // them to the appropriate .h file
 #define INCLUDE_COMMAND_TABLE
-const struct s_tokentbl commandtbl[] = {
+const struct s_tokentbl commandtbl[] =
+{
     #include "Functions.h"
     #include "Commands.h"
     #include "Operators.h"
-					/* #if defined(MX170) || defined(MX470) */
-					/*     #include "../Micromite/Hardware_Commands.h" */
-					/* #endif */
-					{ "",   0,                  0, cmd_null,    }                   // this dummy entry is always at the end
+    { "",   0,                  0, cmd_null,    }                   // this dummy entry is always at the end
 };
 
 #undef INCLUDE_COMMAND_TABLE
-
-
+int CommandTableSize =  (sizeof(commandtbl)/sizeof(struct s_tokentbl));
 
 // this is the token table that defines the other tokens in the source code
 // most of them are listed in the .h files so you should not add your own here
 // but instead add them to the appropriate .h file
 #define INCLUDE_TOKEN_TABLE
-const struct s_tokentbl tokentbl[] = {
+const struct s_tokentbl tokentbl[] =
+{
     #include "Functions.h"
     #include "Commands.h"
     #include "Operators.h"
-				      { "",   0,                  0, cmd_null,    }                   // this dummy entry is always at the end
+    { "",   0,                  0, cmd_null,    }                   // this dummy entry is always at the end
 };
 #undef INCLUDE_TOKEN_TABLE
 
 // these are initialised at startup
-int CommandTableSize, TokenTableSize;
+/* int CommandTableSize, TokenTableSize; */
 
 struct s_vartbl *vartbl;                                            // this table stores all variables
 int varcnt;                                                         // number of variables
