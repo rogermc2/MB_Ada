@@ -10,6 +10,28 @@ with Commands_And_Tokens_Tables;
 
 package body Parse_Functions is
 
+   function Get_Command_From_Input (Pos : in out Positive)
+                                 return Unbounded_String is
+      use Ada.Characters.Handling;
+--        Routine_Name  : constant String :=
+--                          "Parse_Functions.Get_Command_From_Input ";
+      aChar         : Character;
+      Command       : Unbounded_String;
+      Done          : Boolean := False;
+   begin
+      while not Done loop
+         aChar := Element (In_Buffer, Pos);
+         Done := not (aChar = '_' or Is_Alphanumeric (aChar));
+         if not Done then
+           Append (Command, aChar);
+         end if;
+         Pos := Pos + 1;
+      end loop;
+
+      return Command;
+
+   end Get_Command_From_Input;
+
    function Get_Command_Value (Command : String) return integer is
       use Commands_And_Tokens_Tables;
       Routine_Name  : constant String := "Parse_Functions.Get_Command_Value ";
@@ -68,32 +90,39 @@ package body Parse_Functions is
      (Pos  : in out Positive; Label_Valid : Boolean) is
       use Ada.Characters.Handling;
       use Commands_And_Tokens_Tables;
-      aChar       : Character := Element (In_Buffer, Pos);
-      Match_I     : Integer := -1;
-      Match_L     : Integer := -1;
-      Match_Pos   : Positive;
-      Pos2        : Positive;
-      Command     : Unbounded_String;
+      aChar      : Character := Element (In_Buffer, Pos);
+      Match_I    : Integer := -1;
+      Match_L    : Integer := -1;
+      Match_Pos  : Positive;
+      Pos2       : Positive;
+      Command    : Unbounded_String;
+      In_Command : Unbounded_String;
    begin
       if aChar = '?' then
          Match_I := Get_Command_Value ("Print") - M_Misc.C_Base_Token;
-         if Element (In_Buffer, Pos) = ' ' then
+         if Element (In_Buffer, Pos + 1) = ' ' then
+            --  eat a trailing space
             Pos := Pos + 1;
             Match_Pos := Pos;
          end if;
 
       else
-         for index in Command_Table'Range loop
-            Pos2 := Pos;
+         In_Command := Get_Command_From_Input (Pos);
+         for index in Command_Table'First + 1 .. Command_Table'Last loop
+            Pos2 := Pos + 1;
             Command := Command_Table (index).Name;
-            while Pos > 0 and To_Upper (Element (In_Buffer, Pos2)) =
-            To_Upper (Element (In_Buffer, Pos2)) loop
+            while Pos > 0 and To_Upper (To_String (In_Command)) =
+            To_Upper (To_String (Command)) loop
                if Element (In_Buffer, Pos2) = ' ' then
                   Skip_Spaces (Pos2);
                else
                   Pos2 := Pos2 + 1;
                end if;
                Pos := Pos + 1;
+
+               if Element (In_Buffer, Pos) = '(' then
+                  Skip_Spaces (Pos);
+               end if;
             end loop;
          end loop;
 

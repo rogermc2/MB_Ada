@@ -26,7 +26,6 @@ provisions:
 #define CONSOLE_BAUDRATE        38400               // only applies to the serial console
 
 #define nop __asm__ ("NOP")
-/* #define MIPS16 __attribute__((mips16)) */
 
 #define forever 1
 #define true  1
