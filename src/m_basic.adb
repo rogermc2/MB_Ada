@@ -160,6 +160,10 @@ package body M_Basic is
         (To_Unbounded_String (""), T_NA, T_NA, T_NA, T_NA, 0,
          System.Null_Address);
 
+      for index in Token_Table'Range loop
+         Token_Table (index) := Command_Table (index);
+      end loop;
+
    end Init_Basic;
 
    function Is_Name_Start (aChar : Character) return Boolean is

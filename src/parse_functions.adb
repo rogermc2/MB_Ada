@@ -6,7 +6,7 @@ with Ada.Text_IO; use Ada.Text_IO;
 with M_Basic; use M_Basic;
 with M_Misc;
 
-with Command_And_Token_Tables;
+--  with Command_And_Token_Tables;
 
 package body Parse_Functions is
 
@@ -33,7 +33,7 @@ package body Parse_Functions is
    end Get_Command_From_Input;
 
    function Get_Command_Value (Command : String) return integer is
-      use Command_And_Token_Tables;
+--        use Command_And_Token_Tables;
       Routine_Name  : constant String := "Parse_Functions.Get_Command_Value ";
       Command_Value : Integer := 0;
       Found         : Boolean := False;
@@ -89,7 +89,7 @@ package body Parse_Functions is
    procedure Process_First_Nonwhite
      (Pos  : in out Positive; Label_Valid : Boolean) is
       use Ada.Characters.Handling;
-      use Command_And_Token_Tables;
+--        use Command_And_Token_Tables;
       aChar      : Character := Element (In_Buffer, Pos);
       Match_I    : Integer := -1;
       Match_L    : Integer := -1;
