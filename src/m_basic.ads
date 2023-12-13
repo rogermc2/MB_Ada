@@ -21,7 +21,8 @@ package M_Basic is
    --     In_Buffer_Ptr    : Positive := 1;
    --     Token_Buffer_Ptr : Positive := 1;
 
-   Command_Table : array (1 .. Num_Commands + Num_Functions + Num_Operators) of
+   Command_Table : array (1 .. Num_Commands + Num_Functions +
+                            Num_Operators + 1) of
      Command_Table_Item;
 
    Current_Line_Ptr : Natural := 0;

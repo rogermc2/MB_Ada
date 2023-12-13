@@ -156,6 +156,10 @@ package body M_Basic is
            Operator_Types (index);
       end loop;
 
+      Command_Table (Command_Table'Last) :=
+        (To_Unbounded_String (""), T_NA, T_NA, T_NA, T_NA, 0,
+         System.Null_Address);
+
    end Init_Basic;
 
    function Is_Name_Start (aChar : Character) return Boolean is
