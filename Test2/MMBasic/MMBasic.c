@@ -28,7 +28,7 @@ const struct s_tokentbl tokentbl[] =
     #include "Functions.h"
     #include "Commands.h"
     #include "Operators.h"
-    { "",   0,                  0, cmd_null,    }                   // this dummy entry is always at the end
+    { "",   0,  0, cmd_null,    }                   // this dummy entry is always at the end
 };
 #undef INCLUDE_TOKEN_TABLE
 int TokenTableSize =  (sizeof(tokentbl)/sizeof(struct s_tokentbl));

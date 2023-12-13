@@ -200,7 +200,7 @@ char *getstring(char *p);
 void tokenise(int console);
 void ExecuteProgram(char *);
 void SaveProgramToFlash(char *pm, int msg);
-//void AddProgramLine(int append);
+void AddProgramLine(int append);
 char *findline(int, int);
 char *findlabel(char *labelptr);
 char *skipvar(char *p, int noerror);

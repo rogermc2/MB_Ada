@@ -27,12 +27,14 @@ int main(void)
   /*    DefaultType = T_NBR; */
   /*     TokenTableSize =  (sizeof(tokentbl)/sizeof(struct s_tokentbl)); */
 
-  commandtbl[i].type & T_FUN;
-  for (i=0; i <  21; i++)
+/*   commandtbl[i].type & T_FUN; */
+  for (i=0; i <  CommandTableSize - 1; i++)
     {
-      printf ("i: %d:  ", i);
-      printf (",  type: %d", commandtbl[i].type);
-      printf (",  name:  %s \n", commandtbl[i].name);
+      printf ("i: %d: ", i);
+      printf (" name: %s", commandtbl[i].name);
+      printf (", type: %d", commandtbl[i].type);
+      printf (", type & T_FUN: %d", commandtbl[i].type & T_FUN);
+      printf (", precedence: %d\n", commandtbl[i].precedence);
     }
   printf("\n");
 }
