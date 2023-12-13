@@ -23,7 +23,12 @@ int main(void)
 {
   char* p;
   int i;
-
-  printf ("i: %d:\n", i);
-
+  commandtbl[i].type & T_FUN;
+  for (i=0; i < 10; i++)
+    {
+    printf ("i: %d:  ", i);
+    printf (",  type: %d", commandtbl[i].type);
+      printf (",  name:  %s \n", commandtbl[i].name);
+      }
+  printf("\n");
 }
