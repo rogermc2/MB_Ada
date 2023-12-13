@@ -193,8 +193,6 @@ int FindSubFun(char *p, int type) {
   return -1;
 }
 
-
-
 // This function is responsible for executing a defined subroutine or function.
 // As these two are similar they are processed in the one lump of code.
 //
