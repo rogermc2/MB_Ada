@@ -1,6 +1,7 @@
 /* MMBasic  commands.c */
 
 #include "Version.h"
+#include "Configuration.h"
 
 void flist(int, int, int);
 void clearprog(void);

@@ -10,10 +10,10 @@ extern int MMCharPos;
 #define INCLUDE_COMMAND_TABLE
 const struct s_tokentbl commandtbl[] =
 {
-    #include "Functions.h"
+/*     #include "Functions.h" */
     #include "Commands.h"
-    #include "Operators.h"
-    { "",   0,                  0, cmd_null,    }                   // this dummy entry is always at the end
+/*     #include "Operators.h" */
+    { "", 0,  0, cmd_null,    }                   // this dummy entry is always at the end
 };
 
 #undef INCLUDE_COMMAND_TABLE
@@ -25,8 +25,8 @@ int CommandTableSize =  (sizeof(commandtbl)/sizeof(struct s_tokentbl));
 #define INCLUDE_TOKEN_TABLE
 const struct s_tokentbl tokentbl[] =
 {
-    #include "Functions.h"
-    #include "Commands.h"
+/*     #include "Functions.h" */
+/*     #include "Commands.h" */
     #include "Operators.h"
     { "",   0,  0, cmd_null,    }                   // this dummy entry is always at the end
 };

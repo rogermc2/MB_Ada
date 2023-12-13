@@ -1,26 +1,3 @@
-/***********************************************************************************************************************
-MMBasic
-
-functions.h
-
-Include file that contains the globals and defines for functions.c in MMBasic.
-
-Copyright 2011 - 2021 Geoff Graham.  All Rights Reserved.
-
-This file and modified versions of this file are supplied to specific individuals or organisations under the following
-provisions:
-
-- This file, or any files that comprise the MMBasic source (modified or not), may not be distributed or copied to any other
-  person or organisation without written permission.
-
-- Object files (.o and .hex files) generated using this file (modified or not) may not be distributed or copied to any other
-  person or organisation without written permission.
-
-- This file is provided in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
-
-************************************************************************************************************************/
-
 
 
 /**********************************************************************************
@@ -70,9 +47,7 @@ void fun_tab(void);
 void fun_tan(void);
 void fun_ucase(void);
 void fun_val(void);
-#if !defined(MX170)
-    void fun_eval(void);
-#endif
+void fun_eval(void);
 void fun_version(void);
 void fun_asin(void);
 void fun_acos(void);
@@ -84,11 +59,7 @@ void fun_min(void);
 #define PI_VALUE  3.14159265358979323
 #define Rad(a)  (((MMFLOAT)a) / RADCONV)
 
-
 #endif
-
-
-
 
 /**********************************************************************************
  All command tokens tokens (eg, PRINT, FOR, etc) should be inserted in this table

@@ -10,31 +10,29 @@
 #include "Commands.h"
 #include "MMBasic.h"
 
-/* #define INCLUDE_COMMAND_TABLE */
-/* const struct s_tokentbl commandtbl[] = */
-/* { */
-/*     #include "Functions.h" */
-/*     #include "Commands.h" */
-/*     #include "Operators.h" */
-/* 	{"", 0, 0, cmd_null} */
-/* }; */
-/* #undef INCLUDE_COMMAND_TABLE */
-
 int main(void)
 {
   char* p;
   int i;
-  /*    DefaultType = T_NBR; */
-  /*     TokenTableSize =  (sizeof(tokentbl)/sizeof(struct s_tokentbl)); */
+  DefaultType = T_NBR;
 
 /*   commandtbl[i].type & T_FUN; */
+  printf("CommandTable\n");
   for (i=0; i <  CommandTableSize - 1; i++)
     {
-      printf ("i: %d: ", i);
+      printf ("%d: ", i);
       printf (" name: %s", commandtbl[i].name);
       printf (", type: %d", commandtbl[i].type);
-      printf (", type & T_FUN: %d", commandtbl[i].type & T_FUN);
       printf (", precedence: %d\n", commandtbl[i].precedence);
+    }
+  printf("\n");
+  printf("TokenTable\n");
+  for (i=0; i <  TokenTableSize - 1; i++)
+    {
+      printf ("%d: ", i);
+      printf (" name: %s", tokentbl[i].name);
+      printf (", type: %d", tokentbl[i].type);
+      printf (", precedence: %d\n", tokentbl[i].precedence);
     }
   printf("\n");
 }
