@@ -4,7 +4,6 @@ with Ada.Characters.Handling;
 with Ada.Strings;
 with Ada.Text_IO; use Ada.Text_IO;
 
-with Commands_And_Tokens_Tables; use Commands_And_Tokens_Tables;
 with Global;
 with Parse_Functions;
 

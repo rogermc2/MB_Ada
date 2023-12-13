@@ -6,15 +6,15 @@ with Ada.Text_IO; use Ada.Text_IO;
 with M_Basic; use M_Basic;
 with M_Misc;
 
-with Commands_And_Tokens_Tables;
+with Command_And_Token_Tables;
 
 package body Parse_Functions is
 
    function Get_Command_From_Input (Pos : in out Positive)
-                                 return Unbounded_String is
+                                    return Unbounded_String is
       use Ada.Characters.Handling;
---        Routine_Name  : constant String :=
---                          "Parse_Functions.Get_Command_From_Input ";
+      --        Routine_Name  : constant String :=
+      --                          "Parse_Functions.Get_Command_From_Input ";
       aChar         : Character;
       Command       : Unbounded_String;
       Done          : Boolean := False;
@@ -23,7 +23,7 @@ package body Parse_Functions is
          aChar := Element (In_Buffer, Pos);
          Done := not (aChar = '_' or Is_Alphanumeric (aChar));
          if not Done then
-           Append (Command, aChar);
+            Append (Command, aChar);
          end if;
          Pos := Pos + 1;
       end loop;
@@ -33,7 +33,7 @@ package body Parse_Functions is
    end Get_Command_From_Input;
 
    function Get_Command_Value (Command : String) return integer is
-      use Commands_And_Tokens_Tables;
+      use Command_And_Token_Tables;
       Routine_Name  : constant String := "Parse_Functions.Get_Command_Value ";
       Command_Value : Integer := 0;
       Found         : Boolean := False;
@@ -89,7 +89,7 @@ package body Parse_Functions is
    procedure Process_First_Nonwhite
      (Pos  : in out Positive; Label_Valid : Boolean) is
       use Ada.Characters.Handling;
-      use Commands_And_Tokens_Tables;
+      use Command_And_Token_Tables;
       aChar      : Character := Element (In_Buffer, Pos);
       Match_I    : Integer := -1;
       Match_L    : Integer := -1;
@@ -112,7 +112,7 @@ package body Parse_Functions is
             Pos2 := Pos + 1;
             Command := Command_Table (index).Name;
             while Pos > 0 and To_Upper (To_String (In_Command)) =
-            To_Upper (To_String (Command)) loop
+              To_Upper (To_String (Command)) loop
                if Element (In_Buffer, Pos2) = ' ' then
                   Skip_Spaces (Pos2);
                else

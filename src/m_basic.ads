@@ -4,7 +4,9 @@ with System;
 with Ada.Containers.Vectors;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 
+with Command_And_Token_Tables; use Command_And_Token_Tables;
 with Configuration;
+with Operators; use Operators;
 
 package M_Basic is
 
@@ -16,8 +18,11 @@ package M_Basic is
 
    In_Buffer    : Unbounded_String;
    Token_Buffer : UB_String_Buffer;
---     In_Buffer_Ptr    : Positive := 1;
---     Token_Buffer_Ptr : Positive := 1;
+   --     In_Buffer_Ptr    : Positive := 1;
+   --     Token_Buffer_Ptr : Positive := 1;
+
+   Command_Table : array (1 .. Num_Commands + Num_Functions + Num_Operators) of
+     Command_Table_Item;
 
    Current_Line_Ptr : Natural := 0;
    Continue_Point   : Natural := 0;
