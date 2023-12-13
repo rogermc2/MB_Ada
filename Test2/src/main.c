@@ -55,6 +55,7 @@ int main(void)
   /*   for (i = 0; i < CommandTableSize - 1; i++) */
   for (i = 0; i < 4; i++)
     {
+      tp = commandtbl[i].name;
       tp2 = p;
       printf("tp2: %s, tp:  %s\n", tp2, tp);
 
@@ -62,9 +63,13 @@ int main(void)
       while ((toupper(*tp2) == toupper(*tp)) & count < 5)
 	{
 	  count = count + 1;
+	  printf("tp: %s\n", tp);
 	  printf("UC tp2: %c\n", toupper(*tp2));
 	  if (*tp == ' ')
-	    skipspace (tp2);
+	    {
+	      printf("tpis space\n");
+	      skipspace (tp2);
+	    }
 	  else
 	    tp2++;
 	  tp++;
