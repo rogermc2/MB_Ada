@@ -142,6 +142,20 @@ package body M_Basic is
       cmdCFUN := Get_Command_Value ("CFunction");
       cmdCSUB := Get_Command_Value ("CSub");
 
+      for index in Function_Types'Range loop
+         Command_Table (index) := Function_Types (index);
+      end loop;
+
+      for index in Command_Types'Range loop
+         Command_Table (Function_Types'Length + index) := Command_Types (index);
+      end loop;
+
+      for index in Operator_Types'Range loop
+         Command_Table
+           (Function_Types'Length + Command_Types'Length + index) :=
+           Operator_Types (index);
+      end loop;
+
    end Init_Basic;
 
    function Is_Name_Start (aChar : Character) return Boolean is
@@ -198,7 +212,7 @@ package body M_Basic is
    procedure Skip_Spaces (Pos : in out Positive) is
    begin
       while  Element (In_Buffer, Pos) = ' ' loop
-          Pos := Pos + 1;
+         Pos := Pos + 1;
       end loop;
 
    end Skip_Spaces;
