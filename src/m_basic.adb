@@ -199,7 +199,7 @@ package body M_Basic is
          elsif aChar = ''' then
             Process_Quote (Ptr);
          elsif aChar = ':' then
-            Process_Colon (Ptr);
+            Process_Colon (Ptr, First_Nonwhite);
          elsif Is_Digit (aChar) or aChar = '.' then
             --  not white space or string or comment so try a number
             Process_Try_Number (Ptr);
@@ -237,10 +237,10 @@ package body M_Basic is
       use Ada.Characters.Handling;
       use Ada.Strings;
       use M_Basic.UB_String_Buffer_Package;
-      aChar    : Character;
-      In_Ptr   : Positive := 1;
-      Line_Num : Unsigned_64;
-      OK       : Boolean := True;
+      aChar          : Character;
+      In_Ptr         : Positive := 1;
+      Line_Num       : Unsigned_64;
+      OK             : Boolean := True;
    begin
       --  make sure that only printable characters are in the line
       for index in 1 .. Length (In_Buffer) loop
