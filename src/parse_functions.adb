@@ -64,10 +64,10 @@ package body Parse_Functions is
    procedure Process_Colon (Pos            : in out Positive;
                             First_Nonwhite : in out Boolean) is
    begin
-      Token_Buffer.Append (To_Unbounded_String ("0"));
+      Append (Token_Buffer, '0');
       Pos := Pos + 1;
       while Element (In_Buffer, Pos) = ':' loop
-         Token_Buffer.Append (To_Unbounded_String ("0"));
+         Append (Token_Buffer, '0');
          Pos := Pos + 1;
       end loop;
 
@@ -82,21 +82,21 @@ package body Parse_Functions is
       aChar : Character;
    begin
       if Match_Index > -1 then
-         Token_Buffer.Append
-           (Token_Table (Match_Index + M_Misc.C_Base_Token).Name);
+         Append (Token_Buffer,
+                 Token_Table (Match_Index + M_Misc.C_Base_Token).Name);
          --  Step over the input buffer command.
          Pos := Match_Pos;
          if Match_Index + M_Misc.C_Base_Token =
            Get_Command_Value ("Rem") then
             while Pos <= Length (In_Buffer) loop
-               aChar :=Element (In_Buffer, Pos);
-               Token_Buffer.Append (aChar);
+               aChar := Element (In_Buffer, Pos);
+               Append (Token_Buffer, aChar);
                Pos := Pos + 1;
             end loop;
          end if;
 
-      elsif Is_Alphanumeric (In_Buffer (Pos - 1)) and then
-        In_Buffer (Pos) = To_Unbounded_String (" ") then
+      elsif Is_Alphanumeric (Element (In_Buffer, Pos - 1)) and then
+        Element (In_Buffer, Pos) = ' ' then
          Pos := Pos + 1;
       end if;
 
@@ -111,7 +111,7 @@ package body Parse_Functions is
          Pos := Pos + 1;
       end loop;
 
-      Token_Buffer.Append (To_Unbounded_String (""""));
+      Append (Token_Buffer, '"');
       Pos := Pos + 1;
       if  Element (In_Buffer, Pos) = '"' then
          Pos := Pos + 1;
@@ -126,8 +126,7 @@ package body Parse_Functions is
    end Process_Name_Start;
 
    procedure Process_First_Nonwhite
-     (Pos            : in out Positive; Label_Valid : Boolean;
-      First_Nonwhite : in out Boolean) is
+     (Pos : in out Positive; Label_Valid, First_Nonwhite : in out Boolean) is
       --        use Ada.Characters.Handling;
       --        use Command_And_Token_Tables;
       aChar        : constant Character := Element (In_Buffer, Pos);

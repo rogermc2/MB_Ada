@@ -1,19 +1,18 @@
 
-with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
-
 with Configuration;
 with Exceptions;
 
 package Global is
 
-   --   Flags used in the program lines--  end of a command
-   T_CMDEND         : constant Unbounded_String:= To_Unbounded_String ("0");
+   --  Flags used in the program lines
+   --  end of a command
+   T_CMDEND         : constant Character := '0';
    --  Single byte indicating the start of a new line
-   T_NEWLINE        : constant Unbounded_String:= To_Unbounded_String ("1");
+   T_NEWLINE        : constant Character := '1';
    --  three bytes for a line number
-   T_LINENBR        : constant Unbounded_String:= To_Unbounded_String ("2");
+   T_LINENBR        : constant Character := '2';
    --  variable length indicating a label
-   T_LABEL          : constant Unbounded_String:= To_Unbounded_String ("3");
+   T_LABEL          : constant Character := '3';
 
    --  dummy last operator in an expression
    E_END            : constant Character:= Character'Val (16#FF#);

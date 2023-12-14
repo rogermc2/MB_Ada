@@ -63,17 +63,18 @@ package body M_Basic is
 
    end Defined_Subfunction;
 
-   procedure Execute_Program (Tokens : UB_String_Buffer) is
+   procedure Execute_Program (Tokens : Unbounded_String) is
       use Global;
-      use UB_String_Buffer_Package;
+      --        use UB_String_Buffer_Package;
       Done      : Boolean := False;
       Token_Ptr : Natural := 0;
    begin
       Put_Line ("M_Basic.Execute_Program ");
-      if not Is_Empty (Tokens) then
+      --        if not Is_Empty (Tokens) then
+      if Length (Tokens) > 0 then
          while not Done loop
             Token_Ptr := Token_Ptr + 1;
-            if Element (Tokens, Token_Ptr) = "0" then
+            if Element (Tokens, Token_Ptr) = '0' then
                Token_Ptr := Token_Ptr + 1;
             end if;
 
@@ -81,12 +82,11 @@ package body M_Basic is
                Token_Ptr := Token_Ptr + 1;
             end if;
 
-            Done :=  (Element (Tokens, 1) /= "0" and
-                        Element (Tokens, 2) /= "0") and
-              (Element (Tokens, 1) /= "255"  and
-                   Element (Tokens, 2) /= "255") ;
+            Done := Slice (Tokens, 1, 2) /= "00" and
+              Slice (Tokens, 1, 2) /= "255255" ;
          end loop;
       end if;
+
    end Execute_Program;
 
    function Find_Subfunction (Token : Unbounded_String; Fun_Type : Integer)
@@ -182,7 +182,6 @@ package body M_Basic is
 
    procedure Parse_Line (Pos : Positive) is
       use Ada.Characters.Handling;
-      use M_Basic.UB_String_Buffer_Package;
       use Parse_Functions;
       Buff_Length    : constant Positive := Length (In_Buffer);
       Ptr            : Positive := Pos;
@@ -204,7 +203,7 @@ package body M_Basic is
             --  not white space or string or comment so try a number
             Process_Try_Number (Ptr);
          elsif First_Nonwhite then
-            Process_First_Nonwhite (Ptr, Label_Valid);
+            Process_First_Nonwhite (Ptr, Label_Valid, First_Nonwhite);
          else
             null;
          end if;
@@ -236,7 +235,6 @@ package body M_Basic is
       use Interfaces;
       use Ada.Characters.Handling;
       use Ada.Strings;
-      use M_Basic.UB_String_Buffer_Package;
       aChar          : Character;
       In_Ptr         : Positive := 1;
       Line_Num       : Unsigned_64;
@@ -250,9 +248,9 @@ package body M_Basic is
          end if;
       end loop;
 
-      Token_Buffer.Clear;
+      Token_Buffer := Null_Unbounded_String;
       if not From_Console then
-         Token_Buffer.Append (Global.T_NEWLINE);
+         Append (Token_Buffer, Global.T_NEWLINE);
       end if;
       Trim (In_Buffer, Left);
 
@@ -267,10 +265,10 @@ package body M_Basic is
          Line_Num := Unsigned_64'Value (Slice (In_Buffer, 1, In_Ptr - 1));
          if not From_Console and Line_Num > 1 and
            Line_Num <= Unsigned_64 (MAXLINENBR) then
-            Token_Buffer.Append (Global.T_LINENBR);
-            Token_Buffer.Append (To_Unbounded_String ((Unsigned_64'Image
+            Append (Token_Buffer, Global.T_LINENBR);
+            Append (Token_Buffer,To_Unbounded_String ((Unsigned_64'Image
                                  (Shift_Right (Line_Num, 8)))));
-            Token_Buffer.Append (To_Unbounded_String ((Unsigned_64'Image
+            Append (Token_Buffer, To_Unbounded_String ((Unsigned_64'Image
                                  (Line_Num and 16#FF#))));
          end if;
       end if;

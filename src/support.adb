@@ -11,6 +11,7 @@ with Flash;
 with Global;
 with M_Misc;
 with Memory;
+with M_Basic;
 with Serial_File_IO;
 
 package body Support is
@@ -20,10 +21,9 @@ package body Support is
       null;
    end Do_PIN;
 
-   procedure Process_Commands (Tokens : in out M_Basic.UB_String_Buffer) is
+   procedure Process_Commands (Tokens : in out Unbounded_String) is
       use System;
       use M_Basic;
-      use M_Basic.UB_String_Buffer_Package;
    begin
       loop
          if Flash.Option.DISPLAY_CONSOLE then
@@ -66,10 +66,8 @@ package body Support is
          if not Global.Error_In_Prompt and M_Basic.Find_Subfunction
            (To_Unbounded_String ("MM.PROMPT"), 0) /= System.Null_Address then
             Global.Error_In_Prompt := True;
-            Token_Buffer.Clear;
-            Token_Buffer.Append (To_Unbounded_String ("MM.PROMPT"));
-            Token_Buffer.Append (To_Unbounded_String ("\"));
-            Token_Buffer.Append (To_Unbounded_String ("0"));
+            Token_Buffer := Null_Unbounded_String;
+            Append (Token_Buffer,  "MM.PROMPT\0");
             M_Basic.Execute_Program (Tokens);
          else
             M_Basic.Print_String ("> ");

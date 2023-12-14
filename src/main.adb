@@ -29,7 +29,8 @@ procedure Main is
    use System;
    Startup_Token   : constant Unbounded_String :=
                        To_Unbounded_String ("MM.Startup");
-   Tokens          : M_Basic.UB_String_Buffer;
+--     Tokens          : M_Basic.UB_String_Buffer;
+   Tokens          : Unbounded_String;
    Saved_Cause     : Setup_Exception := Cause_Nothing;
    Watchdog_Set    : Boolean := False;
    Basic_Running   : Boolean := True;
@@ -75,13 +76,11 @@ begin
    if Except_Cause /= Cause_MM_Startup then
       M_Basic.Clear_Program;
       M_Basic.Prepare_Program (True);
-      M_Basic.Token_Buffer.Clear;
-      M_Basic.Token_Buffer.Append (Startup_Token);
+      M_Basic.Token_Buffer := Null_Unbounded_String;
+      Append (M_Basic.Token_Buffer, Startup_Token);
       if M_Basic.Find_Subfunction (Startup_Token, 0) /= Null_Address then
-         M_Basic.Token_Buffer.Append (Startup_Token);
-         M_Basic.Token_Buffer.Append (To_Unbounded_String ("/"));
-         M_Basic.Token_Buffer.Append (To_Unbounded_String ("0"));
-         M_Basic.Token_Buffer.Append (Startup_Token);
+         Append (M_Basic.Token_Buffer, Startup_Token);
+         Append (M_Basic.Token_Buffer, To_Unbounded_String ("/0"));
          M_Basic.Execute_Program (M_Basic.Token_Buffer);
       end if;
    end if;
@@ -90,6 +89,6 @@ begin
 
    Except_Cause := Cause_Nothing;
    Process_Commands (M_Basic.Token_Buffer);
-   Put_Line (To_String (Tokens (1)));
+--     Put_Line (To_String (Tokens (1)));
 
 end Main;

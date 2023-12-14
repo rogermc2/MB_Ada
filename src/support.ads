@@ -1,8 +1,6 @@
 
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 
-with M_Basic;
-
 package Support is
 
    type Setup_Exception is (Cause_Nothing, Cause_Display, Cause_File_IO,
@@ -12,7 +10,7 @@ package Support is
    Except_Cause : Setup_Exception := Cause_Nothing;
 
    procedure Do_PIN;
-   procedure Process_Commands (Tokens : in out M_Basic.UB_String_Buffer);
+   procedure Process_Commands (Tokens : in out Unbounded_String);
    procedure Restart;
 
 end Support;
