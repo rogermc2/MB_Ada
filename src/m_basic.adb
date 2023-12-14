@@ -176,7 +176,7 @@ package body M_Basic is
    function Is_Name_Character (aChar : Character) return Boolean is
       use Ada.Characters.Handling;
    begin
-      return Is_Alphanumeric (aChar) or aChar = '_';
+      return Is_Alphanumeric (aChar) or else aChar = '_' or else aChar = ':';
 
    end Is_Name_Character;
 

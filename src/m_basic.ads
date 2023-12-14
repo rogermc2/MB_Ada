@@ -40,7 +40,7 @@ package M_Basic is
    procedure Init_Basic;
    function Is_Name_Start (aChar : Character) return Boolean;
    function Is_Name_Character (aChar : Character) return Boolean;
-   pragma Inline (Init_Basic);
+   pragma Inline (Is_Name_Character);
    procedure Print_String (theString : String);
    procedure Prepare_Program (State : Boolean);
    procedure Skip_Spaces (Pos : in out Positive);

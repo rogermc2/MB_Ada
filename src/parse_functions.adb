@@ -3,6 +3,8 @@ with Ada.Characters.Handling;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Ada.Text_IO; use Ada.Text_IO;
 
+with Configuration;
+with Global;
 with M_Basic; use M_Basic;
 with M_Misc;
 
@@ -15,7 +17,7 @@ package body Parse_Functions is
       Match_I_Pos : Positive;  Match_Index : Integer);
    procedure Try_Command
      (I_Pos                         : in out Positive;
-      Label_Valid, First_Nonwhite : in out Boolean);
+      Label_Valid, First_Nonwhite   : in out Boolean);
 
    function Get_Command_From_Input (I_Pos : in out Positive)
                                     return Unbounded_String is
@@ -62,7 +64,7 @@ package body Parse_Functions is
    end Get_Command_Value;
 
    procedure Process_Colon (I_Pos            : in out Positive;
-                            First_Nonwhite : in out Boolean) is
+                            First_Nonwhite   : in out Boolean) is
    begin
       Append (Token_Buffer, '0');
       I_Pos := I_Pos + 1;
@@ -149,21 +151,24 @@ package body Parse_Functions is
 
    procedure Try_Command
      (I_Pos                         : in out Positive;
-      Label_Valid, First_Nonwhite : in out Boolean) is
+      Label_Valid, First_Nonwhite   : in out Boolean) is
       use Ada.Characters.Handling;
       use Command_And_Token_Tables;
       I_Pos2         : Positive;         --  tp2 an input character indeex
-      Command      : Unbounded_String;
-      In_Command   : Unbounded_String;
-      CT_Index     : Natural;          --  tp  command table index
-      Match_Index  : Integer := -1;
-      Match_Length : Integer := -1;
+      Command        : Unbounded_String;
+      In_Command     : Unbounded_String;
+      CT_Index       : Natural;          --  tp  command table index
+      Match_Index    : Integer := -1;
+      Match_Length   : Integer := -1;
       Match_I_Pos    : Positive;
-      Done         : Boolean := False;
+      Index          : Natural :=0 ;
+      Done           : Boolean := False;
+      OK             : Boolean := True;
    begin
       In_Command := Get_Command_From_Input (I_Pos);
       CT_Index := 0;
       Done := False;
+
       while not Done and then CT_Index < Command_Table'Last loop
          CT_Index := CT_Index +1;
          I_Pos2 := I_Pos + 1;  -- I_Pos2 (tp2) is I_Position of next input character
@@ -202,12 +207,26 @@ package body Parse_Functions is
       if Match_Index > -1 then
          Process_Command (I_Pos, Label_Valid, First_Nonwhite,
                           Match_I_Pos, Match_Index);
+
       elsif Label_Valid and then
         Is_Name_Start (Element (In_Buffer, I_Pos)) then
-         null;
-         --        elsif Label_Valid and
-         --          Is_Name_Start (aChar) then
-         --           Process_Name_Start (I_Pos);
+         Index := 0;
+         I_Pos2 := I_Pos;
+         OK := True;
+         while OK and then Index <= Configuration.MAXVARLEN loop
+            Index := Index + 1;
+            I_Pos2 := I_Pos2 + 1;
+            OK := Is_Name_Character (Element (In_Buffer, I_Pos2));
+         end loop;
+
+         if OK and then Element (In_Buffer, I_Pos2) = ':' then
+            Label_Valid := False;
+            Append (Token_Buffer, Global.T_LABEL);
+            Append (Token_Buffer, Integer'Image (I_Pos2 - I_Pos));
+            Append (Token_Buffer, Slice (In_Buffer, I_Pos, I_Pos2 - 1));
+         end if;
+
+         I_Pos := I_Pos + 1;
       end if;
 
    end Try_Command;
