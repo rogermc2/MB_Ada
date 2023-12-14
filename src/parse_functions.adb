@@ -6,7 +6,7 @@ with Ada.Text_IO; use Ada.Text_IO;
 with M_Basic; use M_Basic;
 with M_Misc;
 
---  with Command_And_Token_Tables;
+with Command_And_Token_Tables;
 
 package body Parse_Functions is
 
@@ -33,7 +33,7 @@ package body Parse_Functions is
    end Get_Command_From_Input;
 
    function Get_Command_Value (Command : String) return integer is
---        use Command_And_Token_Tables;
+      --        use Command_And_Token_Tables;
       Routine_Name  : constant String := "Parse_Functions.Get_Command_Value ";
       Command_Value : Integer := 0;
       Found         : Boolean := False;
@@ -89,17 +89,19 @@ package body Parse_Functions is
    procedure Process_First_Nonwhite
      (Pos  : in out Positive; Label_Valid : Boolean) is
       use Ada.Characters.Handling;
---        use Command_And_Token_Tables;
-      aChar      : Character := Element (In_Buffer, Pos);
-      Match_I    : Integer := -1;
-      Match_L    : Integer := -1;
-      Match_Pos  : Positive;
-      Pos2       : Positive;
-      Command    : Unbounded_String;
-      In_Command : Unbounded_String;
+      use Command_And_Token_Tables;
+      aChar        : Character := Element (In_Buffer, Pos);
+      Match_Index  : Integer := -1;
+      Match_Length : Integer := -1;
+      Match_Pos    : Positive;
+      Pos2         : Positive;         --  tp2 an input character indeex
+      Command      : Unbounded_String;
+      In_Command   : Unbounded_String;
+      CT_Index     : Natural;          --  tp  command table index
+      Done         : Boolean := False;
    begin
       if aChar = '?' then
-         Match_I := Get_Command_Value ("Print") - M_Misc.C_Base_Token;
+         Match_Index := Get_Command_Value ("Print") - M_Misc.C_Base_Token;
          if Element (In_Buffer, Pos + 1) = ' ' then
             --  eat a trailing space
             Pos := Pos + 1;
@@ -108,25 +110,44 @@ package body Parse_Functions is
 
       else
          In_Command := Get_Command_From_Input (Pos);
-         for index in Command_Table'First + 1 .. Command_Table'Last loop
-            Pos2 := Pos + 1;
-            Command := Command_Table (index).Name;
-            while Pos > 0 and To_Upper (To_String (In_Command)) =
-              To_Upper (To_String (Command)) loop
-               if Element (In_Buffer, Pos2) = ' ' then
-                  Skip_Spaces (Pos2);
-               else
+         CT_Index := 0;
+         Done := False;
+         while not Done and then CT_Index < Command_Table'Last loop
+            CT_Index := CT_Index +1;
+            Pos2 := Pos + 1;  -- Pos2 (tp2) is position of next input character
+            Command := Command_Table (CT_Index).Name;
+            while Pos2 < Length (In_Buffer) and then
+              To_Upper (To_String (In_Command)) =
+                To_Upper (To_String (Command)) loop
+               while Pos2 < Length (In_Buffer) and then
+                 Element (In_Buffer, Pos2) = ' '  loop
                   Pos2 := Pos2 + 1;
-               end if;
+               end loop;
                Pos := Pos + 1;
 
                if Element (In_Buffer, Pos) = '(' then
-                  Skip_Spaces (Pos);
+                  while Pos2 < Length (In_Buffer) and then
+                    Element (In_Buffer, Pos2) = ' '  loop
+                     Pos2 := Pos2 + 1;
+                  end loop;
                end if;
             end loop;
+
+            if (Pos2 >= Length (Command) and then
+                  not Is_Name_Character (Element (In_Buffer, Pos2))) or
+              Command_Table (CT_Index).Command_Type1 = T_FUN then
+               Done := Element (Command, CT_Index) /= '(' and
+                 Is_Name_Character (Element (In_Buffer, Pos2));
+
+               if not Done then
+                  Match_Pos := Pos2;
+                  Match_Length := Length (Command_Table (CT_Index).Name);
+                  Match_Index := CT_Index;
+               end if;
+            end if;
          end loop;
 
-         if Match_I > -1 then
+         if Match_Index > -1 then
             Process_Command (Pos);
          elsif Label_Valid and
            Is_Name_Start (aChar) then

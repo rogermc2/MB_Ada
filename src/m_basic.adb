@@ -173,6 +173,13 @@ package body M_Basic is
 
    end Is_Name_Start;
 
+   function Is_Name_Character (aChar : Character) return Boolean is
+      use Ada.Characters.Handling;
+   begin
+      return Is_Alphanumeric (aChar) or aChar = '_';
+
+   end Is_Name_Character;
+
    procedure Parse_Line (Pos : Positive) is
       use Ada.Characters.Handling;
       use M_Basic.UB_String_Buffer_Package;
