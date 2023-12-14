@@ -11,13 +11,13 @@ with Command_And_Token_Tables;
 package body Parse_Functions is
 
    procedure Process_Command
-     (Pos       : in out Positive; First_Nonwhite, Label_Valid : in out Boolean;
-      Match_Pos : Positive;  Match_Index : Integer);
+     (I_Pos       : in out Positive; First_Nonwhite, Label_Valid : in out Boolean;
+      Match_I_Pos : Positive;  Match_Index : Integer);
    procedure Try_Command
-     (Pos                         : in out Positive;
+     (I_Pos                         : in out Positive;
       Label_Valid, First_Nonwhite : in out Boolean);
 
-   function Get_Command_From_Input (Pos : in out Positive)
+   function Get_Command_From_Input (I_Pos : in out Positive)
                                     return Unbounded_String is
       use Ada.Characters.Handling;
       --        Routine_Name  : constant String :=
@@ -27,12 +27,12 @@ package body Parse_Functions is
       Done          : Boolean := False;
    begin
       while not Done loop
-         aChar := Element (In_Buffer, Pos);
+         aChar := Element (In_Buffer, I_Pos);
          Done := not (aChar = '_' or Is_Alphanumeric (aChar));
          if not Done then
             Append (Command, aChar);
          end if;
-         Pos := Pos + 1;
+         I_Pos := I_Pos + 1;
       end loop;
 
       return Command;
@@ -61,14 +61,14 @@ package body Parse_Functions is
 
    end Get_Command_Value;
 
-   procedure Process_Colon (Pos            : in out Positive;
+   procedure Process_Colon (I_Pos            : in out Positive;
                             First_Nonwhite : in out Boolean) is
    begin
       Append (Token_Buffer, '0');
-      Pos := Pos + 1;
-      while Element (In_Buffer, Pos) = ':' loop
+      I_Pos := I_Pos + 1;
+      while Element (In_Buffer, I_Pos) = ':' loop
          Append (Token_Buffer, '0');
-         Pos := Pos + 1;
+         I_Pos := I_Pos + 1;
       end loop;
 
       First_Nonwhite := True;
@@ -76,8 +76,8 @@ package body Parse_Functions is
    end Process_Colon;
 
    procedure Process_Command
-     (Pos       : in out Positive; First_Nonwhite, Label_Valid : in out Boolean;
-      Match_Pos : Positive; Match_Index : Integer) is
+     (I_Pos       : in out Positive; First_Nonwhite, Label_Valid : in out Boolean;
+      Match_I_Pos : Positive; Match_Index : Integer) is
       use Ada.Characters.Handling;
       aChar : Character;
    begin
@@ -85,19 +85,19 @@ package body Parse_Functions is
          Append (Token_Buffer,
                  Token_Table (Match_Index + M_Misc.C_Base_Token).Name);
          --  Step over the input buffer command.
-         Pos := Match_Pos;
+         I_Pos := Match_I_Pos;
          if Match_Index + M_Misc.C_Base_Token =
            Get_Command_Value ("Rem") then
-            while Pos <= Length (In_Buffer) loop
-               aChar := Element (In_Buffer, Pos);
+            while I_Pos <= Length (In_Buffer) loop
+               aChar := Element (In_Buffer, I_Pos);
                Append (Token_Buffer, aChar);
-               Pos := Pos + 1;
+               I_Pos := I_Pos + 1;
             end loop;
          end if;
 
-      elsif Is_Alphanumeric (Element (In_Buffer, Pos - 1)) and then
-        Element (In_Buffer, Pos) = ' ' then
-         Pos := Pos + 1;
+      elsif Is_Alphanumeric (Element (In_Buffer, I_Pos - 1)) and then
+        Element (In_Buffer, I_Pos) = ' ' then
+         I_Pos := I_Pos + 1;
       end if;
 
       First_Nonwhite := False;
@@ -105,94 +105,94 @@ package body Parse_Functions is
 
    end Process_Command;
 
-   procedure Process_Double_Quote (Pos : in out Positive; aChar : Character) is
+   procedure Process_Double_Quote (I_Pos : in out Positive; aChar : Character) is
    begin
-      while aChar /= '"' and Pos <= Length (In_Buffer) loop
-         Pos := Pos + 1;
+      while aChar /= '"' and I_Pos <= Length (In_Buffer) loop
+         I_Pos := I_Pos + 1;
       end loop;
 
       Append (Token_Buffer, '"');
-      Pos := Pos + 1;
-      if  Element (In_Buffer, Pos) = '"' then
-         Pos := Pos + 1;
+      I_Pos := I_Pos + 1;
+      if  Element (In_Buffer, I_Pos) = '"' then
+         I_Pos := I_Pos + 1;
       end if;
 
    end Process_Double_Quote;
 
-   procedure Process_Name_Start (Pos : in out Positive) is
+   procedure Process_Name_Start (I_Pos : in out Positive) is
    begin
       null;
 
    end Process_Name_Start;
 
    procedure Process_First_Nonwhite
-     (Pos : in out Positive; Label_Valid, First_Nonwhite : in out Boolean) is
+     (I_Pos : in out Positive; Label_Valid, First_Nonwhite : in out Boolean) is
       --        use Ada.Characters.Handling;
       --        use Command_And_Token_Tables;
-      aChar        : constant Character := Element (In_Buffer, Pos);
+      aChar        : constant Character := Element (In_Buffer, I_Pos);
       Match_Index  : Integer := -1;
-      Match_Pos    : Positive;
+      Match_I_Pos  : Positive;
    begin
       if aChar = '?' then
          Match_Index := Get_Command_Value ("Print") - M_Misc.C_Base_Token;
-         if Element (In_Buffer, Pos + 1) = ' ' then
+         if Element (In_Buffer, I_Pos + 1) = ' ' then
             --  eat a trailing space
-            Pos := Pos + 1;
-            Match_Pos := Pos;
+            I_Pos := I_Pos + 1;
+            Match_I_Pos := I_Pos;
          end if;
 
       else
-         Try_Command (Pos, Label_Valid, First_Nonwhite);
+         Try_Command (I_Pos, Label_Valid, First_Nonwhite);
       end if;
 
    end Process_First_Nonwhite;
 
    procedure Try_Command
-     (Pos                         : in out Positive;
+     (I_Pos                         : in out Positive;
       Label_Valid, First_Nonwhite : in out Boolean) is
       use Ada.Characters.Handling;
       use Command_And_Token_Tables;
-      Pos2         : Positive;         --  tp2 an input character indeex
+      I_Pos2         : Positive;         --  tp2 an input character indeex
       Command      : Unbounded_String;
       In_Command   : Unbounded_String;
       CT_Index     : Natural;          --  tp  command table index
       Match_Index  : Integer := -1;
       Match_Length : Integer := -1;
-      Match_Pos    : Positive;
+      Match_I_Pos    : Positive;
       Done         : Boolean := False;
    begin
-      In_Command := Get_Command_From_Input (Pos);
+      In_Command := Get_Command_From_Input (I_Pos);
       CT_Index := 0;
       Done := False;
       while not Done and then CT_Index < Command_Table'Last loop
          CT_Index := CT_Index +1;
-         Pos2 := Pos + 1;  -- Pos2 (tp2) is position of next input character
+         I_Pos2 := I_Pos + 1;  -- I_Pos2 (tp2) is I_Position of next input character
          Command := Command_Table (CT_Index).Name;
-         while Pos2 < Length (In_Buffer) and then
+         while I_Pos2 < Length (In_Buffer) and then
            To_Upper (To_String (In_Command)) =
              To_Upper (To_String (Command)) loop
-            while Pos2 < Length (In_Buffer) and then
-              Element (In_Buffer, Pos2) = ' '  loop
-               Pos2 := Pos2 + 1;
+            while I_Pos2 < Length (In_Buffer) and then
+              Element (In_Buffer, I_Pos2) = ' '  loop
+               I_Pos2 := I_Pos2 + 1;
             end loop;
-            Pos := Pos + 1;
+            I_Pos := I_Pos + 1;
 
-            if Element (In_Buffer, Pos) = '(' then
-               while Pos2 < Length (In_Buffer) and then
-                 Element (In_Buffer, Pos2) = ' '  loop
-                  Pos2 := Pos2 + 1;
+            if Element (In_Buffer, I_Pos) = '(' then
+               while I_Pos2 < Length (In_Buffer) and then
+                 Element (In_Buffer, I_Pos2) = ' '  loop
+                  I_Pos2 := I_Pos2 + 1;
                end loop;
             end if;
          end loop;
 
-         if (Pos2 >= Length (Command) and then
-               not Is_Name_Character (Element (In_Buffer, Pos2))) or
+         if (I_Pos2 >= Length (Command) and then
+               not Is_Name_Character (Element (In_Buffer, I_Pos2))) or
            Command_Table (CT_Index).Command_Type1 = T_FUN then
             Done := Element (Command, CT_Index) /= '(' and
-              Is_Name_Character (Element (In_Buffer, Pos2));
+              Is_Name_Character (Element (In_Buffer, I_Pos2));
 
             if not Done and then Length (Command) > Match_Length then
-               Match_Pos := Pos2;
+               Match_I_Pos := I_Pos2;
                Match_Length := Length (Command);
                Match_Index := CT_Index;
             end if;
@@ -200,24 +200,25 @@ package body Parse_Functions is
       end loop;
 
       if Match_Index > -1 then
-         Process_Command (Pos, Label_Valid, First_Nonwhite,
-                          Match_Pos, Match_Index);
-      elsif Label_Valid then
+         Process_Command (I_Pos, Label_Valid, First_Nonwhite,
+                          Match_I_Pos, Match_Index);
+      elsif Label_Valid and then
+        Is_Name_Start (Element (In_Buffer, I_Pos)) then
          null;
          --        elsif Label_Valid and
          --          Is_Name_Start (aChar) then
-         --           Process_Name_Start (Pos);
+         --           Process_Name_Start (I_Pos);
       end if;
 
    end Try_Command;
 
-   procedure Process_Try_Number (Pos : in out Positive) is
+   procedure Process_Try_Number (I_Pos : in out Positive) is
    begin
       null;
 
    end Process_Try_Number;
 
-   procedure Process_Quote (Pos : in out Positive) is
+   procedure Process_Quote (I_Pos : in out Positive) is
    begin
       null;
 
