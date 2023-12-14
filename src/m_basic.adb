@@ -166,12 +166,12 @@ package body M_Basic is
 
    end Init_Basic;
 
-   function Is_Name_Start (aChar : Character) return Boolean is
+   function Is_Line_Num (aChar : Character) return Boolean is
       use Ada.Characters.Handling;
    begin
-      return Is_Alphanumeric (aChar) or aChar = '_';
-
-   end Is_Name_Start;
+      return Is_Alphanumeric (aChar);
+   end Is_Line_Num;
+   pragma Inline (Is_Line_Num);
 
    function Is_Name_Character (aChar : Character) return Boolean is
       use Ada.Characters.Handling;
@@ -179,6 +179,21 @@ package body M_Basic is
       return Is_Alphanumeric (aChar) or else aChar = '_' or else aChar = ':';
 
    end Is_Name_Character;
+
+   function Is_Name_Start (aChar : Character) return Boolean is
+      use Ada.Characters.Handling;
+   begin
+      return Is_Alphanumeric (aChar) or aChar = '_';
+
+   end Is_Name_Start;
+
+   function Is_Name_End (aChar : Character) return Boolean is
+   begin
+      return Is_Line_Num (aChar) or else aChar = '_' or else
+        aChar = '.' or else aChar = '$' or else aChar = '|' or else
+        aChar = '%';
+
+   end Is_Name_End;
 
    procedure Parse_Line (Pos : Positive) is
       use Ada.Characters.Handling;
@@ -205,7 +220,8 @@ package body M_Basic is
          elsif First_Nonwhite then
             Process_First_Nonwhite (Ptr, Label_Valid, First_Nonwhite);
          else
-            null;
+            --  891
+            Try_Function_Or_Keyword (Ptr);
          end if;
 
       end loop;
@@ -267,9 +283,9 @@ package body M_Basic is
            Line_Num <= Unsigned_64 (MAXLINENBR) then
             Append (Token_Buffer, Global.T_LINENBR);
             Append (Token_Buffer,To_Unbounded_String ((Unsigned_64'Image
-                                 (Shift_Right (Line_Num, 8)))));
+                    (Shift_Right (Line_Num, 8)))));
             Append (Token_Buffer, To_Unbounded_String ((Unsigned_64'Image
-                                 (Line_Num and 16#FF#))));
+                    (Line_Num and 16#FF#))));
          end if;
       end if;
 

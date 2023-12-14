@@ -149,6 +149,18 @@ package body Parse_Functions is
 
    end Process_First_Nonwhite;
 
+   procedure Process_Try_Number (I_Pos : in out Positive) is
+   begin
+      null;
+
+   end Process_Try_Number;
+
+   procedure Process_Quote (I_Pos : in out Positive) is
+   begin
+      null;
+
+   end Process_Quote;
+
    procedure Try_Command
      (I_Pos                         : in out Positive;
       Label_Valid, First_Nonwhite   : in out Boolean) is
@@ -204,10 +216,12 @@ package body Parse_Functions is
          end if;
       end loop;
 
+      --  857
       if Match_Index > -1 then
          Process_Command (I_Pos, Label_Valid, First_Nonwhite,
                           Match_I_Pos, Match_Index);
 
+      --  875
       elsif Label_Valid and then
         Is_Name_Start (Element (In_Buffer, I_Pos)) then
          Index := 0;
@@ -231,16 +245,48 @@ package body Parse_Functions is
 
    end Try_Command;
 
-   procedure Process_Try_Number (I_Pos : in out Positive) is
+   --  893
+   procedure Try_Function_Or_Keyword (I_Pos : in out Positive) is
+      use Ada.Characters.Handling;
+      Index  : Natural := 0;
+      I_Char : Character;
+      I_Pos2 : Positive;
+      T_Pos  : Positive;
+      Name   : Unbounded_String;
+      Done   : Boolean;
    begin
-      null;
+      while Index <= Token_Table'Last loop
+         Index := Index + 1;
+         I_Pos2 := I_Pos;
+         Name := Token_Table (Index).Name;
+         T_Pos := 1;
+         I_Char := Element (In_Buffer, I_Pos);
+         Done := False;
+         --  900
+         while not Done and then
+           To_Upper (I_Char) = To_Upper (Element (Name, T_Pos)) loop
+            I_Pos2 := I_Pos2 + 1;
+            T_Pos := T_Pos + 1;
+            if I_Char = '(' then
+               I_Pos := I_Pos + 1;
+               Skip_Spaces (I_Pos);
+            end if;
 
-   end Process_Try_Number;
+            Done := not Is_Name_End (Element (Name, T_Pos - 1)) or
+              not Is_Name_Character (Element (In_Buffer, I_Pos2));
+         end loop;
 
-   procedure Process_Quote (I_Pos : in out Positive) is
-   begin
-      null;
+         --  911
+         if Index /= Token_Table'Last then
+            Index := Index + M_Misc.C_Base_Token;
+            Append (Token_Buffer, Token_Table (Index).Name);
+            I_Pos := I_Pos2;
 
-   end Process_Quote;
+            --  921
+         end if;
+
+      end loop;
+
+   end Try_Function_Or_Keyword;
 
 end Parse_Functions;

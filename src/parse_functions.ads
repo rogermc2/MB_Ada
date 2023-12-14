@@ -9,5 +9,6 @@ package Parse_Functions is
      (I_Pos  : in out Positive;  Label_Valid, First_Nonwhite : in out Boolean);
    procedure Process_Try_Number (I_Pos : in out Positive);
    procedure Process_Quote (I_Pos : in out Positive);
+   procedure Try_Function_Or_Keyword (I_Pos : in out Positive);
 
 end Parse_Functions;

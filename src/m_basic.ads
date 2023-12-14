@@ -38,9 +38,12 @@ package M_Basic is
    function Find_Subfunction (Token : Unbounded_String; Fun_Type : Integer)
                               return System.Address;
    procedure Init_Basic;
-   function Is_Name_Start (aChar : Character) return Boolean;
    function Is_Name_Character (aChar : Character) return Boolean;
    pragma Inline (Is_Name_Character);
+   function Is_Name_End (aChar : Character) return Boolean;
+   pragma Inline (Is_Name_End);
+   function Is_Name_Start (aChar : Character) return Boolean;
+   pragma Inline (Is_Name_Start);
    procedure Print_String (theString : String);
    procedure Prepare_Program (State : Boolean);
    procedure Skip_Spaces (Pos : in out Positive);
