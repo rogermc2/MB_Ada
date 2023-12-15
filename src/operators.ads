@@ -27,8 +27,6 @@ package Operators is
    op_shiftleft   : constant Address := Null_Address;
    op_shiftright  : constant Address := Null_Address;
 
-   Num_Operators  : constant Positive := 19;
-
    Operator_Types : array (1 .. Num_Operators) of Command_Table_Item :=
                       ((To_Unbounded_String ("^"),  T_OPER, T_NA, T_NA, T_NA, 0, op_exp),
                        (To_Unbounded_String ("*"),  T_OPER, T_NA, T_NA, T_NA, 0, op_mul),

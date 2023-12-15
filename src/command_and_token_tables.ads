@@ -27,6 +27,12 @@ package Command_And_Token_Tables is
    Num_Commands  : constant Positive := 45;
    Num_Functions : constant Positive := 100;
    Num_Tokens    : constant Positive := 9;
+   Num_Operators : constant Positive := 19;
+
+   Command_Table    : array (1 .. Num_Functions + Num_Commands +
+                               Num_Operators + 1) of Command_Table_Item;
+   Token_Table      : array (1 .. Num_Functions + Num_Commands +
+                               Num_Operators + 1) of Command_Table_Item;
 
    op_invalid    : constant Address := Null_Address;
    fun_acos      : constant Address := Null_Address;
