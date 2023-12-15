@@ -4,6 +4,7 @@ with System;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 
 with Command_And_Token_Tables; use Command_And_Token_Tables;
+with M_Misc;
 with Operators; use Operators;
 
 package body Command_And_Token_Functions is
@@ -30,13 +31,37 @@ package body Command_And_Token_Functions is
    c_CSUB          : Integer;
 
    function Get_Command_Value (Token : String) return Integer is
+      Index : Integer := Command_Table'First - 1;
+      Value : Integer := 0;
+      Found : Boolean := False;
    begin
-      return 0;
+      while Index <= Command_Table'Last loop
+         Index := Index + 1;
+         Found := Token = To_String (Command_Table (Index).Name);
+         if Found then
+            Value := M_Misc.C_Base_Token + Index - 1;
+         end if;
+      end loop;
+
+      return Value;
+
    end Get_Command_Value;
 
    function Get_Token_Value (Token : String) return Integer is
+      Index : Integer := Token_Table'First - 1;
+      Value : Integer := 0;
+      Found : Boolean := False;
    begin
-      return 0;
+      while Index <= Token_Table'Last loop
+         Index := Index + 1;
+         Found := Token = To_String (Token_Table (Index).Name);
+         if Found then
+            Value := M_Misc.C_Base_Token + Index - 1;
+         end if;
+      end loop;
+
+      return Value;
+
    end Get_Token_Value;
 
    procedure Init_Operator_Functions is
