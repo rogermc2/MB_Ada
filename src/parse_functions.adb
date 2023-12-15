@@ -248,6 +248,7 @@ package body Parse_Functions is
    --  893
    procedure Try_Function_Or_Keyword (I_Pos : in out Positive) is
       use Ada.Characters.Handling;
+      use Command_And_Token_Tables;
       Index  : Natural := 0;
       I_Char : Character;
       I_Pos2 : Positive;
@@ -281,8 +282,11 @@ package body Parse_Functions is
             Index := Index + M_Misc.C_Base_Token;
             Append (Token_Buffer, Token_Table (Index).Name);
             I_Pos := I_Pos2;
+         end if;
 
-            --  921
+         --  921
+         if Index = tokenTHEN then
+            null;
          end if;
 
       end loop;

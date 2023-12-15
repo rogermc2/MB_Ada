@@ -5,6 +5,7 @@ with Ada.Strings;
 with Ada.Text_IO; use Ada.Text_IO;
 
 with Global;
+WITH M_Misc;
 with Parse_Functions;
 
 package body M_Basic is
@@ -13,26 +14,26 @@ package body M_Basic is
    Start_Edit_Char  : Positive := 1;
    Trace_On         : Boolean := False;
 
-   tokenTHEN        : Integer;
-   tokenELSE        : Integer;
-   tokenGOTO        : Integer;
-   tokenEQUAL       : Integer;
-   tokenTO          : Integer;
-   tokenSTEP        : Integer;
-   tokenWHILE       : Integer;
-   tokenUNTIL       : Integer;
-   tokenGOSUB       : Integer;
-   tokenAS          : Integer;
-   tokenFOR         : Integer;
-   cmdSELECT_CASE   : Integer;
-   cmdCASE          : Integer;
-   cmdCASE_ELSE     : Integer;
-   cmdEND_SELECT    : Integer;
-   cmdSUB           : Integer;
-   cmdFUN           : Integer;
-   cmdIRET          : Integer;
-   cmdCFUN          : Integer;
-   cmdCSUB          : Integer;
+   t_THEN        : Integer;
+   t_ELSE        : Integer;
+   t_GOTO        : Integer;
+   t_EQUAL       : Integer;
+   t_TO          : Integer;
+   t_STEP        : Integer;
+   t_WHILE       : Integer;
+   t_UNTIL       : Integer;
+   t_GOSUB       : Integer;
+   t_AS          : Integer;
+   t_FOR         : Integer;
+   c_SELECT_CASE   : Integer;
+   c_CASE          : Integer;
+   c_CASE_ELSE     : Integer;
+   c_END_SELECT    : Integer;
+   c_SUB           : Integer;
+   c_FUN           : Integer;
+   c_IRET          : Integer;
+   c_CFUN          : Integer;
+   c_CSUB          : Integer;
 
    procedure Clear_Runtime;
 
@@ -67,19 +68,19 @@ package body M_Basic is
       use Global;
       --        use UB_String_Buffer_Package;
       Done      : Boolean := False;
-      Token_Ptr : Natural := 0;
+      token_Ptr : Natural := 0;
    begin
       Put_Line ("M_Basic.Execute_Program ");
       --        if not Is_Empty (Tokens) then
       if Length (Tokens) > 0 then
          while not Done loop
-            Token_Ptr := Token_Ptr + 1;
+            token_Ptr := Token_Ptr + 1;
             if Element (Tokens, Token_Ptr) = '0' then
-               Token_Ptr := Token_Ptr + 1;
+               token_Ptr := Token_Ptr + 1;
             end if;
 
             if Element (Tokens, Token_Ptr) = T_NEWLINE then
-               Token_Ptr := Token_Ptr + 1;
+               token_Ptr := Token_Ptr + 1;
             end if;
 
             Done := Slice (Tokens, 1, 2) /= "00" and
@@ -121,26 +122,26 @@ package body M_Basic is
    begin
       Clear_Program;
 
-      tokenTHEN := Get_Token_Value ("Then");
-      tokenELSE := Get_Token_Value ("Else");
-      tokenGOTO := Get_Token_Value ("GoTo");
-      tokenEQUAL:= Get_Token_Value (":=");
-      tokenTO   := Get_Token_Value ("To");
-      tokenSTEP := Get_Token_Value ("Step");
-      tokenWHILE := Get_Token_Value ("While");
-      tokenUNTIL := Get_Token_Value ("Until");
-      tokenGOSUB := Get_Token_Value ("GoSub");
-      tokenAS := Get_Token_Value ("As");
-      tokenFOR := Get_Token_Value ("For");
-      cmdSELECT_CASE := Get_Command_Value ("Select Case");
-      cmdCASE := Get_Command_Value ("Case");
-      cmdCASE_ELSE := Get_Command_Value ("Case Else");
-      cmdEND_SELECT := Get_Command_Value ("End Select");
-      cmdSUB := Get_Command_Value ("Sub");
-      cmdFUN := Get_Command_Value ("Function");
-      cmdIRET := Get_Command_Value ("IReturn");
-      cmdCFUN := Get_Command_Value ("CFunction");
-      cmdCSUB := Get_Command_Value ("CSub");
+      t_THEN := Get_Token_Value ("Then");
+      t_ELSE := Get_Token_Value ("Else");
+      t_GOTO := Get_Token_Value ("GoTo");
+      t_EQUAL:= Get_Token_Value (":=");
+      t_TO   := Get_Token_Value ("To");
+      t_STEP := Get_Token_Value ("Step");
+      t_WHILE := Get_Token_Value ("While");
+      t_UNTIL := Get_Token_Value ("Until");
+      t_GOSUB := Get_Token_Value ("GoSub");
+      t_AS := Get_Token_Value ("As");
+      t_FOR := Get_Token_Value ("For");
+      c_SELECT_CASE := Get_Command_Value ("Select Case");
+      c_CASE := Get_Command_Value ("Case");
+      c_CASE_ELSE := Get_Command_Value ("Case Else");
+      c_END_SELECT := Get_Command_Value ("End Select");
+      c_SUB := Get_Command_Value ("Sub");
+      c_FUN := Get_Command_Value ("Function");
+      c_IRET := Get_Command_Value ("IReturn");
+      c_CFUN := Get_Command_Value ("CFunction");
+      c_CSUB := Get_Command_Value ("CSub");
 
       for index in Function_Types'Range loop
          Command_Table (index) := Function_Types (index);
@@ -247,6 +248,18 @@ package body M_Basic is
 
    end Skip_Spaces;
 
+   function Token_Function (Index : Positive) return System.Address is
+
+   begin
+      if Index >= M_Misc.C_Base_Token and then
+        Index < Token_Table'Length then
+         return Token_Table (Index - M_Misc.C_Base_Token + 1).Function_Ptr;
+      else
+         return Token_Table (Token_Table'First).Function_Ptr;
+      end if;
+
+   end Token_Function;
+
    procedure Tokenize (From_Console : Boolean) is
       use Interfaces;
       use Ada.Characters.Handling;
@@ -293,5 +306,105 @@ package body M_Basic is
       Parse_Line (In_Ptr);
 
    end Tokenize;
+
+   function tokenTHEN return Integer is
+   begin
+      return t_THEN;
+   end tokenTHEN;
+
+   function tokenELSE return Integer is
+   begin
+      return t_ELSE;
+   end tokenELSE;
+
+   function tokenGOTO return Integer is
+   begin
+      return t_GOTO;
+   end tokenGOTO;
+
+   function tokenEQUAL return Integer is
+   begin
+      return t_EQUAL;
+   end tokenEQUAL;
+
+   function tokenTO return Integer is
+   begin
+      return t_TO;
+   end tokenTO;
+
+   function tokenSTEP return Integer is
+   begin
+      return t_STEP;
+   end tokenSTEP;
+
+   function tokenWHILE return Integer is
+   begin
+      return t_WHILE;
+   end tokenWHILE;
+
+   function tokenUNTIL return Integer is
+   begin
+      return t_UNTIL;
+   end tokenUNTIL;
+
+   function tokenGOSUB return Integer is
+   begin
+      return t_GOSUB;
+   end tokenGOSUB;
+
+   function tokenAS   return Integer is
+   begin
+      return t_AS;
+   end tokenAS;
+
+   function tokenFOR  return Integer is
+   begin
+      return t_FOR;
+   end tokenFOR;
+
+   function cmdSELECT_CASE return Integer is
+   begin
+      return c_SELECT_CASE;
+   end cmdSELECT_CASE;
+
+   function cmdCASE   return Integer is
+   begin
+      return c_CASE;
+   end cmdCASE;
+
+   function cmdCASE_ELSE return Integer is
+   begin
+      return c_CASE_ELSE;
+   end cmdCASE_ELSE;
+
+   function cmdEND_SELECT return Integer is
+   begin
+      return c_END_SELECT;
+   end cmdEND_SELECT;
+
+   function cmdSUB    return Integer is
+   begin
+      return c_SUB;
+   end cmdSUB;
+
+   function cmdFUN    return Integer is
+   begin
+      return c_FUN;
+   end cmdFUN;
+
+   function cmdIRET   return Integer is
+   begin
+      return c_IRET;
+   end cmdIRET;
+
+   function cmdCFUN   return Integer is
+   begin
+      return c_CFUN;
+   end cmdCFUN;
+
+   function cmdCSUB   return Integer is
+   begin
+      return c_CSUB;
+   end cmdCSUB;
 
 end M_Basic;
