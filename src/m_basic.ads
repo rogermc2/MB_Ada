@@ -47,6 +47,7 @@ package M_Basic is
    procedure Print_String (theString : String);
    procedure Prepare_Program (State : Boolean);
    procedure Skip_Spaces (Pos : in out Positive);
+   function Skip_Var (Pos : in out Positive) return Positive;
    function Token_Function (Index : Positive) return System.Address;
    procedure Tokenize (From_Console : Boolean);
 

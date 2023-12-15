@@ -1,5 +1,7 @@
 
 with Interfaces;
+
+with Ada.Assertions;
 with Ada.Characters.Handling;
 with Ada.Strings;
 with Ada.Text_IO; use Ada.Text_IO;
@@ -14,17 +16,17 @@ package body M_Basic is
    Start_Edit_Char  : Positive := 1;
    Trace_On         : Boolean := False;
 
-   t_THEN        : Integer;
-   t_ELSE        : Integer;
-   t_GOTO        : Integer;
-   t_EQUAL       : Integer;
-   t_TO          : Integer;
-   t_STEP        : Integer;
-   t_WHILE       : Integer;
-   t_UNTIL       : Integer;
-   t_GOSUB       : Integer;
-   t_AS          : Integer;
-   t_FOR         : Integer;
+   t_THEN          : Integer;
+   t_ELSE          : Integer;
+   t_GOTO          : Integer;
+   t_EQUAL         : Integer;
+   t_TO            : Integer;
+   t_STEP          : Integer;
+   t_WHILE         : Integer;
+   t_UNTIL         : Integer;
+   t_GOSUB         : Integer;
+   t_AS            : Integer;
+   t_FOR           : Integer;
    c_SELECT_CASE   : Integer;
    c_CASE          : Integer;
    c_CASE_ELSE     : Integer;
@@ -220,11 +222,12 @@ package body M_Basic is
             Process_Try_Number (Ptr);
          elsif First_Nonwhite then
             Process_First_Nonwhite (Ptr, Label_Valid, First_Nonwhite);
-         --  892 not First_Nonwhite
-         elsif Try_Function_Or_Keyword (Ptr) then
-           null;
-      else
-         null;
+            --  892 not First_Nonwhite
+         elsif Try_Function_Or_Keyword (Ptr, First_Nonwhite) then
+            null;
+         elsif Is_Name_Start (Element (In_Buffer, Ptr)) and then
+           Try_Variable_Name (Ptr, First_Nonwhite) then
+            null;
          end if;
 
       end loop;
@@ -243,12 +246,48 @@ package body M_Basic is
    end Prepare_Program;
 
    procedure Skip_Spaces (Pos : in out Positive) is
+      use Ada.Assertions;
    begin
       while  Element (In_Buffer, Pos) = ' ' loop
          Pos := Pos + 1;
       end loop;
 
    end Skip_Spaces;
+
+   --  Skip_Var skips to the end of a variable
+   function Skip_Var (Pos : in out Positive) return Positive is
+      use Ada.Assertions;
+      Routine_Name : String := "M_Basic.Skip_Var ";
+      Pos2 : Positive := Pos;
+      Pos3 : Positive;
+   begin
+      if Element (In_Buffer, Pos) = ' ' then
+         Pos := Pos + 1;
+      end if;
+
+      if Is_Name_Start (Element (In_Buffer, Pos)) then
+         while Is_Name_Character (Element (In_Buffer, Pos)) loop
+            Pos := Pos + 1;
+         end loop;
+
+         --  2429 check the terminating char.
+         if not (Element (In_Buffer, Pos) = '$') and then
+           not (Element (In_Buffer, Pos) = '%') and then
+           not (Element (In_Buffer, Pos) = '|') then
+            Pos := Pos - 1;
+         end if;
+
+         Assert (Pos2 - Pos < Configuration.MAXVARLEN,
+                 Routine_Name & "Variable name " &
+                  Slice (In_Buffer, Pos, Pos2) & " is too long");
+
+         Pos3 := Pos;
+
+      end if;
+
+      return Pos2;
+
+   end Skip_Var;
 
    function Token_Function (Index : Positive) return System.Address is
 

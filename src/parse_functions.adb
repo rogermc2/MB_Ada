@@ -295,4 +295,18 @@ package body Parse_Functions is
 
    end Try_Function_Or_Keyword;
 
+   function Try_Variable_Name
+     (Pos : in out Positive; First_Nonwhite : in out Boolean) return Boolean is
+      Found  : Boolean := False;
+      Pos2 : Positive;
+   begin
+      if First_Nonwhite then
+         --  irst entry on the line?
+         Pos2 = Skip_Var (Pos, True);
+      end if;
+
+      return Found;
+
+   end Try_Variable_Name;
+
 end Parse_Functions;
