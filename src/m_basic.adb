@@ -14,13 +14,12 @@ with Parse_Functions;
 
 package body M_Basic is
 
-   Start_Edit_Point : Positive := 1;
-   Start_Edit_Char  : Positive := 1;
-   Trace_On         : Boolean := False;
+   Trace_On : Boolean := False;
 
    procedure Clear_Runtime;
 
-   procedure Clear_Program is
+   procedure Clear_Program (Start_Edit_Point : in out Positive;
+                            Start_Edit_Char  : in out Positive) is
    begin
       Clear_Runtime;
       Start_Edit_Point := 1;
@@ -91,9 +90,10 @@ package body M_Basic is
 
    end Find_Subfunction;
 
-   procedure Init_Basic is
+   procedure Init_Basic (Start_Edit_Point : in out Positive;
+                         Start_Edit_Char  : in out Positive) is
    begin
-      Clear_Program;
+      Clear_Program (Start_Edit_Point, Start_Edit_Char);
       Command_And_Token_Functions.Init_Operator_Functions;
 
    end Init_Basic;
@@ -254,6 +254,7 @@ package body M_Basic is
 
                   Pos := Pos + 1;
                end if;
+               Pos := Pos + 1;
             end loop;
 
          end if;
