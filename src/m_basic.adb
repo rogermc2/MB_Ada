@@ -246,7 +246,6 @@ package body M_Basic is
    end Prepare_Program;
 
    procedure Skip_Spaces (Pos : in out Positive) is
-      use Ada.Assertions;
    begin
       while  Element (In_Buffer, Pos) = ' ' loop
          Pos := Pos + 1;
@@ -258,8 +257,11 @@ package body M_Basic is
    function Skip_Var (Pos : in out Positive) return Positive is
       use Ada.Assertions;
       Routine_Name : String := "M_Basic.Skip_Var ";
-      Pos2 : Positive := Pos;
-      Pos3 : Positive;
+      Pos2         : Positive := Pos;
+      Pos3         : Positive;
+      Index        : Positive;
+      In_Quote     : Boolean := False;
+      Done         : Boolean;
    begin
       if Element (In_Buffer, Pos) = ' ' then
          Pos := Pos + 1;
@@ -279,10 +281,52 @@ package body M_Basic is
 
          Assert (Pos2 - Pos < Configuration.MAXVARLEN,
                  Routine_Name & "Variable name " &
-                  Slice (In_Buffer, Pos, Pos2) & " is too long");
+                   Slice (In_Buffer, Pos, Pos2) & " is too long");
 
          Pos3 := Pos;
+         if Element (In_Buffer, Pos3) = ' ' then
+            Pos3 := Pos3 + 1;
+         end if;
 
+         if Element (In_Buffer, Pos3) = '(' then
+            Pos := Pos3;
+         end if;
+
+         if Element (In_Buffer, Pos) = '(' then
+            --  this is an array
+            Pos := Pos + 1;
+            Assert (Pos2 - Pos < Configuration.MAXVARLEN,
+                    Routine_Name & "Variable name " &
+                      Slice (In_Buffer, Pos, Pos2) & " is too long");
+
+            --  Step over the array parameters keeping track of nested brackets.
+            Index := 1;
+            Done := False;
+            while not Done loop
+               if Element (In_Buffer, Pos) = '"' then
+                  In_Quote := not In_Quote;
+               end if;
+
+               if Pos = Length (In_Buffer) then
+
+                  Assert (Pos >= Length (In_Buffer),
+                          Routine_Name & "Expected closing bracket.");
+
+                  Done := not In_Quote and then
+                    Element (In_Buffer, Pos) = ')' and then
+                    Index = 1;
+
+                  if not Done and then
+                    (Element (In_Buffer, Pos) = '(' or else
+                     Element (In_Buffer, Pos) = T_FUN) then
+                     Index := Index + 1;
+                  end if;
+
+                  Pos := Pos + 1;
+               end if;
+            end loop;
+
+         end if;
       end if;
 
       return Pos2;

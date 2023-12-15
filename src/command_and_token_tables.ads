@@ -6,6 +6,13 @@ with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 package Command_And_Token_Tables is
 
    type Fun_Type is (T_NA, T_FNA, T_FUN, T_INT, T_NBR, T_OPER, T_STR);
+   for Fun_Type use (T_NA => 0,
+                     T_FNA => 1,
+                     T_FUN => 2,
+                     T_INT => 3,
+                     T_NBR => 4,
+                     T_OPER => 5,
+                     T_STR => 6);
 
    type Command_Table_Item is record
       Name          : Unbounded_String;
