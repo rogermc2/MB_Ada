@@ -35,7 +35,7 @@ package body Command_And_Token_Functions is
       Value : Integer := 0;
       Found : Boolean := False;
    begin
-      while Index <= Command_Table'Last loop
+      while Index < Command_Table'Last loop
          Index := Index + 1;
          Found := Token = To_String (Command_Table (Index).Name);
          if Found then
@@ -52,7 +52,7 @@ package body Command_And_Token_Functions is
       Value : Integer := 0;
       Found : Boolean := False;
    begin
-      while Index <= Token_Table'Last loop
+      while Index < Token_Table'Last loop
          Index := Index + 1;
          Found := Token = To_String (Token_Table (Index).Name);
          if Found then
@@ -102,8 +102,7 @@ package body Command_And_Token_Functions is
       end loop;
 
       Command_Table (Command_Table'Last) :=
-        (To_Unbounded_String (""), T_NA, T_NA, T_NA, T_NA, 0,
-         System.Null_Address);
+        (To_Unbounded_String (""), T_NA, 0, System.Null_Address);
 
       for index in Token_Table'Range loop
          Token_Table (index) := Command_Table (index);

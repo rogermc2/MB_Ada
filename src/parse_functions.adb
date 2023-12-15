@@ -9,6 +9,7 @@ with M_Basic; use M_Basic;
 with M_Misc;
 
 with Command_And_Token_Tables;
+with Command_And_Token_Functions;
 
 package body Parse_Functions is
 
@@ -42,7 +43,7 @@ package body Parse_Functions is
    end Get_Command_From_Input;
 
    function Get_Command_Value (Command : String) return integer is
-      --        use Command_And_Token_Tables;
+      use Command_And_Token_Tables;
       Routine_Name  : constant String := "Parse_Functions.Get_Command_Value ";
       Command_Value : Integer := 0;
       Found         : Boolean := False;
@@ -78,9 +79,11 @@ package body Parse_Functions is
    end Process_Colon;
 
    procedure Process_Command
-     (I_Pos       : in out Positive; First_Nonwhite, Label_Valid : in out Boolean;
+     (I_Pos                       : in out Positive;
+      First_Nonwhite, Label_Valid : in out Boolean;
       Match_I_Pos : Positive; Match_Index : Integer) is
       use Ada.Characters.Handling;
+      use Command_And_Token_Tables;
       aChar : Character;
    begin
       if Match_Index > -1 then
@@ -204,7 +207,7 @@ package body Parse_Functions is
 
          if (I_Pos2 >= Length (Command) and then
                not Is_Name_Character (Element (In_Buffer, I_Pos2))) or
-           Command_Table (CT_Index).Command_Type1 = T_FUN then
+           Command_Table (CT_Index).Command_Type = T_FUN then
             Done := Element (Command, CT_Index) /= '(' and
               Is_Name_Character (Element (In_Buffer, I_Pos2));
 
@@ -250,6 +253,8 @@ package body Parse_Functions is
      (I_Pos : in out Positive; First_Nonwhite : in out Boolean)
       return Boolean is
       use Ada.Characters.Handling;
+      use Command_And_Token_Tables;
+      use Command_And_Token_Functions;
       Index  : Natural := 0;
       I_Char : Character;
       I_Pos2 : Positive;
@@ -301,8 +306,8 @@ package body Parse_Functions is
       Pos2 : Positive;
    begin
       if First_Nonwhite then
-         --  irst entry on the line?
-         Pos2 = Skip_Var (Pos, True);
+         --  First entry on the line?
+         Pos2 := Skip_Var (Pos);
       end if;
 
       return Found;

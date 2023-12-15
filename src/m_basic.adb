@@ -182,7 +182,7 @@ package body M_Basic is
 
    end Skip_Spaces;
 
-   --  Skip_Var skips to the end of a variable
+   --  2413 Skip_Var skips to the end of a variable
    function Skip_Var (Pos : in out Positive) return Positive is
       use Ada.Assertions;
       Routine_Name : String := "M_Basic.Skip_Var ";
@@ -222,13 +222,14 @@ package body M_Basic is
          end if;
 
          if Element (In_Buffer, Pos) = '(' then
-            --  this is an array
+            --  2445 this is an array
             Pos := Pos + 1;
             Assert (Pos2 - Pos < Configuration.MAXVARLEN,
                     Routine_Name & "Variable name " &
                       Slice (In_Buffer, Pos, Pos2) & " is too long");
 
-            --  Step over the array parameters keeping track of nested brackets.
+            --  2456 Step over the array parameters keeping track of
+            --  nested brackets.
             Index := 1;
             Done := False;
             while not Done loop
@@ -247,7 +248,7 @@ package body M_Basic is
 
                   if not Done and then
                     (Element (In_Buffer, Pos) = '(' or else
-                     Element (In_Buffer, Pos) = T_FUN) then
+                     Token_Type (Pos) = T_FUN) then
                      Index := Index + 1;
                   end if;
 

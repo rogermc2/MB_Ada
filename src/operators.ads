@@ -28,24 +28,24 @@ package Operators is
    op_shiftright  : constant Address := Null_Address;
 
    Operator_Types : array (1 .. Num_Operators) of Command_Table_Item :=
-                      ((To_Unbounded_String ("^"),  T_OPER, T_NA, T_NA, T_NA, 0, op_exp),
-                       (To_Unbounded_String ("*"),  T_OPER, T_NA, T_NA, T_NA, 0, op_mul),
-                       (To_Unbounded_String ("/"),  T_OPER, T_NA, T_NA, T_NA, 0, op_div),
-                       (To_Unbounded_String ("\"),  T_OPER, T_NA, T_NA, T_NA, 0, op_divint),
-                       (To_Unbounded_String ("Mod"), T_OPER, T_NA, T_NA, T_NA, 0, op_mod),
-                       (To_Unbounded_String ("+"),  T_OPER, T_NA, T_NA, T_NA, 0, op_add),
-                       (To_Unbounded_String ("-"),  T_OPER, T_NA, T_NA, T_NA, 0, op_subtract),
-                       (To_Unbounded_String ("Not"), T_OPER, T_NA, T_NA, T_NA, 0, op_not),
-                       (To_Unbounded_String ("<<"), T_OPER, T_NA, T_NA, T_NA, 0, op_shiftleft),
-                       (To_Unbounded_String (">>"), T_OPER, T_NA, T_NA, T_NA, 0, op_shiftright),
-                       (To_Unbounded_String ("<>"), T_OPER, T_NA, T_NA, T_NA, 0, op_ne),
-                       (To_Unbounded_String ("=>"), T_OPER, T_NA, T_NA, T_NA, 0, op_gte),
-                       (To_Unbounded_String ("=<"), T_OPER, T_NA, T_NA, T_NA, 0, op_lte),
-                       (To_Unbounded_String ("<"),  T_OPER, T_NA, T_NA, T_NA, 0, op_lt),
-                       (To_Unbounded_String (">"),  T_OPER, T_NA, T_NA, T_NA, 0, op_gt),
-                       (To_Unbounded_String ("="),  T_OPER, T_NA, T_NA, T_NA, 0, op_equal),
-                       (To_Unbounded_String ("And"), T_OPER, T_NA, T_NA, T_NA, 0, op_and),
-                       (To_Unbounded_String ("Or"),  T_OPER, T_NA, T_NA, T_NA, 0, op_or),
-                       (To_Unbounded_String ("Xor"), T_OPER, T_NA, T_NA, T_NA, 0, op_xor));
+                      ((To_Unbounded_String ("^"),  T_OPER, 0, op_exp),
+                       (To_Unbounded_String ("*"),  T_OPER, 0, op_mul),
+                       (To_Unbounded_String ("/"),  T_OPER, 0, op_div),
+                       (To_Unbounded_String ("\"),  T_OPER, 0, op_divint),
+                       (To_Unbounded_String ("Mod"), T_OPER, 0, op_mod),
+                       (To_Unbounded_String ("+"),  T_OPER, 0, op_add),
+                       (To_Unbounded_String ("-"),  T_OPER, 0, op_subtract),
+                       (To_Unbounded_String ("Not"), T_OPER, 0, op_not),
+                       (To_Unbounded_String ("<<"), T_OPER, 0, op_shiftleft),
+                       (To_Unbounded_String (">>"), T_OPER, 0, op_shiftright),
+                       (To_Unbounded_String ("<>"), T_OPER, 0, op_ne),
+                       (To_Unbounded_String ("=>"), T_OPER, 0, op_gte),
+                       (To_Unbounded_String ("=<"), T_OPER, 0, op_lte),
+                       (To_Unbounded_String ("<"),  T_OPER, 0, op_lt),
+                       (To_Unbounded_String (">"),  T_OPER, 0, op_gt),
+                       (To_Unbounded_String ("="),  T_OPER, 0, op_equal),
+                       (To_Unbounded_String ("And"), T_OPER, 0, op_and),
+                       (To_Unbounded_String ("Or"),  T_OPER, 0, op_or),
+                       (To_Unbounded_String ("Xor"), T_OPER, 0, op_xor));
 
 end Operators;
