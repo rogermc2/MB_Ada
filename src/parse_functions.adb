@@ -246,15 +246,17 @@ package body Parse_Functions is
    end Try_Command;
 
    --  893
-   procedure Try_Function_Or_Keyword (I_Pos : in out Positive) is
+   function Try_Function_Or_Keyword
+     (I_Pos : in out Positive; First_Nonwhite : in out Boolean)
+      return Boolean is
       use Ada.Characters.Handling;
-      use Command_And_Token_Tables;
       Index  : Natural := 0;
       I_Char : Character;
       I_Pos2 : Positive;
       T_Pos  : Positive;
       Name   : Unbounded_String;
       Done   : Boolean;
+      Found  : Boolean := False;
    begin
       while Index <= Token_Table'Last loop
          Index := Index + 1;
@@ -278,18 +280,18 @@ package body Parse_Functions is
          end loop;
 
          --  911
-         if Index /= Token_Table'Last then
+         Found := Index /= Token_Table'Last;
+         if Found then
             Index := Index + M_Misc.C_Base_Token;
             Append (Token_Buffer, Token_Table (Index).Name);
             I_Pos := I_Pos2;
          end if;
 
          --  921
-         if Index = tokenTHEN then
-            null;
-         end if;
-
+         First_Nonwhite := Index = tokenTHEN or else Index = tokenELSE;
       end loop;
+
+      return Found;
 
    end Try_Function_Or_Keyword;
 

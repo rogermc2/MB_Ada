@@ -220,9 +220,11 @@ package body M_Basic is
             Process_Try_Number (Ptr);
          elsif First_Nonwhite then
             Process_First_Nonwhite (Ptr, Label_Valid, First_Nonwhite);
-         else
-            --  891
-            Try_Function_Or_Keyword (Ptr);
+         --  892 not First_Nonwhite
+         elsif Try_Function_Or_Keyword (Ptr) then
+           null;
+      else
+         null;
          end if;
 
       end loop;
