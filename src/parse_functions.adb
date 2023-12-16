@@ -15,8 +15,9 @@ with Support;
 package body Parse_Functions is
 
    procedure Process_Command
-     (I_Pos       : in out Positive; First_Nonwhite, Label_Valid : in out Boolean;
-      Match_I_Pos : Positive;  Match_Index : Integer);
+     (I_Pos          : in out Positive;
+      Match_I_Pos    : Positive; Match_Index : Integer;
+      First_Nonwhite : in out Boolean; Label_Valid : in out Boolean);
    procedure Try_Command
      (I_Pos                         : in out Positive;
       Label_Valid, First_Nonwhite   : in out Boolean);
@@ -81,9 +82,9 @@ package body Parse_Functions is
    end Process_Colon;
 
    procedure Process_Command
-     (I_Pos                       : in out Positive;
-      First_Nonwhite, Label_Valid : in out Boolean;
-      Match_I_Pos                 : Positive; Match_Index : Integer) is
+     (I_Pos          : in out Positive;
+      Match_I_Pos    : Positive; Match_Index : Integer;
+      First_Nonwhite : in out Boolean; Label_Valid : in out Boolean) is
       use Ada.Characters.Handling;
       use M_Basic.String_Buffer_Package;
       use Support;
@@ -265,8 +266,8 @@ package body Parse_Functions is
 
       --  857
       if Match_Index > -1 then
-         Process_Command (I_Pos, Label_Valid, First_Nonwhite,
-                          Match_I_Pos, Match_Index);
+         Process_Command (I_Pos, Match_I_Pos, Match_Index,
+                          Label_Valid, First_Nonwhite);
 
          --  875
       elsif Label_Valid and then

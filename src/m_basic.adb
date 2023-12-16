@@ -205,9 +205,20 @@ package body M_Basic is
    end Prepare_Program_Ext;
 
    procedure Prepare_Program (Error_Abort : Boolean) is
+      use System;
+      use Ada.Assertions;
+      use Ada.Characters.Handling;
+      use Configuration;
       use Draw;
       use Flash;
-      Num_Funcs : Natural := 0;
+      Routine_Name : constant String := "M_Basic.Prepare_Program ";
+      Num_Funcs    : Natural := 0;
+      Dump         : Natural := 0;
+      Index1       : Natural := 0;
+      Index2       : Natural := 0;
+      Pos1         : Positive;
+      Pos2         : Positive;
+      Done         : Boolean := False;
    begin
       for index in FONT_BUILTIN_NBR .. FONT_TABLE_SIZE loop
          Font_Table (index) := System.Null_Address;
@@ -221,6 +232,39 @@ package body M_Basic is
            (Prog_Memory'Length + Option.Program_Flash_Size, 1,
             C_Function_Library, False);
       end if;
+
+      Dump := Prepare_Program_Ext
+        (Prog_Memory'Length, Num_Funcs, C_Function_Flash, False);
+
+      while Index1 < MAXSUBFUN and then
+        Subfunctions (Index1) > 0 loop
+         Index1 := Index1 + 1;
+         Index2 := Index1;
+         while Index2 < MAXSUBFUN and then
+           Subfunctions (Index2) > 0 loop
+            Index2 := Index1 + 1;
+            Pos1 := Subfunctions (Index1);
+            Current_Line_Ptr := Pos1;
+            Pos1 := Pos1 + 1;
+            Skip_Spaces (Pos1);
+
+            Pos2 := Subfunctions (Index2);
+            Pos2 := Pos2 + 1;
+            Skip_Spaces (Pos2);
+
+            while not Done loop
+               Assert (Is_Name_Character (Element (In_Buffer, Pos1)) or else
+                       Is_Name_Character (Element (In_Buffer, Pos2)),
+                       Routine_Name & "error duplicate name.");
+               Done := To_Upper (Element (In_Buffer, Pos1)) /=
+                 To_Upper (Element (In_Buffer, Pos2));
+               if not Done then
+                  Pos1 := Pos1 + 1;
+                  Pos2 := Pos2 + 1;
+               end if;
+            end loop;
+         end loop;
+      end loop;
 
    end Prepare_Program;
 
