@@ -152,8 +152,11 @@ package body M_Basic is
             --  892 not First_Nonwhite
          elsif Try_Function_Or_Keyword (Ptr, First_Nonwhite) then
             null;
-         elsif Is_Name_Start (Element (In_Buffer, Ptr)) and then
-           Try_Variable_Name (Ptr, First_Nonwhite) then
+         elsif Is_Name_Start (Element (In_Buffer, Ptr)) then
+            --  934
+           Process_Variable_Name (Ptr, First_Nonwhite, Label_Valid);
+         elsif Element (In_Buffer, Ptr) = '(' then
+            --  953
             null;
          end if;
 

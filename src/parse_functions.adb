@@ -158,8 +158,11 @@ package body Parse_Functions is
       if Match_Index > 0 then
          Commands.Process_Command (Match_Index, Match_I_Pos,
                                    First_Nonwhite, Label_Valid);
+
+       --   876 test if it is a label
       elsif Label_Valid and then
         Is_Name_Start (Element (In_Buffer, I_Pos)) then
+         --  search for the first invalid char
          Pos2 := I_Pos;
          Index := 0;
          Done := False;
@@ -167,23 +170,26 @@ package body Parse_Functions is
             Index := Index + 1;
             Pos2 := Pos2 + 1;
             Done := not Is_Name_Character (Element (In_Buffer, Pos2));
-            if not Done and then Element (In_Buffer, Pos2) = ':' then
-               --  is label
-               Label_Valid := False;
-               Append (Token_Buffer, Global.T_LABEL);
-
-               --  insert the length of the label
-               Append (Token_Buffer, Integer'Image (Pos2 - I_Pos));
-
-               --  copy the label
-               for pos3 in reverse 1 .. Pos2 - I_Pos loop
-                  Append (Token_Buffer, Element (In_Buffer, I_Pos));
-                  I_Pos := I_Pos + 1;
-               end loop;
-               --  step over the terminating colon
-               I_Pos := I_Pos + 1;
-            end if;
          end loop;
+         --  Last character of name found
+
+         --  881
+         if Element (In_Buffer, Pos2) = ':' then
+            --  is label
+            Label_Valid := False;
+            Append (Token_Buffer, Global.T_LABEL);
+
+            --  insert the length of the label
+            Append (Token_Buffer, Integer'Image (Pos2 - I_Pos));
+
+            --  copy the label
+            for pos3 in reverse 1 .. Pos2 - I_Pos loop
+               Append (Token_Buffer, Element (In_Buffer, I_Pos));
+               I_Pos := I_Pos + 1;
+            end loop;
+            --  step over the terminating colon
+            I_Pos := I_Pos + 1;
+         end if;
       end if;
 
    end Process_First_Nonwhite;
@@ -336,18 +342,30 @@ package body Parse_Functions is
 
    end Try_Function_Or_Keyword;
 
-   function Try_Variable_Name
-     (Pos : in out Positive; First_Nonwhite : in out Boolean) return Boolean is
-      Found  : Boolean := False;
+   procedure Process_Variable_Name
+     (Pos            : in out Positive;
+      First_Nonwhite, Label_Valid : in out Boolean) is
       Pos2   : Positive;
    begin
+      --  935
       if First_Nonwhite then
          --  First entry on the line?
          Pos2 := Skip_Var (Pos);
+         if Element (In_Buffer, Pos2) = '=' then
+            --  an implied let
+            Append (Token_Buffer, Integer'Image (Get_Command_Value ("Let")));
+         end if;
+      else
+         --  942 copy the variable name
+         while Is_Name_Character (Element (In_Buffer, Pos)) loop
+            Append (Token_Buffer, Element (In_Buffer, Pos));
+            Pos := Pos + 1;
+         end loop;
+
+         First_Nonwhite := False;
+         Label_Valid:= False;
       end if;
 
-      return Found;
-
-   end Try_Variable_Name;
+   end Process_Variable_Name;
 
 end Parse_Functions;

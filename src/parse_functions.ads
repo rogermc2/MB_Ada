@@ -12,7 +12,7 @@ package Parse_Functions is
    procedure Process_Quote (I_Pos : in out Positive);
    function Try_Function_Or_Keyword
      (I_Pos : in out Positive; First_Nonwhite : in out Boolean) return Boolean;
-   function Try_Variable_Name
-     (Pos : in out Positive; First_Nonwhite : in out Boolean) return Boolean;
+   procedure Process_Variable_Name
+     (Pos : in out Positive; First_Nonwhite, Label_Valid : in out Boolean);
 
 end Parse_Functions;
