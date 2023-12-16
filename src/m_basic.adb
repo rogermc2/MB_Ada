@@ -8,23 +8,22 @@ with Ada.Text_IO; use Ada.Text_IO;
 
 with Command_And_Token_Tables; use Command_And_Token_Tables;
 with Command_And_Token_Functions;
+with Editor;
 with Global;
 WITH M_Misc;
 with Parse_Functions;
 
 package body M_Basic is
 
-   Trace_On : Boolean := False;
+--     Trace_On : Boolean := False;
 
    procedure Clear_Runtime;
 
-   procedure Clear_Program (Start_Edit_Point : in out Positive;
-                            Start_Edit_Char  : in out Positive) is
+   procedure Clear_Program is
    begin
       Clear_Runtime;
-      Start_Edit_Point := 1;
-      Start_Edit_Char := 1;
-      Trace_On := False;
+      Editor.Init_Editor;
+--        Trace_On := False;
    end Clear_Program;
 
    procedure Clear_Runtime is
@@ -90,10 +89,9 @@ package body M_Basic is
 
    end Find_Subfunction;
 
-   procedure Init_Basic (Start_Edit_Point : in out Positive;
-                         Start_Edit_Char  : in out Positive) is
+   procedure Init_Basic is
    begin
-      Clear_Program (Start_Edit_Point, Start_Edit_Char);
+      Clear_Program;
       Command_And_Token_Functions.Init_Operator_Functions;
 
    end Init_Basic;

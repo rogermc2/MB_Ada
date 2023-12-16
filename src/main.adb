@@ -40,7 +40,7 @@ procedure Main is
 begin
    Watchdog_Timer.Clear_Event_WDT;
    Misc_MX470.Init_Processor;
-   M_Basic.Init_Basic (Editor.Start_Edit_Point, Editor.Start_Edit_Char);
+   M_Basic.Init_Basic;
 
    if Except_Cause /= Cause_Display then
       Saved_Cause := Except_Cause;
@@ -75,7 +75,7 @@ begin
    Touch.Init_Touch;
 
    if Except_Cause /= Cause_MM_Startup then
-      M_Basic.Clear_Program (Editor.Start_Edit_Point, Editor.Start_Edit_Char);
+      M_Basic.Clear_Program;
       M_Basic.Prepare_Program (True);
       M_Basic.Token_Buffer := Null_Unbounded_String;
       Append (M_Basic.Token_Buffer, Startup_Token);

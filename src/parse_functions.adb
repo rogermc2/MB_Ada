@@ -3,6 +3,7 @@ with Ada.Characters.Handling;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Ada.Text_IO; use Ada.Text_IO;
 
+with Commands;
 with Configuration;
 with Global;
 with M_Basic; use M_Basic;
@@ -81,7 +82,7 @@ package body Parse_Functions is
    procedure Process_Command
      (I_Pos                       : in out Positive;
       First_Nonwhite, Label_Valid : in out Boolean;
-      Match_I_Pos : Positive; Match_Index : Integer) is
+      Match_I_Pos                 : Positive; Match_Index : Integer) is
       use Ada.Characters.Handling;
       use Command_And_Token_Tables;
       aChar : Character;
@@ -135,8 +136,11 @@ package body Parse_Functions is
       --        use Ada.Characters.Handling;
       --        use Command_And_Token_Tables;
       aChar        : constant Character := Element (In_Buffer, I_Pos);
-      Match_Index  : Integer := -1;
+      Match_Index  : Natural := 0;
       Match_I_Pos  : Positive;
+      Pos2         : Positive;
+      Index        : Natural := 0;
+      Done         : Boolean := False;
    begin
       if aChar = '?' then
          Match_Index := Get_Command_Value ("Print") - M_Misc.C_Base_Token;
@@ -148,6 +152,38 @@ package body Parse_Functions is
 
       else
          Try_Command (I_Pos, Label_Valid, First_Nonwhite);
+      end if;
+
+      --  857
+      if Match_Index > 0 then
+         Commands.Process_Command (Match_Index, Match_I_Pos,
+                                   First_Nonwhite, Label_Valid);
+      elsif Label_Valid and then
+        Is_Name_Start (Element (In_Buffer, I_Pos)) then
+         Pos2 := I_Pos;
+         Index := 0;
+         Done := False;
+         while not Done and then Index <= Configuration.MAXVARLEN loop
+            Index := Index + 1;
+            Pos2 := Pos2 + 1;
+            Done := not Is_Name_Character (Element (In_Buffer, Pos2));
+            if not Done and then Element (In_Buffer, Pos2) = ':' then
+               --  is label
+               Label_Valid := False;
+               Append (Token_Buffer, Global.T_LABEL);
+
+               --  insert the length of the label
+               Append (Token_Buffer, Integer'Image (Pos2 - I_Pos));
+
+               --  copy the label
+               for pos3 in reverse 1 .. Pos2 - I_Pos loop
+                  Append (Token_Buffer, Element (In_Buffer, I_Pos));
+                  I_Pos := I_Pos + 1;
+               end loop;
+               --  step over the terminating colon
+               I_Pos := I_Pos + 1;
+            end if;
+         end loop;
       end if;
 
    end Process_First_Nonwhite;
@@ -224,7 +260,7 @@ package body Parse_Functions is
          Process_Command (I_Pos, Label_Valid, First_Nonwhite,
                           Match_I_Pos, Match_Index);
 
-      --  875
+         --  875
       elsif Label_Valid and then
         Is_Name_Start (Element (In_Buffer, I_Pos)) then
          Index := 0;
@@ -303,7 +339,7 @@ package body Parse_Functions is
    function Try_Variable_Name
      (Pos : in out Positive; First_Nonwhite : in out Boolean) return Boolean is
       Found  : Boolean := False;
-      Pos2 : Positive;
+      Pos2   : Positive;
    begin
       if First_Nonwhite then
          --  First entry on the line?

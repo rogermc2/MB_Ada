@@ -22,13 +22,11 @@ package M_Basic is
 
    Subfunctions     : array (1 .. Configuration.MAXSUBFUN) of System.Address;
 
-   procedure Clear_Program (Start_Edit_Point : in out Positive;
-                            Start_Edit_Char  : in out Positive);
+   procedure Clear_Program;
    procedure Execute_Program (Tokens : Unbounded_String);
    function Find_Subfunction (Token : Unbounded_String; Fun_Type : Integer)
                               return System.Address;
-   procedure Init_Basic(Start_Edit_Point : in out Positive;
-                         Start_Edit_Char  : in out Positive);
+   procedure Init_Basic;
    function Is_Name_Character (aChar : Character) return Boolean;
    pragma Inline (Is_Name_Character);
    function Is_Name_End (aChar : Character) return Boolean;

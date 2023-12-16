@@ -1,6 +1,7 @@
 
 package Parse_Functions is
 
+   function Get_Command_Value (Command : String) return Integer;
    procedure Process_Colon (I_Pos : in out Positive;
                             First_Nonwhite : in out Boolean);
    procedure Process_Double_Quote (I_Pos : in out Positive; aChar : Character);
