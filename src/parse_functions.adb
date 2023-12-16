@@ -3,14 +3,14 @@ with Ada.Characters.Handling;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Ada.Text_IO; use Ada.Text_IO;
 
+with Command_And_Token_Tables;
+with Command_And_Token_Functions;
 with Commands;
 with Configuration;
 with Global;
 with M_Basic; use M_Basic;
 with M_Misc;
-
-with Command_And_Token_Tables;
-with Command_And_Token_Functions;
+with Support;
 
 package body Parse_Functions is
 
@@ -85,10 +85,8 @@ package body Parse_Functions is
       First_Nonwhite, Label_Valid : in out Boolean;
       Match_I_Pos                 : Positive; Match_Index : Integer) is
       use Ada.Characters.Handling;
-      use Command_And_Token_Tables;
       use M_Basic.String_Buffer_Package;
-      aChar  : Character;
-      Remark : Unbounded_String;
+      use Support;
    begin
       --  879
       if Match_Index > -1 then
@@ -99,11 +97,7 @@ package body Parse_Functions is
          if Match_Index + M_Misc.C_Base_Token =
            Get_Command_Value ("Rem") then
             --  886 copy everything
-            Append (Token_Buffer,
-                    Slice (In_Buffer, Match_I_Pos, Length (In_Buffer)));
-            while I_Pos <= Length (In_Buffer) loop
-               I_Pos := I_Pos + 1;
-            end loop;
+            Copy_Slice (I_Pos, Length (In_Buffer));
          end if;
 
       elsif Is_Alphanumeric (Element (In_Buffer, I_Pos - 1)) and then
@@ -140,13 +134,13 @@ package body Parse_Functions is
    procedure Process_First_Nonwhite
      (I_Pos : in out Positive; Label_Valid, First_Nonwhite : in out Boolean) is
       use M_Basic.String_Buffer_Package;
-      aChar        : constant Character := Element (In_Buffer, I_Pos);
-      Match_Index  : Natural := 0;
-      Match_I_Pos  : Positive;
-      Label        : Unbounded_String;
-      Pos2         : Positive;
-      Index        : Natural := 0;
-      Done         : Boolean := False;
+      aChar       : constant Character := Element (In_Buffer, I_Pos);
+      Match_Index : Natural := 0;
+      Match_I_Pos : Positive;
+      Label       : Unbounded_String;
+      Pos2        : Positive;
+      Index       : Natural := 0;
+      Done        : Boolean := False;
    begin
       if aChar = '?' then
          Match_Index := Get_Command_Value ("Print") - M_Misc.C_Base_Token;

@@ -9,6 +9,7 @@ package Support is
 
    Except_Cause : Setup_Exception := Cause_Nothing;
 
+   procedure Copy_Slice (Pos1 : in out Positive; Pos2 : Positive);
    procedure Do_PIN;
    procedure Process_Commands (Tokens : in out M_Basic.String_Buffer);
    procedure Restart;

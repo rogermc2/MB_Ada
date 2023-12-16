@@ -40,20 +40,20 @@ package body Commands is
 
    end Execute_One_Line;
 
-   procedure Process_Command (Match_Index, Match_I_Pos    : in out Positive;
-                              First_Nonwhite, Label_Valid : in out Boolean) is
+   procedure Process_Command
+     (Match_Index : Positive; Pos : in out Positive;
+      First_Nonwhite, Label_Valid : in out Boolean) is
       use Ada.Characters.Handling;
       use M_Basic;
       use M_Misc;
       use Parse_Functions;
-      Pos : Positive := Match_I_Pos;
+      use M_Basic.String_Buffer_Package;
    begin
       Append (Token_Buffer, Integer'Image (C_Base_Token + Match_Index));
 
       if C_Base_Token + Match_Index = Get_Command_Value ("Rem") then
-         for index in Pos .. Length (In_Buffer) loop
-            Append (Token_Buffer, Element (In_Buffer, index));
-         end loop;
+         Append (Token_Buffer, Slice (In_Buffer, Pos, Length(In_Buffer)));
+
       elsif Is_Alphanumeric (Element (In_Buffer, Pos - 1)) and then
         Element (In_Buffer, Pos) = ' ' then
          --  if the command is followed by a space skip over it
