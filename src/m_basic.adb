@@ -47,18 +47,17 @@ package body M_Basic is
 
    end Defined_Subfunction;
 
-   procedure Execute_Program (Tokens : Unbounded_String) is
+   procedure Execute_Program (Tokens : String_Buffer) is
       use Global;
-      --        use UB_String_Buffer_Package;
+      use String_Buffer_Package;
       Done      : Boolean := False;
       token_Ptr : Natural := 0;
    begin
       Put_Line ("M_Basic.Execute_Program ");
-      --        if not Is_Empty (Tokens) then
-      if Length (Tokens) > 0 then
+      if not Is_Empty (Tokens) then
          while not Done loop
             token_Ptr := Token_Ptr + 1;
-            if Element (Tokens, Token_Ptr) = '0' then
+            if Element (Tokens, Token_Ptr) = "0" then
                token_Ptr := Token_Ptr + 1;
             end if;
 
@@ -66,14 +65,14 @@ package body M_Basic is
                token_Ptr := Token_Ptr + 1;
             end if;
 
-            Done := Slice (Tokens, 1, 2) /= "00" and
-              Slice (Tokens, 1, 2) /= "255255" ;
+            Done := Element (Tokens, 1) /= "00" and
+              Element (Tokens, 1) /= "255255" ;
          end loop;
       end if;
 
    end Execute_Program;
 
-   function Find_Subfunction (Token : Unbounded_String; Fun_Type : Integer)
+   function Find_Subfunction (Token : String; Fun_Type : Integer)
                               return System.Address is
       use System;
       use Command_And_Token_Functions;
@@ -193,7 +192,7 @@ package body M_Basic is
      (Pos, Index  : Positive; C_Fun_Ptr : System.Address;
       Error_Abort : Boolean) return Natural is
       use Command_And_Token_Functions;
-      Pos2 : Positive := Pos;
+      Pos2      : Positive := Pos;
       Num_Funcs : Natural := 0;
    begin
       while Pos2 <= 255 loop
@@ -205,7 +204,7 @@ package body M_Basic is
 
    end Prepare_Program_Ext;
 
- procedure Prepare_Program (Error_Abort : Boolean) is
+   procedure Prepare_Program (Error_Abort : Boolean) is
       use Draw;
       use Flash;
       Num_Funcs : Natural := 0;
@@ -331,6 +330,7 @@ package body M_Basic is
       use Interfaces;
       use Ada.Characters.Handling;
       use Ada.Strings;
+      use M_Basic.String_Buffer_Package;
       aChar          : Character;
       In_Ptr         : Positive := 1;
       Line_Num       : Unsigned_64;
@@ -344,7 +344,7 @@ package body M_Basic is
          end if;
       end loop;
 
-      Token_Buffer := Null_Unbounded_String;
+      Token_Buffer := Empty_Vector;
       if not From_Console then
          Append (Token_Buffer, Global.T_NEWLINE);
       end if;
@@ -362,10 +362,10 @@ package body M_Basic is
          if not From_Console and Line_Num > 1 and
            Line_Num <= Unsigned_64 (MAXLINENBR) then
             Append (Token_Buffer, Global.T_LINENBR);
-            Append (Token_Buffer,To_Unbounded_String ((Unsigned_64'Image
-                    (Shift_Right (Line_Num, 8)))));
-            Append (Token_Buffer, To_Unbounded_String ((Unsigned_64'Image
-                    (Line_Num and 16#FF#))));
+            Append (Token_Buffer, (Unsigned_64'Image
+                    (Shift_Right (Line_Num, 8))));
+            Append (Token_Buffer, (Unsigned_64'Image
+                    (Line_Num and 16#FF#)));
          end if;
       end if;
 

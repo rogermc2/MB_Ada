@@ -67,11 +67,12 @@ package body Parse_Functions is
 
    procedure Process_Colon (I_Pos            : in out Positive;
                             First_Nonwhite   : in out Boolean) is
+      use M_Basic.String_Buffer_Package;
    begin
-      Append (Token_Buffer, '0');
+      Append (Token_Buffer, "0");
       I_Pos := I_Pos + 1;
       while Element (In_Buffer, I_Pos) = ':' loop
-         Append (Token_Buffer, '0');
+         Append (Token_Buffer, "0");
          I_Pos := I_Pos + 1;
       end loop;
 
@@ -85,18 +86,22 @@ package body Parse_Functions is
       Match_I_Pos                 : Positive; Match_Index : Integer) is
       use Ada.Characters.Handling;
       use Command_And_Token_Tables;
-      aChar : Character;
+      use M_Basic.String_Buffer_Package;
+      aChar  : Character;
+      Remark : Unbounded_String;
    begin
+      --  879
       if Match_Index > -1 then
          Append (Token_Buffer,
-                 Token_Table (Match_Index + M_Misc.C_Base_Token).Name);
+                 Integer'Image (M_Misc.C_Base_Token + Match_Index));
          --  Step over the input buffer command.
          I_Pos := Match_I_Pos;
          if Match_Index + M_Misc.C_Base_Token =
            Get_Command_Value ("Rem") then
+            --  886 copy everything
+            Append (Token_Buffer,
+                    Slice (In_Buffer, Match_I_Pos, Length (In_Buffer)));
             while I_Pos <= Length (In_Buffer) loop
-               aChar := Element (In_Buffer, I_Pos);
-               Append (Token_Buffer, aChar);
                I_Pos := I_Pos + 1;
             end loop;
          end if;
@@ -112,12 +117,13 @@ package body Parse_Functions is
    end Process_Command;
 
    procedure Process_Double_Quote (I_Pos : in out Positive; aChar : Character) is
+      use M_Basic.String_Buffer_Package;
    begin
       while aChar /= '"' and I_Pos <= Length (In_Buffer) loop
          I_Pos := I_Pos + 1;
       end loop;
 
-      Append (Token_Buffer, '"');
+      Append (Token_Buffer, """");
       I_Pos := I_Pos + 1;
       if  Element (In_Buffer, I_Pos) = '"' then
          I_Pos := I_Pos + 1;
@@ -133,11 +139,11 @@ package body Parse_Functions is
 
    procedure Process_First_Nonwhite
      (I_Pos : in out Positive; Label_Valid, First_Nonwhite : in out Boolean) is
-      --        use Ada.Characters.Handling;
-      --        use Command_And_Token_Tables;
+      use M_Basic.String_Buffer_Package;
       aChar        : constant Character := Element (In_Buffer, I_Pos);
       Match_Index  : Natural := 0;
       Match_I_Pos  : Positive;
+      Label        : Unbounded_String;
       Pos2         : Positive;
       Index        : Natural := 0;
       Done         : Boolean := False;
@@ -159,7 +165,7 @@ package body Parse_Functions is
          Commands.Process_Command (Match_Index, Match_I_Pos,
                                    First_Nonwhite, Label_Valid);
 
-       --   876 test if it is a label
+         --   876 test if it is a label
       elsif Label_Valid and then
         Is_Name_Start (Element (In_Buffer, I_Pos)) then
          --  search for the first invalid char
@@ -184,9 +190,10 @@ package body Parse_Functions is
 
             --  copy the label
             for pos3 in reverse 1 .. Pos2 - I_Pos loop
-               Append (Token_Buffer, Element (In_Buffer, I_Pos));
+               Append (Label, Element (In_Buffer, I_Pos));
                I_Pos := I_Pos + 1;
             end loop;
+            Append (Token_Buffer, To_String (Label));
             --  step over the terminating colon
             I_Pos := I_Pos + 1;
          end if;
@@ -211,6 +218,7 @@ package body Parse_Functions is
       Label_Valid, First_Nonwhite   : in out Boolean) is
       use Ada.Characters.Handling;
       use Command_And_Token_Tables;
+      use M_Basic.String_Buffer_Package;
       I_Pos2         : Positive;         --  tp2 an input character indeex
       Command        : Unbounded_String;
       In_Command     : Unbounded_String;
@@ -297,6 +305,7 @@ package body Parse_Functions is
       use Ada.Characters.Handling;
       use Command_And_Token_Tables;
       use Command_And_Token_Functions;
+      use M_Basic.String_Buffer_Package;
       Index  : Natural := 0;
       I_Char : Character;
       I_Pos2 : Positive;
@@ -330,7 +339,7 @@ package body Parse_Functions is
          Found := Index /= Token_Table'Last;
          if Found then
             Index := Index + M_Misc.C_Base_Token;
-            Append (Token_Buffer, Token_Table (Index).Name);
+            Append (Token_Buffer, To_String (Token_Table (Index).Name));
             I_Pos := I_Pos2;
          end if;
 
@@ -343,9 +352,11 @@ package body Parse_Functions is
    end Try_Function_Or_Keyword;
 
    procedure Process_Variable_Name
-     (Pos            : in out Positive;
+     (Pos                         : in out Positive;
       First_Nonwhite, Label_Valid : in out Boolean) is
-      Pos2   : Positive;
+      use M_Basic.String_Buffer_Package;
+      Pos2  : Positive;
+      Name  : Unbounded_String;
    begin
       --  935
       if First_Nonwhite then
@@ -358,9 +369,10 @@ package body Parse_Functions is
       else
          --  942 copy the variable name
          while Is_Name_Character (Element (In_Buffer, Pos)) loop
-            Append (Token_Buffer, Element (In_Buffer, Pos));
+            Name := Name & Element (In_Buffer, Pos);
             Pos := Pos + 1;
          end loop;
+         Append (Token_Buffer, To_String (Name));
 
          First_Nonwhite := False;
          Label_Valid:= False;

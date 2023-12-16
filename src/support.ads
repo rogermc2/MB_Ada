@@ -1,5 +1,5 @@
 
-with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
+with M_Basic;
 
 package Support is
 
@@ -10,7 +10,7 @@ package Support is
    Except_Cause : Setup_Exception := Cause_Nothing;
 
    procedure Do_PIN;
-   procedure Process_Commands (Tokens : in out Unbounded_String);
+   procedure Process_Commands (Tokens : in out M_Basic.String_Buffer);
    procedure Restart;
 
 end Support;

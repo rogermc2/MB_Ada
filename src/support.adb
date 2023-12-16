@@ -1,6 +1,7 @@
 
 with System;
 
+with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Ada.Text_IO; use Ada.Text_IO;
 
 with Audio;
@@ -11,7 +12,6 @@ with Flash;
 with Global;
 with M_Misc;
 with Memory;
-with M_Basic;
 with Serial_File_IO;
 
 package body Support is
@@ -21,9 +21,10 @@ package body Support is
       null;
    end Do_PIN;
 
-   procedure Process_Commands (Tokens : in out Unbounded_String) is
+   procedure Process_Commands (Tokens : in out M_Basic.String_Buffer) is
       use System;
       use M_Basic;
+      use M_Basic.String_Buffer_Package;
    begin
       loop
          if Flash.Option.DISPLAY_CONSOLE then
@@ -65,10 +66,10 @@ package body Support is
          Prepare_Program (False);
 
          if not Global.Error_In_Prompt and M_Basic.Find_Subfunction
-           (To_Unbounded_String ("MM.PROMPT"), 0) /= System.Null_Address then
+           ("MM.PROMPT", 0) /= System.Null_Address then
             Global.Error_In_Prompt := True;
-            Token_Buffer := Null_Unbounded_String;
-            Append (Token_Buffer,  "MM.PROMPT\0");
+            Token_Buffer := Empty_Vector;
+            Append (Token_Buffer, "MM.PROMPT\0");
             M_Basic.Execute_Program (Tokens);
          else
             M_Basic.Print_String ("> ");

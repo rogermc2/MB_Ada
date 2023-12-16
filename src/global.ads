@@ -1,4 +1,6 @@
 
+--  with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
+
 with Configuration;
 with Exceptions;
 
@@ -6,20 +8,20 @@ package Global is
 
    --  Flags used in the program lines
    --  end of a command
-   T_CMDEND         : constant Character := '0';
+   T_CMDEND         : constant String := "0";
    --  Single byte indicating the start of a new line
-   T_NEWLINE        : constant Character := '1';
+   T_NEWLINE        : constant String := "1";
    --  three bytes for a line number
-   T_LINENBR        : constant Character := '2';
+   T_LINENBR        : constant String := "2";
    --  variable length indicating a label
-   T_LABEL          : constant Character := '3';
+   T_LABEL          : constant String := "3";
 
    --  dummy last operator in an expression
-   E_END            : constant Character:= Character'Val (16#FF#);
+   E_END            : constant String:= "FF";
 
    --  these constants are used in the second argument of the findvar()
-   --  function, they should be or'd together
-   V_FIND              : constant Natural:= 0;
+   --  function, they should be or"d together
+   V_FIND            : constant Natural:= 0;
    --  a straight forward find, if the variable is not found
    --  it is created and set to zero
    --  throw an error if not found

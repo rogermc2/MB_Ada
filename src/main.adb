@@ -28,10 +28,9 @@ with Watchdog_Timer;
 
 procedure Main is
    use System;
-   Startup_Token   : constant Unbounded_String :=
-                       To_Unbounded_String ("MM.Startup");
+   use M_Basic.String_Buffer_Package;
+   Startup_Token   : constant String := "MM.Startup";
 --     Tokens          : M_Basic.UB_String_Buffer;
-   Tokens          : Unbounded_String;
    Saved_Cause     : Setup_Exception := Cause_Nothing;
    Watchdog_Set    : Boolean := False;
    Basic_Running   : Boolean := True;
@@ -77,12 +76,12 @@ begin
    if Except_Cause /= Cause_MM_Startup then
       M_Basic.Clear_Program;
       M_Basic.Prepare_Program (True);
-      M_Basic.Token_Buffer := Null_Unbounded_String;
+      M_Basic.Token_Buffer := Empty_Vector;
       Append (M_Basic.Token_Buffer, Startup_Token);
 
       if M_Basic.Find_Subfunction (Startup_Token, 0) /= Null_Address then
          Append (M_Basic.Token_Buffer, Startup_Token);
-         Append (M_Basic.Token_Buffer, To_Unbounded_String ("/0"));
+         Append (M_Basic.Token_Buffer, "/0");
          M_Basic.Execute_Program (M_Basic.Token_Buffer);
       end if;
    end if;

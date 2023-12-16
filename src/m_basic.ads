@@ -1,20 +1,21 @@
 
 with System;
 
+with Ada.Containers.Indefinite_Vectors;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 
 with Configuration;
 
 package M_Basic is
 
-   --     package UB_String_Buffer_Package is
-   --       new Ada.Containers.Vectors (Positive, Unbounded_String);
-   --     subtype UB_String_Buffer is UB_String_Buffer_Package.Vector;
+   package String_Buffer_Package is
+     new Ada.Containers.Indefinite_Vectors (Positive, String);
+   subtype String_Buffer is String_Buffer_Package.Vector;
 
    MAXLINENBR       : constant integer := 65001;
 
    In_Buffer        : Unbounded_String;
-   Token_Buffer     : Unbounded_String;
+   Token_Buffer     : String_Buffer;
 
    Current_Line_Ptr : Natural := 0;
    Continue_Point   : Natural := 0;
@@ -27,8 +28,8 @@ package M_Basic is
      Unbounded_String;
 
    procedure Clear_Program;
-   procedure Execute_Program (Tokens : Unbounded_String);
-   function Find_Subfunction (Token : Unbounded_String; Fun_Type : Integer)
+   procedure Execute_Program (Tokens : String_Buffer);
+   function Find_Subfunction (Token : String; Fun_Type : Integer)
                               return System.Address;
    procedure Init_Basic;
    function Is_Name_Character (aChar : Character) return Boolean;
