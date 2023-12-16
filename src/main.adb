@@ -79,6 +79,7 @@ begin
       M_Basic.Prepare_Program (True);
       M_Basic.Token_Buffer := Null_Unbounded_String;
       Append (M_Basic.Token_Buffer, Startup_Token);
+
       if M_Basic.Find_Subfunction (Startup_Token, 0) /= Null_Address then
          Append (M_Basic.Token_Buffer, Startup_Token);
          Append (M_Basic.Token_Buffer, To_Unbounded_String ("/0"));

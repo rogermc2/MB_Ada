@@ -60,6 +60,7 @@ package body Support is
             Do_PIN;
          end loop;
 
+         --  300
          Global.Except_Code := Exceptions.EXCEP_IRQ;
          Prepare_Program (False);
 
