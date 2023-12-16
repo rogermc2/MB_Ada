@@ -1,4 +1,6 @@
 
+with System;
+
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 
 with Command_And_Token_Tables; use Command_And_Token_Tables;
@@ -7,39 +9,37 @@ with Operators; use Operators;
 
 package body Command_And_Token_Functions is
 
-   t_THEN         : System.Address;
-   t_ELSE         : System.Address;
-   t_GOTO         : System.Address;
-   t_EQUAL        : System.Address;
-   t_TO           : System.Address;
-   t_STEP         : System.Address;
-   t_WHILE        : System.Address;
-   t_UNTIL        : System.Address;
-   t_GOSUB        : System.Address;
-   t_AS           : System.Address;
-   t_FOR          : System.Address;
-   c_SELECT_CASE  : System.Address;
-   c_CASE         : System.Address;
-   c_CASE_ELSE    : System.Address;
-   c_END_SELECT   : System.Address;
-   c_SUB          : System.Address;
-   c_FUN          : System.Address;
-   c_IRET         : System.Address;
-   c_CFUN         : System.Address;
-   c_CSUB         : System.Address;
+   t_THEN         : Positive;
+   t_ELSE         : Positive;
+   t_GOTO         : Positive;
+   t_EQUAL        : Positive;
+   t_TO           : Positive;
+   t_STEP         : Positive;
+   t_WHILE        : Positive;
+   t_UNTIL        : Positive;
+   t_GOSUB        : Positive;
+   t_AS           : Positive;
+   t_FOR          : Positive;
+   c_SELECT_CASE  : Positive;
+   c_CASE         : Positive;
+   c_CASE_ELSE    : Positive;
+   c_END_SELECT   : Positive;
+   c_SUB          : Positive;
+   c_FUN          : Positive;
+   c_IRET         : Positive;
+   c_CFUN         : Positive;
+   c_CSUB         : Positive;
 
-   function Get_Command_Value (Token : String) return System.Address is
-      use System;
+   function Get_Command_Value (Token : String) return Natural is
       Index : Integer := Command_Table'First - 1;
-      Value : Address := Null_Address;
+      Value : Natural := 0;
       Found : Boolean := False;
    begin
       while Index < Command_Table'Last loop
          Index := Index + 1;
          Found := Token = To_String (Command_Table (Index).Name);
          if Found then
-            Value :=
-              Command_Table (M_Misc.C_Base_Token + Index - 1).Function_Ptr;
+            Value := M_Misc.C_Base_Token + Index - 1;
          end if;
       end loop;
 
@@ -47,18 +47,16 @@ package body Command_And_Token_Functions is
 
    end Get_Command_Value;
 
-   function Get_Token_Value (Token : String) return System.Address is
-      use System;
+   function Get_Token_Value (Token : String) return Natural is
       Index : Integer := Token_Table'First - 1;
-      Value : Address := Null_Address;
+      Value : Natural := 0;
       Found : Boolean := False;
    begin
       while Index < Token_Table'Last loop
          Index := Index + 1;
          Found := Token = To_String (Token_Table (Index).Name);
          if Found then
-            Value :=
-              Token_Table (M_Misc.C_Base_Token + Index - 1).Function_Ptr;
+            Value := M_Misc.C_Base_Token + Index - 1;
          end if;
       end loop;
 
@@ -112,121 +110,121 @@ package body Command_And_Token_Functions is
       end loop;
    end Init_Operator_Functions;
 
-   function tokenTHEN return System.Address is
+   function tokenTHEN return Positive is
    begin
       return t_THEN;
 
    end tokenTHEN;
 
-   function tokenELSE return System.Address is
+   function tokenELSE return Positive is
    begin
       return t_ELSE;
 
    end tokenELSE;
 
-   function tokenGOTO return System.Address is
+   function tokenGOTO return Positive is
    begin
       return t_GOTO;
 
    end tokenGOTO;
 
-   function tokenEQUAL return System.Address is
+   function tokenEQUAL return Positive is
    begin
       return t_EQUAL;
 
    end tokenEQUAL;
 
-   function tokenTO return System.Address is
+   function tokenTO return Positive is
    begin
       return t_TO;
 
    end tokenTO;
 
-   function tokenSTEP return System.Address is
+   function tokenSTEP return Positive is
    begin
       return t_STEP;
 
    end tokenSTEP;
 
-   function tokenWHILE return System.Address is
+   function tokenWHILE return Positive is
    begin
       return t_WHILE;
 
    end tokenWHILE;
 
-   function tokenUNTIL return System.Address is
+   function tokenUNTIL return Positive is
    begin
       return t_UNTIL;
 
    end tokenUNTIL;
 
-   function tokenGOSUB return System.Address is
+   function tokenGOSUB return Positive is
    begin
       return t_GOSUB;
 
    end tokenGOSUB;
 
-   function tokenAS   return System.Address is
+   function tokenAS   return Positive is
    begin
       return t_AS;
 
    end tokenAS;
 
-   function tokenFOR  return System.Address is
+   function tokenFOR  return Positive is
    begin
       return t_FOR;
 
    end tokenFOR;
 
-   function cmdSELECT_CASE return System.Address is
+   function cmdSELECT_CASE return Positive is
    begin
       return c_SELECT_CASE;
 
    end cmdSELECT_CASE;
 
-   function cmdCASE   return System.Address is
+   function cmdCASE return Positive is
    begin
       return c_CASE;
 
    end cmdCASE;
 
-   function cmdCASE_ELSE return System.Address is
+   function cmdCASE_ELSE return Positive is
    begin
       return c_CASE_ELSE;
 
    end cmdCASE_ELSE;
 
-   function cmdEND_SELECT return System.Address is
+   function cmdEND_SELECT return Positive is
    begin
       return c_END_SELECT;
 
    end cmdEND_SELECT;
 
-   function cmdSUB return System.Address is
+   function cmdSUB return Positive is
    begin
       return c_SUB;
 
    end cmdSUB;
 
-   function cmdFUN return System.Address is
+   function cmdFUN return Positive is
    begin
       return c_FUN;
 
    end cmdFUN;
 
-   function cmdIRET return System.Address is
+   function cmdIRET return Positive is
    begin
       return c_IRET;
 
    end cmdIRET;
 
-   function cmdCFUN return System.Address is
+   function cmdCFUN return Positive is
    begin
       return c_CFUN;
 
    end cmdCFUN;
 
-   function cmdCSUB return System.Address is
+   function cmdCSUB return Positive is
    begin
       return c_CSUB;
 

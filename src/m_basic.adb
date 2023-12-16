@@ -1,6 +1,4 @@
 
-with System.Storage_Elements;
-
 with Interfaces;
 
 with Ada.Assertions;
@@ -32,7 +30,7 @@ package body M_Basic is
    procedure Clear_Runtime is
    begin
       for index in Subfunctions'Range loop
-         Subfunctions (Index) := System.Null_Address;
+         Subfunctions (Index) := 0;
       end loop;
 
    end Clear_Runtime;
@@ -77,12 +75,10 @@ package body M_Basic is
    function Find_Subfunction (Token : Unbounded_String; Fun_Type : Integer)
                               return System.Address is
       use System;
-      use System.Storage_Elements;
       use Command_And_Token_Functions;
       --        Sub_Name : constant Unbounded_String := To_Unbounded_String (Name);
       Index    : Natural := 0;
-      Pos2     : System.Address;
---        Done     : Boolean := False;
+      Pos2     : Positive;
    begin
       --        Put_Line ("M_Basic.Find_Subfunction ");
       --  350
