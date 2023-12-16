@@ -20,7 +20,12 @@ package M_Basic is
    Continue_Point   : Natural := 0;
    Local_Index      : Natural := 0;
 
-   Subfunctions     : array (1 .. Configuration.MAXSUBFUN) of System.Address;
+   Subfunctions             : array (1 .. Configuration.MAXSUBFUN) of
+     System.Address;
+   Current_Subfunction_Name : array (1 .. Configuration.MAXVARLEN + 1) of
+     Unbounded_String;
+   Current_Interrupt_Name   : array (1 .. Configuration.MAXVARLEN + 1) of
+     Unbounded_String;
 
    procedure Clear_Program;
    procedure Execute_Program (Tokens : Unbounded_String);
@@ -34,7 +39,7 @@ package M_Basic is
    function Is_Name_Start (aChar : Character) return Boolean;
    pragma Inline (Is_Name_Start);
    procedure Print_String (theString : String);
-   procedure Prepare_Program (State : Boolean);
+   procedure Prepare_Program (Error_Abort : Boolean);
    procedure Skip_Spaces (Pos : in out Positive);
    function Skip_Var (Pos : in out Positive) return Positive;
    function Token_Function (Index : Positive) return System.Address;

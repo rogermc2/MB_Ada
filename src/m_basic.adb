@@ -1,4 +1,6 @@
 
+with System.Storage_Elements;
+
 with Interfaces;
 
 with Ada.Assertions;
@@ -8,6 +10,7 @@ with Ada.Text_IO; use Ada.Text_IO;
 
 with Command_And_Token_Tables; use Command_And_Token_Tables;
 with Command_And_Token_Functions;
+with Draw;
 with Editor;
 with Global;
 WITH M_Misc;
@@ -74,6 +77,7 @@ package body M_Basic is
    function Find_Subfunction (Token : Unbounded_String; Fun_Type : Integer)
                               return System.Address is
       use System;
+      use System.Storage_Elements;
       use Command_And_Token_Functions;
       --        Sub_Name : constant Unbounded_String := To_Unbounded_String (Name);
       Index    : Natural := 0;
@@ -188,9 +192,13 @@ package body M_Basic is
 
    end Print_String;
 
-   procedure Prepare_Program (State : Boolean) is
+   procedure Prepare_Program (Error_Abort : Boolean) is
+   use Draw;
    begin
-      null;
+      for index in FONT_BUILTIN_NBR .. FONT_TABLE_SIZE loop
+         Font_Table (index) := System.Null_Address;
+      end loop;
+
    end Prepare_Program;
 
    procedure Skip_Spaces (Pos : in out Positive) is
@@ -204,7 +212,7 @@ package body M_Basic is
    --  2413 Skip_Var skips to the end of a variable
    function Skip_Var (Pos : in out Positive) return Positive is
       use Ada.Assertions;
-      --        Routine_Name : String := "M_Basic.Skip_Var ";
+      Routine_Name : String := "M_Basic.Skip_Var ";
       Pos2         : constant Positive := Pos;
       Pos3         : Positive;
       Index        : Positive;

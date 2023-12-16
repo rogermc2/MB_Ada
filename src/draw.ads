@@ -1,4 +1,6 @@
 
+with System;
+
 package Draw is
 
    type RGB is array (1 .. 3) of Natural;
@@ -14,6 +16,12 @@ package Draw is
    GUI_Font    : Natural := 0;
    GUI_Fcolour : Natural := 0;
    GUI_Bcolour : Natural;
+
+   FONT_BUILTIN_NBR : constant Positive := 6;
+   FONT_TABLE_SIZE  : constant Positive := 16;
+
+   Font_Table : array (1 .. FONT_TABLE_SIZE) of System.Address :=
+                  (others => System.Null_Address);
 
    procedure Set_Font (Font_ID : Natural);
 
