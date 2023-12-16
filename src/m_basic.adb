@@ -10,6 +10,7 @@ with Command_And_Token_Tables; use Command_And_Token_Tables;
 with Command_And_Token_Functions;
 with Draw;
 with Editor;
+with Flash;
 with Global;
 WITH M_Misc;
 with Parse_Functions;
@@ -188,26 +189,42 @@ package body M_Basic is
 
    end Print_String;
 
-   procedure Prepare_Program_Ext
-     (Pos, Index  : in out Positive; C_Fun_Ptr : System.Address;
-      Error_Abort : Boolean) is
-      use System;
+   function Prepare_Program_Ext
+     (Pos, Index  : Positive; C_Fun_Ptr : System.Address;
+      Error_Abort : Boolean) return Natural is
       use Command_And_Token_Functions;
+      Pos2 : Positive := Pos;
+      Num_Funcs : Natural := 0;
    begin
-      while Pos <= 255 loop
-         Pos := Get_Next_Command (Pos, Current_Line_Ptr, Null_Address);
+      while Pos2 <= 255 loop
+         Pos2 := Get_Next_Command (Pos2, Current_Line_Ptr, "");
+         Num_Funcs := Num_Funcs + 1;
       end loop;
+
+      return Num_Funcs;
 
    end Prepare_Program_Ext;
 
  procedure Prepare_Program (Error_Abort : Boolean) is
-   use Draw;
+      use Draw;
+      use Flash;
+      Num_Funcs : Natural := 0;
    begin
       for index in FONT_BUILTIN_NBR .. FONT_TABLE_SIZE loop
          Font_Table (index) := System.Null_Address;
       end loop;
 
+      C_Function_Flash := System.Null_Address;
+      C_Function_Library := System.Null_Address;
+
+      if Option.Program_Flash_Size /= PROG_FLASH_SIZE then
+         Num_Funcs := Prepare_Program_Ext
+           (Prog_Memory'Length + Option.Program_Flash_Size, 1,
+            C_Function_Library, False);
+      end if;
+
    end Prepare_Program;
+
    procedure Skip_Spaces (Pos : in out Positive) is
    begin
       while  Element (In_Buffer, Pos) = ' ' loop

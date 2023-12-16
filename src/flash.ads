@@ -1,4 +1,7 @@
 
+with System;
+
+with Command_And_Token_Tables; use Command_And_Token_Tables;
 with Configuration; use Configuration;
 with Draw;
 
@@ -8,6 +11,9 @@ package Flash is
 
    FLASH_PAGE_SIZE : constant Positive := 4096;
    PROG_FLASH_SIZE : constant Positive := 16 * FLASH_PAGE_SIZE;
+
+   Prog_Memory     : array (1 .. PROG_FLASH_SIZE) of Unsigned_Byte :=
+                       (others => 255);
 
    type Option_Record is record
       Autorun              : Boolean := False;
@@ -56,6 +62,8 @@ package Flash is
       Max_Controls         : Natural := 101;
    end record;
 
+   C_Function_Flash   : System.Address := System.Null_Address;
+   C_Function_Library : System.Address := System.Null_Address;
    Option : Option_Record;
 
    procedure Load_Options;
