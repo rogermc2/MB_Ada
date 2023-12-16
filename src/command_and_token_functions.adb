@@ -4,6 +4,8 @@ with System;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 
 with Command_And_Token_Tables; use Command_And_Token_Tables;
+with Global;
+with M_Basic;
 with M_Misc;
 with Operators; use Operators;
 
@@ -229,5 +231,61 @@ package body Command_And_Token_Functions is
       return c_CSUB;
 
    end cmdCSUB;
+
+   --  Get_Next_Command returns a pointer to the next command in the program.
+   --  Get_Next_Command contains the logic for stepping over a line number and
+   --  label (if present).
+   --  p is the current place in the program to start the search from.
+   --  CLine is a pointer to a char pointer which points to the start of the
+   --  current line for error reporting (if NULL it will be ignored).
+   --  EOFMsg is the error message to use if the end of the program is reached.
+   function Get_Next_Command (Pos, Current_Line : in out Positive;
+                              EOF_Message       : String) return Positive is
+      use Global;
+      use M_Basic;
+      use M_Misc;
+      OK : Boolean := True;
+   begin
+      while OK and then Pos <= C_Base_Token loop
+         --  look for the zero marking the start of an element
+         if Element (Token_Buffer, Pos) /= T_NEWLINE then
+            while Element (Token_Buffer, Pos) /= '0' loop
+               Pos := Pos + 1;
+            end loop;
+            Pos := Pos + 1;
+         end if;
+
+         OK := Element (Token_Buffer, Pos) = '0';
+         if not OK then
+            if EOF_Message'Length /= 0 then
+               null;
+            end if;
+
+         else
+            if Element (Token_Buffer, Pos) = T_NEWLINE then
+               if Current_Line > 0 then
+                  Current_Line := Pos;
+               end if;
+               Pos := Pos + 1;
+            end if;
+
+            if Element (Token_Buffer, Pos) = T_LINENBR then
+               Pos := Pos + 3;
+            end if;
+
+            Skip_Spaces (Pos);
+
+            if Element (Token_Buffer, 1) = T_LABEL then
+               --  skip over the label
+               Pos := Pos + Character'Pos (Element (Token_Buffer, 2)) - 48 + 2;
+               Skip_Spaces (Pos);
+            end if;
+         end if;
+
+      end loop;
+
+      return Pos;
+
+   end Get_Next_Command;
 
 end Command_And_Token_Functions;

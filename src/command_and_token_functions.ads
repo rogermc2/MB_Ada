@@ -23,4 +23,8 @@ package Command_And_Token_Functions is
    function cmdCFUN return Positive;
    function cmdCSUB return Positive;
 
+   function Get_Next_Command
+     (Pos, Current_Line : in out Positive; EOF_Message : String)
+      return Positive;
+
 end Command_And_Token_Functions;

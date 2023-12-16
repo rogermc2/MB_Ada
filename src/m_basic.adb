@@ -188,7 +188,19 @@ package body M_Basic is
 
    end Print_String;
 
-   procedure Prepare_Program (Error_Abort : Boolean) is
+   procedure Prepare_Program_Ext
+     (Pos, Index  : in out Positive; C_Fun_Ptr : System.Address;
+      Error_Abort : Boolean) is
+      use System;
+      use Command_And_Token_Functions;
+   begin
+      while Pos <= 255 loop
+         Pos := Get_Next_Command (Pos, Current_Line_Ptr, Null_Address);
+      end loop;
+
+   end Prepare_Program_Ext;
+
+ procedure Prepare_Program (Error_Abort : Boolean) is
    use Draw;
    begin
       for index in FONT_BUILTIN_NBR .. FONT_TABLE_SIZE loop
@@ -196,7 +208,6 @@ package body M_Basic is
       end loop;
 
    end Prepare_Program;
-
    procedure Skip_Spaces (Pos : in out Positive) is
    begin
       while  Element (In_Buffer, Pos) = ' ' loop
