@@ -20,6 +20,7 @@ package body M_Basic is
    --     Trace_On : Boolean := False;
 
    procedure Clear_Runtime;
+   procedure Skip_Element (Buffer : String_Buffer; Pos : in out Positive);
 
    procedure Clear_Program is
    begin
@@ -46,6 +47,24 @@ package body M_Basic is
 --        null;
 --
 --     end Defined_Subfunction;
+
+   procedure Execute_Command (Token_Ptr : in out Positive) is
+      use Ada.Assertions;
+      use M_Basic.String_Buffer_Package;
+      Routine_Name       : constant String := "M_Basic.Execute_Command";
+      Next_Statement_Ptr : Positive := Token_Ptr + 1;
+      Command_Line_Ptr   : Positive := Token_Ptr + 1;
+   begin
+      Skip_Spaces (Token_Buffer, Command_Line_Ptr);
+      Skip_Element (Token_Buffer, Next_Statement_Ptr);
+
+      if Integer'Value (Element (Token_Buffer, Token_Ptr)) /= 0 and then
+        Element (Token_Buffer, Token_Ptr) /= "'" then
+         Assert (Is_Name_Start (Element (Token_Buffer, Token_Ptr) (1)),
+                 Routine_Name &"Invalid character: ");
+      end if;
+
+   end Execute_Command;
 
    procedure Execute_Program (Tokens : String_Buffer) is
       use Global;
@@ -79,6 +98,10 @@ package body M_Basic is
                --  skip over the label
                Token_Ptr := Integer'Value (Element (Tokens, 2)) + 2;
                Skip_Spaces (Tokens, Token_Ptr);
+            end if;
+
+            if Integer'Value (Element (Tokens, 1)) /= 0 then
+               Execute_Command (Token_Ptr);
             end if;
 
             Done := Element (Tokens, 1) /= "00" and
@@ -292,6 +315,16 @@ package body M_Basic is
       end if;
 
    end Prepare_Program;
+
+   --  Skip_Element skips to the the zero char that preceeds an element
+   procedure Skip_Element (Buffer : String_Buffer; Pos : in out Positive) is
+      use M_Basic.String_Buffer_Package;
+   begin
+      while  Integer'Value (Element (Buffer, Pos)) /= 0 loop
+         Pos := Pos + 1;
+      end loop;
+
+   end Skip_Element;
 
    procedure Skip_Spaces (Buffer : Unbounded_String; Pos : in out Positive) is
    begin
