@@ -37,16 +37,16 @@ package body M_Basic is
 
    end Clear_Runtime;
 
---     procedure Defined_Subfunction (Is_Fun : Boolean; Command : Unbounded_String;
---                                    Index  : Positive; Fa : Configuration.MMFLOAT;
---                                    Sa     : String; SF_Type : Fun_Type) is
-      --        use System;
-      --        Sub_Name : constant Unbounded_String := To_Unbounded_String (Name);
-      --        Done     : Boolean := False;
---     begin
---        null;
---
---     end Defined_Subfunction;
+   procedure Defined_Subfunction (Is_Fun : Boolean; Command : Unbounded_String;
+                                  Index  : Positive; Fa : Configuration.MMFLOAT;
+                                  Sa     : String; SF_Type : Fun_Type) is
+      use System;
+--        Sub_Name : constant Unbounded_String := To_Unbounded_String (Name);
+      Done     : Boolean := False;
+   begin
+      null;
+
+   end Defined_Subfunction;
 
    procedure Execute_Command (Token_Ptr : in out Positive) is
       use Ada.Assertions;
@@ -54,15 +54,50 @@ package body M_Basic is
       Routine_Name       : constant String := "M_Basic.Execute_Command";
       Next_Statement_Ptr : Positive := Token_Ptr + 1;
       Command_Line_Ptr   : Positive := Token_Ptr + 1;
+      Index              : Positive;
+      Done               : Boolean := False;
    begin
+      --  228
       Skip_Spaces (Token_Buffer, Command_Line_Ptr);
       Skip_Element (Token_Buffer, Next_Statement_Ptr);
 
-      if Integer'Value (Element (Token_Buffer, Token_Ptr)) /= 0 and then
-        Element (Token_Buffer, Token_Ptr) /= "'" then
-         Assert (Is_Name_Start (Element (Token_Buffer, Token_Ptr) (1)),
-                 Routine_Name &"Invalid character: ");
-      end if;
+      while not Done loop
+         if Integer'Value (Element (Token_Buffer, Token_Ptr)) /= 0 and then
+           Element (Token_Buffer, Token_Ptr) /= "'" then
+            --  239 Do setjmp
+            --           if Set_Jump (Err_Next) = 0 then
+            --              null;
+            --           else  --  249 do non-local jump
+            Assert (Is_Name_Start (Element (Token_Buffer, Token_Ptr)(1)),
+                    Routine_Name &"Invalid character ");
+            Index :=
+              Find_Subfunction (Element (Token_Buffer, Token_Ptr), False);
+            if Index > 0 then
+               Defined_Subfunction (False, Token_Ptr, Index, null, null, null);
+            end if;
+
+            --           end if;
+
+            --  268
+            --           if Option_Error_Skip > then
+            --              Option_Error_Skip := Option_Error_Skip - 1;
+            --           end if;
+
+            --           if Temp_Memory_Has_Changed then
+            --              Clear_Temp_Memory;
+            --           end if;
+
+            --           Check_Abort;
+            --           Check_Interrupt;
+            --        end if;
+
+            Token_Ptr := Next_Statement_Ptr;
+         end if;
+
+         Done := Element (Token_Buffer, 1) = "00" or else
+           Element (Token_Buffer, 1) = "FF";
+
+      end loop;
 
    end Execute_Command;
 
@@ -105,15 +140,15 @@ package body M_Basic is
             end if;
 
             Done := Element (Tokens, 1) /= "00" and
-              Element (Tokens, 1) /= "255255";
+              Element (Tokens, 1) /= "FF";
             Token_Ptr := Token_Ptr + 1;
          end loop;
       end if;
 
    end Execute_Program;
 
-   function Find_Subfunction (Token : String; Fun_Type : Integer)
-                              return System.Address is
+   function Find_Subfunction (Token : String; Fun_Type : Boolean)
+                              return Natural is
       use System;
       use Command_And_Token_Functions;
       --        Sub_Name : constant Unbounded_String := To_Unbounded_String (Name);
@@ -337,7 +372,7 @@ package body M_Basic is
    procedure Skip_Spaces (Buffer : String_Buffer; Pos : in out Positive) is
       use M_Basic.String_Buffer_Package;
    begin
-      while  Element (Buffer, Pos) = " " loop
+      while  Element (Buffer, Pos)(1) = ' ' loop
          Pos := Pos + 1;
       end loop;
 
