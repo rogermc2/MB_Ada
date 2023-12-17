@@ -6,7 +6,6 @@ with Ada.Characters.Handling;
 with Ada.Strings;
 with Ada.Text_IO; use Ada.Text_IO;
 
-with Command_And_Token_Tables; use Command_And_Token_Tables;
 with Command_And_Token_Functions;
 with Draw;
 with Editor;
@@ -37,12 +36,14 @@ package body M_Basic is
 
    end Clear_Runtime;
 
-   procedure Defined_Subfunction (Is_Fun : Boolean; Command : Unbounded_String;
+   procedure Defined_Subfunction (Is_Fun : Boolean; Token_Ptr : Positive;
                                   Index  : Positive; Fa : Configuration.MMFLOAT;
-                                  Sa     : String; SF_Type : Fun_Type) is
-      use System;
+                                  Sa     : String; SF_Type : Function_Type) is
+      --        use System;
+      use M_Basic.String_Buffer_Package;
+      Command      : constant String := Element (Token_Buffer, Token_Ptr);
 --        Sub_Name : constant Unbounded_String := To_Unbounded_String (Name);
-      Done     : Boolean := False;
+--        Done     : Boolean := False;
    begin
       null;
 
@@ -71,9 +72,9 @@ package body M_Basic is
             Assert (Is_Name_Start (Element (Token_Buffer, Token_Ptr)(1)),
                     Routine_Name &"Invalid character ");
             Index :=
-              Find_Subfunction (Element (Token_Buffer, Token_Ptr), False);
+              Find_Subfunction (Element (Token_Buffer, Token_Ptr), T_NA);
             if Index > 0 then
-               Defined_Subfunction (False, Token_Ptr, Index, null, null, null);
+               Defined_Subfunction (False, Token_Ptr, Index, 0.0, "", T_NA);
             end if;
 
             --           end if;
@@ -147,9 +148,8 @@ package body M_Basic is
 
    end Execute_Program;
 
-   function Find_Subfunction (Token : String; Fun_Type : Boolean)
+   function Find_Subfunction (Token : String; Fun_Type : Function_Type)
                               return Natural is
-      use System;
       use Command_And_Token_Functions;
       --        Sub_Name : constant Unbounded_String := To_Unbounded_String (Name);
       Index    : Natural := 0;
@@ -160,7 +160,7 @@ package body M_Basic is
       while index <= Configuration.MAXSUBFUN loop
          Index := Index + 1;
          Pos2 := Subfunctions (index);
-         if Fun_Type = 0 and then
+         if Fun_Type = T_NA and then
            (Pos2 = cmdSUB or Pos2 = cmdCSUB) then
             null;
          elsif (Pos2 = cmdFUN or Pos2 = cmdCFUN) then
@@ -172,7 +172,7 @@ package body M_Basic is
          --           Done := Subfunctions (Index) = Sub_Address;
       end loop;
 
-      return System.Null_Address;
+      return 0;
 
    end Find_Subfunction;
 

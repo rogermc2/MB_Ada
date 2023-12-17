@@ -4,6 +4,7 @@ with System;
 with Ada.Containers.Indefinite_Vectors;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 
+with Command_And_Token_Tables; use Command_And_Token_Tables;
 with Configuration;
 
 package M_Basic is
@@ -29,7 +30,7 @@ package M_Basic is
 
    procedure Clear_Program;
    procedure Execute_Program (Tokens : String_Buffer);
-   function Find_Subfunction (Token : String; Fun_Type : Boolean)
+   function Find_Subfunction (Token : String; Fun_Type : Function_Type)
                               return Natural;
    procedure Init_Basic;
    function Is_Name_Character (aChar : Character) return Boolean;
