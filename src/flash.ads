@@ -12,8 +12,10 @@ package Flash is
    FLASH_PAGE_SIZE : constant Positive := 4096;
    PROG_FLASH_SIZE : constant Positive := 16 * FLASH_PAGE_SIZE;
 
-   Prog_Memory     : array (1 .. PROG_FLASH_SIZE) of Unsigned_Byte :=
-                       (others => 255);
+   type Prog_Memory_Array is array (1 .. PROG_FLASH_SIZE) of Unsigned_Byte;
+--     type Prog_Memory_Ptr is access Prog_Memory_Array;
+
+   Prog_Memory     : Prog_Memory_Array := (others => 255);
 
    type Option_Record is record
       Autorun              : Boolean := False;

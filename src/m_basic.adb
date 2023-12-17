@@ -188,32 +188,37 @@ package body M_Basic is
 
    end Print_String;
 
-   function Prepare_Program_Ext
-     (Pos, Index  : Positive; C_Fun_Ptr : System.Address;
-      Error_Abort : Boolean) return Natural is
-      use Command_And_Token_Functions;
-      Pos2      : Positive := Pos;
-      Num_Funcs : Natural := 0;
-   begin
-      while Pos2 <= 255 loop
-         Pos2 := Get_Next_Command (Pos2, Current_Line_Ptr, "");
-         Num_Funcs := Num_Funcs + 1;
-      end loop;
-
-      return Num_Funcs;
-
-   end Prepare_Program_Ext;
+   --     function Prepare_Program_Ext
+   --       (Pos       : Unsigned_Byte_Ptr; Index : Positive;
+   --        C_Fun_Ptr : System.Address; Error_Abort : Boolean) return Natural is
+   --        use Command_And_Token_Functions;
+   --        use Flash;
+   --        Pos2      : Unsigned_Byte_Ptr := Pos;
+   --        Num_Funcs : Natural := 0;
+   --     begin
+   --        while Pos2.all /= 255 loop
+   --           Pos2 := Get_Next_Command (Pos2, Current_Line_Ptr, "");
+   --           if Pos2 > 0 then
+   --              if Element (In_Buffer, Pos2) = cmdSUB then
+   --                 null;
+   --              end if;
+   --           end if;
+   --           null;
+   --        end loop;
+   --
+   --        return Num_Funcs;
+   --
+   --     end Prepare_Program_Ext;
 
    procedure Prepare_Program (Error_Abort : Boolean) is
-      use System;
       use Ada.Assertions;
       use Ada.Characters.Handling;
       use Configuration;
       use Draw;
       use Flash;
       Routine_Name : constant String := "M_Basic.Prepare_Program ";
-      Num_Funcs    : Natural := 0;
-      Dump         : Natural := 0;
+      --        Num_Funcs    : Natural := 0;
+      --        Dump         : Natural := 0;
       Index1       : Natural := 0;
       Index2       : Natural := 0;
       Pos1         : Positive;
@@ -228,43 +233,46 @@ package body M_Basic is
       C_Function_Library := System.Null_Address;
 
       if Option.Program_Flash_Size /= PROG_FLASH_SIZE then
-         Num_Funcs := Prepare_Program_Ext
-           (Prog_Memory'Length + Option.Program_Flash_Size, 1,
-            C_Function_Library, False);
+         null;
+         --           Num_Funcs := Prepare_Program_Ext
+         --             (Prog_Memory'Access + Option.Program_Flash_Size, 1,
+         --              C_Function_Library, False);
       end if;
 
-      Dump := Prepare_Program_Ext
-        (Prog_Memory'Length, Num_Funcs, C_Function_Flash, False);
+      --        Dump := Prepare_Program_Ext
+      --          (Prog_Memory'Access, Num_Funcs, C_Function_Flash, False);
 
-      while Index1 < MAXSUBFUN and then
-        Subfunctions (Index1) > 0 loop
-         Index1 := Index1 + 1;
-         Index2 := Index1;
-         while Index2 < MAXSUBFUN and then
-           Subfunctions (Index2) > 0 loop
-            Index2 := Index1 + 1;
-            Pos1 := Subfunctions (Index1);
-            Current_Line_Ptr := Pos1;
-            Pos1 := Pos1 + 1;
-            Skip_Spaces (Pos1);
+      if Error_Abort then
+         while Index1 < MAXSUBFUN and then
+           Subfunctions (Index1) > 0 loop
+            Index1 := Index1 + 1;
+            Index2 := Index1;
+            while Index2 < MAXSUBFUN and then
+              Subfunctions (Index2) > 0 loop
+               Index2 := Index1 + 1;
+               Pos1 := Subfunctions (Index1);
+               Current_Line_Ptr := Pos1;
+               Pos1 := Pos1 + 1;
+               Skip_Spaces (Pos1);
 
-            Pos2 := Subfunctions (Index2);
-            Pos2 := Pos2 + 1;
-            Skip_Spaces (Pos2);
+               Pos2 := Subfunctions (Index2);
+               Pos2 := Pos2 + 1;
+               Skip_Spaces (Pos2);
 
-            while not Done loop
-               Assert (Is_Name_Character (Element (In_Buffer, Pos1)) or else
-                       Is_Name_Character (Element (In_Buffer, Pos2)),
-                       Routine_Name & "error duplicate name.");
-               Done := To_Upper (Element (In_Buffer, Pos1)) /=
-                 To_Upper (Element (In_Buffer, Pos2));
-               if not Done then
-                  Pos1 := Pos1 + 1;
-                  Pos2 := Pos2 + 1;
-               end if;
+               while not Done loop
+                  Assert (Is_Name_Character (Element (In_Buffer, Pos1)) or else
+                          Is_Name_Character (Element (In_Buffer, Pos2)),
+                          Routine_Name & "error duplicate name.");
+                  Done := To_Upper (Element (In_Buffer, Pos1)) /=
+                    To_Upper (Element (In_Buffer, Pos2));
+                  if not Done then
+                     Pos1 := Pos1 + 1;
+                     Pos2 := Pos2 + 1;
+                  end if;
+               end loop;
             end loop;
          end loop;
-      end loop;
+      end if;
 
    end Prepare_Program;
 
@@ -279,7 +287,7 @@ package body M_Basic is
    --  2413 Skip_Var skips to the end of a variable
    function Skip_Var (Pos : in out Positive) return Positive is
       use Ada.Assertions;
-      Routine_Name : String := "M_Basic.Skip_Var ";
+      Routine_Name : constant String := "M_Basic.Skip_Var ";
       Pos2         : constant Positive := Pos;
       Pos3         : Positive;
       Index        : Positive;

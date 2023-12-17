@@ -6,6 +6,7 @@ with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 package Command_And_Token_Tables is
 
    type Unsigned_Byte is mod 256;
+   type Unsigned_Byte_Ptr is access Unsigned_Byte;
    subtype Fun_Type is Unsigned_Byte range 0 .. 8;
 
    T_NA   : constant Unsigned_Byte := 0;
