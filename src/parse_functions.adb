@@ -323,7 +323,7 @@ package body Parse_Functions is
             T_Pos := T_Pos + 1;
             if I_Char = '(' then
                I_Pos := I_Pos + 1;
-               Skip_Spaces (I_Pos);
+               Skip_Spaces (In_Buffer, I_Pos);
             end if;
 
             Done := not Is_Name_End (Element (Name, T_Pos - 1)) or

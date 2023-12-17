@@ -36,37 +36,54 @@ package body M_Basic is
 
    end Clear_Runtime;
 
-   procedure Defined_Subfunction (Is_Fun : Boolean; Command : Unbounded_String;
-                                  Index  : Positive; Fa : Configuration.MMFLOAT;
-                                  Sa     : String; SF_Type : Fun_Type) is
+--     procedure Defined_Subfunction (Is_Fun : Boolean; Command : Unbounded_String;
+--                                    Index  : Positive; Fa : Configuration.MMFLOAT;
+--                                    Sa     : String; SF_Type : Fun_Type) is
       --        use System;
       --        Sub_Name : constant Unbounded_String := To_Unbounded_String (Name);
       --        Done     : Boolean := False;
-   begin
-      null;
-
-   end Defined_Subfunction;
+--     begin
+--        null;
+--
+--     end Defined_Subfunction;
 
    procedure Execute_Program (Tokens : String_Buffer) is
       use Global;
       use String_Buffer_Package;
+      Token_Ptr : Positive := 1;
       Done      : Boolean := False;
-      token_Ptr : Natural := 0;
    begin
       Put_Line ("M_Basic.Execute_Program ");
+      --  194
+      Skip_Spaces (Tokens, Token_Ptr);
+
       if not Is_Empty (Tokens) then
-         while not Done loop
-            token_Ptr := Token_Ptr + 1;
+         while not Done and then Token_Ptr <= Positive (Length (Tokens)) loop
             if Element (Tokens, Token_Ptr) = "0" then
                token_Ptr := Token_Ptr + 1;
             end if;
 
+            --  199
             if Element (Tokens, Token_Ptr) = T_NEWLINE then
-               token_Ptr := Token_Ptr + 1;
+               Current_Line_Ptr := Token_Ptr;
+               Token_Ptr := Token_Ptr + 1;
+            end if;
+
+            --  217
+            if Element (Tokens, Token_Ptr) = T_LINENBR then
+               Token_Ptr := Token_Ptr + 3;
+            end if;
+            Skip_Spaces (Tokens, Token_Ptr);
+
+            if Element (Tokens, 1) = T_LABEL then
+               --  skip over the label
+               Token_Ptr := Integer'Value (Element (Tokens, 2)) + 2;
+               Skip_Spaces (Tokens, Token_Ptr);
             end if;
 
             Done := Element (Tokens, 1) /= "00" and
-              Element (Tokens, 1) /= "255255" ;
+              Element (Tokens, 1) /= "255255";
+            Token_Ptr := Token_Ptr + 1;
          end loop;
       end if;
 
@@ -92,7 +109,7 @@ package body M_Basic is
             null;
          else
             Pos2 := Pos2 + 1;
-            Skip_Spaces (Pos2);
+            Skip_Spaces (In_Buffer, Pos2);
          end if;
          --           Done := Subfunctions (Index) = Sub_Address;
       end loop;
@@ -253,11 +270,11 @@ package body M_Basic is
                Pos1 := Subfunctions (Index1);
                Current_Line_Ptr := Pos1;
                Pos1 := Pos1 + 1;
-               Skip_Spaces (Pos1);
+               Skip_Spaces (In_Buffer, Pos1);
 
                Pos2 := Subfunctions (Index2);
                Pos2 := Pos2 + 1;
-               Skip_Spaces (Pos2);
+               Skip_Spaces (In_Buffer, Pos2);
 
                while not Done loop
                   Assert (Is_Name_Character (Element (In_Buffer, Pos1)) or else
@@ -276,9 +293,18 @@ package body M_Basic is
 
    end Prepare_Program;
 
-   procedure Skip_Spaces (Pos : in out Positive) is
+   procedure Skip_Spaces (Buffer : Unbounded_String; Pos : in out Positive) is
    begin
-      while  Element (In_Buffer, Pos) = ' ' loop
+      while  Element (Buffer, Pos) = ' ' loop
+         Pos := Pos + 1;
+      end loop;
+
+   end Skip_Spaces;
+
+   procedure Skip_Spaces (Buffer : String_Buffer; Pos : in out Positive) is
+      use M_Basic.String_Buffer_Package;
+   begin
+      while  Element (Buffer, Pos) = " " loop
          Pos := Pos + 1;
       end loop;
 

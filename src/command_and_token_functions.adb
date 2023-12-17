@@ -274,12 +274,12 @@ package body Command_And_Token_Functions is
                Pos := Pos + 3;
             end if;
 
-            Skip_Spaces (Pos);
+            Skip_Spaces (In_Buffer, Pos);
 
             if Element (Token_Buffer, 1) = T_LABEL then
                --  skip over the label
                Pos := Pos + Integer'Value (Element (Token_Buffer, 2)) + 2;
-               Skip_Spaces (Pos);
+               Skip_Spaces (In_Buffer, Pos);
             end if;
          end if;
 

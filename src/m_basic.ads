@@ -40,7 +40,8 @@ package M_Basic is
    pragma Inline (Is_Name_Start);
    procedure Print_String (theString : String);
    procedure Prepare_Program (Error_Abort : Boolean);
-   procedure Skip_Spaces (Pos : in out Positive);
+   procedure Skip_Spaces (Buffer : Unbounded_String; Pos : in out Positive);
+   procedure Skip_Spaces (Buffer : String_Buffer; Pos : in out Positive);
    function Skip_Var (Pos : in out Positive) return Positive;
    function Token_Function (Index : Positive) return System.Address;
    procedure Tokenize (From_Console : Boolean);
