@@ -2,7 +2,7 @@
 with System;
 
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
-with Ada.Text_IO; use Ada.Text_IO;
+--  with Ada.Text_IO; use Ada.Text_IO;
 
 with Command_And_Token_Tables; use Command_And_Token_Tables;
 with Global;
@@ -52,38 +52,38 @@ package body Command_And_Token_Functions is
    end Get_Command_Value;
 
    function Get_Token_Value (Token : String) return Natural is
-      Routine_Name : constant String :=
-                       "Command_And_Token_Tables.Get_Token_Value ";
+--        Routine_Name : constant String :=
+--                         "Command_And_Token_Tables.Get_Token_Value ";
       Index : Integer := Token_Table'First - 1;
       Value : Natural := 0;
       Found : Boolean := False;
    begin
-      Put_Line (Routine_Name & "Token_Table Length: " &
-                  Integer'Image (Token_Table'Length));
+--        Put_Line (Routine_Name & "Token_Table Length: " &
+--                    Integer'Image (Token_Table'Length));
       while Index < Token_Table'Last loop
 --              Put_Line (Routine_Name & "index: " & Integer'Image (Index));
          Index := Index + 1;
          Found := Token = To_String (Token_Table (Index).Name);
 --           Put_Line (Routine_Name & "Found: " &  Boolean'Image (Found));
          if Found then
-            Put_Line (Routine_Name & "token found, index: " &
-                        Integer'Image (Index));
+--              Put_Line (Routine_Name & "token found, index: " &
+--                          Integer'Image (Index));
             Value := M_Misc.C_Base_Token + Index - 1;
          end if;
       end loop;
 
-      Put_Line (Routine_Name & "done, Value: " &  Integer'Image (Value));
+--        Put_Line (Routine_Name & "done, Value: " &  Integer'Image (Value));
       return Value;
 
    end Get_Token_Value;
 
    procedure Init_Operator_Functions is
-      Routine_Name : constant String :=
-                       "Command_And_Token_Tables.Init_Operator_Functions ";
+--        Routine_Name : constant String :=
+--                         "Command_And_Token_Tables.Init_Operator_Functions ";
    begin
-      Put_Line (Routine_Name);
+--        Put_Line (Routine_Name);
       t_THEN := Get_Token_Value ("Then");
-      Put_Line (Routine_Name & "t_THEN set: " & Integer'Image (t_THEN));
+--        Put_Line (Routine_Name & "t_THEN set: " & Integer'Image (t_THEN));
       t_ELSE := Get_Token_Value ("Else");
       t_GOTO := Get_Token_Value ("GoTo");
       t_EQUAL:= Get_Token_Value (":=");
@@ -128,127 +128,127 @@ package body Command_And_Token_Functions is
       end loop;
    end Init_Operator_Functions;
 
-   function tokenTHEN return Positive is
+   function tokenTHEN return Natural is
    begin
       return t_THEN;
 
    end tokenTHEN;
 
-   function tokenELSE return Positive is
+   function tokenELSE return Natural is
    begin
       return t_ELSE;
 
    end tokenELSE;
 
-   function tokenGOTO return Positive is
+   function tokenGOTO return Natural is
    begin
       return t_GOTO;
 
    end tokenGOTO;
 
-   function tokenEQUAL return Positive is
+   function tokenEQUAL return Natural is
    begin
       return t_EQUAL;
 
    end tokenEQUAL;
 
-   function tokenTO return Positive is
+   function tokenTO return Natural is
    begin
       return t_TO;
 
    end tokenTO;
 
-   function tokenSTEP return Positive is
+   function tokenSTEP return Natural is
    begin
       return t_STEP;
 
    end tokenSTEP;
 
-   function tokenWHILE return Positive is
+   function tokenWHILE return Natural is
    begin
       return t_WHILE;
 
    end tokenWHILE;
 
-   function tokenUNTIL return Positive is
+   function tokenUNTIL return Natural is
    begin
       return t_UNTIL;
 
    end tokenUNTIL;
 
-   function tokenGOSUB return Positive is
+   function tokenGOSUB return Natural is
    begin
       return t_GOSUB;
 
    end tokenGOSUB;
 
-   function tokenAS   return Positive is
+   function tokenAS   return Natural is
    begin
       return t_AS;
 
    end tokenAS;
 
-   function tokenFOR  return Positive is
+   function tokenFOR  return Natural is
    begin
       return t_FOR;
 
    end tokenFOR;
 
-   function tokenIMPLIED  return Positive is
+   function tokenIMPLIED  return Natural is
    begin
       return t_IMPLIED;
 
    end tokenIMPLIED;
 
-   function cmdSELECT_CASE return Positive is
+   function cmdSELECT_CASE return Natural is
    begin
       return c_SELECT_CASE;
 
    end cmdSELECT_CASE;
 
-   function cmdCASE return Positive is
+   function cmdCASE return Natural is
    begin
       return c_CASE;
 
    end cmdCASE;
 
-   function cmdCASE_ELSE return Positive is
+   function cmdCASE_ELSE return Natural is
    begin
       return c_CASE_ELSE;
 
    end cmdCASE_ELSE;
 
-   function cmdEND_SELECT return Positive is
+   function cmdEND_SELECT return Natural is
    begin
       return c_END_SELECT;
 
    end cmdEND_SELECT;
 
-   function cmdSUB return Positive is
+   function cmdSUB return Natural is
    begin
       return c_SUB;
 
    end cmdSUB;
 
-   function cmdFUN return Positive is
+   function cmdFUN return Natural is
    begin
       return c_FUN;
 
    end cmdFUN;
 
-   function cmdIRET return Positive is
+   function cmdIRET return Natural is
    begin
       return c_IRET;
 
    end cmdIRET;
 
-   function cmdCFUN return Positive is
+   function cmdCFUN return Natural is
    begin
       return c_CFUN;
 
    end cmdCFUN;
 
-   function cmdCSUB return Positive is
+   function cmdCSUB return Natural is
    begin
       return c_CSUB;
 

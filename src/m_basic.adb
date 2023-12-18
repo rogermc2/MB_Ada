@@ -215,14 +215,15 @@ package body M_Basic is
    function Find_Subfunction (Token : String; Fun_Type : Function_Type)
                               return Natural is
       use Command_And_Token_Functions;
+--        Routine_Name : constant String := "M_Basic.Find_Subfunction";
       --        Sub_Name : constant Unbounded_String := To_Unbounded_String (Name);
       Index    : Natural := 0;
       Pos2     : Natural;
    begin
-      --        Put_Line ("M_Basic.Find_Subfunction ");
       --  350
-      while index <= Configuration.MAXSUBFUN loop
+      while index < Configuration.MAXSUBFUN loop
          Index := Index + 1;
+--           Put_Line (Routine_Name & "Index "& Integer'Image (Index));
          Pos2 := Subfunctions (index);
          if Fun_Type = T_NA and then
            (Pos2 = cmdSUB or Pos2 = cmdCSUB) then

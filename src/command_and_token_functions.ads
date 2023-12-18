@@ -2,27 +2,27 @@
 package Command_And_Token_Functions is
 
    procedure Init_Operator_Functions;
-   function tokenTHEN return Positive;
-   function tokenELSE return Positive;
-   function tokenGOTO return Positive;
-   function tokenEQUAL return Positive;
-   function tokenTO return Positive;
-   function tokenSTEP return Positive;
-   function tokenWHILE return Positive;
-   function tokenUNTIL return Positive;
-   function tokenGOSUB return Positive;
-   function tokenAS return Positive;
-   function tokenFOR return Positive;
-   function tokenIMPLIED  return Positive;
-   function cmdSELECT_CASE return Positive;
-   function cmdCASE return Positive;
-   function cmdCASE_ELSE return Positive;
-   function cmdEND_SELECT return Positive;
-   function cmdSUB return Positive;
-   function cmdFUN return Positive;
-   function cmdIRET return Positive;
-   function cmdCFUN return Positive;
-   function cmdCSUB return Positive;
+   function tokenTHEN return Natural;
+   function tokenELSE return Natural;
+   function tokenGOTO return Natural;
+   function tokenEQUAL return Natural;
+   function tokenTO return Natural;
+   function tokenSTEP return Natural;
+   function tokenWHILE return Natural;
+   function tokenUNTIL return Natural;
+   function tokenGOSUB return Natural;
+   function tokenAS return Natural;
+   function tokenFOR return Natural;
+   function tokenIMPLIED  return Natural;
+   function cmdSELECT_CASE return Natural;
+   function cmdCASE return Natural;
+   function cmdCASE_ELSE return Natural;
+   function cmdEND_SELECT return Natural;
+   function cmdSUB return Natural;
+   function cmdFUN return Natural;
+   function cmdIRET return Natural;
+   function cmdCFUN return Natural;
+   function cmdCSUB return Natural;
 
    function Get_Next_Command
      (Pos, Current_Line : in out Positive; EOF_Message : String)
