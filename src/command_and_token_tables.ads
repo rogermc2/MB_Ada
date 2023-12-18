@@ -8,17 +8,22 @@ package Command_And_Token_Tables is
    type Unsigned_Byte is mod 256;
    type Unsigned_Byte_Ptr is access Unsigned_Byte;
 
-   subtype Function_Type is Unsigned_Byte range 0 .. 9;
+   subtype Function_Type is Unsigned_Byte;
    type Function_Type_Ptr is access Function_Type;
 
+   T_NOTYPE  : constant Function_Type := 0;
+   T_NBR     : constant Function_Type := 1;
+   T_STR     : constant Function_Type := 2;
+   T_INT     : constant Function_Type := 4;
+   T_PTR     : constant Function_Type := 8;
+   T_IMPLIED : constant Function_Type := 16;
+   T_CONST   : constant Function_Type := 32;
+   T_INV     : constant Function_Type := 0;
    T_NA      : constant Function_Type := 0;
-   T_FNA     : constant Function_Type := 1;
-   T_FUN     : constant Function_Type := 2;
-   T_INT     : constant Function_Type := 3;
-   T_NBR     : constant Function_Type := 4;
-   T_OPER    : constant Function_Type := 5;
-   T_STR     : constant Function_Type := 6;
-   T_IMPLIED : constant Function_Type := 7;
+   T_CMD     : constant Function_Type := 16;
+   T_OPER    : constant Function_Type := 32;
+   T_FUN     : constant Function_Type := 64;
+   T_FNA     : constant Function_Type := 128;
 
    type Command_Table_Item is record
       Name         : Unbounded_String;
