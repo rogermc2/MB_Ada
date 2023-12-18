@@ -42,9 +42,10 @@ package body M_Basic is
                                   Sa     : String; SF_Type : Function_Type) is
       --        use System;
       use Ada.Characters.Handling;
-      use M_Basic.String_Buffer_Package;
       use Ada.Assertions;
       use Command_And_Token_Functions;
+      use Global;
+      use M_Basic.String_Buffer_Package;
       Routine_Name       : constant String := "M_Basic.Defined_Subfunction";
       Command            : constant String := Element (Token_Buffer, Command_Ptr);
       Callers_Line_Ptr   : Positive := Current_Line_Ptr;
@@ -111,6 +112,7 @@ package body M_Basic is
             Pos2 := Commands.Check_Type_Specified (Pos2, Fun_Type, True);
             Assert (Fun_Type = T_IMPLIED);
          end if;
+         Fun_Type := Fun_Type or V_FIND or V_DIM_VAR or V_LOCAL or V_EMPTY_OK;
       end if;
 
    end Defined_Subfunction;

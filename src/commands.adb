@@ -12,7 +12,7 @@ with Parse_Functions;
 package body Commands is
 
    function Check_Type_Specified
-     (Pos                : Positive; Fun_Type : in out Function_Type;
+     (Pos                : Positive; Fun_Type : in out Unsigned_2Byte;
       Allow_Default_Type : Boolean) return Positive is
       use M_Basic;
       use M_Basic.String_Buffer_Package;
@@ -20,14 +20,14 @@ package body Commands is
       Pos2 : Positive;
    begin
       if Element (Token_Buffer, Pos) = "INTEGER" then
-         Fun_Type := T_INTorIMPLIED;
+         Fun_Type := T_INT or T_IMPLIED;
       elsif Element (Token_Buffer, Pos) = "STRING" then
-         Fun_Type := T_STRorImplied;
+         Fun_Type := T_STR or T_Implied;
       elsif Element (Token_Buffer, Pos) = "FLOAT" then
-         Fun_Type := T_NBRorImplied;
+         Fun_Type := T_NBR or T_Implied;
       else
       Assert (Allow_Default_Type, Routine_Name & "variable type");
-      Pos2 :=Pos;
+      Pos2 := Pos;
          Fun_Type := Default_Type;
       end if;
 

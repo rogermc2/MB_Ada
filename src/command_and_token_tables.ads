@@ -6,41 +6,42 @@ with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 package Command_And_Token_Tables is
 
    type Unsigned_Byte is mod 256;
+   type Unsigned_2Byte is mod 65536;
    type Unsigned_Byte_Ptr is access Unsigned_Byte;
 
-   --     subtype Function_Type is Unsigned_Byte;
-   type Function_Type is (T_NOTYPE, T_NBR, T_STR, T_INT, T_PTR, T_CMD,
-                          T_NBRorImplied, T_STRorImplied, T_INTorImplied,
-                          T_CONST, T_FUN, T_FUNorNBR, T_FUNorSTR, T_FUNorINT,
-                          T_FUNorNBRorINT, T_FUNorNBRorINTorSTR, T_FNA,
-                          T_FNAorNBR, T_FNAorSTR, T_FNAorINT);
+   subtype Function_Type is Unsigned_2Byte;
+   --     type Function_Type is (T_NOTYPE, T_NBR, T_STR, T_INT, T_PTR, T_CMD,
+   --                            T_NBRorImplied, T_STRorImplied, T_INTorImplied,
+   --                            T_CONST, T_FUN, T_FUNorNBR, T_FUNorSTR, T_FUNorINT,
+   --                            T_FUNorNBRorINT, T_FUNorNBRorINTorSTR, T_FNA,
+   --                            T_FNAorNBR, T_FNAorSTR, T_FNAorINT);
    type Function_Type_Ptr is access Function_Type;
 
-   for Function_Type use (T_NOTYPE   => 0,
-                          T_NBR      => 1,
-                          T_STR      => 2,
-                          T_INT      => 4,
-                          T_PTR      => 8,
-                          T_CMD      => 16,
-                          T_NBRorImplied => 17,
-                          T_STRorImplied => 18,
-                          T_INTorImplied => 20,
-                          T_CONST    => 32,
-                          T_FUN      => 64,
-                          T_FUNorNBR => 65,
-                          T_FUNorSTR => 66,
-                          T_FUNorINT => 68,
-                          T_FUNorNBRorINT => 69,
-                          T_FUNorNBRorINTorSTR => 71,
-                          T_FNA      => 128,
-                          T_FNAorNBR => 129,
-                          T_FNAorSTR => 130,
-                          T_FNAorINT => 132);
+   T_NOTYPE  : constant Function_Type := 0;
+   T_NBR     : constant Function_Type := 1;
+   T_STR     : constant Function_Type := 2;
+   T_INT     : constant Function_Type := 4;
+   T_PTR     : constant Function_Type := 8;
+   T_CMD     : constant Function_Type := 16;
+   --                            T_NBRorImplied => 17,
+   --                            T_STRorImplied => 18,
+   --                            T_INTorImplied => 20,
+   T_CONST   : constant Function_Type := 32;
+   T_FUN     : constant Function_Type := 64;
+   --                            T_FUNorNBR => 65,
+   --                            T_FUNorSTR => 66,
+   --                            T_FUNorINT => 68,
+   --                            T_FUNorNBRorINT => 69,
+   --                            T_FUNorNBRorINTorSTR => 71,
+   T_FNA     : constant Function_Type := 128;
+   --                            T_FNAorNBR => 129,
+   --                            T_FNAorSTR => 130,
+--     T_FNAorINT => 132;
 
-   T_NA           : constant Function_Type := T_NOTYPE;
-   T_INV          : constant Function_Type := T_NA;
-   T_IMPLIED      : constant Function_Type := T_CMD;
-   T_OPER         : constant Function_Type := T_CONST;
+   T_NA      : constant Function_Type := T_NOTYPE;
+   T_INV     : constant Function_Type := T_NA;
+   T_IMPLIED : constant Function_Type := T_CMD;
+   T_OPER    : constant Function_Type := T_CONST;
 
    type Command_Table_Item is record
       Name         : Unbounded_String;
@@ -110,92 +111,92 @@ package Command_And_Token_Tables is
 
    Command_Types : array (1 .. Num_Commands) of Command_Table_Item :=
                      ((To_Unbounded_String ("ACos("),
-                      T_FUNorNBR, 0, fun_acos),
+                      T_FUN or T_NBR, 0, fun_acos),
                       (To_Unbounded_String ("Abs("),
-                       T_FUNorNBRorINT, 0, fun_abs),
+                       T_FUN or T_NBR or T_INT, 0, fun_abs),
                       (To_Unbounded_String ("Asc("),
-                       T_FUNorINT, 0, fun_asc),
+                       T_FUN or T_INT, 0, fun_asc),
                       (To_Unbounded_String ("ASin("),
-                       T_FUNorNBR, 0, fun_asin),
+                       T_FUN or T_NBR, 0, fun_asin),
                       (To_Unbounded_String ("Atn("),
-                       T_FUNorNBR, 0, fun_atn),
+                       T_FUN or T_NBR, 0, fun_atn),
                       (To_Unbounded_String ("Bin$("),
-                       T_FUNorSTR, 0, fun_bin),
+                       T_FUN or T_STR, 0, fun_bin),
                       (To_Unbounded_String ("Chr$("),
-                       T_FUNorSTR, 0, fun_chr),
+                       T_FUN or T_STR, 0, fun_chr),
                       (To_Unbounded_String ("Cint("),
-                       T_FUNorINT, 0, fun_cint),
+                       T_FUN or T_INT, 0, fun_cint),
                       (To_Unbounded_String ("Cos("),
-                       T_FUNorNBR, 0, fun_cos),
+                       T_FUN or T_NBR, 0, fun_cos),
                       (To_Unbounded_String ("Deg("),
-                       T_FUNorNBR, 0, fun_deg),
+                       T_FUN or T_NBR, 0, fun_deg),
                       (To_Unbounded_String ("MM.Errno"),
-                       T_FNAorINT, 0, fun_errno),
+                       T_FNA or T_INT, 0, fun_errno),
                       (To_Unbounded_String ("MM.ErrMsg$"),
-                       T_FNAorSTR, 0, fun_errmsg),
-                      (To_Unbounded_String ("Exp("), T_FUNorNBR, 0, fun_exp),
+                       T_FNA or T_STR, 0, fun_errmsg),
+                      (To_Unbounded_String ("Exp("), T_FUN or T_NBR, 0, fun_exp),
                       (To_Unbounded_String ("Fix("),
-                       T_FUNorINT, 0, fun_fix),
+                       T_FUN or T_INT, 0, fun_fix),
                       (To_Unbounded_String ("Hex$("),
-                       T_FUNorSTR, 0, fun_hex),
+                       T_FUN or T_STR, 0, fun_hex),
                       (To_Unbounded_String ("Inkey$"),
-                       T_FNAorSTR, 0, fun_inkey),
+                       T_FNA or T_STR, 0, fun_inkey),
                       (To_Unbounded_String ("Instr("),
-                       T_FUNorINT, 0, fun_instr),
+                       T_FUN or T_INT, 0, fun_instr),
                       (To_Unbounded_String ("Int("),
-                       T_FUNorINT, 0, fun_int),
+                       T_FUN or T_INT, 0, fun_int),
                       (To_Unbounded_String ("LCase$("),
-                       T_FUNorSTR, 0, fun_lcase),
+                       T_FUN or T_STR, 0, fun_lcase),
                       (To_Unbounded_String ("Left$("),
-                       T_FUNorSTR, 0, fun_left),
+                       T_FUN or T_STR, 0, fun_left),
                       (To_Unbounded_String ("Len("),
-                       T_FUNorINT, 0, fun_len),
+                       T_FUN or T_INT, 0, fun_len),
                       (To_Unbounded_String ("Log("),
-                       T_FUNorNBR, 0, fun_log),
+                       T_FUN or T_NBR, 0, fun_log),
                       (To_Unbounded_String ("Mid$("),
-                       T_FUNorSTR, 0, fun_mid),
+                       T_FUN or T_STR, 0, fun_mid),
                       (To_Unbounded_String ("MM.Ver"),
-                       T_FNAorNBR, 0, fun_version),
+                       T_FNA or T_NBR, 0, fun_version),
                       (To_Unbounded_String ("Oct$("),
-                       T_FUNorSTR, 0, fun_oct),
-                      (To_Unbounded_String ("Pi"), T_FNAorNBR, 0, fun_pi ),
-                      (To_Unbounded_String ("Pos"), T_FNAorINT, 0, fun_pos),
+                       T_FUN or T_STR, 0, fun_oct),
+                      (To_Unbounded_String ("Pi"), T_FNA or T_NBR, 0, fun_pi ),
+                      (To_Unbounded_String ("Pos"), T_FNA or T_INT, 0, fun_pos),
                       (To_Unbounded_String ("Rad("),
-                       T_FUNorNBR, 0, fun_rad),
+                       T_FUN or T_NBR, 0, fun_rad),
                       (To_Unbounded_String ("Right$("),
-                       T_FUNorSTR, 0, fun_right),
+                       T_FUN or T_STR, 0, fun_right),
                       (To_Unbounded_String ("Rnd("),
-                       T_FUNorNBR, 0, fun_rnd),  -- this must come before Rnd - without bracket
+                       T_FUN or T_NBR, 0, fun_rnd),  -- this must come before Rnd - without bracket
                       (To_Unbounded_String ("Rnd"),
-                       T_FNAorNBR, 0, fun_rnd),   -- this must come after Rnd(
+                       T_FNA or T_NBR, 0, fun_rnd),   -- this must come after Rnd(
                       (To_Unbounded_String ("Sgn("),
-                       T_FUNorINT, 0, fun_sgn),
+                       T_FUN or T_INT, 0, fun_sgn),
                       (To_Unbounded_String ("Sin("),
-                       T_FUNorNBR, 0, fun_sin),
+                       T_FUN or T_NBR, 0, fun_sin),
                       (To_Unbounded_String ("Space$("),
-                       T_FUNorNBR, 0, fun_space),
+                       T_FUN or T_NBR, 0, fun_space),
                       (To_Unbounded_String ("Spc("),
-                       T_FUNorSTR, 0, fun_space),
+                       T_FUN or T_STR, 0, fun_space),
                       (To_Unbounded_String ("Sqr("),
-                       T_FUNorNBR, 0, fun_sqr),
+                       T_FUN or T_NBR, 0, fun_sqr),
                       (To_Unbounded_String ("Str$("),
-                       T_FUNorSTR, 0, fun_str),
+                       T_FUN or T_STR, 0, fun_str),
                       (To_Unbounded_String ("String$(("),
-                       T_FUNorSTR, 0, fun_string),
+                       T_FUN or T_STR, 0, fun_string),
                       (To_Unbounded_String ("Tab("),
-                       T_FUNorSTR, 0, fun_tab),
+                       T_FUN or T_STR, 0, fun_tab),
                       (To_Unbounded_String ("Tan("),
-                       T_FUNorNBR, 0, fun_tan),
+                       T_FUN or T_NBR, 0, fun_tan),
                       (To_Unbounded_String ("UCase$("),
-                       T_FUNorSTR, 0, fun_ucase),
+                       T_FUN or T_STR, 0, fun_ucase),
                       (To_Unbounded_String ("Val("),
-                       T_FUNorNBRorINT, 0, fun_val),
+                       T_FUN or T_NBR or T_INT, 0, fun_val),
                       (To_Unbounded_String ("Eval("),
-                       T_FUNorNBRorINTorSTR, 0, fun_eval),
+                       T_FUN or T_NBR or T_INT or T_STR, 0, fun_eval),
                       (To_Unbounded_String ("Max("),
-                       T_FUNorNBR, 0, fun_max),
+                       T_FUN or T_NBR, 0, fun_max),
                       (To_Unbounded_String ("Min("),
-                       T_FUNorNBR, 0, fun_min));
+                       T_FUN or T_NBR, 0, fun_min));
 
    Token_Types   : array (1 .. Num_Tokens) of Command_Table_Item :=
                      ((To_Unbounded_String ("For"), T_NA, 0, op_invalid),
