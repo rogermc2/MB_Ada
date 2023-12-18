@@ -1,4 +1,5 @@
 
+with Ada.Assertions; use Ada.Assertions;
 with Ada.Characters.Handling;
 with Ada.Command_Line;
 with Ada.Strings;
@@ -9,6 +10,30 @@ with M_Misc;
 with Parse_Functions;
 
 package body Commands is
+
+   function Check_Type_Specified
+     (Pos                : Positive; Fun_Type : in out Function_Type;
+      Allow_Default_Type : Boolean) return Positive is
+      use M_Basic;
+      use M_Basic.String_Buffer_Package;
+      Routine_Name : constant String := "Commands.Check_Type_Specified ";
+      Pos2 : Positive;
+   begin
+      if Element (Token_Buffer, Pos) = "INTEGER" then
+         Fun_Type := T_INTorIMPLIED;
+      elsif Element (Token_Buffer, Pos) = "STRING" then
+         Fun_Type := T_STRorImplied;
+      elsif Element (Token_Buffer, Pos) = "FLOAT" then
+         Fun_Type := T_NBRorImplied;
+      else
+      Assert (Allow_Default_Type, Routine_Name & "variable type");
+      Pos2 :=Pos;
+         Fun_Type := Default_Type;
+      end if;
+
+      return Pos2;
+
+   end Check_Type_Specified;
 
    procedure Command_Input is
       use Ada.Command_Line;
@@ -41,7 +66,7 @@ package body Commands is
    end Execute_One_Line;
 
    procedure Process_Command
-     (Match_Index : Positive; Pos : in out Positive;
+     (Match_Index                 : Positive; Pos : in out Positive;
       First_Nonwhite, Label_Valid : in out Boolean) is
       use Ada.Characters.Handling;
       use M_Basic;

@@ -28,6 +28,8 @@ package M_Basic is
    Current_Interrupt_Name   : array (1 .. Configuration.MAXVARLEN + 1) of
      Unbounded_String;
 
+   Default_Type     : Function_Type := T_NBR;
+
    procedure Clear_Program;
    procedure Execute_Program (Tokens : String_Buffer);
    function Find_Subfunction (Token : String; Fun_Type : Function_Type)

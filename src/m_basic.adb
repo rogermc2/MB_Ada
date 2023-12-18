@@ -7,6 +7,7 @@ with Ada.Strings;
 with Ada.Text_IO; use Ada.Text_IO;
 
 with Command_And_Token_Functions;
+with Commands;
 with Draw;
 with Editor;
 with Flash;
@@ -52,7 +53,7 @@ package body M_Basic is
       Pos2               : Positive;
       Fun_Name           : String_Buffer;
       Name_Ptr           : Positive;
-      Fun_Type           : Function_Type := T_NA;
+      Fun_Type           : Function_Type := T_NOTYPE;
       --        Sub_Name : constant Unbounded_String := To_Unbounded_String (Name);
       --        Done     : Boolean := False;
    begin
@@ -98,15 +99,16 @@ package body M_Basic is
                 To_Upper (Element (Fun_Name, Name_Ptr - 1)),
               Routine_Name & "Inconsistent type suffix");
 
-      --  If this is a function we check to find if the function's type
+      --  494 If this is a function we check to find if the function's type
       --  has been specified with AS <type> and save it.
       Current_Line_Ptr := Sub_Line_Ptr;
-      Fun_Type := T_NA;
+      Fun_Type := T_NOTYPE;
       if Is_Fun then
          Pos2 := Skip_Var (Pos2);
-         Skip_Spaces(Token_Buffer, Pos2);
+         Skip_Spaces (Token_Buffer, Pos2);
          if Element (Token_Buffer, Pos2) = Integer'Image (tokenAS) then
             Pos2 := Pos2 + 1;
+            Pos2 := Commands.Check_Type_Specified (Pos2, Fun_Type, True);
             Assert (Fun_Type = T_IMPLIED);
          end if;
       end if;
@@ -156,6 +158,7 @@ package body M_Basic is
             --           Check_Interrupt;
             --        end if;
 
+            --  276
             Token_Ptr := Next_Statement_Ptr;
          end if;
 
@@ -244,6 +247,7 @@ package body M_Basic is
    procedure Init_Basic is
       Routine_Name : constant String := "M_Basic.Init_Basic ";
    begin
+      Default_Type := T_NBR;
       Clear_Program;
       Put_Line (Routine_Name);
       Command_And_Token_Functions.Init_Operator_Functions;

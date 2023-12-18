@@ -9,8 +9,9 @@ package Command_And_Token_Tables is
    type Unsigned_Byte_Ptr is access Unsigned_Byte;
 
    --     subtype Function_Type is Unsigned_Byte;
-   type Function_Type is (T_NOTYPE, T_NBR, T_STR, T_INT, T_PTR, T_CMD, T_CONST,
-                          T_FUN, T_FUNorNBR, T_FUNorSTR, T_FUNorINT,
+   type Function_Type is (T_NOTYPE, T_NBR, T_STR, T_INT, T_PTR, T_CMD,
+                          T_NBRorImplied, T_STRorImplied, T_INTorImplied,
+                          T_CONST, T_FUN, T_FUNorNBR, T_FUNorSTR, T_FUNorINT,
                           T_FUNorNBRorINT, T_FUNorNBRorINTorSTR, T_FNA,
                           T_FNAorNBR, T_FNAorSTR, T_FNAorINT);
    type Function_Type_Ptr is access Function_Type;
@@ -21,6 +22,9 @@ package Command_And_Token_Tables is
                           T_INT      => 4,
                           T_PTR      => 8,
                           T_CMD      => 16,
+                          T_NBRorImplied => 17,
+                          T_STRorImplied => 18,
+                          T_INTorImplied => 20,
                           T_CONST    => 32,
                           T_FUN      => 64,
                           T_FUNorNBR => 65,
@@ -33,10 +37,10 @@ package Command_And_Token_Tables is
                           T_FNAorSTR => 130,
                           T_FNAorINT => 132);
 
-   T_NA      : constant Function_Type := T_NOTYPE;
-   T_INV     : constant Function_Type := T_NA;
-   T_IMPLIED : constant Function_Type := T_CMD;
-   T_OPER    : constant Function_Type := T_CONST;
+   T_NA           : constant Function_Type := T_NOTYPE;
+   T_INV          : constant Function_Type := T_NA;
+   T_IMPLIED      : constant Function_Type := T_CMD;
+   T_OPER         : constant Function_Type := T_CONST;
 
    type Command_Table_Item is record
       Name         : Unbounded_String;
