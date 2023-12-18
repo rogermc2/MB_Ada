@@ -7,6 +7,7 @@ with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Ada.Text_IO; use Ada.Text_IO;
 
 with Audio;
+with Command_And_Token_Tables;
 with Configuration;
 with Draw;
 with Editor;
@@ -28,6 +29,7 @@ with Watchdog_Timer;
 
 procedure Main is
    use System;
+   use Command_And_Token_Tables;
    use M_Basic.String_Buffer_Package;
    Startup_Token   : constant String := "MM.Startup";
 --     Tokens          : M_Basic.UB_String_Buffer;
@@ -35,7 +37,6 @@ procedure Main is
    Watchdog_Set    : Boolean := False;
    Basic_Running   : Boolean := True;
    Error_In_Prompt : Boolean := False;
-
 begin
    Watchdog_Timer.Clear_Event_WDT;
    Misc_MX470.Init_Processor;
@@ -79,7 +80,7 @@ begin
       M_Basic.Token_Buffer := Empty_Vector;
       Append (M_Basic.Token_Buffer, Startup_Token);
 
-      if M_Basic.Find_Subfunction (Startup_Token, 0) /= 0 then
+      if M_Basic.Find_Subfunction (Startup_Token, T_NOTYPE) /= 0 then
          Append (M_Basic.Token_Buffer, Startup_Token);
          Append (M_Basic.Token_Buffer, "/0");
          M_Basic.Execute_Program (M_Basic.Token_Buffer);
