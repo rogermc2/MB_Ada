@@ -217,7 +217,7 @@ package body M_Basic is
       use Command_And_Token_Functions;
       --        Sub_Name : constant Unbounded_String := To_Unbounded_String (Name);
       Index    : Natural := 0;
-      Pos2     : Positive;
+      Pos2     : Natural;
    begin
       --        Put_Line ("M_Basic.Find_Subfunction ");
       --  350
@@ -241,8 +241,10 @@ package body M_Basic is
    end Find_Subfunction;
 
    procedure Init_Basic is
+      Routine_Name : constant String := "M_Basic.Init_Basic ";
    begin
       Clear_Program;
+      Put_Line (Routine_Name);
       Command_And_Token_Functions.Init_Operator_Functions;
 
    end Init_Basic;
@@ -358,7 +360,7 @@ package body M_Basic is
       Routine_Name : constant String := "M_Basic.Prepare_Program ";
       --        Num_Funcs    : Natural := 0;
       --        Dump         : Natural := 0;
-      Index1       : Natural := 0;
+      Index1       : Positive := 1;
       Index2       : Natural := 0;
       Pos1         : Positive;
       Pos2         : Positive;
@@ -384,7 +386,6 @@ package body M_Basic is
       if Error_Abort then
          while Index1 < MAXSUBFUN and then
            Subfunctions (Index1) > 0 loop
-            Index1 := Index1 + 1;
             Index2 := Index1;
             while Index2 < MAXSUBFUN and then
               Subfunctions (Index2) > 0 loop
@@ -410,6 +411,8 @@ package body M_Basic is
                   end if;
                end loop;
             end loop;
+
+         Index1 := Index1 + 1;
          end loop;
       end if;
 

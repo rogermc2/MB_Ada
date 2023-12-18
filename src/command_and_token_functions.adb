@@ -2,6 +2,7 @@
 with System;
 
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
+with Ada.Text_IO; use Ada.Text_IO;
 
 with Command_And_Token_Tables; use Command_And_Token_Tables;
 with Global;
@@ -11,27 +12,27 @@ with Operators; use Operators;
 
 package body Command_And_Token_Functions is
 
-   t_THEN         : Positive;
-   t_ELSE         : Positive;
-   t_GOTO         : Positive;
-   t_EQUAL        : Positive;
-   t_TO           : Positive;
-   t_STEP         : Positive;
-   t_WHILE        : Positive;
-   t_UNTIL        : Positive;
-   t_GOSUB        : Positive;
-   t_AS           : Positive;
-   t_FOR          : Positive;
-   T_IMPLIED      : Positive;
-   c_SELECT_CASE  : Positive;
-   c_CASE         : Positive;
-   c_CASE_ELSE    : Positive;
-   c_END_SELECT   : Positive;
-   c_SUB          : Positive;
-   c_FUN          : Positive;
-   c_IRET         : Positive;
-   c_CFUN         : Positive;
-   c_CSUB         : Positive;
+   t_THEN         : Natural;
+   t_ELSE         : Natural;
+   t_GOTO         : Natural;
+   t_EQUAL        : Natural;
+   t_TO           : Natural;
+   t_STEP         : Natural;
+   t_WHILE        : Natural;
+   t_UNTIL        : Natural;
+   t_GOSUB        : Natural;
+   t_AS           : Natural;
+   t_FOR          : Natural;
+   T_IMPLIED      : Natural;
+   c_SELECT_CASE  : Natural;
+   c_CASE         : Natural;
+   c_CASE_ELSE    : Natural;
+   c_END_SELECT   : Natural;
+   c_SUB          : Natural;
+   c_FUN          : Natural;
+   c_IRET         : Natural;
+   c_CFUN         : Natural;
+   c_CSUB         : Natural;
 
    function Get_Command_Value (Token : String) return Natural is
       Index : Integer := Command_Table'First - 1;
@@ -51,25 +52,38 @@ package body Command_And_Token_Functions is
    end Get_Command_Value;
 
    function Get_Token_Value (Token : String) return Natural is
+      Routine_Name : constant String :=
+                       "Command_And_Token_Tables.Get_Token_Value ";
       Index : Integer := Token_Table'First - 1;
       Value : Natural := 0;
       Found : Boolean := False;
    begin
+      Put_Line (Routine_Name & "Token_Table Length: " &
+                  Integer'Image (Token_Table'Length));
       while Index < Token_Table'Last loop
+--              Put_Line (Routine_Name & "index: " & Integer'Image (Index));
          Index := Index + 1;
          Found := Token = To_String (Token_Table (Index).Name);
+--           Put_Line (Routine_Name & "Found: " &  Boolean'Image (Found));
          if Found then
+            Put_Line (Routine_Name & "token found, index: " &
+                        Integer'Image (Index));
             Value := M_Misc.C_Base_Token + Index - 1;
          end if;
       end loop;
 
+      Put_Line (Routine_Name & "done, Value: " &  Integer'Image (Value));
       return Value;
 
    end Get_Token_Value;
 
    procedure Init_Operator_Functions is
+      Routine_Name : constant String :=
+                       "Command_And_Token_Tables.Init_Operator_Functions ";
    begin
+      Put_Line (Routine_Name);
       t_THEN := Get_Token_Value ("Then");
+      Put_Line (Routine_Name & "t_THEN set: " & Integer'Image (t_THEN));
       t_ELSE := Get_Token_Value ("Else");
       t_GOTO := Get_Token_Value ("GoTo");
       t_EQUAL:= Get_Token_Value (":=");
