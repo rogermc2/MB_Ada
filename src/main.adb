@@ -79,7 +79,7 @@ begin
       M_Basic.Token_Buffer := Empty_Vector;
       Append (M_Basic.Token_Buffer, Startup_Token);
 
-      if M_Basic.Find_Subfunction (Startup_Token, 0) /= Null_Address then
+      if M_Basic.Find_Subfunction (Startup_Token, 0) /= 0 then
          Append (M_Basic.Token_Buffer, Startup_Token);
          Append (M_Basic.Token_Buffer, "/0");
          M_Basic.Execute_Program (M_Basic.Token_Buffer);

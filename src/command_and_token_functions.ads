@@ -13,6 +13,7 @@ package Command_And_Token_Functions is
    function tokenGOSUB return Positive;
    function tokenAS return Positive;
    function tokenFOR return Positive;
+   function tokenIMPLIED  return Positive;
    function cmdSELECT_CASE return Positive;
    function cmdCASE return Positive;
    function cmdCASE_ELSE return Positive;

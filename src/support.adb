@@ -1,6 +1,4 @@
 
-with System;
-
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Ada.Text_IO; use Ada.Text_IO;
 
@@ -33,7 +31,6 @@ begin
 end Do_PIN;
 
 procedure Process_Commands (Tokens : in out M_Basic.String_Buffer) is
-   use System;
    use M_Basic;
    use M_Basic.String_Buffer_Package;
 begin
@@ -77,7 +74,7 @@ begin
       Prepare_Program (False);
 
       if not Global.Error_In_Prompt and M_Basic.Find_Subfunction
-        ("MM.PROMPT", 0) /= System.Null_Address then
+        ("MM.PROMPT", 0) /= 0 then
          Global.Error_In_Prompt := True;
          Token_Buffer := Empty_Vector;
          Append (Token_Buffer, "MM.PROMPT\0");

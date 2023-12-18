@@ -36,16 +36,80 @@ package body M_Basic is
 
    end Clear_Runtime;
 
-   procedure Defined_Subfunction (Is_Fun : Boolean; Token_Ptr : Positive;
+   procedure Defined_Subfunction (Is_Fun : Boolean; Command_Ptr : Positive;
                                   Index  : Positive; Fa : Configuration.MMFLOAT;
                                   Sa     : String; SF_Type : Function_Type) is
       --        use System;
+      use Ada.Characters.Handling;
       use M_Basic.String_Buffer_Package;
-      Command      : constant String := Element (Token_Buffer, Token_Ptr);
---        Sub_Name : constant Unbounded_String := To_Unbounded_String (Name);
---        Done     : Boolean := False;
+      use Ada.Assertions;
+      use Command_And_Token_Functions;
+      Routine_Name       : constant String := "M_Basic.Defined_Subfunction";
+      Command            : constant String := Element (Token_Buffer, Command_Ptr);
+      Callers_Line_Ptr   : Positive := Current_Line_Ptr;
+      Sub_Line_Ptr       : Positive := Subfunctions (Index);
+      Pos                : Positive := Sub_Line_Ptr + 1;
+      Pos2               : Positive;
+      Fun_Name           : String_Buffer;
+      Name_Ptr           : Positive;
+      Fun_Type           : Function_Type := T_NA;
+      --        Sub_Name : constant Unbounded_String := To_Unbounded_String (Name);
+      --        Done     : Boolean := False;
    begin
-      null;
+      Skip_Spaces (Token_Buffer, Pos);
+      Pos2 := Pos;
+      Current_Line_Ptr := Sub_Line_Ptr;
+      Append (Fun_Name, Element (Token_Buffer, Pos));
+      Pos := Pos + 1;
+      Name_Ptr := 1;
+
+      if Element (Token_Buffer, Pos) = "$" or else
+        Element (Token_Buffer, Pos) = "%" or else
+        Element (Token_Buffer, Pos) = "!" then
+         Assert (Is_Fun, Routine_Name & "Type specification is invalid:");
+
+         Append (Fun_Name, Element (Token_Buffer, Pos));
+         Pos := Pos + 1;
+         Name_Ptr := Name_Ptr + 1;
+      end if;
+
+      Name_Ptr := 1;
+      Assert (Is_Fun and then Element (Token_Buffer, Pos) = "(" and then
+              Subfunctions (Sub_Line_Ptr) = cmdCFUN,
+              Routine_Name & "Function definition");
+
+      --  479 Find the end of the caller's identifier, Name_Ptr is left pointing to
+      --  the start of the caller's argument list
+      Current_Line_Ptr := Callers_Line_Ptr;
+
+      Name_Ptr := Command_Ptr + 1;
+      while Is_Name_Character (Element (Fun_Name, Name_Ptr) (1)) loop
+         Name_Ptr := Name_Ptr + 1;
+      end loop;
+
+      Assert (Is_Fun and then Element (Fun_Name, Name_Ptr) /= "$" and then
+              Element (Fun_Name, Name_Ptr) /= "%" and then
+              Element (Fun_Name, Name_Ptr) /= "!",
+              Routine_Name & "Type specification is invalid");
+
+      --  490
+      Pos := Pos + 1;
+      Assert (To_Upper (Element (Token_Buffer, Pos - 1)) =
+                To_Upper (Element (Fun_Name, Name_Ptr - 1)),
+              Routine_Name & "Inconsistent type suffix");
+
+      --  If this is a function we check to find if the function's type
+      --  has been specified with AS <type> and save it.
+      Current_Line_Ptr := Sub_Line_Ptr;
+      Fun_Type := T_NA;
+      if Is_Fun then
+         Pos2 := Skip_Var (Pos2);
+         Skip_Spaces(Token_Buffer, Pos2);
+         if Element (Token_Buffer, Pos2) = Integer'Image (tokenAS) then
+            Pos2 := Pos2 + 1;
+            Assert (Fun_Type = T_IMPLIED);
+         end if;
+      end if;
 
    end Defined_Subfunction;
 

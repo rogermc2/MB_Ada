@@ -22,6 +22,7 @@ package body Command_And_Token_Functions is
    t_GOSUB        : Positive;
    t_AS           : Positive;
    t_FOR          : Positive;
+   T_IMPLIED      : Positive;
    c_SELECT_CASE  : Positive;
    c_CASE         : Positive;
    c_CASE_ELSE    : Positive;
@@ -79,6 +80,7 @@ package body Command_And_Token_Functions is
       t_GOSUB := Get_Token_Value ("GoSub");
       t_AS := Get_Token_Value ("As");
       t_FOR := Get_Token_Value ("For");
+      T_IMPLIED := Get_Token_Value ("");
 
       c_SELECT_CASE := Get_Command_Value ("Select Case");
       c_CASE := Get_Command_Value ("Case");
@@ -177,6 +179,12 @@ package body Command_And_Token_Functions is
       return t_FOR;
 
    end tokenFOR;
+
+   function tokenIMPLIED  return Positive is
+   begin
+      return t_IMPLIED;
+
+   end tokenIMPLIED;
 
    function cmdSELECT_CASE return Positive is
    begin

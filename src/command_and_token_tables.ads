@@ -8,16 +8,17 @@ package Command_And_Token_Tables is
    type Unsigned_Byte is mod 256;
    type Unsigned_Byte_Ptr is access Unsigned_Byte;
 
-   subtype Function_Type is Unsigned_Byte range 0 .. 8;
+   subtype Function_Type is Unsigned_Byte range 0 .. 9;
    type Function_Type_Ptr is access Function_Type;
 
-   T_NA   : constant Function_Type := 0;
-   T_FNA  : constant Function_Type := 1;
-   T_FUN  : constant Function_Type := 2;
-   T_INT  : constant Function_Type := 3;
-   T_NBR  : constant Function_Type := 4;
-   T_OPER : constant Function_Type := 5;
-   T_STR  : constant Function_Type := 6;
+   T_NA      : constant Function_Type := 0;
+   T_FNA     : constant Function_Type := 1;
+   T_FUN     : constant Function_Type := 2;
+   T_INT     : constant Function_Type := 3;
+   T_NBR     : constant Function_Type := 4;
+   T_OPER    : constant Function_Type := 5;
+   T_STR     : constant Function_Type := 6;
+   T_IMPLIED : constant Function_Type := 7;
 
    type Command_Table_Item is record
       Name         : Unbounded_String;
@@ -27,7 +28,7 @@ package Command_And_Token_Tables is
    end record;
 
    Num_Commands  : constant Positive := 45;
-   Num_Functions : constant Positive := 100;
+   Num_Functions : constant Positive := 101;
    Num_Tokens    : constant Positive := 9;
    Num_Operators : constant Positive := 19;
 
@@ -285,7 +286,8 @@ package Command_And_Token_Tables is
                         (To_Unbounded_String ("op_xor"), T_NA, 0, Null_Address),
                         (To_Unbounded_String ("op_not"), T_NA, 0, Null_Address),
                         (To_Unbounded_String ("op_shiftleft"), T_NA, 0, Null_Address),
-                        (To_Unbounded_String ("op_shiftright"), T_NA, 0, Null_Address));
+                        (To_Unbounded_String ("op_shiftright"), T_NA, 0, Null_Address),
+                        (To_Unbounded_String (""), T_NA, 0, Null_Address));
 
    function Token_Type (Index : Integer) return Function_Type;
 
