@@ -1,4 +1,6 @@
 
+--  with Command_And_Token_Tables; use Command_And_Token_Tables;
+
 package Command_And_Token_Functions is
 
    procedure Init_Operator_Functions;

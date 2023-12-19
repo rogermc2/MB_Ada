@@ -11,13 +11,12 @@ with Parse_Functions;
 
 package body Commands is
 
-   function Check_Type_Specified
+   procedure Check_Type_Specified
      (Pos                : Positive; Fun_Type : in out Unsigned_2Byte;
-      Allow_Default_Type : Boolean) return Positive is
+      Allow_Default_Type : Boolean) is
       use M_Basic;
       use M_Basic.String_Buffer_Package;
       Routine_Name : constant String := "Commands.Check_Type_Specified ";
-      Pos2 : Positive;
    begin
       if Element (Token_Buffer, Pos) = "INTEGER" then
          Fun_Type := T_INT or T_IMPLIED;
@@ -26,12 +25,9 @@ package body Commands is
       elsif Element (Token_Buffer, Pos) = "FLOAT" then
          Fun_Type := T_NBR or T_Implied;
       else
-      Assert (Allow_Default_Type, Routine_Name & "variable type");
-      Pos2 := Pos;
+         Assert (Allow_Default_Type, Routine_Name & "variable type");
          Fun_Type := Default_Type;
       end if;
-
-      return Pos2;
 
    end Check_Type_Specified;
 
