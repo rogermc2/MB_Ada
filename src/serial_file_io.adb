@@ -9,7 +9,7 @@ with Serial;
 
 package body Serial_File_IO is
 
-   procedure Process_File (File_Num : Positive);
+   function Process_File (File_Num : Positive) return Unbounded_String;
 
    function MMF_Get_Character
      (File_Num : Integer; File_ID : File_Type; isConsole : Boolean := False)
@@ -41,36 +41,34 @@ package body Serial_File_IO is
       use M_Misc;
       use IO_Support;
       --  Routine_Name : constant String := "Serial_File_IO.MM_Get_Line ";
-      tp : Unbounded_String;
    begin
       if File_Num = 0 then
-         tp := To_Unbounded_String (Get_Line);
-         if tp = F2 then
-            tp := To_Unbounded_String ("RUN");
-         elsif tp = F3 then
-            tp := To_Unbounded_String ("LIST");
-         elsif tp = F4 then
-            tp := To_Unbounded_String ("EDIT");
-         elsif tp = F10 then
-            tp := To_Unbounded_String ("AUTOSAVE");
-         elsif tp = F3 then
-            tp := To_Unbounded_String ("XMODEM RECEIVE");
-         elsif tp = F3 then
-            tp := To_Unbounded_String ("XMODEM SEND");
+         Buffer := To_Unbounded_String (Get_Line);
+         if Buffer = F2 then
+            Buffer := To_Unbounded_String ("RUN");
+         elsif Buffer = F3 then
+            Buffer := To_Unbounded_String ("LIST");
+         elsif Buffer = F4 then
+            Buffer := To_Unbounded_String ("EDIT");
+         elsif Buffer = F10 then
+            Buffer := To_Unbounded_String ("AUTOSAVE");
+         elsif Buffer = F3 then
+            Buffer := To_Unbounded_String ("XMODEM RECEIVE");
+         elsif Buffer = F3 then
+            Buffer := To_Unbounded_String ("XMODEM SEND");
          end if;
 
-         Buffer := tp;
          if M_Misc.Echo_Option then
             Put_Line (To_String (Buffer));
          end if;
 
       elsif File_Num > 0 then
-         Process_File (File_Num);
+         Buffer := Process_File (File_Num);
       end if;
 
    end MM_Get_Line;
 
-   procedure Process_File (File_Num : Positive) is
+   function Process_File (File_Num : Positive) return Unbounded_String is
       use M_Misc;
       Routine_Name : constant String := "Serial_File_IO.Process_File ";
       File_ID      : File_Type;
@@ -117,6 +115,8 @@ package body Serial_File_IO is
       end loop;
 
       Close (File_ID);
+
+      return tp;
 
    end Process_File;
 

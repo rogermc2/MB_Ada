@@ -316,10 +316,11 @@ package Command_And_Token_Tables is
    function Get_Input_Character (Pos : Positive) return Character;
    function Get_Input_Slice (Pos1, Pos2 : Positive) return String;
    function Get_Token_Buffer_Item (Pos : Positive) return String;
-   procedure Skip_Spaces (Buffer : String_Buffer; Pos : in out Positive);
    function Input_Buffer_Length return Natural;
+   procedure Load_Input_Buffer (File_Num : Natural);
    procedure Replace_In_Buffer_Character (Pos : Positive; aChar : Character);
    procedure Skip_In_Buffer_Spaces (Pos : in out Positive);
+   procedure Skip_Spaces (Buffer : String_Buffer; Pos : in out Positive);
    procedure Skip_Token_Buffer_Element (Pos : in out Positive);
    procedure Skip_Token_Buffer_Spaces (Pos : in out Positive);
    procedure Token_Buffer_Append (Item : String);

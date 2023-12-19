@@ -1,5 +1,4 @@
 
-with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Ada.Text_IO; use Ada.Text_IO;
 
 with Audio;
@@ -12,13 +11,12 @@ with Global;
 with M_Basic;
 with M_Misc;
 with Memory;
-with Serial_File_IO;
 
 package body Support is
 
    procedure Copy_Slice (Pos1 : in out Positive; Pos2 : Positive) is
    begin
-      Token_Buffer_Append (Slice (In_Buffer, Pos1, Pos2));
+      Token_Buffer_Append (Get_Input_Slice (Pos1, Pos2));
       while Pos1 <= Pos2 loop
          Pos1 := Pos1 + 1;
       end loop;
@@ -82,8 +80,8 @@ begin
       end if;
 
       Global.Error_In_Prompt := False;
-      Serial_File_IO.MM_Get_Line (0, In_Buffer);
-      if Length (In_Buffer) > 0 then
+      Load_Input_Buffer (0);
+      if Input_Buffer_Length > 0 then
          Put_Line ("Process_Commands  ");
          M_Basic.Tokenize (True);
          M_Basic.Execute_Program;

@@ -70,10 +70,10 @@ package body Commands is
       Token_Buffer_Append (Integer'Image (C_Base_Token + Match_Index));
 
       if C_Base_Token + Match_Index = Get_Command_Value ("Rem") then
-         Token_Buffer_Append (Slice (In_Buffer, Pos, Length(In_Buffer)));
+         Token_Buffer_Append (Get_Input_Slice (Pos, Input_Buffer_Length));
 
-      elsif Is_Alphanumeric (Element (In_Buffer, Pos - 1)) and then
-        Element (In_Buffer, Pos) = ' ' then
+      elsif Is_Alphanumeric (Get_Input_Character (Pos - 1)) and then
+        Get_Input_Character (Pos) = ' ' then
          --  if the command is followed by a space skip over it
          --  (llist will restore the space)
          Pos := Pos + 1;

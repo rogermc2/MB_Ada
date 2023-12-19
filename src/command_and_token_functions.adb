@@ -6,7 +6,6 @@ with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 
 with Command_And_Token_Tables; use Command_And_Token_Tables;
 with Global;
-with M_Basic;
 with M_Misc;
 with Operators; use Operators;
 
@@ -264,7 +263,6 @@ package body Command_And_Token_Functions is
    function Get_Next_Command (Pos, Current_Line : in out Positive;
                               EOF_Message       : String) return Positive is
       use Global;
-      use M_Basic;
       use M_Misc;
       OK : Boolean := True;
    begin
@@ -295,12 +293,12 @@ package body Command_And_Token_Functions is
                Pos := Pos + 3;
             end if;
 
-            Skip_Spaces (In_Buffer, Pos);
+            Skip_In_Buffer_Spaces (Pos);
 
             if Get_Token_Buffer_Item (1) = T_LABEL then
                --  skip over the label
                Pos := Pos + Integer'Value (Get_Token_Buffer_Item (2)) + 2;
-               Skip_Spaces (In_Buffer, Pos);
+               Skip_In_Buffer_Spaces (Pos);
             end if;
          end if;
 

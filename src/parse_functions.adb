@@ -32,7 +32,7 @@ package body Parse_Functions is
       Done          : Boolean := False;
    begin
       while not Done loop
-         aChar := Element (In_Buffer, I_Pos);
+         aChar := Get_Input_Character (I_Pos);
          Done := not (aChar = '_' or Is_Alphanumeric (aChar));
          if not Done then
             Append (Command, aChar);
@@ -70,7 +70,7 @@ package body Parse_Functions is
    begin
       Token_Buffer_Append ("0");
       I_Pos := I_Pos + 1;
-      while Element (In_Buffer, I_Pos) = ':' loop
+      while Get_Input_Character (I_Pos) = ':' loop
          Token_Buffer_Append ("0");
          I_Pos := I_Pos + 1;
       end loop;
@@ -95,11 +95,11 @@ package body Parse_Functions is
          if Match_Index + M_Misc.C_Base_Token =
            Get_Command_Value ("Rem") then
             --  886 copy everything
-            Copy_Slice (I_Pos, Length (In_Buffer));
+            Copy_Slice (I_Pos, Input_Buffer_Length);
          end if;
 
-      elsif Is_Alphanumeric (Element (In_Buffer, I_Pos - 1)) and then
-        Element (In_Buffer, I_Pos) = ' ' then
+      elsif Is_Alphanumeric (Get_Input_Character (I_Pos - 1)) and then
+        Get_Input_Character (I_Pos) = ' ' then
          I_Pos := I_Pos + 1;
       end if;
 
@@ -111,13 +111,13 @@ package body Parse_Functions is
    procedure Process_Double_Quote (I_Pos : in out Positive;
                                    aChar : Character) is
    begin
-      while aChar /= '"' and I_Pos <= Length (In_Buffer) loop
+      while aChar /= '"' and I_Pos <= Input_Buffer_Length loop
          I_Pos := I_Pos + 1;
       end loop;
 
       Token_Buffer_Append ("""");
       I_Pos := I_Pos + 1;
-      if  Element (In_Buffer, I_Pos) = '"' then
+      if Get_Input_Character (I_Pos) = '"' then
          I_Pos := I_Pos + 1;
       end if;
 
@@ -131,7 +131,7 @@ package body Parse_Functions is
 
    procedure Process_First_Nonwhite
      (I_Pos : in out Positive; Label_Valid, First_Nonwhite : in out Boolean) is
-      aChar       : constant Character := Element (In_Buffer, I_Pos);
+      aChar       : constant Character := Get_Input_Character (I_Pos);
       Match_Index : Natural := 0;
       Match_I_Pos : Positive;
       Label       : Unbounded_String;
@@ -141,7 +141,7 @@ package body Parse_Functions is
    begin
       if aChar = '?' then
          Match_Index := Get_Command_Value ("Print") - M_Misc.C_Base_Token;
-         if Element (In_Buffer, I_Pos + 1) = ' ' then
+         if Get_Input_Character (I_Pos + 1) = ' ' then
             --  eat a trailing space
             I_Pos := I_Pos + 1;
             Match_I_Pos := I_Pos;
@@ -158,7 +158,7 @@ package body Parse_Functions is
 
          --   876 test if it is a label
       elsif Label_Valid and then
-        Is_Name_Start (Element (In_Buffer, I_Pos)) then
+        Is_Name_Start (Get_Input_Character (I_Pos)) then
          --  search for the first invalid char
          Pos2 := I_Pos;
          Index := 0;
@@ -166,12 +166,12 @@ package body Parse_Functions is
          while not Done and then Index <= Configuration.MAXVARLEN loop
             Index := Index + 1;
             Pos2 := Pos2 + 1;
-            Done := not Is_Name_Character (Element (In_Buffer, Pos2));
+            Done := not Is_Name_Character (Get_Input_Character (Pos2));
          end loop;
          --  Last character of name found
 
          --  881
-         if Element (In_Buffer, Pos2) = ':' then
+         if Get_Input_Character (Pos2) = ':' then
             --  is label
             Label_Valid := False;
             Token_Buffer_Append (Global.T_LABEL);
@@ -181,7 +181,7 @@ package body Parse_Functions is
 
             --  copy the label
             for pos3 in reverse 1 .. Pos2 - I_Pos loop
-               Append (Label, Element (In_Buffer, I_Pos));
+               Append (Label, Get_Input_Character (I_Pos));
                I_Pos := I_Pos + 1;
             end loop;
 
@@ -229,28 +229,28 @@ package body Parse_Functions is
          I_Pos2 := I_Pos + 1;  -- I_Pos2 (tp2) is I_Position of next input character
          Command := Command_Table (CT_Index).Name;
 
-         while I_Pos2 < Length (In_Buffer) and then
+         while I_Pos2 < Input_Buffer_Length and then
            To_Upper (To_String (In_Command)) =
              To_Upper (To_String (Command)) loop
-            while I_Pos2 < Length (In_Buffer) and then
-              Element (In_Buffer, I_Pos2) = ' '  loop
+            while I_Pos2 < Input_Buffer_Length and then
+              Get_Input_Character (I_Pos2) = ' '  loop
                I_Pos2 := I_Pos2 + 1;
             end loop;
             I_Pos := I_Pos + 1;
 
-            if Element (In_Buffer, I_Pos) = '(' then
-               while I_Pos2 < Length (In_Buffer) and then
-                 Element (In_Buffer, I_Pos2) = ' '  loop
+            if Get_Input_Character (I_Pos) = '(' then
+               while I_Pos2 < Input_Buffer_Length and then
+                 Get_Input_Character (I_Pos2) = ' '  loop
                   I_Pos2 := I_Pos2 + 1;
                end loop;
             end if;
          end loop;
 
          if (I_Pos2 >= Length (Command) and then
-               not Is_Name_Character (Element (In_Buffer, I_Pos2))) or
+               not Is_Name_Character (Get_Input_Character (I_Pos2))) or
            Command_Table (CT_Index).Command_Type = T_FUN then
             Done := Element (Command, CT_Index) /= '(' and
-              Is_Name_Character (Element (In_Buffer, I_Pos2));
+              Is_Name_Character (Get_Input_Character (I_Pos2));
 
             if not Done and then Length (Command) > Match_Length then
                Match_I_Pos := I_Pos2;
@@ -267,21 +267,21 @@ package body Parse_Functions is
 
          --  875
       elsif Label_Valid and then
-        Is_Name_Start (Element (In_Buffer, I_Pos)) then
+        Is_Name_Start (Get_Input_Character (I_Pos)) then
          Index := 0;
          I_Pos2 := I_Pos;
          OK := True;
          while OK and then Index <= Configuration.MAXVARLEN loop
             Index := Index + 1;
             I_Pos2 := I_Pos2 + 1;
-            OK := Is_Name_Character (Element (In_Buffer, I_Pos2));
+            OK := Is_Name_Character (Get_Input_Character (I_Pos2));
          end loop;
 
-         if OK and then Element (In_Buffer, I_Pos2) = ':' then
+         if OK and then Get_Input_Character (I_Pos2) = ':' then
             Label_Valid := False;
             Token_Buffer_Append (Global.T_LABEL);
             Token_Buffer_Append (Integer'Image (I_Pos2 - I_Pos));
-            Token_Buffer_Append (Slice (In_Buffer, I_Pos, I_Pos2 - 1));
+            Token_Buffer_Append (Get_Input_Slice (I_Pos, I_Pos2 - 1));
          end if;
 
          I_Pos := I_Pos + 1;
@@ -308,7 +308,7 @@ package body Parse_Functions is
          I_Pos2 := I_Pos;
          Name := Token_Table (Index).Name;
          T_Pos := 1;
-         I_Char := Element (In_Buffer, I_Pos);
+         I_Char := Get_Input_Character (I_Pos);
          Done := False;
          --  900
          while not Done and then
@@ -317,11 +317,11 @@ package body Parse_Functions is
             T_Pos := T_Pos + 1;
             if I_Char = '(' then
                I_Pos := I_Pos + 1;
-               Skip_Spaces (In_Buffer, I_Pos);
+               Skip_In_Buffer_Spaces (I_Pos);
             end if;
 
             Done := not Is_Name_End (Element (Name, T_Pos - 1)) or
-              not Is_Name_Character (Element (In_Buffer, I_Pos2));
+              not Is_Name_Character (Get_Input_Character (I_Pos2));
          end loop;
 
          --  911
@@ -350,14 +350,14 @@ package body Parse_Functions is
       if First_Nonwhite then
          --  First entry on the line?
          Pos2 := Skip_Var (Pos);
-         if Element (In_Buffer, Pos2) = '=' then
+         if Get_Input_Character (Pos2) = '=' then
             --  an implied let
             Token_Buffer_Append (Integer'Image (Get_Command_Value ("Let")));
          end if;
       else
          --  942 copy the variable name
-         while Is_Name_Character (Element (In_Buffer, Pos)) loop
-            Name := Name & Element (In_Buffer, Pos);
+         while Is_Name_Character (Get_Input_Character (Pos)) loop
+            Name := Name & Get_Input_Character (Pos);
             Pos := Pos + 1;
          end loop;
          Token_Buffer_Append (To_String (Name));

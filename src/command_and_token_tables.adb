@@ -2,6 +2,7 @@
 with Ada.Strings;
 
 with M_Misc; use M_Misc;
+with Serial_File_IO;
 
 package body Command_And_Token_Tables is
 
@@ -39,6 +40,12 @@ package body Command_And_Token_Tables is
       return Length (In_Buffer);
 
    end Input_Buffer_Length;
+
+   procedure Load_Input_Buffer (File_Num : Natural) is
+   begin
+       Serial_File_IO.MM_Get_Line (File_Num, In_Buffer);
+
+   end Load_Input_Buffer;
 
    procedure Replace_In_Buffer_Character (Pos : Positive; aChar : Character) is
    begin

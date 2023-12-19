@@ -633,17 +633,17 @@ package body M_Basic is
       if not From_Console then
          Token_Buffer_Append (Global.T_NEWLINE);
       end if;
-      Trim (In_Buffer, Left);
+      Trim_Input_Buffer (Left);
 
       --  if it a digit and not an 8 digit hex number
       --  (ie, it is CFUNCTION data) then try for a line number
       while OK and then In_Ptr <= 8 loop
-         OK := OK and Is_Hexadecimal_Digit (Element (In_Buffer, In_Ptr));
+         OK := OK and Is_Hexadecimal_Digit (Get_Input_Character (In_Ptr));
          In_Ptr := In_Ptr + 1;
       end loop;
 
-      if Is_Digit (Element (In_Buffer, 1)) and In_Ptr <= 8 then
-         Line_Num := Unsigned_64'Value (Slice (In_Buffer, 1, In_Ptr - 1));
+      if Is_Digit (Get_Input_Character (1)) and In_Ptr <= 8 then
+         Line_Num := Unsigned_64'Value (Get_Input_Slice (1, In_Ptr - 1));
          if not From_Console and Line_Num > 1 and
            Line_Num <= Unsigned_64 (MAXLINENBR) then
             Token_Buffer_Append (Global.T_LINENBR);
