@@ -14,6 +14,7 @@ with Editor;
 with Flash;
 with Global;
 WITH M_Misc;
+with Memory;
 with Parse_Functions;
 
 package body M_Basic is
@@ -41,28 +42,28 @@ package body M_Basic is
    procedure Defined_Subfunction
      (Is_Fun : Boolean; Command_Ptr : Positive; Index  : Positive;
       Fa     : in out Configuration.MMFLOAT; I64a : in out Long_Long_Integer;
-      Sa     : in out Unbounded_String; SF_Type : Function_Type) is
+      Sa     : in out Unbounded_String; Fun_Type : in out Function_Type) is
       --        use System;
       use Ada.Characters.Handling;
       use Ada.Assertions;
+      use C_Functions;
       use Command_And_Token_Functions;
       use Global;
       use M_Basic.String_Buffer_Package;
       Routine_Name       : constant String := "M_Basic.Defined_Subfunction";
-      Command            : constant String := Element (Token_Buffer, Command_Ptr);
-      Callers_Line_Ptr   : Positive := Current_Line_Ptr;
-      Sub_Line_Ptr       : Positive := Subfunctions (Index);
+      --        Command            : constant String := Element (Token_Buffer, Command_Ptr);
+      Callers_Line_Ptr   : constant Positive := Current_Line_Ptr;
+      Sub_Line_Ptr       : constant Positive := Subfunctions (Index);
       Pos                : Positive := Sub_Line_Ptr + 1;  --  p
       Pos2               : Positive;                      --  ttp
       Pos3               : Positive;                      --  pp
       Fun_Name           : String_Buffer;
       Name_Ptr           : Positive;                      --  tp
-      Fun_Type           : Function_Type := T_NOTYPE;
-      I_Tmp              : Integer;
-      F_Tmp              : Float;
+      I_Tmp              : Long_Long_Integer;
       --        Sub_Name : constant Unbounded_String := To_Unbounded_String (Name);
       Found              : Boolean := False;
    begin
+      Fun_Type := T_NOTYPE;
       Skip_Spaces (Token_Buffer, Pos);
       Pos2 := Pos;
       Current_Line_Ptr := Sub_Line_Ptr;
@@ -115,17 +116,18 @@ package body M_Basic is
          if Element (Token_Buffer, Pos2) = Integer'Image (tokenAS) then
             Pos2 := Pos2 + 1;
             Commands.Check_Type_Specified (Pos2, Fun_Type, True);
-            Assert (Fun_Type = T_IMPLIED);
+            Assert (Fun_Type = T_IMPLIED, Routine_Name & "invalid type");
          end if;
          Fun_Type := Fun_Type or V_FIND or V_DIM_VAR or V_LOCAL or V_EMPTY_OK;
       end if;
 
-      --  from now on Name_Ptr (tp) = the caller's argument list
-      --              Pos      (p)  = the argument list for the definition
+      --  511 from now on Name_Ptr (tp) = the caller's argument list
+      --                  Pos      (p)  = the argument list for the definition
       Skip_Spaces (Token_Buffer, Pos);
       Skip_Spaces (Fun_Name, Name_Ptr);
 
       if Element (Token_Buffer, Sub_Line_Ptr) = Integer'Image (cmdCFUN) then
+         --  521
          --           Skip_Spaces (Token_Buffer, Pos);
          if Element (Token_Buffer, Pos) = ")" then
             Pos3 := Pos;
@@ -146,14 +148,24 @@ package body M_Basic is
             Fun_Type := T_INT;
          end if;
 
+         --  537
          case Fun_Type is
-            when T_INT => C_Functions.Call_CFunction (Sub_Line_Ptr, Name_Ptr,
-                                                      Pos, Callers_Line_Ptr);
-            when T_NBR => null;
-            when T_STR => null;
-            when others => null;
+            when T_INT => I64a :=
+                 Call_CFunction (Sub_Line_Ptr, Name_Ptr, Pos, Callers_Line_Ptr);
+            when T_NBR => I_Tmp :=
+                 Call_CFunction (Sub_Line_Ptr, Name_Ptr, Pos, Callers_Line_Ptr);
+               Fa := Configuration.MMFLOAT (I_Tmp);
+            when T_STR => Sa :=
+                 Call_CFunction (Sub_Line_Ptr, Name_Ptr, Pos, Callers_Line_Ptr);
+               Fa := Configuration.MMFLOAT (I_Tmp);
+            when others =>
+               Assert (False, Routine_Name & "function name: " &
+                         Element (Fun_Name, Name_Ptr));
          end case;
       end if;
+
+      --  553
+      Memory.Temp_Memory_Is_Changed := True;
 
    end Defined_Subfunction;
 
@@ -163,6 +175,7 @@ package body M_Basic is
       Routine_Name       : constant String := "M_Basic.Execute_Command";
       Next_Statement_Ptr : Positive := Token_Ptr + 1;
       Command_Line_Ptr   : Positive := Token_Ptr + 1;
+      Null_Function      : Function_Type := T_NA;
       Fa                 : Configuration.MMFLOAT := 0.0;
       I64a               : Long_Long_Integer := 0;
       Sa                 : Unbounded_String := To_Unbounded_String ("");
@@ -186,7 +199,7 @@ package body M_Basic is
               Find_Subfunction (Element (Token_Buffer, Token_Ptr), T_NA);
             if Index > 0 then
                Defined_Subfunction (False, Token_Ptr, Index,
-                                    Fa, I64a, Sa, T_NA);
+                                    Fa, I64a, Sa, Null_Function);
             end if;
 
             --           end if;
@@ -263,13 +276,15 @@ package body M_Basic is
 
    function Find_Subfunction (Token : String; Fun_Type : Function_Type)
                               return Natural is
+      use Ada.Characters.Handling;
       use Command_And_Token_Functions;
       --        Routine_Name : constant String := "M_Basic.Find_Subfunction";
       --        Sub_Name : constant Unbounded_String := To_Unbounded_String (Name);
       Index    : Natural := 0;
+      Pos1     : Natural;
       Pos2     : Natural;
    begin
-      --  350
+      --  394
       while index < Configuration.MAXSUBFUN loop
          Index := Index + 1;
          --           Put_Line (Routine_Name & "Index "& Integer'Image (Index));
@@ -280,8 +295,19 @@ package body M_Basic is
          elsif (Pos2 = cmdFUN or Pos2 = cmdCFUN) then
             null;
          else
+            --  412
             Pos2 := Pos2 + 1;
             Skip_Spaces (In_Buffer, Pos2);
+            if To_Upper (Token) =
+              To_Upper (Element (Subfunctions (index), Pos2)) then
+               Pos1 := 2;
+               Pos2 := Pos2 + 1;
+               --  418
+               while Is_Name_Character (Element (Token, Pos1)) loop
+                  Pos1 := Pos1 + 1;
+                  Pos2 := Pos2 + 1;
+               end loop;
+            end if;
          end if;
          --           Done := Subfunctions (Index) = Sub_Address;
       end loop;
