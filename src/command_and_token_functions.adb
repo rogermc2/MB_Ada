@@ -200,57 +200,57 @@ package body Command_And_Token_Functions is
 
    end tokenIMPLIED;
 
-   function cmdSELECT_CASE return Natural is
+   function cmdSELECT_CASE return String is
    begin
-      return c_SELECT_CASE;
+      return To_String (Command_Table (c_SELECT_CASE).Name);
 
    end cmdSELECT_CASE;
 
-   function cmdCASE return Natural is
+   function cmdCASE return String is
    begin
-      return c_CASE;
+      return To_String (Command_Table (c_CASE).Name);
 
    end cmdCASE;
 
-   function cmdCASE_ELSE return Natural is
+   function cmdCASE_ELSE return String is
    begin
-      return c_CASE_ELSE;
+      return To_String (Command_Table (c_CASE_ELSE).Name);
 
    end cmdCASE_ELSE;
 
-   function cmdEND_SELECT return Natural is
+   function cmdEND_SELECT return String is
    begin
-      return c_END_SELECT;
+      return To_String (Command_Table (c_END_SELECT).Name);
 
    end cmdEND_SELECT;
 
-   function cmdSUB return Natural is
+   function cmdSUB return String is
    begin
-      return c_SUB;
+      return To_String (Command_Table (c_SUB).Name);
 
    end cmdSUB;
 
-   function cmdFUN return Natural is
+   function cmdFUN return String is
    begin
-      return c_FUN;
+      return To_String (Command_Table (c_FUN).Name);
 
    end cmdFUN;
 
-   function cmdIRET return Natural is
+   function cmdIRET return String is
    begin
-      return c_IRET;
+      return To_String (Command_Table (c_IRET).Name);
 
    end cmdIRET;
 
-   function cmdCFUN return Natural is
+   function cmdCFUN return String is
    begin
-      return c_CFUN;
+      return To_String (Command_Table (c_CFUN).Name);
 
    end cmdCFUN;
 
-   function cmdCSUB return Natural is
+   function cmdCSUB return String is
    begin
-      return c_CSUB;
+      return To_String (Command_Table (c_CSUB).Name);
 
    end cmdCSUB;
 

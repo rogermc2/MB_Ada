@@ -16,15 +16,15 @@ package Command_And_Token_Functions is
    function tokenAS return Natural;
    function tokenFOR return Natural;
    function tokenIMPLIED  return Natural;
-   function cmdSELECT_CASE return Natural;
-   function cmdCASE return Natural;
-   function cmdCASE_ELSE return Natural;
-   function cmdEND_SELECT return Natural;
-   function cmdSUB return Natural;
-   function cmdFUN return Natural;
-   function cmdIRET return Natural;
-   function cmdCFUN return Natural;
-   function cmdCSUB return Natural;
+   function cmdSELECT_CASE return String;
+   function cmdCASE return String;
+   function cmdCASE_ELSE return String;
+   function cmdEND_SELECT return String;
+   function cmdSUB return String;
+   function cmdFUN return String;
+   function cmdIRET return String;
+   function cmdCFUN return String;
+   function cmdCSUB return String;
 
    function Get_Next_Command
      (Pos, Current_Line : in out Positive; EOF_Message : String)

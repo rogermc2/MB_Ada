@@ -126,7 +126,7 @@ package body M_Basic is
       Skip_Spaces (Token_Buffer, Pos);
       Skip_Spaces (Fun_Name, Name_Ptr);
 
-      if Element (Token_Buffer, Sub_Line_Ptr) = Integer'Image (cmdCFUN) then
+      if Element (Token_Buffer, Sub_Line_Ptr) = cmdCFUN then
          --  521
          --           Skip_Spaces (Token_Buffer, Pos);
          if Element (Token_Buffer, Pos) = ")" then
@@ -276,12 +276,12 @@ package body M_Basic is
 
    function Find_Subfunction (Token : String; Fun_Type : Function_Type)
                               return Natural is
-      use Ada.Characters.Handling;
+--        use Ada.Characters.Handling;
       use Command_And_Token_Functions;
       --        Routine_Name : constant String := "M_Basic.Find_Subfunction";
       --        Sub_Name : constant Unbounded_String := To_Unbounded_String (Name);
       Index    : Natural := 0;
-      Pos1     : Natural;
+--        Pos1     : Natural;
       Pos2     : Natural;
    begin
       --  394
@@ -298,16 +298,16 @@ package body M_Basic is
             --  412
             Pos2 := Pos2 + 1;
             Skip_Spaces (In_Buffer, Pos2);
-            if To_Upper (Token) =
-              To_Upper (Element (Subfunctions (index), Pos2)) then
-               Pos1 := 2;
-               Pos2 := Pos2 + 1;
-               --  418
-               while Is_Name_Character (Element (Token, Pos1)) loop
-                  Pos1 := Pos1 + 1;
-                  Pos2 := Pos2 + 1;
-               end loop;
-            end if;
+--              if To_Upper (Token) =
+--                To_Upper (Element (Subfunctions (index), Pos2)) then
+--                 Pos1 := 2;
+--                 Pos2 := Pos2 + 1;
+--                 --  418
+--                 while Is_Name_Character (Element (Token, Pos1)) loop
+--                    Pos1 := Pos1 + 1;
+--                    Pos2 := Pos2 + 1;
+--                 end loop;
+--              end if;
          end if;
          --           Done := Subfunctions (Index) = Sub_Address;
       end loop;
@@ -406,27 +406,38 @@ package body M_Basic is
 
    end Print_String;
 
-   --     function Prepare_Program_Ext
-   --       (Pos       : Unsigned_Byte_Ptr; Index : Positive;
-   --        C_Fun_Ptr : System.Address; Error_Abort : Boolean) return Natural is
-   --        use Command_And_Token_Functions;
-   --        use Flash;
-   --        Pos2      : Unsigned_Byte_Ptr := Pos;
-   --        Num_Funcs : Natural := 0;
-   --     begin
-   --        while Pos2.all /= 255 loop
-   --           Pos2 := Get_Next_Command (Pos2, Current_Line_Ptr, "");
-   --           if Pos2 > 0 then
-   --              if Element (In_Buffer, Pos2) = cmdSUB then
-   --                 null;
-   --              end if;
-   --           end if;
-   --           null;
-   --        end loop;
-   --
-   --        return Num_Funcs;
-   --
-   --     end Prepare_Program_Ext;
+   function Prepare_Program_Ext
+     (Pos       : in out Positive; Index : in out Positive;
+      C_Fun_Ptr : System.Address; Error_Abort : Boolean) return Natural is
+      use Ada.Assertions;
+      use Command_And_Token_Functions;
+      use Flash;
+      use M_Basic.String_Buffer_Package;
+      Routine_Name : constant String := "M_Basic.Prepare_Program_Ext ";
+      Num_Funcs : Natural := 0;
+   begin
+      while Element (Token_Buffer, Pos) /= "FF" loop
+         Pos := Get_Next_Command (Pos, Current_Line_Ptr, "");
+         if Pos > 0 then
+            if Element (Token_Buffer, Pos) = cmdSUB or else
+              Element (Token_Buffer, Pos) = cmdFUN or else
+              Element (Token_Buffer, Pos) = cmdCFUN or else
+            Element (Token_Buffer, Pos) = cmdCSUB then
+               Assert (Index <= Configuration.MAXSUBFUN, Routine_Name &
+                         "Too many subroutines and functions");
+               Subfunctions (Index) := Pos;
+               Index := Index + 1;
+               Pos := Pos + 1;
+               Skip_Spaces (Token_Buffer, Pos);
+
+            end if;
+         end if;
+         null;
+      end loop;
+
+      return Num_Funcs;
+
+   end Prepare_Program_Ext;
 
    procedure Prepare_Program (Error_Abort : Boolean) is
       use Ada.Assertions;
