@@ -17,8 +17,6 @@ package Command_And_Token_Tables is
    subtype Function_Type is Unsigned_2Byte;
    type Function_Type_Ptr is access Function_Type;
 
-   In_Buffer    : Unbounded_String;
-
    T_NOTYPE  : constant Function_Type := 0;
    T_NBR     : constant Function_Type := 1;
    T_STR     : constant Function_Type := 2;
@@ -315,13 +313,19 @@ package Command_And_Token_Tables is
                         (To_Unbounded_String (""), T_NA, 0, Null_Address));
 
    procedure Clear_Token_Buffer;
+   function Get_Input_Character (Pos : Positive) return Character;
+   function Get_Input_Slice (Pos1, Pos2 : Positive) return String;
    function Get_Token_Buffer_Item (Pos : Positive) return String;
    procedure Skip_Spaces (Buffer : String_Buffer; Pos : in out Positive);
+   function Input_Buffer_Length return Natural;
+   procedure Replace_In_Buffer_Character (Pos : Positive; aChar : Character);
+   procedure Skip_In_Buffer_Spaces (Pos : in out Positive);
    procedure Skip_Token_Buffer_Element (Pos : in out Positive);
    procedure Skip_Token_Buffer_Spaces (Pos : in out Positive);
    procedure Token_Buffer_Append (Item : String);
    function Token_Buffer_Length return Natural;
    function Token_Buffer_Not_Empty return Boolean;
    function Token_Type (Index : Integer) return Function_Type;
+   procedure Trim_Input_Buffer (Side : Ada.Strings.Trim_End);
 
 end Command_And_Token_Tables;

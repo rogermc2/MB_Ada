@@ -353,14 +353,14 @@ package body M_Basic is
    procedure Parse_Line (Pos : Positive) is
       use Ada.Characters.Handling;
       use Parse_Functions;
-      Buff_Length    : constant Positive := Length (In_Buffer);
+      Buff_Length    : constant Positive := Input_Buffer_Length;
       Ptr            : Positive := Pos;
       aChar          : Character;
       First_Nonwhite : Boolean := True;
       Label_Valid    : Boolean := True;
    begin
       while Ptr <= Buff_Length loop
-         aChar := Element (In_Buffer, Ptr);
+         aChar := Get_Input_Character (Ptr);
          if aChar = ' ' then
             Ptr := Ptr + 1;
          elsif aChar = '"' then
@@ -377,10 +377,10 @@ package body M_Basic is
             --  892 not First_Nonwhite
          elsif Try_Function_Or_Keyword (Ptr, First_Nonwhite) then
             null;
-         elsif Is_Name_Start (Element (In_Buffer, Ptr)) then
+         elsif Is_Name_Start (Get_Input_Character (Ptr)) then
             --  934
             Process_Variable_Name (Ptr, First_Nonwhite, Label_Valid);
-         elsif Element (In_Buffer, Ptr) = '(' then
+         elsif Get_Input_Character (Ptr) = '(' then
             --  953 special case where the character to copy is an
             --  opening parenthesis.
             --  Search back to see if the previous non space char was the end
@@ -475,18 +475,18 @@ package body M_Basic is
                Pos1 := Subfunctions (Index1);
                Current_Line_Ptr := Pos1;
                Pos1 := Pos1 + 1;
-               Skip_Spaces (In_Buffer, Pos1);
+               Skip_In_Buffer_Spaces (Pos1);
 
                Pos2 := Subfunctions (Index2);
                Pos2 := Pos2 + 1;
-               Skip_Spaces (In_Buffer, Pos2);
+               Skip_In_Buffer_Spaces (Pos2);
 
                while not Done loop
-                  Assert (Is_Name_Character (Element (In_Buffer, Pos1)) or else
-                          Is_Name_Character (Element (In_Buffer, Pos2)),
+                  Assert (Is_Name_Character (Get_Input_Character (Pos1)) or else
+                          Is_Name_Character (Get_Input_Character (Pos2)),
                           Routine_Name & "error duplicate name.");
-                  Done := To_Upper (Element (In_Buffer, Pos1)) /=
-                    To_Upper (Element (In_Buffer, Pos2));
+                  Done := To_Upper (Get_Input_Character (Pos1)) /=
+                    To_Upper (Get_Input_Character (Pos2));
                   if not Done then
                      Pos1 := Pos1 + 1;
                      Pos2 := Pos2 + 1;
@@ -528,62 +528,62 @@ package body M_Basic is
       In_Quote     : Boolean := False;
       Done         : Boolean;
    begin
-      if Element (In_Buffer, Pos) = ' ' then
+      if Get_Input_Character (Pos) = ' ' then
          Pos := Pos + 1;
       end if;
 
-      if Is_Name_Start (Element (In_Buffer, Pos)) then
-         while Is_Name_Character (Element (In_Buffer, Pos)) loop
+      if Is_Name_Start (Get_Input_Character (Pos)) then
+         while Is_Name_Character (Get_Input_Character (Pos)) loop
             Pos := Pos + 1;
          end loop;
 
          --  2429 check the terminating char.
-         if not (Element (In_Buffer, Pos) = '$') and then
-           not (Element (In_Buffer, Pos) = '%') and then
-           not (Element (In_Buffer, Pos) = '|') then
+         if not (Get_Input_Character (Pos) = '$') and then
+           not (Get_Input_Character ( Pos) = '%') and then
+           not (Get_Input_Character (Pos) = '|') then
             Pos := Pos - 1;
          end if;
 
          Assert (Pos2 - Pos < Configuration.MAXVARLEN,
                  Routine_Name & "Variable name " &
-                   Slice (In_Buffer, Pos, Pos2) & " is too long");
+                   Get_Input_Slice (Pos, Pos2) & " is too long");
 
          Pos3 := Pos;
-         if Element (In_Buffer, Pos3) = ' ' then
+         if Get_Input_Character (Pos3) = ' ' then
             Pos3 := Pos3 + 1;
          end if;
 
-         if Element (In_Buffer, Pos3) = '(' then
+         if Get_Input_Character (Pos3) = '(' then
             Pos := Pos3;
          end if;
 
-         if Element (In_Buffer, Pos) = '(' then
+         if Get_Input_Character (Pos) = '(' then
             --  2445 this is an array
             Pos := Pos + 1;
             Assert (Pos2 - Pos < Configuration.MAXVARLEN,
                     Routine_Name & "Variable name " &
-                      Slice (In_Buffer, Pos, Pos2) & " is too long");
+                      Get_Input_Slice (Pos, Pos2) & " is too long");
 
             --  2456 Step over the array parameters keeping track of
             --  nested brackets.
             Index := 1;
             Done := False;
             while not Done loop
-               if Element (In_Buffer, Pos) = '"' then
+               if Get_Input_Character (Pos) = '"' then
                   In_Quote := not In_Quote;
                end if;
 
-               if Pos = Length (In_Buffer) then
+               if Pos = Input_Buffer_Length then
 
-                  Assert (Pos >= Length (In_Buffer),
+                  Assert (Pos >= Input_Buffer_Length,
                           Routine_Name & "Expected closing bracket.");
 
                   Done := not In_Quote and then
-                    Element (In_Buffer, Pos) = ')' and then
+                    Get_Input_Character (Pos) = ')' and then
                     Index = 1;
 
                   if not Done and then
-                    (Element (In_Buffer, Pos) = '(' or else
+                    (Get_Input_Character (Pos) = '(' or else
                      Token_Type (Pos) = T_FUN) then
                      Index := Index + 1;
                   end if;
@@ -622,10 +622,10 @@ package body M_Basic is
       OK             : Boolean := True;
    begin
       --  make sure that only printable characters are in the line
-      for index in 1 .. Length (In_Buffer) loop
-         aChar := Element (In_Buffer, index);
+      for index in 1 .. Input_Buffer_Length loop
+         aChar := Get_Input_Character (index);
          if Character'Pos (aChar) < 32 or Character'Pos (aChar) > 127 then
-            Replace_Element (In_Buffer, index, ' ');
+            Replace_In_Buffer_Character (index, ' ');
          end if;
       end loop;
 

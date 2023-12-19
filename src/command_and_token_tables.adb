@@ -1,8 +1,11 @@
 
+with Ada.Strings;
+
 with M_Misc; use M_Misc;
 
 package body Command_And_Token_Tables is
 
+   In_Buffer    : Unbounded_String;
    Token_Buffer : String_Buffer;
 
    procedure Clear_Token_Buffer is
@@ -12,12 +15,44 @@ package body Command_And_Token_Tables is
 
    end Clear_Token_Buffer;
 
+   function Get_Input_Character (Pos : Positive) return Character is
+   begin
+      return Element (In_Buffer, Pos);
+
+   end Get_Input_Character;
+
+   function Get_Input_Slice (Pos1, Pos2 : Positive) return String is
+   begin
+      return Slice (In_Buffer, Pos1, Pos2);
+
+   end Get_Input_Slice;
+
    function Get_Token_Buffer_Item (Pos : Positive) return String is
       use String_Buffer_Package;
    begin
       return Element (Token_Buffer, Pos);
 
    end Get_Token_Buffer_Item;
+
+   function Input_Buffer_Length return Natural is
+      begin
+      return Length (In_Buffer);
+
+   end Input_Buffer_Length;
+
+   procedure Replace_In_Buffer_Character (Pos : Positive; aChar : Character) is
+   begin
+      Replace_Element (In_Buffer, Pos, aChar);
+
+   end Replace_In_Buffer_Character;
+
+   procedure Skip_In_Buffer_Spaces (Pos : in out Positive) is
+   begin
+      while  Element (In_Buffer, Pos) = ' ' loop
+         Pos := Pos + 1;
+      end loop;
+
+   end Skip_In_Buffer_Spaces;
 
    procedure Skip_Spaces (Buffer : String_Buffer; Pos : in out Positive) is
       use String_Buffer_Package;
@@ -78,5 +113,11 @@ package body Command_And_Token_Tables is
       return T_Type;
 
    end Token_Type;
+
+   procedure Trim_Input_Buffer (Side : Ada.Strings.Trim_End) is
+      begin
+      Trim (In_Buffer, Side);
+
+     end Trim_Input_Buffer;
 
 end  Command_And_Token_Tables;
