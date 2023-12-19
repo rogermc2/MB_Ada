@@ -15,14 +15,13 @@ package body Commands is
      (Pos                : Positive; Fun_Type : in out Unsigned_2Byte;
       Allow_Default_Type : Boolean) is
       use M_Basic;
-      use String_Buffer_Package;
       Routine_Name : constant String := "Commands.Check_Type_Specified ";
    begin
-      if Element (Token_Buffer, Pos) = "INTEGER" then
+      if Get_Token_Buffer_Item (Pos) = "INTEGER" then
          Fun_Type := T_INT or T_IMPLIED;
-      elsif Element (Token_Buffer, Pos) = "STRING" then
+      elsif Get_Token_Buffer_Item (Pos) = "STRING" then
          Fun_Type := T_STR or T_Implied;
-      elsif Element (Token_Buffer, Pos) = "FLOAT" then
+      elsif Get_Token_Buffer_Item (Pos) = "FLOAT" then
          Fun_Type := T_NBR or T_Implied;
       else
          Assert (Allow_Default_Type, Routine_Name & "variable type");
@@ -67,12 +66,11 @@ package body Commands is
       use Ada.Characters.Handling;
       use M_Misc;
       use Parse_Functions;
-      use String_Buffer_Package;
    begin
-      Append (Token_Buffer, Integer'Image (C_Base_Token + Match_Index));
+      Token_Buffer_Append (Integer'Image (C_Base_Token + Match_Index));
 
       if C_Base_Token + Match_Index = Get_Command_Value ("Rem") then
-         Append (Token_Buffer, Slice (In_Buffer, Pos, Length(In_Buffer)));
+         Token_Buffer_Append (Slice (In_Buffer, Pos, Length(In_Buffer)));
 
       elsif Is_Alphanumeric (Element (In_Buffer, Pos - 1)) and then
         Element (In_Buffer, Pos) = ' ' then

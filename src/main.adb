@@ -75,20 +75,20 @@ begin
    if Except_Cause /= Cause_MM_Startup then
       M_Basic.Clear_Program;
       M_Basic.Prepare_Program (True);
-      Token_Buffer := Empty_Vector;
-      Append (Token_Buffer, Startup_Token);
+      Clear_Token_Buffer;
+      Token_Buffer_Append (Startup_Token);
 
       if M_Basic.Find_Subfunction (Startup_Token, T_NOTYPE) /= 0 then
-         Append (Token_Buffer, Startup_Token);
-         Append (Token_Buffer, "/0");
-         M_Basic.Execute_Program (Token_Buffer);
+         Token_Buffer_Append (Startup_Token);
+         Token_Buffer_Append ("/0");
+         M_Basic.Execute_Program;
       end if;
    end if;
 
    --  Autorun code
 
    Except_Cause := Cause_Nothing;
-   Process_Commands (Token_Buffer);
+   Process_Commands;
 --     Put_Line (To_String (Tokens (1)));
 
 end Main;

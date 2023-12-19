@@ -22,7 +22,6 @@ package body M_Basic is
    --     Trace_On : Boolean := False;
 
    procedure Clear_Runtime;
-   procedure Skip_Element (Buffer : String_Buffer; Pos : in out Positive);
 
    procedure Clear_Program is
    begin
@@ -63,10 +62,10 @@ package body M_Basic is
       Found              : Boolean := False;
    begin
       Fun_Type := T_NOTYPE;
-      Skip_Spaces (Token_Buffer, Pos);
+      Skip_Token_Buffer_Spaces (Pos);
       Pos2 := Pos;
       Current_Line_Ptr := Sub_Line_Ptr;
-      Append (Fun_Name, Element (Token_Buffer, Pos));
+      Append (Fun_Name, Get_Token_Buffer_Item (Pos));
       Pos := Pos + 1;
       Name_Ptr := 1;
 
@@ -75,7 +74,7 @@ package body M_Basic is
         Get_Token_Buffer_Item (Pos) = "!" then
          Assert (Is_Fun, Routine_Name & "Type specification is invalid:");
 
-         Append (Fun_Name, Element (Token_Buffer, Pos));
+         Append (Fun_Name, Get_Token_Buffer_Item (Pos));
          Pos := Pos + 1;
          Name_Ptr := Name_Ptr + 1;
       end if;
@@ -111,7 +110,7 @@ package body M_Basic is
       Fun_Type := T_NOTYPE;
       if Is_Fun then
          Pos2 := Skip_Var (Pos2);
-         Skip_Spaces (Token_Buffer, Pos2);
+         Skip_Token_Buffer_Spaces (Pos2);
          if Get_Token_Buffer_Item (Pos2) = Integer'Image (tokenAS) then
             Pos2 := Pos2 + 1;
             Commands.Check_Type_Specified (Pos2, Fun_Type, True);
@@ -122,13 +121,13 @@ package body M_Basic is
 
       --  511 from now on Name_Ptr (tp) = the caller's argument list
       --                  Pos      (p)  = the argument list for the definition
-      Skip_Spaces (Token_Buffer, Pos);
+      Skip_Token_Buffer_Spaces (Pos);
       Skip_Spaces (Fun_Name, Name_Ptr);
 
       if Get_Token_Buffer_Item (Sub_Line_Ptr) = cmdCFUN then
          --  521
          --           Skip_Spaces (Token_Buffer, Pos);
-         if Element (Token_Buffer, Pos) = ")" then
+         if Get_Token_Buffer_Item (Pos) = ")" then
             Pos3 := Pos;
             Found := Get_Token_Buffer_Item (Pos3) /= ")" and then
               Get_Token_Buffer_Item (Pos3) /= "0";
@@ -140,7 +139,7 @@ package body M_Basic is
 
             Assert (Found, Routine_Name & "syntax error, ) or 0 expected.");
             Pos3 := Pos3 + 1;
-            Skip_Spaces (Token_Buffer, Pos3);
+            Skip_Token_Buffer_Spaces (Pos3);
             Commands.Check_Type_Specified (Pos3, Fun_Type, False);
             Fun_Type := Fun_Type and not T_IMPLIED;
          else
@@ -170,7 +169,6 @@ package body M_Basic is
 
    procedure Execute_Command (Token_Ptr : in out Positive) is
       use Ada.Assertions;
-      use String_Buffer_Package;
       Routine_Name       : constant String := "M_Basic.Execute_Command";
       Next_Statement_Ptr : Positive := Token_Ptr + 1;
       Command_Line_Ptr   : Positive := Token_Ptr + 1;
@@ -182,8 +180,8 @@ package body M_Basic is
       Done               : Boolean := False;
    begin
       --  228
-      Skip_Spaces (Token_Buffer, Command_Line_Ptr);
-      Skip_Element (Token_Buffer, Next_Statement_Ptr);
+      Skip_Token_Buffer_Spaces (Command_Line_Ptr);
+      Skip_Token_Buffer_Element (Next_Statement_Ptr);
 
       while not Done loop
          if Integer'Value (Get_Token_Buffer_Item (Token_Ptr)) /= 0 and then
@@ -192,10 +190,10 @@ package body M_Basic is
             --           if Set_Jump (Err_Next) = 0 then
             --              null;
             --           else  --  249 do non-local jump
-            Assert (Is_Name_Start (Element (Token_Buffer, Token_Ptr)(1)),
+            Assert (Is_Name_Start (Get_Token_Buffer_Item (Token_Ptr)(1)),
                     Routine_Name &"Invalid character ");
             Index :=
-              Find_Subfunction (Element (Token_Buffer, Token_Ptr), T_NA);
+              Find_Subfunction (Get_Token_Buffer_Item (Token_Ptr), T_NA);
             if Index > 0 then
                Defined_Subfunction (False, Token_Ptr, Index,
                                     Fa, I64a, Sa, Null_Function);
@@ -220,53 +218,52 @@ package body M_Basic is
             Token_Ptr := Next_Statement_Ptr;
          end if;
 
-         Done := Element (Token_Buffer, 1) = "00" or else
-           Element (Token_Buffer, 1) = "FF";
+         Done := Get_Token_Buffer_Item (1) = "00" or else
+           Get_Token_Buffer_Item (1) = "FF";
 
       end loop;
 
    end Execute_Command;
 
-   procedure Execute_Program (Tokens : String_Buffer) is
+   procedure Execute_Program is
       use Global;
-      use String_Buffer_Package;
       Token_Ptr : Positive := 1;
       Done      : Boolean := False;
    begin
       Put_Line ("M_Basic.Execute_Program ");
       --  194
-      Skip_Spaces (Tokens, Token_Ptr);
+      Skip_Token_Buffer_Spaces (Token_Ptr);
 
-      if not Is_Empty (Tokens) then
-         while not Done and then Token_Ptr <= Positive (Length (Tokens)) loop
-            if Element (Tokens, Token_Ptr) = "0" then
+      if Token_Buffer_Not_Empty then
+         while not Done and then Token_Ptr <= Positive (Token_Buffer_Length) loop
+            if Get_Token_Buffer_Item (Token_Ptr) = "0" then
                token_Ptr := Token_Ptr + 1;
             end if;
 
             --  199
-            if Element (Tokens, Token_Ptr) = T_NEWLINE then
+            if Get_Token_Buffer_Item (Token_Ptr) = T_NEWLINE then
                Current_Line_Ptr := Token_Ptr;
                Token_Ptr := Token_Ptr + 1;
             end if;
 
             --  217
-            if Element (Tokens, Token_Ptr) = T_LINENBR then
+            if Get_Token_Buffer_Item (Token_Ptr) = T_LINENBR then
                Token_Ptr := Token_Ptr + 3;
             end if;
-            Skip_Spaces (Tokens, Token_Ptr);
+            Skip_Token_Buffer_Spaces (Token_Ptr);
 
-            if Element (Tokens, 1) = T_LABEL then
+            if Get_Token_Buffer_Item (1) = T_LABEL then
                --  skip over the label
-               Token_Ptr := Integer'Value (Element (Tokens, 2)) + 2;
-               Skip_Spaces (Tokens, Token_Ptr);
+               Token_Ptr := Integer'Value (Get_Token_Buffer_Item (2)) + 2;
+               Skip_Token_Buffer_Spaces (Token_Ptr);
             end if;
 
-            if Integer'Value (Element (Tokens, 1)) /= 0 then
+            if Integer'Value (Get_Token_Buffer_Item (1)) /= 0 then
                Execute_Command (Token_Ptr);
             end if;
 
-            Done := Element (Tokens, 1) /= "00" and
-              Element (Tokens, 1) /= "FF";
+            Done := Get_Token_Buffer_Item (1) /= "00" and
+              Get_Token_Buffer_Item (1) /= "FF";
             Token_Ptr := Token_Ptr + 1;
          end loop;
       end if;
@@ -410,7 +407,6 @@ package body M_Basic is
       use Ada.Assertions;
       use Command_And_Token_Functions;
       use Flash;
-      use String_Buffer_Package;
       Routine_Name : constant String := "M_Basic.Prepare_Program_Ext ";
       Num_Funcs : Natural := 0;
    begin
@@ -426,7 +422,7 @@ package body M_Basic is
                Subfunctions (Index) := Pos;
                Index := Index + 1;
                Pos := Pos + 1;
-               Skip_Spaces (Token_Buffer, Pos);
+               Skip_Token_Buffer_Spaces (Pos);
 
             end if;
          end if;
@@ -505,27 +501,18 @@ package body M_Basic is
    end Prepare_Program;
 
    --  Skip_Element skips to the the zero char that preceeds an element
-   procedure Skip_Element (Buffer : String_Buffer; Pos : in out Positive) is
-      use String_Buffer_Package;
-   begin
-      while  Integer'Value (Element (Buffer, Pos)) /= 0 loop
-         Pos := Pos + 1;
-      end loop;
-
-   end Skip_Element;
+--     procedure Skip_Element (Buffer : String_Buffer; Pos : in out Positive) is
+--        use String_Buffer_Package;
+--     begin
+--        while  Integer'Value (Element (Buffer, Pos)) /= 0 loop
+--           Pos := Pos + 1;
+--        end loop;
+--
+--     end Skip_Element;
 
    procedure Skip_Spaces (Buffer : Unbounded_String; Pos : in out Positive) is
    begin
       while  Element (Buffer, Pos) = ' ' loop
-         Pos := Pos + 1;
-      end loop;
-
-   end Skip_Spaces;
-
-   procedure Skip_Spaces (Buffer : String_Buffer; Pos : in out Positive) is
-      use String_Buffer_Package;
-   begin
-      while  Element (Buffer, Pos)(1) = ' ' loop
          Pos := Pos + 1;
       end loop;
 
@@ -629,7 +616,6 @@ package body M_Basic is
       use Interfaces;
       use Ada.Characters.Handling;
       use Ada.Strings;
-      use String_Buffer_Package;
       aChar          : Character;
       In_Ptr         : Positive := 1;
       Line_Num       : Unsigned_64;
@@ -643,9 +629,9 @@ package body M_Basic is
          end if;
       end loop;
 
-      Token_Buffer := Empty_Vector;
+      Clear_Token_Buffer;
       if not From_Console then
-         Append (Token_Buffer, Global.T_NEWLINE);
+         Token_Buffer_Append (Global.T_NEWLINE);
       end if;
       Trim (In_Buffer, Left);
 
@@ -660,11 +646,9 @@ package body M_Basic is
          Line_Num := Unsigned_64'Value (Slice (In_Buffer, 1, In_Ptr - 1));
          if not From_Console and Line_Num > 1 and
            Line_Num <= Unsigned_64 (MAXLINENBR) then
-            Append (Token_Buffer, Global.T_LINENBR);
-            Append (Token_Buffer, (Unsigned_64'Image
-                    (Shift_Right (Line_Num, 8))));
-            Append (Token_Buffer, (Unsigned_64'Image
-                    (Line_Num and 16#FF#)));
+            Token_Buffer_Append (Global.T_LINENBR);
+            Token_Buffer_Append (Unsigned_64'Image (Shift_Right (Line_Num, 8)));
+            Token_Buffer_Append (Unsigned_64'Image (Line_Num and 16#FF#));
          end if;
       end if;
 

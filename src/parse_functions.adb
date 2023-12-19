@@ -67,12 +67,11 @@ package body Parse_Functions is
 
    procedure Process_Colon (I_Pos            : in out Positive;
                             First_Nonwhite   : in out Boolean) is
-      use String_Buffer_Package;
    begin
-      Append (Token_Buffer, "0");
+      Token_Buffer_Append ("0");
       I_Pos := I_Pos + 1;
       while Element (In_Buffer, I_Pos) = ':' loop
-         Append (Token_Buffer, "0");
+         Token_Buffer_Append ("0");
          I_Pos := I_Pos + 1;
       end loop;
 
@@ -85,13 +84,12 @@ package body Parse_Functions is
       Match_I_Pos    : Positive; Match_Index : Integer;
       First_Nonwhite : in out Boolean; Label_Valid : in out Boolean) is
       use Ada.Characters.Handling;
-      use String_Buffer_Package;
       use Support;
    begin
       --  879
       if Match_Index > -1 then
-         Append (Token_Buffer,
-                 Integer'Image (M_Misc.C_Base_Token + Match_Index));
+         Token_Buffer_Append (Integer'Image
+                              (M_Misc.C_Base_Token + Match_Index));
          --  Step over the input buffer command.
          I_Pos := Match_I_Pos;
          if Match_Index + M_Misc.C_Base_Token =
@@ -110,14 +108,14 @@ package body Parse_Functions is
 
    end Process_Command;
 
-   procedure Process_Double_Quote (I_Pos : in out Positive; aChar : Character) is
-      use String_Buffer_Package;
+   procedure Process_Double_Quote (I_Pos : in out Positive;
+                                   aChar : Character) is
    begin
       while aChar /= '"' and I_Pos <= Length (In_Buffer) loop
          I_Pos := I_Pos + 1;
       end loop;
 
-      Append (Token_Buffer, """");
+      Token_Buffer_Append ("""");
       I_Pos := I_Pos + 1;
       if  Element (In_Buffer, I_Pos) = '"' then
          I_Pos := I_Pos + 1;

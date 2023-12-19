@@ -1,6 +1,4 @@
 
-with Command_And_Token_Tables; use Command_And_Token_Tables;
-
 package Support is
 
    type Setup_Exception is (Cause_Nothing, Cause_Display, Cause_File_IO,
@@ -11,7 +9,7 @@ package Support is
 
    procedure Copy_Slice (Pos1 : in out Positive; Pos2 : Positive);
    procedure Do_PIN;
-   procedure Process_Commands (Tokens : in out String_Buffer);
+   procedure Process_Commands;
    procedure Restart;
 
 end Support;

@@ -18,7 +18,6 @@ package Command_And_Token_Tables is
    type Function_Type_Ptr is access Function_Type;
 
    In_Buffer    : Unbounded_String;
-   Token_Buffer : String_Buffer;
 
    T_NOTYPE  : constant Function_Type := 0;
    T_NBR     : constant Function_Type := 1;
@@ -315,8 +314,14 @@ package Command_And_Token_Tables is
                         (To_Unbounded_String ("op_shiftright"), T_NA, 0, Null_Address),
                         (To_Unbounded_String (""), T_NA, 0, Null_Address));
 
+   procedure Clear_Token_Buffer;
    function Get_Token_Buffer_Item (Pos : Positive) return String;
+   procedure Skip_Spaces (Buffer : String_Buffer; Pos : in out Positive);
+   procedure Skip_Token_Buffer_Element (Pos : in out Positive);
+   procedure Skip_Token_Buffer_Spaces (Pos : in out Positive);
    procedure Token_Buffer_Append (Item : String);
+   function Token_Buffer_Length return Natural;
+   function Token_Buffer_Not_Empty return Boolean;
    function Token_Type (Index : Integer) return Function_Type;
 
 end Command_And_Token_Tables;

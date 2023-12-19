@@ -3,6 +3,7 @@ with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Ada.Text_IO; use Ada.Text_IO;
 
 with Audio;
+with Command_And_Token_Tables; use Command_And_Token_Tables;
 with Configuration;
 with Draw;
 with Exceptions;
@@ -16,9 +17,8 @@ with Serial_File_IO;
 package body Support is
 
    procedure Copy_Slice (Pos1 : in out Positive; Pos2 : Positive) is
-      use String_Buffer_Package;
    begin
-      Append (Token_Buffer, Slice (In_Buffer, Pos1, Pos2));
+      Token_Buffer_Append (Slice (In_Buffer, Pos1, Pos2));
       while Pos1 <= Pos2 loop
          Pos1 := Pos1 + 1;
       end loop;
@@ -30,8 +30,7 @@ begin
    null;
 end Do_PIN;
 
-procedure Process_Commands (Tokens : in out String_Buffer) is
-   use String_Buffer_Package;
+procedure Process_Commands is
 begin
    loop
       if Flash.Option.DISPLAY_CONSOLE then
@@ -75,9 +74,9 @@ begin
       if not Global.Error_In_Prompt and M_Basic.Find_Subfunction
         ("MM.PROMPT", T_NOTYPE) /= 0 then
          Global.Error_In_Prompt := True;
-         Token_Buffer := Empty_Vector;
-         Append (Token_Buffer, "MM.PROMPT\0");
-         M_Basic.Execute_Program (Tokens);
+         Clear_Token_Buffer;
+         Token_Buffer_Append ("MM.PROMPT\0");
+         M_Basic.Execute_Program;
       else
          M_Basic.Print_String ("> ");
       end if;
@@ -87,7 +86,7 @@ begin
       if Length (In_Buffer) > 0 then
          Put_Line ("Process_Commands  ");
          M_Basic.Tokenize (True);
-         M_Basic.Execute_Program (Tokens);
+         M_Basic.Execute_Program;
       end if;
 
    end loop;

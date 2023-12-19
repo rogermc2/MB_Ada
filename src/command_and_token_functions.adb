@@ -265,42 +265,41 @@ package body Command_And_Token_Functions is
                               EOF_Message       : String) return Positive is
       use Global;
       use M_Basic;
-      use String_Buffer_Package;
       use M_Misc;
       OK : Boolean := True;
    begin
       while OK and then Pos <= C_Base_Token loop
          --  look for the zero marking the start of an element
-         if Element (Token_Buffer, Pos) /= T_NEWLINE then
-            while Element (Token_Buffer, Pos) /= "0" loop
+         if Get_Token_Buffer_Item (Pos) /= T_NEWLINE then
+            while Get_Token_Buffer_Item (Pos) /= "0" loop
                Pos := Pos + 1;
             end loop;
             Pos := Pos + 1;
          end if;
 
-         OK := Element (Token_Buffer, Pos) = "0";
+         OK :=  Get_Token_Buffer_Item (Pos) = "0";
          if not OK then
             if EOF_Message'Length /= 0 then
                null;
             end if;
 
          else
-            if Element (Token_Buffer, Pos) = T_NEWLINE then
+            if Get_Token_Buffer_Item (Pos) = T_NEWLINE then
                if Current_Line > 0 then
                   Current_Line := Pos;
                end if;
                Pos := Pos + 1;
             end if;
 
-            if Element (Token_Buffer, Pos) = T_LINENBR then
+            if Get_Token_Buffer_Item (Pos) = T_LINENBR then
                Pos := Pos + 3;
             end if;
 
             Skip_Spaces (In_Buffer, Pos);
 
-            if Element (Token_Buffer, 1) = T_LABEL then
+            if Get_Token_Buffer_Item (1) = T_LABEL then
                --  skip over the label
-               Pos := Pos + Integer'Value (Element (Token_Buffer, 2)) + 2;
+               Pos := Pos + Integer'Value (Get_Token_Buffer_Item (2)) + 2;
                Skip_Spaces (In_Buffer, Pos);
             end if;
          end if;
