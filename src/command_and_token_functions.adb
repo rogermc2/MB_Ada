@@ -265,7 +265,7 @@ package body Command_And_Token_Functions is
                               EOF_Message       : String) return Positive is
       use Global;
       use M_Basic;
-      use M_Basic.String_Buffer_Package;
+      use String_Buffer_Package;
       use M_Misc;
       OK : Boolean := True;
    begin

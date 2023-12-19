@@ -49,7 +49,7 @@ package body M_Basic is
       use C_Functions;
       use Command_And_Token_Functions;
       use Global;
-      use M_Basic.String_Buffer_Package;
+      use String_Buffer_Package;
       Routine_Name       : constant String := "M_Basic.Defined_Subfunction";
       --        Command            : constant String := Element (Token_Buffer, Command_Ptr);
       Callers_Line_Ptr   : constant Positive := Current_Line_Ptr;
@@ -82,9 +82,9 @@ package body M_Basic is
       end if;
 
       Name_Ptr := 1;
-      Assert (Is_Fun and then Element (Token_Buffer, Pos) = "(" and then
-              Subfunctions (Sub_Line_Ptr) = cmdCFUN,
-              Routine_Name & "Function definition");
+--        Assert (Is_Fun and then Element (Token_Buffer, Pos) = "(" and then
+--                Subfunctions (Sub_Line_Ptr) = cmdCFUN,
+--                Routine_Name & "Function definition");
 
       --  479 Find the end of the caller's identifier, Name_Ptr is left pointing to
       --  the start of the caller's argument list
@@ -171,7 +171,7 @@ package body M_Basic is
 
    procedure Execute_Command (Token_Ptr : in out Positive) is
       use Ada.Assertions;
-      use M_Basic.String_Buffer_Package;
+      use String_Buffer_Package;
       Routine_Name       : constant String := "M_Basic.Execute_Command";
       Next_Statement_Ptr : Positive := Token_Ptr + 1;
       Command_Line_Ptr   : Positive := Token_Ptr + 1;
@@ -289,15 +289,15 @@ package body M_Basic is
          Index := Index + 1;
          --           Put_Line (Routine_Name & "Index "& Integer'Image (Index));
          Pos2 := Subfunctions (index);
-         if Fun_Type = T_NA and then
-           (Pos2 = cmdSUB or Pos2 = cmdCSUB) then
-            null;
-         elsif (Pos2 = cmdFUN or Pos2 = cmdCFUN) then
-            null;
-         else
+--           if Fun_Type = T_NA and then
+--             (Pos2 = cmdSUB or Pos2 = cmdCSUB) then
+--              null;
+--           elsif (Pos2 = cmdFUN or Pos2 = cmdCFUN) then
+--              null;
+--           else
             --  412
-            Pos2 := Pos2 + 1;
-            Skip_Spaces (In_Buffer, Pos2);
+--              Pos2 := Pos2 + 1;
+--              Skip_Spaces (In_Buffer, Pos2);
 --              if To_Upper (Token) =
 --                To_Upper (Element (Subfunctions (index), Pos2)) then
 --                 Pos1 := 2;
@@ -308,7 +308,7 @@ package body M_Basic is
 --                    Pos2 := Pos2 + 1;
 --                 end loop;
 --              end if;
-         end if;
+--           end if;
          --           Done := Subfunctions (Index) = Sub_Address;
       end loop;
 
@@ -412,7 +412,7 @@ package body M_Basic is
       use Ada.Assertions;
       use Command_And_Token_Functions;
       use Flash;
-      use M_Basic.String_Buffer_Package;
+      use String_Buffer_Package;
       Routine_Name : constant String := "M_Basic.Prepare_Program_Ext ";
       Num_Funcs : Natural := 0;
    begin
@@ -508,7 +508,7 @@ package body M_Basic is
 
    --  Skip_Element skips to the the zero char that preceeds an element
    procedure Skip_Element (Buffer : String_Buffer; Pos : in out Positive) is
-      use M_Basic.String_Buffer_Package;
+      use String_Buffer_Package;
    begin
       while  Integer'Value (Element (Buffer, Pos)) /= 0 loop
          Pos := Pos + 1;
@@ -525,7 +525,7 @@ package body M_Basic is
    end Skip_Spaces;
 
    procedure Skip_Spaces (Buffer : String_Buffer; Pos : in out Positive) is
-      use M_Basic.String_Buffer_Package;
+      use String_Buffer_Package;
    begin
       while  Element (Buffer, Pos)(1) = ' ' loop
          Pos := Pos + 1;
@@ -631,7 +631,7 @@ package body M_Basic is
       use Interfaces;
       use Ada.Characters.Handling;
       use Ada.Strings;
-      use M_Basic.String_Buffer_Package;
+      use String_Buffer_Package;
       aChar          : Character;
       In_Ptr         : Positive := 1;
       Line_Num       : Unsigned_64;

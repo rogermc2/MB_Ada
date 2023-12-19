@@ -15,7 +15,7 @@ package body Commands is
      (Pos                : Positive; Fun_Type : in out Unsigned_2Byte;
       Allow_Default_Type : Boolean) is
       use M_Basic;
-      use M_Basic.String_Buffer_Package;
+      use String_Buffer_Package;
       Routine_Name : constant String := "Commands.Check_Type_Specified ";
    begin
       if Element (Token_Buffer, Pos) = "INTEGER" then
@@ -65,10 +65,9 @@ package body Commands is
      (Match_Index                 : Positive; Pos : in out Positive;
       First_Nonwhite, Label_Valid : in out Boolean) is
       use Ada.Characters.Handling;
-      use M_Basic;
       use M_Misc;
       use Parse_Functions;
-      use M_Basic.String_Buffer_Package;
+      use String_Buffer_Package;
    begin
       Append (Token_Buffer, Integer'Image (C_Base_Token + Match_Index));
 

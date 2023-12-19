@@ -1,5 +1,5 @@
 
-with M_Basic;
+with Command_And_Token_Tables; use Command_And_Token_Tables;
 
 package Support is
 
@@ -11,7 +11,7 @@ package Support is
 
    procedure Copy_Slice (Pos1 : in out Positive; Pos2 : Positive);
    procedure Do_PIN;
-   procedure Process_Commands (Tokens : in out M_Basic.String_Buffer);
+   procedure Process_Commands (Tokens : in out String_Buffer);
    procedure Restart;
 
 end Support;

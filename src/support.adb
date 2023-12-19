@@ -3,12 +3,12 @@ with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Ada.Text_IO; use Ada.Text_IO;
 
 with Audio;
-with Command_And_Token_Tables;
 with Configuration;
 with Draw;
 with Exceptions;
 with Flash;
 with Global;
+with M_Basic;
 with M_Misc;
 with Memory;
 with Serial_File_IO;
@@ -16,8 +16,7 @@ with Serial_File_IO;
 package body Support is
 
    procedure Copy_Slice (Pos1 : in out Positive; Pos2 : Positive) is
-      use M_Basic;
-      use M_Basic.String_Buffer_Package;
+      use String_Buffer_Package;
    begin
       Append (Token_Buffer, Slice (In_Buffer, Pos1, Pos2));
       while Pos1 <= Pos2 loop
@@ -31,10 +30,8 @@ begin
    null;
 end Do_PIN;
 
-procedure Process_Commands (Tokens : in out M_Basic.String_Buffer) is
-      use M_Basic;
-      use Command_And_Token_Tables;
-   use M_Basic.String_Buffer_Package;
+procedure Process_Commands (Tokens : in out String_Buffer) is
+   use String_Buffer_Package;
 begin
    loop
       if Flash.Option.DISPLAY_CONSOLE then
@@ -73,7 +70,7 @@ begin
 
       --  300
       Global.Except_Code := Exceptions.EXCEP_IRQ;
-      Prepare_Program (False);
+      M_Basic.Prepare_Program (False);
 
       if not Global.Error_In_Prompt and M_Basic.Find_Subfunction
         ("MM.PROMPT", T_NOTYPE) /= 0 then

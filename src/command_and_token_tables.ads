@@ -1,21 +1,24 @@
 
 with System; use System;
 
+with Ada.Containers.Indefinite_Vectors;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 
 package Command_And_Token_Tables is
+
+   package String_Buffer_Package is
+     new Ada.Containers.Indefinite_Vectors (Positive, String);
+   subtype String_Buffer is String_Buffer_Package.Vector;
 
    type Unsigned_Byte is mod 256;
    type Unsigned_2Byte is mod 65536;
    type Unsigned_Byte_Ptr is access Unsigned_Byte;
 
    subtype Function_Type is Unsigned_2Byte;
-   --     type Function_Type is (T_NOTYPE, T_NBR, T_STR, T_INT, T_PTR, T_CMD,
-   --                            T_NBRorImplied, T_STRorImplied, T_INTorImplied,
-   --                            T_CONST, T_FUN, T_FUNorNBR, T_FUNorSTR, T_FUNorINT,
-   --                            T_FUNorNBRorINT, T_FUNorNBRorINTorSTR, T_FNA,
-   --                            T_FNAorNBR, T_FNAorSTR, T_FNAorINT);
    type Function_Type_Ptr is access Function_Type;
+
+   In_Buffer    : Unbounded_String;
+   Token_Buffer : String_Buffer;
 
    T_NOTYPE  : constant Function_Type := 0;
    T_NBR     : constant Function_Type := 1;

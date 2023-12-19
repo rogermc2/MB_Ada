@@ -3,7 +3,7 @@ with Ada.Characters.Handling;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Ada.Text_IO; use Ada.Text_IO;
 
-with Command_And_Token_Tables;
+with Command_And_Token_Tables; use Command_And_Token_Tables;
 with Command_And_Token_Functions;
 with Commands;
 with Configuration;
@@ -45,7 +45,6 @@ package body Parse_Functions is
    end Get_Command_From_Input;
 
    function Get_Command_Value (Command : String) return integer is
-      use Command_And_Token_Tables;
       Routine_Name  : constant String := "Parse_Functions.Get_Command_Value ";
       Command_Value : Integer := 0;
       Found         : Boolean := False;
@@ -68,7 +67,7 @@ package body Parse_Functions is
 
    procedure Process_Colon (I_Pos            : in out Positive;
                             First_Nonwhite   : in out Boolean) is
-      use M_Basic.String_Buffer_Package;
+      use String_Buffer_Package;
    begin
       Append (Token_Buffer, "0");
       I_Pos := I_Pos + 1;
@@ -86,7 +85,7 @@ package body Parse_Functions is
       Match_I_Pos    : Positive; Match_Index : Integer;
       First_Nonwhite : in out Boolean; Label_Valid : in out Boolean) is
       use Ada.Characters.Handling;
-      use M_Basic.String_Buffer_Package;
+      use String_Buffer_Package;
       use Support;
    begin
       --  879
@@ -112,7 +111,7 @@ package body Parse_Functions is
    end Process_Command;
 
    procedure Process_Double_Quote (I_Pos : in out Positive; aChar : Character) is
-      use M_Basic.String_Buffer_Package;
+      use String_Buffer_Package;
    begin
       while aChar /= '"' and I_Pos <= Length (In_Buffer) loop
          I_Pos := I_Pos + 1;
@@ -134,7 +133,7 @@ package body Parse_Functions is
 
    procedure Process_First_Nonwhite
      (I_Pos : in out Positive; Label_Valid, First_Nonwhite : in out Boolean) is
-      use M_Basic.String_Buffer_Package;
+      use String_Buffer_Package;
       aChar       : constant Character := Element (In_Buffer, I_Pos);
       Match_Index : Natural := 0;
       Match_I_Pos : Positive;
@@ -212,8 +211,7 @@ package body Parse_Functions is
      (I_Pos                         : in out Positive;
       Label_Valid, First_Nonwhite   : in out Boolean) is
       use Ada.Characters.Handling;
-      use Command_And_Token_Tables;
-      use M_Basic.String_Buffer_Package;
+      use String_Buffer_Package;
       I_Pos2         : Positive;         --  tp2 an input character indeex
       Command        : Unbounded_String;
       In_Command     : Unbounded_String;
@@ -298,9 +296,8 @@ package body Parse_Functions is
      (I_Pos : in out Positive; First_Nonwhite : in out Boolean)
       return Boolean is
       use Ada.Characters.Handling;
-      use Command_And_Token_Tables;
       use Command_And_Token_Functions;
-      use M_Basic.String_Buffer_Package;
+      use String_Buffer_Package;
       Index  : Natural := 0;
       I_Char : Character;
       I_Pos2 : Positive;
@@ -349,7 +346,7 @@ package body Parse_Functions is
    procedure Process_Variable_Name
      (Pos                         : in out Positive;
       First_Nonwhite, Label_Valid : in out Boolean) is
-      use M_Basic.String_Buffer_Package;
+      use String_Buffer_Package;
       Pos2  : Positive;
       Name  : Unbounded_String;
    begin

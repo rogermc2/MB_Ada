@@ -7,7 +7,7 @@ with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Ada.Text_IO; use Ada.Text_IO;
 
 with Audio;
-with Command_And_Token_Tables;
+with Command_And_Token_Tables; use Command_And_Token_Tables;
 with Configuration;
 with Draw;
 with Editor;
@@ -29,10 +29,8 @@ with Watchdog_Timer;
 
 procedure Main is
    use System;
-   use Command_And_Token_Tables;
-   use M_Basic.String_Buffer_Package;
+   use String_Buffer_Package;
    Startup_Token   : constant String := "MM.Startup";
---     Tokens          : M_Basic.UB_String_Buffer;
    Saved_Cause     : Setup_Exception := Cause_Nothing;
    Watchdog_Set    : Boolean := False;
    Basic_Running   : Boolean := True;
@@ -77,20 +75,20 @@ begin
    if Except_Cause /= Cause_MM_Startup then
       M_Basic.Clear_Program;
       M_Basic.Prepare_Program (True);
-      M_Basic.Token_Buffer := Empty_Vector;
-      Append (M_Basic.Token_Buffer, Startup_Token);
+      Token_Buffer := Empty_Vector;
+      Append (Token_Buffer, Startup_Token);
 
       if M_Basic.Find_Subfunction (Startup_Token, T_NOTYPE) /= 0 then
-         Append (M_Basic.Token_Buffer, Startup_Token);
-         Append (M_Basic.Token_Buffer, "/0");
-         M_Basic.Execute_Program (M_Basic.Token_Buffer);
+         Append (Token_Buffer, Startup_Token);
+         Append (Token_Buffer, "/0");
+         M_Basic.Execute_Program (Token_Buffer);
       end if;
    end if;
 
    --  Autorun code
 
    Except_Cause := Cause_Nothing;
-   Process_Commands (M_Basic.Token_Buffer);
+   Process_Commands (Token_Buffer);
 --     Put_Line (To_String (Tokens (1)));
 
 end Main;
