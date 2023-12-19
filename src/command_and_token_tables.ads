@@ -315,6 +315,8 @@ package Command_And_Token_Tables is
                         (To_Unbounded_String ("op_shiftright"), T_NA, 0, Null_Address),
                         (To_Unbounded_String (""), T_NA, 0, Null_Address));
 
+   function Get_Token_Buffer_Item (Pos : Positive) return String;
+   procedure Token_Buffer_Append (Item : String);
    function Token_Type (Index : Integer) return Function_Type;
 
 end Command_And_Token_Tables;

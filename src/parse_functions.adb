@@ -133,7 +133,6 @@ package body Parse_Functions is
 
    procedure Process_First_Nonwhite
      (I_Pos : in out Positive; Label_Valid, First_Nonwhite : in out Boolean) is
-      use String_Buffer_Package;
       aChar       : constant Character := Element (In_Buffer, I_Pos);
       Match_Index : Natural := 0;
       Match_I_Pos : Positive;
@@ -177,17 +176,18 @@ package body Parse_Functions is
          if Element (In_Buffer, Pos2) = ':' then
             --  is label
             Label_Valid := False;
-            Append (Token_Buffer, Global.T_LABEL);
+            Token_Buffer_Append (Global.T_LABEL);
 
             --  insert the length of the label
-            Append (Token_Buffer, Integer'Image (Pos2 - I_Pos));
+            Token_Buffer_Append (Integer'Image (Pos2 - I_Pos));
 
             --  copy the label
             for pos3 in reverse 1 .. Pos2 - I_Pos loop
                Append (Label, Element (In_Buffer, I_Pos));
                I_Pos := I_Pos + 1;
             end loop;
-            Append (Token_Buffer, To_String (Label));
+
+            Token_Buffer_Append (To_String (Label));
             --  step over the terminating colon
             I_Pos := I_Pos + 1;
          end if;
@@ -211,7 +211,6 @@ package body Parse_Functions is
      (I_Pos                         : in out Positive;
       Label_Valid, First_Nonwhite   : in out Boolean) is
       use Ada.Characters.Handling;
-      use String_Buffer_Package;
       I_Pos2         : Positive;         --  tp2 an input character indeex
       Command        : Unbounded_String;
       In_Command     : Unbounded_String;
@@ -231,6 +230,7 @@ package body Parse_Functions is
          CT_Index := CT_Index +1;
          I_Pos2 := I_Pos + 1;  -- I_Pos2 (tp2) is I_Position of next input character
          Command := Command_Table (CT_Index).Name;
+
          while I_Pos2 < Length (In_Buffer) and then
            To_Upper (To_String (In_Command)) =
              To_Upper (To_String (Command)) loop
@@ -281,9 +281,9 @@ package body Parse_Functions is
 
          if OK and then Element (In_Buffer, I_Pos2) = ':' then
             Label_Valid := False;
-            Append (Token_Buffer, Global.T_LABEL);
-            Append (Token_Buffer, Integer'Image (I_Pos2 - I_Pos));
-            Append (Token_Buffer, Slice (In_Buffer, I_Pos, I_Pos2 - 1));
+            Token_Buffer_Append (Global.T_LABEL);
+            Token_Buffer_Append (Integer'Image (I_Pos2 - I_Pos));
+            Token_Buffer_Append (Slice (In_Buffer, I_Pos, I_Pos2 - 1));
          end if;
 
          I_Pos := I_Pos + 1;
@@ -297,7 +297,6 @@ package body Parse_Functions is
       return Boolean is
       use Ada.Characters.Handling;
       use Command_And_Token_Functions;
-      use String_Buffer_Package;
       Index  : Natural := 0;
       I_Char : Character;
       I_Pos2 : Positive;
@@ -331,7 +330,7 @@ package body Parse_Functions is
          Found := Index /= Token_Table'Last;
          if Found then
             Index := Index + M_Misc.C_Base_Token;
-            Append (Token_Buffer, To_String (Token_Table (Index).Name));
+            Token_Buffer_Append (To_String (Token_Table (Index).Name));
             I_Pos := I_Pos2;
          end if;
 
@@ -346,7 +345,6 @@ package body Parse_Functions is
    procedure Process_Variable_Name
      (Pos                         : in out Positive;
       First_Nonwhite, Label_Valid : in out Boolean) is
-      use String_Buffer_Package;
       Pos2  : Positive;
       Name  : Unbounded_String;
    begin
@@ -356,7 +354,7 @@ package body Parse_Functions is
          Pos2 := Skip_Var (Pos);
          if Element (In_Buffer, Pos2) = '=' then
             --  an implied let
-            Append (Token_Buffer, Integer'Image (Get_Command_Value ("Let")));
+            Token_Buffer_Append (Integer'Image (Get_Command_Value ("Let")));
          end if;
       else
          --  942 copy the variable name
@@ -364,7 +362,7 @@ package body Parse_Functions is
             Name := Name & Element (In_Buffer, Pos);
             Pos := Pos + 1;
          end loop;
-         Append (Token_Buffer, To_String (Name));
+         Token_Buffer_Append (To_String (Name));
 
          First_Nonwhite := False;
          Label_Valid:= False;

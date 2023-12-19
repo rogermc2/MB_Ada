@@ -43,7 +43,6 @@ package body M_Basic is
      (Is_Fun : Boolean; Command_Ptr : Positive; Index  : Positive;
       Fa     : in out Configuration.MMFLOAT; I64a : in out Long_Long_Integer;
       Sa     : in out Unbounded_String; Fun_Type : in out Function_Type) is
-      --        use System;
       use Ada.Characters.Handling;
       use Ada.Assertions;
       use C_Functions;
@@ -71,9 +70,9 @@ package body M_Basic is
       Pos := Pos + 1;
       Name_Ptr := 1;
 
-      if Element (Token_Buffer, Pos) = "$" or else
-        Element (Token_Buffer, Pos) = "%" or else
-        Element (Token_Buffer, Pos) = "!" then
+      if Get_Token_Buffer_Item (Pos) = "$" or else
+        Get_Token_Buffer_Item (Pos) = "%" or else
+        Get_Token_Buffer_Item (Pos) = "!" then
          Assert (Is_Fun, Routine_Name & "Type specification is invalid:");
 
          Append (Fun_Name, Element (Token_Buffer, Pos));
@@ -102,7 +101,7 @@ package body M_Basic is
 
       --  490
       Pos := Pos + 1;
-      Assert (To_Upper (Element (Token_Buffer, Pos - 1)) =
+      Assert (To_Upper (Get_Token_Buffer_Item (Pos - 1)) =
                 To_Upper (Element (Fun_Name, Name_Ptr - 1)),
               Routine_Name & "Inconsistent type suffix");
 
@@ -113,7 +112,7 @@ package body M_Basic is
       if Is_Fun then
          Pos2 := Skip_Var (Pos2);
          Skip_Spaces (Token_Buffer, Pos2);
-         if Element (Token_Buffer, Pos2) = Integer'Image (tokenAS) then
+         if Get_Token_Buffer_Item (Pos2) = Integer'Image (tokenAS) then
             Pos2 := Pos2 + 1;
             Commands.Check_Type_Specified (Pos2, Fun_Type, True);
             Assert (Fun_Type = T_IMPLIED, Routine_Name & "invalid type");
@@ -126,17 +125,17 @@ package body M_Basic is
       Skip_Spaces (Token_Buffer, Pos);
       Skip_Spaces (Fun_Name, Name_Ptr);
 
-      if Element (Token_Buffer, Sub_Line_Ptr) = cmdCFUN then
+      if Get_Token_Buffer_Item (Sub_Line_Ptr) = cmdCFUN then
          --  521
          --           Skip_Spaces (Token_Buffer, Pos);
          if Element (Token_Buffer, Pos) = ")" then
             Pos3 := Pos;
-            Found := Element (Token_Buffer, Pos3) /= ")" and then
-              Element (Token_Buffer, Pos3) /= "0";
+            Found := Get_Token_Buffer_Item (Pos3) /= ")" and then
+              Get_Token_Buffer_Item (Pos3) /= "0";
             while not Found loop
                Pos3 := Pos3 + 1;
-               Found := Element (Token_Buffer, Pos3) /= ")" and then
-                 Element (Token_Buffer, Pos3) /= "0";
+               Found := Get_Token_Buffer_Item (Pos3) /= ")" and then
+                 Get_Token_Buffer_Item (Pos3) /= "0";
             end loop;
 
             Assert (Found, Routine_Name & "syntax error, ) or 0 expected.");
@@ -187,8 +186,8 @@ package body M_Basic is
       Skip_Element (Token_Buffer, Next_Statement_Ptr);
 
       while not Done loop
-         if Integer'Value (Element (Token_Buffer, Token_Ptr)) /= 0 and then
-           Element (Token_Buffer, Token_Ptr) /= "'" then
+         if Integer'Value (Get_Token_Buffer_Item (Token_Ptr)) /= 0 and then
+           Get_Token_Buffer_Item (Token_Ptr) /= "'" then
             --  239 Do setjmp
             --           if Set_Jump (Err_Next) = 0 then
             --              null;
@@ -277,7 +276,6 @@ package body M_Basic is
    function Find_Subfunction (Token : String; Fun_Type : Function_Type)
                               return Natural is
 --        use Ada.Characters.Handling;
-      use Command_And_Token_Functions;
       --        Routine_Name : constant String := "M_Basic.Find_Subfunction";
       --        Sub_Name : constant Unbounded_String := To_Unbounded_String (Name);
       Index    : Natural := 0;
@@ -416,13 +414,13 @@ package body M_Basic is
       Routine_Name : constant String := "M_Basic.Prepare_Program_Ext ";
       Num_Funcs : Natural := 0;
    begin
-      while Element (Token_Buffer, Pos) /= "FF" loop
+      while Get_Token_Buffer_Item (Pos) /= "FF" loop
          Pos := Get_Next_Command (Pos, Current_Line_Ptr, "");
          if Pos > 0 then
-            if Element (Token_Buffer, Pos) = cmdSUB or else
-              Element (Token_Buffer, Pos) = cmdFUN or else
-              Element (Token_Buffer, Pos) = cmdCFUN or else
-            Element (Token_Buffer, Pos) = cmdCSUB then
+            if Get_Token_Buffer_Item (Pos) = cmdSUB or else
+              Get_Token_Buffer_Item (Pos) = cmdFUN or else
+              Get_Token_Buffer_Item (Pos) = cmdCFUN or else
+            Get_Token_Buffer_Item (Pos) = cmdCSUB then
                Assert (Index <= Configuration.MAXSUBFUN, Routine_Name &
                          "Too many subroutines and functions");
                Subfunctions (Index) := Pos;
