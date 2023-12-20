@@ -1,5 +1,5 @@
 
-with System;
+with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 
 package Draw is
 
@@ -20,8 +20,7 @@ package Draw is
    FONT_BUILTIN_NBR : constant Positive := 6;
    FONT_TABLE_SIZE  : constant Positive := 16;
 
-   Font_Table : array (1 .. FONT_TABLE_SIZE) of System.Address :=
-                  (others => System.Null_Address);
+   Font_Table : array (1 .. FONT_TABLE_SIZE) of Unbounded_String;
 
    procedure Set_Font (Font_ID : Natural);
 

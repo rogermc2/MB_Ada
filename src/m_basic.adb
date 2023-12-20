@@ -1,8 +1,6 @@
 
 with Interfaces;
 
-with System.Storage_Elements;
-
 with Ada.Assertions;
 with Ada.Characters.Handling;
 with Ada.Strings;
@@ -403,14 +401,16 @@ package body M_Basic is
 
    function Prepare_Program_Ext
      (Pos       : in out Positive; Index : in out Positive;
-      C_Fun_Ptr : in out System.Address; Error_Abort : Boolean)
+      C_Fun_Ptr : in out Token_Pointer; Error_Abort : Boolean)
       return Natural is
-      use System.Storage_Elements;
       use Ada.Assertions;
       use Command_And_Token_Functions;
       use Flash;
       Routine_Name : constant String := "M_Basic.Prepare_Program_Ext ";
+      C_Fun_Pos    : Natural;
+      Ptr          : Token_Pointer;
       Num_Funcs    : Natural := 0;
+      Data         : Unbounded_String;
    begin
       while Get_Token_Buffer_Item (Pos) /= "FF" loop
          Pos := Get_Next_Command (Pos, Current_Line_Ptr, "");
@@ -442,7 +442,25 @@ package body M_Basic is
       end loop;
       Pos := Pos + 1;
 
-      C_Fun_Ptr := System.Address ((Pos + 2#11#) and not 2#11#);
+      C_Fun_Ptr := Get_Token_Ptr (Pos);
+      if Index <= Configuration.MAXSUBFUN then
+         Subfunctions (Index) := 0;
+      end if;
+      Current_Line_Ptr := 0;
+
+      --  380 step through the CFunction area looking for fonts to add to the
+      --  font table.
+      C_Fun_Pos := 0;
+      while C_Fun_Ptr.all /= "ffffffff" loop
+         C_Fun_Pos := C_Fun_Pos + 1;
+         if C_Fun_Pos <= Draw.FONT_TABLE_SIZE then
+            Data := To_Unbounded_String (C_Fun_Ptr.all);
+            Draw.Font_Table (C_Fun_Pos) :=
+              To_Unbounded_String (Slice (Data, 3, Length (Data)));
+         end if;
+         C_Fun_Pos := C_Fun_Pos + 1;
+         C_Fun_Ptr := C_Fun_Ptr + (C_Fun_Ptr.all)'Length;
+      end loop;
 
       return Num_Funcs;
 
