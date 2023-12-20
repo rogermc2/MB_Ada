@@ -441,11 +441,12 @@ package body M_Basic is
             end if;
          end if;
 
-         if not Skip then
+         if Skip then
+            Skip := False;
+         else
             while Get_Token_Buffer_Item (Pos) /= "0" loop
                Pos := Pos + 1;
             end loop;
-            Skip := False;
          end if;
       end loop;
       --  FF  detected, all token bufferr subroutines and functions processed.
