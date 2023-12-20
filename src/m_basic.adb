@@ -1,6 +1,8 @@
 
 with Interfaces;
 
+with System.Storage_Elements;
+
 with Ada.Assertions;
 with Ada.Characters.Handling;
 with Ada.Strings;
@@ -78,11 +80,9 @@ package body M_Basic is
          Pos := Pos + 1;
          Name_Ptr := Name_Ptr + 1;
       end if;
-
-      Name_Ptr := 1;
---        Assert (Is_Fun and then Element (Token_Buffer, Pos) = "(" and then
---                Subfunctions (Sub_Line_Ptr) = cmdCFUN,
---                Routine_Name & "Function definition");
+      --        Assert (Is_Fun and then Element (Token_Buffer, Pos) = "(" and then
+      --                Subfunctions (Sub_Line_Ptr) = cmdCFUN,
+      --                Routine_Name & "Function definition");
 
       --  479 Find the end of the caller's identifier, Name_Ptr is left pointing to
       --  the start of the caller's argument list
@@ -272,11 +272,11 @@ package body M_Basic is
 
    function Find_Subfunction (Token : String; Fun_Type : Function_Type)
                               return Natural is
---        use Ada.Characters.Handling;
+      --        use Ada.Characters.Handling;
       --        Routine_Name : constant String := "M_Basic.Find_Subfunction";
       --        Sub_Name : constant Unbounded_String := To_Unbounded_String (Name);
       Index    : Natural := 0;
---        Pos1     : Natural;
+      --        Pos1     : Natural;
       Pos2     : Natural;
    begin
       --  394
@@ -284,26 +284,26 @@ package body M_Basic is
          Index := Index + 1;
          --           Put_Line (Routine_Name & "Index "& Integer'Image (Index));
          Pos2 := Subfunctions (index);
---           if Fun_Type = T_NA and then
---             (Pos2 = cmdSUB or Pos2 = cmdCSUB) then
---              null;
---           elsif (Pos2 = cmdFUN or Pos2 = cmdCFUN) then
---              null;
---           else
-            --  412
---              Pos2 := Pos2 + 1;
---              Skip_Spaces (In_Buffer, Pos2);
---              if To_Upper (Token) =
---                To_Upper (Element (Subfunctions (index), Pos2)) then
---                 Pos1 := 2;
---                 Pos2 := Pos2 + 1;
---                 --  418
---                 while Is_Name_Character (Element (Token, Pos1)) loop
---                    Pos1 := Pos1 + 1;
---                    Pos2 := Pos2 + 1;
---                 end loop;
---              end if;
---           end if;
+         --           if Fun_Type = T_NA and then
+         --             (Pos2 = cmdSUB or Pos2 = cmdCSUB) then
+         --              null;
+         --           elsif (Pos2 = cmdFUN or Pos2 = cmdCFUN) then
+         --              null;
+         --           else
+         --  412
+         --              Pos2 := Pos2 + 1;
+         --              Skip_Spaces (In_Buffer, Pos2);
+         --              if To_Upper (Token) =
+         --                To_Upper (Element (Subfunctions (index), Pos2)) then
+         --                 Pos1 := 2;
+         --                 Pos2 := Pos2 + 1;
+         --                 --  418
+         --                 while Is_Name_Character (Element (Token, Pos1)) loop
+         --                    Pos1 := Pos1 + 1;
+         --                    Pos2 := Pos2 + 1;
+         --                 end loop;
+         --              end if;
+         --           end if;
          --           Done := Subfunctions (Index) = Sub_Address;
       end loop;
 
@@ -403,12 +403,14 @@ package body M_Basic is
 
    function Prepare_Program_Ext
      (Pos       : in out Positive; Index : in out Positive;
-      C_Fun_Ptr : System.Address; Error_Abort : Boolean) return Natural is
+      C_Fun_Ptr : in out System.Address; Error_Abort : Boolean)
+      return Natural is
+      use System.Storage_Elements;
       use Ada.Assertions;
       use Command_And_Token_Functions;
       use Flash;
       Routine_Name : constant String := "M_Basic.Prepare_Program_Ext ";
-      Num_Funcs : Natural := 0;
+      Num_Funcs    : Natural := 0;
    begin
       while Get_Token_Buffer_Item (Pos) /= "FF" loop
          Pos := Get_Next_Command (Pos, Current_Line_Ptr, "");
@@ -416,18 +418,31 @@ package body M_Basic is
             if Get_Token_Buffer_Item (Pos) = cmdSUB or else
               Get_Token_Buffer_Item (Pos) = cmdFUN or else
               Get_Token_Buffer_Item (Pos) = cmdCFUN or else
-            Get_Token_Buffer_Item (Pos) = cmdCSUB then
+              Get_Token_Buffer_Item (Pos) = cmdCSUB then
                Assert (Index <= Configuration.MAXSUBFUN, Routine_Name &
                          "Too many subroutines and functions");
                Subfunctions (Index) := Pos;
                Index := Index + 1;
                Pos := Pos + 1;
                Skip_Token_Buffer_Spaces (Pos);
-
+               if Is_Name_Start (Get_Token_Buffer_Item (Pos)(1)) then
+                  while Get_Token_Buffer_Item (Pos)(1) /= '0' loop
+                     Pos := Pos + 1;
+                  end loop;
+               else
+                  Index := Index - 1;
+               end if;
             end if;
          end if;
-         null;
       end loop;
+
+      --  the end of the program can have multiple zeros
+      while Get_Token_Buffer_Item (Pos)(1) /= '0' loop
+         Pos := Pos + 1;
+      end loop;
+      Pos := Pos + 1;
+
+      C_Fun_Ptr := System.Address ((Pos + 2#11#) and not 2#11#);
 
       return Num_Funcs;
 
@@ -501,14 +516,14 @@ package body M_Basic is
    end Prepare_Program;
 
    --  Skip_Element skips to the the zero char that preceeds an element
---     procedure Skip_Element (Buffer : String_Buffer; Pos : in out Positive) is
---        use String_Buffer_Package;
---     begin
---        while  Integer'Value (Element (Buffer, Pos)) /= 0 loop
---           Pos := Pos + 1;
---        end loop;
---
---     end Skip_Element;
+   --     procedure Skip_Element (Buffer : String_Buffer; Pos : in out Positive) is
+   --        use String_Buffer_Package;
+   --     begin
+   --        while  Integer'Value (Element (Buffer, Pos)) /= 0 loop
+   --           Pos := Pos + 1;
+   --        end loop;
+   --
+   --     end Skip_Element;
 
    procedure Skip_Spaces (Buffer : Unbounded_String; Pos : in out Positive) is
    begin

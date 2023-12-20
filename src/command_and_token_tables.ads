@@ -10,6 +10,8 @@ package Command_And_Token_Tables is
      new Ada.Containers.Indefinite_Vectors (Positive, String);
    subtype String_Buffer is String_Buffer_Package.Vector;
 
+   type Token_Pointer is access String;
+
    type Unsigned_Byte is mod 256;
    type Unsigned_2Byte is mod 65536;
    type Unsigned_Byte_Ptr is access Unsigned_Byte;
@@ -316,6 +318,7 @@ package Command_And_Token_Tables is
    function Get_Input_Character (Pos : Positive) return Character;
    function Get_Input_Slice (Pos1, Pos2 : Positive) return String;
    function Get_Token_Buffer_Item (Pos : Positive) return String;
+   function Get_Token_Ptr (Pos : Positive) return Token_Pointer;
    function Input_Buffer_Length return Natural;
    procedure Load_Input_Buffer (File_Num : Natural);
    procedure Replace_In_Buffer_Character (Pos : Positive; aChar : Character);

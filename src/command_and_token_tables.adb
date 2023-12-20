@@ -28,6 +28,16 @@ package body Command_And_Token_Tables is
 
    end Get_Input_Slice;
 
+   function Get_Token_Ptr (Pos : Positive) return Token_Pointer is
+      Ptr : Token_Pointer;
+   begin
+      Ptr := new String'(Token_Buffer (Pos));
+
+      return  (Ptr + 2#11#) and not 2#11#;
+--        return Ptr;
+
+      end Get_Token_Ptr;
+
    function Get_Token_Buffer_Item (Pos : Positive) return String is
       use String_Buffer_Package;
    begin
