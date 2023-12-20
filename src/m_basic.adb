@@ -399,6 +399,8 @@ package body M_Basic is
 
    end Print_String;
 
+   --  Prepare_Program_Ext cans one area (main program or the library area)
+   --   for user defined subroutines and functions.
    function Prepare_Program_Ext
      (Pos       : in out Positive; Index : in out Positive;
       C_Fun_Ptr : in out Token_Pointer; Error_Abort : Boolean)
@@ -411,6 +413,7 @@ package body M_Basic is
       Ptr          : Token_Pointer;
       Num_Funcs    : Natural := 0;
       Data         : Unbounded_String;
+      Skip         : Boolean := False;
    begin
       while Get_Token_Buffer_Item (Pos) /= "FF" loop
          Pos := Get_Next_Command (Pos, Current_Line_Ptr, "");
@@ -425,16 +428,27 @@ package body M_Basic is
                Index := Index + 1;
                Pos := Pos + 1;
                Skip_Token_Buffer_Spaces (Pos);
+
                if Is_Name_Start (Get_Token_Buffer_Item (Pos)(1)) then
                   while Get_Token_Buffer_Item (Pos)(1) /= '0' loop
                      Pos := Pos + 1;
                   end loop;
                else
+                  --  Assert (not Error_Abort, Routine_Name & "Invalid identifier");
                   Index := Index - 1;
+                  Skip := True;
                end if;
             end if;
          end if;
+
+         if not Skip then
+            while Get_Token_Buffer_Item (Pos) /= "0" loop
+               Pos := Pos + 1;
+            end loop;
+            Skip := False;
+         end if;
       end loop;
+      --  FF  detected, all token bufferr subroutines and functions processed.
 
       --  the end of the program can have multiple zeros
       while Get_Token_Buffer_Item (Pos)(1) /= '0' loop
@@ -442,6 +456,8 @@ package body M_Basic is
       end loop;
       Pos := Pos + 1;
 
+      --  CFunction flash (if it exists) starts on the next word address-
+      --  after the program in flash
       C_Fun_Ptr := Get_Token_Ptr (Pos);
       if Index <= Configuration.MAXSUBFUN then
          Subfunctions (Index) := 0;

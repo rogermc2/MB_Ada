@@ -6,3 +6,4 @@ main
 */*.c.*
 */*.d
 */*.cswl
+*/.clang-format
