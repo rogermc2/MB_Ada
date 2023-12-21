@@ -1,7 +1,8 @@
 
 with System;
 
-with Command_And_Token_Tables; use Command_And_Token_Tables;
+with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
+
 with Configuration; use Configuration;
 with Draw;
 
@@ -12,10 +13,12 @@ package Flash is
    FLASH_PAGE_SIZE : constant Positive := 4096;
    PROG_FLASH_SIZE : constant Positive := 16 * FLASH_PAGE_SIZE;
 
-   type Prog_Memory_Array is array (1 .. PROG_FLASH_SIZE) of Unsigned_Byte;
+   type Prog_Memory_Array is array (1 .. PROG_FLASH_SIZE) of
+     Unbounded_String;
 --     type Prog_Memory_Ptr is access Prog_Memory_Array;
 
-   Prog_Memory     : Prog_Memory_Array := (others => 255);
+   Prog_Memory     : Prog_Memory_Array :=
+                       (others => To_Unbounded_String ("ff"));
 
    type Option_Record is record
       Autorun              : Boolean := False;

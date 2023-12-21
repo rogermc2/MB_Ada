@@ -5,6 +5,7 @@ with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 --  with Ada.Text_IO; use Ada.Text_IO;
 
 with Command_And_Token_Tables; use Command_And_Token_Tables;
+with Flash;
 with Global;
 with M_Misc;
 with Operators; use Operators;
@@ -32,6 +33,8 @@ package body Command_And_Token_Functions is
    c_IRET         : Natural;
    c_CFUN         : Natural;
    c_CSUB         : Natural;
+
+   procedure Skip_Spaces (Pos : in out Positive);
 
    function Get_Command_Value (Token : String) return Natural is
       Index : Integer := Command_Table'First - 1;
@@ -262,38 +265,39 @@ package body Command_And_Token_Functions is
    --  EOFMsg is the error message to use if the end of the program is reached.
    function Get_Next_Command (Pos, Current_Line : in out Positive;
                               EOF_Message       : String) return Positive is
+      use Flash;
       use Global;
       use M_Misc;
       OK : Boolean := True;
    begin
       while OK and then Pos <= C_Base_Token loop
          --  look for the zero marking the start of an element
-         if Get_Token_Buffer_Item (Pos) /= T_NEWLINE then
-            while Get_Token_Buffer_Item (Pos) /= "0" loop
+         if Prog_Memory (Pos) /= T_NEWLINE then
+            while Prog_Memory (Pos) /= "0" loop
                Pos := Pos + 1;
             end loop;
             Pos := Pos + 1;
          end if;
 
-         OK :=  Get_Token_Buffer_Item (Pos) = "0";
+         OK :=  Prog_Memory (Pos) = "0";
          if not OK then
             if EOF_Message'Length /= 0 then
                null;
             end if;
 
          else
-            if Get_Token_Buffer_Item (Pos) = T_NEWLINE then
+            if Prog_Memory (Pos) = T_NEWLINE then
                if Current_Line > 0 then
                   Current_Line := Pos;
                end if;
                Pos := Pos + 1;
             end if;
 
-            if Get_Token_Buffer_Item (Pos) = T_LINENBR then
+            if Prog_Memory (Pos) = T_LINENBR then
                Pos := Pos + 3;
             end if;
 
-            Skip_In_Buffer_Spaces (Pos);
+            Skip_Spaces (Pos);
 
             if Get_Token_Buffer_Item (1) = T_LABEL then
                --  skip over the label
@@ -307,5 +311,14 @@ package body Command_And_Token_Functions is
       return Pos;
 
    end Get_Next_Command;
+
+   procedure Skip_Spaces (Pos : in out Positive) is
+      use Flash;
+   begin
+      while  Prog_Memory (Pos) = To_Unbounded_String (" ") loop
+         Pos := Pos + 1;
+      end loop;
+
+   end Skip_Spaces;
 
 end Command_And_Token_Functions;

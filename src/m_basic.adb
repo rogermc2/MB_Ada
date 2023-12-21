@@ -268,9 +268,13 @@ package body M_Basic is
 
    end Execute_Program;
 
+   --  searches the subfun[] table to locate a defined sub or fun
+   --  returns with the index of the sub/function in the table or -1 if not found
+   --  if type = 0 then look for a sub otherwise a function
    function Find_Subfunction (Token : String; Fun_Type : Function_Type)
                               return Natural is
-      --        use Ada.Characters.Handling;
+      use Command_And_Token_Functions;
+      use Ada.Characters.Handling;
       --        Routine_Name : constant String := "M_Basic.Find_Subfunction";
       --        Sub_Name : constant Unbounded_String := To_Unbounded_String (Name);
       Index    : Natural := 0;
@@ -282,27 +286,29 @@ package body M_Basic is
          Index := Index + 1;
          --           Put_Line (Routine_Name & "Index "& Integer'Image (Index));
          Pos2 := Subfunctions (index);
-         --           if Fun_Type = T_NA and then
-         --             (Pos2 = cmdSUB or Pos2 = cmdCSUB) then
-         --              null;
-         --           elsif (Pos2 = cmdFUN or Pos2 = cmdCFUN) then
-         --              null;
-         --           else
-         --  412
-         --              Pos2 := Pos2 + 1;
-         --              Skip_Spaces (In_Buffer, Pos2);
-         --              if To_Upper (Token) =
-         --                To_Upper (Element (Subfunctions (index), Pos2)) then
-         --                 Pos1 := 2;
-         --                 Pos2 := Pos2 + 1;
-         --                 --  418
-         --                 while Is_Name_Character (Element (Token, Pos1)) loop
-         --                    Pos1 := Pos1 + 1;
-         --                    Pos2 := Pos2 + 1;
-         --                 end loop;
-         --              end if;
-         --           end if;
-         --           Done := Subfunctions (Index) = Sub_Address;
+         if Fun_Type = T_NOTYPE and then
+           (Get_Token_Buffer_Item (Pos2) = cmdSUB or
+                Get_Token_Buffer_Item (Pos2) = cmdCSUB) then
+            null;
+         elsif (Get_Token_Buffer_Item (Pos2) = cmdFUN or
+                  Get_Token_Buffer_Item (Pos2) = cmdCFUN) then
+            null;
+         else
+            --  412
+            Pos2 := Pos2 + 1;
+            Skip_Token_Buffer_Spaces (Pos2);
+            if To_Upper (Token) =
+              To_Upper (Element (Subfunctions (index), Pos2)) then
+               Pos1 := 2;
+               Pos2 := Pos2 + 1;
+               --  418
+               while Is_Name_Character (Element (Token, Pos1)) loop
+                  Pos1 := Pos1 + 1;
+                  Pos2 := Pos2 + 1;
+               end loop;
+            end if;
+         end if;
+         Done := Subfunctions (Index) = Sub_Address;
       end loop;
 
       return 0;
@@ -402,7 +408,7 @@ package body M_Basic is
    --  Prepare_Program_Ext cans one area (main program or the library area)
    --   for user defined subroutines and functions.
    function Prepare_Program_Ext
-     (Pos       : in out Positive; Index : in out Positive;
+     (Pos  : in out Positive; Index : in out Positive;
       C_Fun_Ptr : in out Token_Pointer; Error_Abort : Boolean)
       return Natural is
       use Ada.Assertions;
@@ -415,7 +421,7 @@ package body M_Basic is
       Data         : Unbounded_String;
       Skip         : Boolean := False;
    begin
-      while Get_Token_Buffer_Item (Pos) /= "FF" loop
+      while Flash.Prog_Memory (Pos) /= "ff" loop
          Pos := Get_Next_Command (Pos, Current_Line_Ptr, "");
          if Pos > 0 then
             if Get_Token_Buffer_Item (Pos) = cmdSUB or else
@@ -476,7 +482,7 @@ package body M_Basic is
               To_Unbounded_String (Slice (Data, 3, Length (Data)));
          end if;
          C_Fun_Pos := C_Fun_Pos + 1;
-         C_Fun_Ptr := C_Fun_Ptr + (C_Fun_Ptr.all)'Length;
+         --           C_Fun_Ptr := C_Fun_Ptr + (C_Fun_Ptr.all)'Length;
       end loop;
 
       return Num_Funcs;
@@ -502,14 +508,11 @@ package body M_Basic is
          Font_Table (index) := System.Null_Address;
       end loop;
 
-      C_Function_Flash := System.Null_Address;
-      C_Function_Library := System.Null_Address;
-
       if Option.Program_Flash_Size /= PROG_FLASH_SIZE then
          null;
-         --           Num_Funcs := Prepare_Program_Ext
-         --             (Prog_Memory'Access + Option.Program_Flash_Size, 1,
-         --              C_Function_Library, False);
+                  Num_Funcs := Prepare_Program_Ext
+                    (Flash.Prog_Memory'Length + Option.Program_Flash_Size, 1,
+                     Flash.C_Function_Library, False);
       end if;
 
       --        Dump := Prepare_Program_Ext
