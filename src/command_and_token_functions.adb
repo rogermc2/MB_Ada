@@ -299,10 +299,10 @@ package body Command_And_Token_Functions is
 
             Skip_Spaces (Pos);
 
-            if Get_Token_Buffer_Item (1) = T_LABEL then
+            if Prog_Memory (1) = T_LABEL then
                --  skip over the label
-               Pos := Pos + Integer'Value (Get_Token_Buffer_Item (2)) + 2;
-               Skip_In_Buffer_Spaces (Pos);
+               Pos := Pos + Integer'Value (To_String (Prog_Memory (2))) + 2;
+               Skip_Spaces (Pos);
             end if;
          end if;
 
