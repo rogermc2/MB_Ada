@@ -490,16 +490,14 @@ package body M_Basic is
       --  FF  detected, all token bufferr subroutines and functions processed.
 
       --  the end of the program can have multiple zeros
-      Assert  (Pos <= Prog_Memory'Length, Routine_Name &
-                 "unexpected program end 1.");
-      while Element (Prog_Memory (Pos), 1) /= '0' loop
+      if Pos >= Prog_Memory'Length then
+         Put_Line (Routine_Name & "unexpected program end");
+      else
+         while Element (Prog_Memory (Pos), 1) /= '0' loop
+            Pos := Pos + 1;
+         end loop;
          Pos := Pos + 1;
-         Assert  (Pos <= Prog_Memory'Length, Routine_Name &
-                    "unexpected program end 2.");
-      end loop;
-      Pos := Pos + 1;
-      Assert  (Pos <= Prog_Memory'Length, Routine_Name &
-                 "unexpected program end 3.");
+      end if;
 
       --  CFunction flash (if it exists) starts on the next word address-
       --  after the program in flash
@@ -508,11 +506,13 @@ package body M_Basic is
          Subfunctions (Num_Funcs) := 0;
       end if;
       Current_Line_Ptr := 0;
+      Put_Line (Routine_Name & "looking for fonts");
 
       --  380 step through the CFunction area looking for fonts to add to the
       --  font table.
       C_Fun_Pos := 0;
       while C_Fun_Ptr.all /= "ffffffff" loop
+         Put_Line (Routine_Name & "C_Fun_Pos:" & Integer'Image (C_Fun_Pos));
          C_Fun_Pos := C_Fun_Pos + 1;
          if C_Fun_Pos <= Draw.FONT_TABLE_SIZE then
             Data := C_Fun_Ptr.all;
@@ -522,6 +522,7 @@ package body M_Basic is
          C_Fun_Pos := C_Fun_Pos + 1;
          --           C_Fun_Ptr := C_Fun_Ptr + (C_Fun_Ptr.all)'Length;
       end loop;
+      Put_Line (Routine_Name & "done");
 
    end Prepare_Program_Ext;
 
