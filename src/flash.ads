@@ -14,7 +14,6 @@ package Flash is
 
    type Prog_Memory_Array is array (1 .. PROG_FLASH_SIZE) of
      Unbounded_String;
---     type Prog_Memory_Ptr is access Prog_Memory_Array;
 
    Prog_Memory     : Prog_Memory_Array :=
                        (others => To_Unbounded_String ("ff"));
