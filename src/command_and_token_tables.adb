@@ -17,13 +17,6 @@ package body Command_And_Token_Tables is
 
    end Clear_Token_Buffer;
 
-   pragma Warnings (Off);
-   function Copy_To_Mod is new
-     Ada.Unchecked_Conversion (Token_Pointer, Modular);
-   function Copy_From_Mod is new
-     Ada.Unchecked_Conversion (Modular, Token_Pointer);
-   pragma Warnings (On);
-
    function Get_Input_Character (Pos : Positive) return Character is
    begin
       return Element (In_Buffer, Pos);
@@ -35,28 +28,6 @@ package body Command_And_Token_Tables is
       return Slice (In_Buffer, Pos1, Pos2);
 
    end Get_Input_Slice;
-
---     function Get_Token_Cursor (Pos : Positive) return Token_Cursor is
---        use String_Buffer_Package;
---        Ptr     : Token_Pointer:= new String'(Token_Buffer (Pos));
---        Mod_Ptr : Modular := Copy_To_Mod (Ptr);
---     begin
---        Mod_Ptr := (Mod_Ptr + 2#11#) and not 2#11#;
---        Ptr := Copy_From_Mod (Mod_Ptr);
---
---        return To_Cursor (Token_Buffer, Ptr);
---
---        end Get_Token_Cursor;
-
-   function Get_Token_Ptr (Pos : Positive) return Token_Pointer is
-      Ptr     : constant Token_Pointer := new String'(Token_Buffer (Pos));
-      Mod_Ptr : Modular := Copy_To_Mod (Ptr);
-   begin
-      Mod_Ptr := (Mod_Ptr + 2#11#) and not 2#11#;
-
-      return Copy_From_Mod (Mod_Ptr);
-
-   end Get_Token_Ptr;
 
    function Get_Token_Buffer_Item (Pos : Positive) return String is
       use String_Buffer_Package;

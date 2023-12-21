@@ -52,38 +52,38 @@ package body Command_And_Token_Functions is
    end Get_Command_Value;
 
    function Get_Token_Value (Token : String) return Natural is
---        Routine_Name : constant String :=
---                         "Command_And_Token_Tables.Get_Token_Value ";
+      --        Routine_Name : constant String :=
+      --                         "Command_And_Token_Tables.Get_Token_Value ";
       Index : Integer := Token_Table'First - 1;
       Value : Natural := 0;
       Found : Boolean := False;
    begin
---        Put_Line (Routine_Name & "Token_Table Length: " &
---                    Integer'Image (Token_Table'Length));
+      --        Put_Line (Routine_Name & "Token_Table Length: " &
+      --                    Integer'Image (Token_Table'Length));
       while Index < Token_Table'Last loop
---              Put_Line (Routine_Name & "index: " & Integer'Image (Index));
+         --              Put_Line (Routine_Name & "index: " & Integer'Image (Index));
          Index := Index + 1;
          Found := Token = To_String (Token_Table (Index).Name);
---           Put_Line (Routine_Name & "Found: " &  Boolean'Image (Found));
+         --           Put_Line (Routine_Name & "Found: " &  Boolean'Image (Found));
          if Found then
---              Put_Line (Routine_Name & "token found, index: " &
---                          Integer'Image (Index));
+            --              Put_Line (Routine_Name & "token found, index: " &
+            --                          Integer'Image (Index));
             Value := M_Misc.C_Base_Token + Index - 1;
          end if;
       end loop;
 
---        Put_Line (Routine_Name & "done, Value: " &  Integer'Image (Value));
+      --        Put_Line (Routine_Name & "done, Value: " &  Integer'Image (Value));
       return Value;
 
    end Get_Token_Value;
 
    procedure Init_Operator_Functions is
---        Routine_Name : constant String :=
---                         "Command_And_Token_Tables.Init_Operator_Functions ";
+      --        Routine_Name : constant String :=
+      --                         "Command_And_Token_Tables.Init_Operator_Functions ";
    begin
---        Put_Line (Routine_Name);
+      --        Put_Line (Routine_Name);
       t_THEN := Get_Token_Value ("Then");
---        Put_Line (Routine_Name & "t_THEN set: " & Integer'Image (t_THEN));
+      --        Put_Line (Routine_Name & "t_THEN set: " & Integer'Image (t_THEN));
       t_ELSE := Get_Token_Value ("Else");
       t_GOTO := Get_Token_Value ("GoTo");
       t_EQUAL:= Get_Token_Value (":=");
@@ -261,8 +261,8 @@ package body Command_And_Token_Functions is
    --  CLine is a pointer to a char pointer which points to the start of the
    --  current line for error reporting (if NULL it will be ignored).
    --  EOFMsg is the error message to use if the end of the program is reached.
-   function Get_Next_Command (Pos, Current_Line : in out Positive;
-                              EOF_Message       : String) return Positive is
+   procedure Get_Next_Command (Pos, Current_Line : in out Positive;
+                               EOF_Message       : String) is
       use Flash;
       use Global;
       use M_Misc;
@@ -306,14 +306,12 @@ package body Command_And_Token_Functions is
 
       end loop;
 
-      return Pos;
-
    end Get_Next_Command;
 
    procedure Skip_Spaces (Pos : in out Positive) is
       use Flash;
    begin
-      while  Prog_Memory (Pos) = To_Unbounded_String (" ") loop
+      while Prog_Memory (Pos) = To_Unbounded_String (" ") loop
          Pos := Pos + 1;
       end loop;
 

@@ -1,6 +1,4 @@
 
-with System;
-
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 
 with Configuration; use Configuration;
@@ -8,6 +6,7 @@ with Draw;
 
 package Flash is
 
+   type UB_String_Access is access all Unbounded_String;
    type Pins_Array is array (1 .. 8) of Integer;
 
    FLASH_PAGE_SIZE : constant Positive := 4096;
@@ -67,8 +66,8 @@ package Flash is
       Max_Controls         : Natural := 101;
    end record;
 
-   C_Function_Flash   : System.Address := System.Null_Address;
-   C_Function_Library : System.Address := System.Null_Address;
+   C_Function_Flash   : UB_String_Access := Null;
+   C_Function_Library : UB_String_Access := Null;
    Option : Option_Record;
 
    procedure Load_Options;

@@ -5,6 +5,7 @@ with Ada.Assertions;
 with Ada.Characters.Handling;
 with Ada.Strings;
 with Ada.Text_IO; use Ada.Text_IO;
+with Ada.Unchecked_Conversion;
 
 with C_Functions;
 with Command_And_Token_Functions;
@@ -37,6 +38,14 @@ package body M_Basic is
       end loop;
 
    end Clear_Runtime;
+
+   pragma Warnings (Off);
+   function Copy_To_Mod is new
+     Ada.Unchecked_Conversion (Flash.UB_String_Access, Modular);
+
+   function Copy_From_Mod is new
+     Ada.Unchecked_Conversion (Modular, Flash.UB_String_Access);
+   pragma Warnings (On);
 
    procedure Defined_Subfunction
      (Is_Fun : Boolean; Command_Ptr : Positive; Index  : Positive;
@@ -328,6 +337,18 @@ package body M_Basic is
 
    end Find_Subfunction;
 
+   function Get_C_Fun_Ptr (Pos : Positive) return Flash.UB_String_Access is
+      use Flash;
+      Ptr     : constant UB_String_Access :=
+                  new Unbounded_String'(Prog_Memory (Pos));
+      Mod_Ptr : Modular := Copy_To_Mod (Ptr);
+   begin
+      Mod_Ptr := (Mod_Ptr + 2#11#) and not 2#11#;
+
+      return Copy_From_Mod (Mod_Ptr);
+
+   end Get_C_Fun_Ptr;
+
    procedure Init_Basic is
       Routine_Name : constant String := "M_Basic.Init_Basic ";
    begin
@@ -419,41 +440,40 @@ package body M_Basic is
    end Print_String;
 
    --  Prepare_Program_Ext cans one area (main program or the library area)
-   --   for user defined subroutines and functions.
-   function Prepare_Program_Ext
-     (Pos       : in out Positive; Index : in out Positive;
-      C_Fun_Ptr : in out Token_Pointer; Error_Abort : Boolean)
-         return Natural is
+   --  for user defined subroutines and functions.
+   procedure Prepare_Program_Ext
+     (User_Mem_Start : Positive; Num_Funcs : in out Natural;
+      C_Fun_Ptr      : in out Flash.UB_String_Access; Error_Abort : Boolean) is
       use Ada.Assertions;
       use Command_And_Token_Functions;
       use Flash;
       Routine_Name : constant String := "M_Basic.Prepare_Program_Ext ";
+      Pos          : Positive := User_Mem_Start;
       C_Fun_Pos    : Natural;
-      Num_Funcs    : Natural := 0;
       Data         : Unbounded_String;
       Skip         : Boolean := False;
    begin
-      while Flash.Prog_Memory (Pos) /= "ff" loop
-         Pos := Get_Next_Command (Pos, Current_Line_Ptr, "");
+      while Prog_Memory (Pos) /= "ff" loop
+         Get_Next_Command (Pos, Current_Line_Ptr, "");
          if Pos > 0 then
-            if Get_Token_Buffer_Item (Pos) = cmdSUB or else
-              Get_Token_Buffer_Item (Pos) = cmdFUN or else
-              Get_Token_Buffer_Item (Pos) = cmdCFUN or else
-              Get_Token_Buffer_Item (Pos) = cmdCSUB then
-               Assert (Index <= Configuration.MAXSUBFUN, Routine_Name &
+            if Prog_Memory (Pos) = cmdSUB or else
+              Prog_Memory (Pos) = cmdFUN or else
+              Prog_Memory (Pos) = cmdCFUN or else
+              Prog_Memory (Pos) = cmdCSUB then
+               Assert (Num_Funcs <= Configuration.MAXSUBFUN, Routine_Name &
                          "Too many subroutines and functions");
-               Subfunctions (Index) := Pos;
-               Index := Index + 1;
+               Subfunctions (Num_Funcs) := Pos;
+               Num_Funcs := Num_Funcs + 1;
                Pos := Pos + 1;
-               Skip_Token_Buffer_Spaces (Pos);
+               Skip_Spaces (Pos);
 
-               if Is_Name_Start (Get_Token_Buffer_Item (Pos)(1)) then
-                  while Get_Token_Buffer_Item (Pos)(1) /= '0' loop
+               if Is_Name_Start (Element (Prog_Memory (Pos), 1)) then
+                  while Element (Prog_Memory (Pos), 1) /= '0' loop
                      Pos := Pos + 1;
                   end loop;
                else
-                  --  Assert (not Error_Abort, Routine_Name & "Invalid identifier");
-                  Index := Index - 1;
+                  Assert (not Error_Abort, Routine_Name & "Invalid identifier");
+                  Num_Funcs := Num_Funcs - 1;
                   Skip := True;
                end if;
             end if;
@@ -462,7 +482,7 @@ package body M_Basic is
          if Skip then
             Skip := False;
          else
-            while Get_Token_Buffer_Item (Pos) /= "0" loop
+            while Prog_Memory (Pos) /= "0" loop
                Pos := Pos + 1;
             end loop;
          end if;
@@ -470,16 +490,22 @@ package body M_Basic is
       --  FF  detected, all token bufferr subroutines and functions processed.
 
       --  the end of the program can have multiple zeros
-      while Get_Token_Buffer_Item (Pos)(1) /= '0' loop
+      Assert  (Pos <= Prog_Memory'Length, Routine_Name &
+                 "unexpected program end 1.");
+      while Element (Prog_Memory (Pos), 1) /= '0' loop
          Pos := Pos + 1;
+         Assert  (Pos <= Prog_Memory'Length, Routine_Name &
+                    "unexpected program end 2.");
       end loop;
       Pos := Pos + 1;
+      Assert  (Pos <= Prog_Memory'Length, Routine_Name &
+                 "unexpected program end 3.");
 
       --  CFunction flash (if it exists) starts on the next word address-
       --  after the program in flash
-      C_Fun_Ptr := Get_Token_Ptr (Pos);
-      if Index <= Configuration.MAXSUBFUN then
-         Subfunctions (Index) := 0;
+      C_Fun_Ptr := Get_C_Fun_Ptr (Pos);
+      if Num_Funcs <= Configuration.MAXSUBFUN then
+         Subfunctions (Num_Funcs) := 0;
       end if;
       Current_Line_Ptr := 0;
 
@@ -489,15 +515,13 @@ package body M_Basic is
       while C_Fun_Ptr.all /= "ffffffff" loop
          C_Fun_Pos := C_Fun_Pos + 1;
          if C_Fun_Pos <= Draw.FONT_TABLE_SIZE then
-            Data := To_Unbounded_String (C_Fun_Ptr.all);
+            Data := C_Fun_Ptr.all;
             Draw.Font_Table (C_Fun_Pos) :=
               To_Unbounded_String (Slice (Data, 3, Length (Data)));
          end if;
          C_Fun_Pos := C_Fun_Pos + 1;
          --           C_Fun_Ptr := C_Fun_Ptr + (C_Fun_Ptr.all)'Length;
       end loop;
-
-      return Num_Funcs;
 
    end Prepare_Program_Ext;
 
@@ -508,7 +532,7 @@ package body M_Basic is
       use Draw;
       use Flash;
       Routine_Name : constant String := "M_Basic.Prepare_Program ";
-      --        Num_Funcs    : Natural := 0;
+      Num_Funcs    : Positive := 1;
       --        Dump         : Natural := 0;
       Index1       : Positive := 1;
       Index2       : Natural := 0;
@@ -517,18 +541,20 @@ package body M_Basic is
       Done         : Boolean := False;
    begin
       for index in FONT_BUILTIN_NBR .. FONT_TABLE_SIZE loop
-         Font_Table (index) := System.Null_Address;
+         Font_Table (index) := Null_Unbounded_String;
       end loop;
 
+      C_Function_Flash := null;
+      C_Function_Library := null;
+
       if Option.Program_Flash_Size /= PROG_FLASH_SIZE then
-         null;
-         Num_Funcs := Prepare_Program_Ext
-           (Flash.Prog_Memory'Length + Option.Program_Flash_Size, 1,
-            Flash.C_Function_Library, False);
+         Prepare_Program_Ext
+           (Prog_Memory'Length + Option.Program_Flash_Size, Num_Funcs,
+            C_Function_Library, False);
       end if;
 
-      --        Dump := Prepare_Program_Ext
-      --          (Prog_Memory'Access, Num_Funcs, C_Function_Flash, False);
+      Prepare_Program_Ext (Prog_Memory'Length, Num_Funcs, C_Function_Flash,
+                           False);
 
       if Error_Abort then
          while Index1 < MAXSUBFUN and then
