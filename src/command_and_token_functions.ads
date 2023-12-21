@@ -30,4 +30,7 @@ package Command_And_Token_Functions is
      (Pos, Current_Line : in out Positive; EOF_Message : String)
       return Positive;
 
+   procedure Skip_Spaces (Pos : in out Positive);
+
+
 end Command_And_Token_Functions;

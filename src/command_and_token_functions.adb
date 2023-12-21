@@ -34,8 +34,6 @@ package body Command_And_Token_Functions is
    c_CFUN         : Natural;
    c_CSUB         : Natural;
 
-   procedure Skip_Spaces (Pos : in out Positive);
-
    function Get_Command_Value (Token : String) return Natural is
       Index : Integer := Command_Table'First - 1;
       Value : Natural := 0;

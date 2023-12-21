@@ -275,6 +275,7 @@ package body M_Basic is
                               return Natural is
       use Command_And_Token_Functions;
       use Ada.Characters.Handling;
+      use Flash;
       --        Routine_Name : constant String := "M_Basic.Find_Subfunction";
       --        Sub_Name : constant Unbounded_String := To_Unbounded_String (Name);
       Index    : Natural := 0;
@@ -287,16 +288,15 @@ package body M_Basic is
          --           Put_Line (Routine_Name & "Index "& Integer'Image (Index));
          Pos2 := Subfunctions (index);
          if Fun_Type = T_NOTYPE and then
-           (Get_Token_Buffer_Item (Pos2) = cmdSUB or
-                Get_Token_Buffer_Item (Pos2) = cmdCSUB) then
+           (Prog_Memory (Pos2) = cmdSUB or Prog_Memory (Pos2) = cmdCSUB) then
             null;
-         elsif (Get_Token_Buffer_Item (Pos2) = cmdFUN or
-                  Get_Token_Buffer_Item (Pos2) = cmdCFUN) then
+         elsif (Prog_Memory (Pos2) = cmdFUN or
+                  Prog_Memory (Pos2) = cmdCFUN) then
             null;
          else
             --  412
             Pos2 := Pos2 + 1;
-            Skip_Token_Buffer_Spaces (Pos2);
+            Skip_Spaces (Pos2);
             if To_Upper (Token) =
               To_Upper (Element (Subfunctions (index), Pos2)) then
                Pos1 := 2;
