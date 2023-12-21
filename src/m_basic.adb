@@ -277,13 +277,13 @@ package body M_Basic is
       use Ada.Characters.Handling;
       use Flash;
       --        Routine_Name : constant String := "M_Basic.Find_Subfunction";
-      --        Sub_Name : constant Unbounded_String := To_Unbounded_String (Name);
       Index    : Natural := 0;
-      --        Pos1     : Natural;
+      Pos1     : Natural;
       Pos2     : Natural;
+      Done     : Boolean := False;
    begin
       --  394
-      while index < Configuration.MAXSUBFUN loop
+      while not Done and then index < Configuration.MAXSUBFUN loop
          Index := Index + 1;
          --           Put_Line (Routine_Name & "Index "& Integer'Image (Index));
          Pos2 := Subfunctions (index);
@@ -297,21 +297,34 @@ package body M_Basic is
             --  412
             Pos2 := Pos2 + 1;
             Skip_Spaces (Pos2);
+            --  418
             if To_Upper (Token) =
-              To_Upper (Element (Subfunctions (index), Pos2)) then
+              To_Upper (Integer'Image (Subfunctions (index))) then
                Pos1 := 2;
                Pos2 := Pos2 + 1;
-               --  418
-               while Is_Name_Character (Element (Token, Pos1)) loop
-                  Pos1 := Pos1 + 1;
+               --  422
+               while Is_Name_Character (Token (Pos1))  and then
+                 To_Upper (Token (Pos1)) = To_Upper (Token (Pos2)) loop
+                  Pos1 := Pos2 + 1;
                   Pos2 := Pos2 + 1;
                end loop;
+
+               Done := (Prog_Memory (Pos1) = "$" and Prog_Memory (Pos2) = "$")
+                 or else
+                   (Prog_Memory (Pos1) = "%" and Prog_Memory (Pos2) = "%")
+                   or else
+                     (Prog_Memory (Pos1) = "!" and Prog_Memory (Pos2) = "!")
+                     or else
+                       (not Is_Name_Character (Element (Prog_Memory (Pos1), 1)) and
+                          not Is_Name_Character (Element (Prog_Memory (Pos2), 1)));
             end if;
          end if;
-         Done := Subfunctions (Index) = Sub_Address;
       end loop;
 
-      return 0;
+      if not Done then
+         Index := 0;
+      end if;
+      return Index;
 
    end Find_Subfunction;
 
@@ -408,15 +421,14 @@ package body M_Basic is
    --  Prepare_Program_Ext cans one area (main program or the library area)
    --   for user defined subroutines and functions.
    function Prepare_Program_Ext
-     (Pos  : in out Positive; Index : in out Positive;
+     (Pos       : in out Positive; Index : in out Positive;
       C_Fun_Ptr : in out Token_Pointer; Error_Abort : Boolean)
-      return Natural is
+         return Natural is
       use Ada.Assertions;
       use Command_And_Token_Functions;
       use Flash;
       Routine_Name : constant String := "M_Basic.Prepare_Program_Ext ";
       C_Fun_Pos    : Natural;
-      Ptr          : Token_Pointer;
       Num_Funcs    : Natural := 0;
       Data         : Unbounded_String;
       Skip         : Boolean := False;
@@ -510,9 +522,9 @@ package body M_Basic is
 
       if Option.Program_Flash_Size /= PROG_FLASH_SIZE then
          null;
-                  Num_Funcs := Prepare_Program_Ext
-                    (Flash.Prog_Memory'Length + Option.Program_Flash_Size, 1,
-                     Flash.C_Function_Library, False);
+         Num_Funcs := Prepare_Program_Ext
+           (Flash.Prog_Memory'Length + Option.Program_Flash_Size, 1,
+            Flash.C_Function_Library, False);
       end if;
 
       --        Dump := Prepare_Program_Ext
