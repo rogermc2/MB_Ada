@@ -285,47 +285,50 @@ package body M_Basic is
       use Command_And_Token_Functions;
       use Ada.Characters.Handling;
       use Flash;
-      --        Routine_Name : constant String := "M_Basic.Find_Subfunction";
-      Index    : Natural := 0;
-      Pos1     : Natural;
-      Pos2     : Natural;
-      Done     : Boolean := False;
+--        Routine_Name : constant String := "M_Basic.Find_Subfunctionm ";
+      Index        : Natural := 0;
+      Pos1         : Natural;
+      Pos2         : Natural;
+      Done         : Boolean := False;
    begin
       --  394
       while not Done and then index < Configuration.MAXSUBFUN loop
          Index := Index + 1;
-         --           Put_Line (Routine_Name & "Index "& Integer'Image (Index));
+--           Put_Line (Routine_Name & "Index "& Integer'Image (Index));
          Pos2 := Subfunctions (index);
-         if Fun_Type = T_NOTYPE and then
-           (Prog_Memory (Pos2) = cmdSUB or Prog_Memory (Pos2) = cmdCSUB) then
-            null;
-         elsif (Prog_Memory (Pos2) = cmdFUN or
-                  Prog_Memory (Pos2) = cmdCFUN) then
-            null;
-         else
-            --  412
-            Pos2 := Pos2 + 1;
-            Skip_Spaces (Pos2);
-            --  418
-            if To_Upper (Token) =
-              To_Upper (Integer'Image (Subfunctions (index))) then
-               Pos1 := 2;
+         if Pos2 > 0 then
+--              Put_Line (Routine_Name & "Pos2 "& Integer'Image (Pos2));
+            if Fun_Type = T_NOTYPE and then
+              (Prog_Memory (Pos2) = cmdSUB or Prog_Memory (Pos2) = cmdCSUB) then
+               null;
+            elsif (Prog_Memory (Pos2) = cmdFUN or
+                     Prog_Memory (Pos2) = cmdCFUN) then
+               null;
+            else
+               --  412
                Pos2 := Pos2 + 1;
-               --  422
-               while Is_Name_Character (Token (Pos1))  and then
-                 To_Upper (Token (Pos1)) = To_Upper (Token (Pos2)) loop
-                  Pos1 := Pos2 + 1;
+               Skip_Spaces (Pos2);
+               --  418
+               if To_Upper (Token) =
+                 To_Upper (Integer'Image (Subfunctions (index))) then
+                  Pos1 := 2;
                   Pos2 := Pos2 + 1;
-               end loop;
+                  --  422
+                  while Is_Name_Character (Token (Pos1))  and then
+                    To_Upper (Token (Pos1)) = To_Upper (Token (Pos2)) loop
+                     Pos1 := Pos2 + 1;
+                     Pos2 := Pos2 + 1;
+                  end loop;
 
-               Done := (Prog_Memory (Pos1) = "$" and Prog_Memory (Pos2) = "$")
-                 or else
-                   (Prog_Memory (Pos1) = "%" and Prog_Memory (Pos2) = "%")
-                   or else
-                     (Prog_Memory (Pos1) = "!" and Prog_Memory (Pos2) = "!")
-                     or else
-                       (not Is_Name_Character (Element (Prog_Memory (Pos1), 1)) and
-                          not Is_Name_Character (Element (Prog_Memory (Pos2), 1)));
+                  Done := (Prog_Memory (Pos1) = "$" and Prog_Memory (Pos2) = "$")
+                    or else
+                      (Prog_Memory (Pos1) = "%" and Prog_Memory (Pos2) = "%")
+                      or else
+                        (Prog_Memory (Pos1) = "!" and Prog_Memory (Pos2) = "!")
+                        or else
+                          (not Is_Name_Character (Element (Prog_Memory (Pos1), 1)) and
+                             not Is_Name_Character (Element (Prog_Memory (Pos2), 1)));
+               end if;
             end if;
          end if;
       end loop;
