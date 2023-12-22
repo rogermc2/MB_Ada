@@ -1,5 +1,6 @@
 
 with Ada.Strings;
+--  with Ada.Text_IO; use Ada.Text_IO;
 with Ada.Unchecked_Conversion;
 
 with M_Misc; use M_Misc;
@@ -73,9 +74,12 @@ package body Command_And_Token_Tables is
 
    --  Skip_Element skips to the the zero char that preceeds an element
    procedure Skip_Token_Buffer_Element (Pos : in out Positive) is
+--        Routine_Name : constant String :=
+--                         "Command_And_Token_Tables.Skip_Token_Buffer_Element";
       use String_Buffer_Package;
    begin
-      while  Integer'Value (Element (Token_Buffer, Pos)) /= 0 loop
+      while Pos <= Token_Buffer_Length and then
+        Element (Token_Buffer, Pos)(1) /= '0' loop
          Pos := Pos + 1;
       end loop;
 

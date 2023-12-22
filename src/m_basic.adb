@@ -65,10 +65,10 @@ package body M_Basic is
       use Command_And_Token_Functions;
       use Global;
       use String_Buffer_Package;
-      Routine_Name       : constant String := "M_Basic.Defined_Subfunction";
+      Routine_Name       : constant String := "M_Basic.Defined_Subfunction ";
       --        Command            : constant String := Element (Token_Buffer, Command_Ptr);
-      Callers_Line_Ptr   : constant Positive := Current_Line_Ptr;
-      Sub_Line_Ptr       : constant Positive := Subfunctions (Index);
+      Callers_Line_Ptr   : constant Natural := Current_Line_Ptr;
+      Sub_Line_Ptr       : constant Natural := Subfunctions (Index);
       Pos                : Positive := Sub_Line_Ptr + 1;  --  p
       Pos2               : Positive;                      --  ttp
       Pos3               : Positive;                      --  pp
@@ -104,21 +104,28 @@ package body M_Basic is
       Current_Line_Ptr := Callers_Line_Ptr;
 
       Name_Ptr := Command_Ptr + 1;
-      while Is_Name_Character (Element (Fun_Name, Name_Ptr) (1)) loop
+      while Name_Ptr <= Integer (Length (Fun_Name)) and then
+        Is_Name_Character (Element (Fun_Name, Name_Ptr) (1)) loop
          Name_Ptr := Name_Ptr + 1;
       end loop;
 
+      Put_Line (Routine_Name & "check Type specification for Name_Ptr: " &
+                  Integer'Image (Name_Ptr));
+      Put_Line (Routine_Name & "Fun_Name length: " &
+                  Integer'Image (Integer (Length (Fun_Name))));
       Assert (Is_Fun and then Element (Fun_Name, Name_Ptr) /= "$" and then
               Element (Fun_Name, Name_Ptr) /= "%" and then
               Element (Fun_Name, Name_Ptr) /= "!",
               Routine_Name & "Type specification is invalid");
 
+      Put_Line (Routine_Name & "490");
       --  490
       Pos := Pos + 1;
       Assert (To_Upper (Get_Token_Buffer_Item (Pos - 1)) =
                 To_Upper (Element (Fun_Name, Name_Ptr - 1)),
               Routine_Name & "Inconsistent type suffix");
 
+      Put_Line (Routine_Name & "494");
       --  494 If this is a function we check to find if the function's type
       --  has been specified with AS <type> and save it.
       Current_Line_Ptr := Sub_Line_Ptr;
@@ -134,6 +141,7 @@ package body M_Basic is
          Fun_Type := Fun_Type or V_FIND or V_DIM_VAR or V_LOCAL or V_EMPTY_OK;
       end if;
 
+      Put_Line (Routine_Name & "511");
       --  511 from now on Name_Ptr (tp) = the caller's argument list
       --                  Pos      (p)  = the argument list for the definition
       Skip_Token_Buffer_Spaces (Pos);
@@ -184,10 +192,10 @@ package body M_Basic is
 
    procedure Execute_Command (Token_Ptr : in out Positive) is
       use Ada.Assertions;
-      Routine_Name       : constant String := "M_Basic.Execute_Command";
+      Routine_Name       : constant String := "M_Basic.Execute_Command ";
       Next_Statement_Ptr : Positive := Token_Ptr + 1;
       Command_Line_Ptr   : Positive := Token_Ptr + 1;
-      Null_Function      : Function_Type := T_NA;
+      Null_Function      : Function_Type := T_NOTYPE;
       Fa                 : Configuration.MMFLOAT := 0.0;
       I64a               : Long_Long_Integer := 0;
       Sa                 : Unbounded_String := To_Unbounded_String ("");
@@ -199,9 +207,15 @@ package body M_Basic is
       --  228
       Skip_Token_Buffer_Spaces (Command_Line_Ptr);
       Skip_Token_Buffer_Element (Next_Statement_Ptr);
+      Done := Token_Ptr >= Token_Buffer_Length;
+      if Done then
+         Put_Line (Routine_Name & "No more token buffer elements");
+      end if;
 
       while not Done loop
-         if Integer'Value (Get_Token_Buffer_Item (Token_Ptr)) /= 0 and then
+         Put_Line (Routine_Name & "Token_Buffer (Token_Ptr): " &
+                  Get_Token_Buffer_Item (Token_Ptr));
+         if Get_Token_Buffer_Item (Token_Ptr)(1) /= '0' and then
            Get_Token_Buffer_Item (Token_Ptr) /= "'" then
             --  239
             --              if Set_Jump (Err_Next) = 0 then
@@ -216,6 +230,7 @@ package body M_Basic is
                Defined_Subfunction (False, Token_Ptr, Index,
                                     Fa, I64a, Sa, Null_Function);
             end if;
+            Put_Line (Routine_Name & "268 ");
 
             --              end if;
 
@@ -279,10 +294,14 @@ package body M_Basic is
                Skip_Token_Buffer_Spaces (Token_Ptr);
             end if;
 
-            if Integer'Value (Get_Token_Buffer_Item (1)) /= 0 then
+            --  225
+            Put_Line (Routine_Name & "Token_Buffer (1); " &
+                     Get_Token_Buffer_Item (1));
+            if Get_Token_Buffer_Item (Token_Ptr)(1) /= '0' then
                Execute_Command (Token_Ptr);
             end if;
 
+            Put_Line (Routine_Name & "check Get_Token_Buffer_Item (1) /= 00");
             Done := Get_Token_Buffer_Item (1) /= "00" and
               Get_Token_Buffer_Item (1) /= "FF";
             Token_Ptr := Token_Ptr + 1;
@@ -293,7 +312,7 @@ package body M_Basic is
 
    exception
       when others =>
-         Put_Line (Routine_Name);
+         Put_Line (Routine_Name & "exception");
          raise;
 
    end Execute_Program;
@@ -316,10 +335,12 @@ package body M_Basic is
       Put_Line (Routine_Name & "Token: " & Token);
       while not Done and then index < Configuration.MAXSUBFUN loop
          Index := Index + 1;
-         Put_Line (Routine_Name & "Index "& Integer'Image (Index));
+         Put_Line (Routine_Name & "Index " & Integer'Image (Index));
          Pos2 := Subfunctions (index);
-         Put_Line (Routine_Name & "Pos2 "& Integer'Image (Pos2));
-         if Pos2 > 0 then
+         Put_Line (Routine_Name & "Pos2 " & Integer'Image (Pos2));
+         Done := Pos2 = 0;
+
+         if not Done then
             if Fun_Type = T_NOTYPE and then
               (Prog_Memory (Pos2) = cmdSUB or Prog_Memory (Pos2) = cmdCSUB) then
                null;
@@ -361,6 +382,8 @@ package body M_Basic is
       if not Done then
          Index := 0;
       end if;
+      Put_Line (Routine_Name & "done");
+
       return Index;
 
    end Find_Subfunction;
@@ -396,7 +419,9 @@ package body M_Basic is
 
    function Is_Name_Character (aChar : Character) return Boolean is
       use Ada.Characters.Handling;
+      Routine_Name : constant String := "M_Basic.Is_Name_Character ";
    begin
+      Put_Line (Routine_Name & "aChar: " & aChar);
       return Is_Alphanumeric (aChar) or else aChar = '_' or else aChar = ':';
 
    end Is_Name_Character;
