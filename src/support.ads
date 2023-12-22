@@ -9,7 +9,9 @@ package Support is
 
    procedure Copy_Slice (Pos1 : in out Positive; Pos2 : Positive);
    procedure Do_PIN;
+   procedure Initialize;
    procedure Process_Commands;
    procedure Restart;
+   procedure Setup;
 
 end Support;

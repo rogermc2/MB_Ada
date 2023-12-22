@@ -32,25 +32,11 @@ procedure Main is
    use String_Buffer_Package;
    Program_Name    : constant String := "Main ";
    Startup_Token   : constant String := "MM.Startup";
-   Saved_Cause     : Setup_Exception := Cause_Nothing;
    Watchdog_Set    : Boolean := False;
    Basic_Running   : Boolean := True;
    Error_In_Prompt : Boolean := False;
 begin
-   --  140
-   Watchdog_Timer.Clear_Event_WDT;
-   Misc_MX470.Init_Processor;
-   M_Basic.Init_Basic;
-
-   if Except_Cause /= Cause_Display then
-      Saved_Cause := Except_Cause;
-      Except_Cause := Cause_Display;
-      --  Setup the SSD display early in case it is being used
-      --  as the console output.
-      SSD_1963.Init_Display_SSD;
-      Except_Cause := Saved_Cause;
-      Saved_Cause := Cause_Nothing;
-   end if;
+   Initialize;
 
    if P32mx470f512h.RCON = 64 then
       Restart;
@@ -64,21 +50,7 @@ begin
       --        end if;
    end if;
 
-   Except_Cause := Cause_Display;
-   SPI_LCD.Init_Display_SPI (False);
-
-   Except_Cause := Cause_File_IO;
-   File_IO.Init_File_IO;
-   Except_Cause := Cause_Keyboard;
-   Keyboard.Init_Keyboard;
-
-   Except_Cause := Cause_RTC;
-   if Flash.Option.RTC_Data /= 0 then
-      I2C.RTC_Get_Time;
-   end if;
-
-   Except_Cause := Cause_Touch;
-   Touch.Init_Touch;
+   Setup;
 
    --  298
    if Except_Cause /= Cause_MM_Startup then
@@ -108,7 +80,29 @@ begin
 
    Except_Cause := Cause_Nothing;
    Put_Line (Program_Name  & "Process_Commands");
-   Process_Commands;
+   loop
+      Process_Commands;
+
+      if not Global.Error_In_Prompt and M_Basic.Find_Subfunction
+        ("MM.PROMPT", T_NOTYPE) /= 0 then
+         Global.Error_In_Prompt := True;
+         Clear_Token_Buffer;
+         Token_Buffer_Append ("MM.PROMPT\0");
+         M_Basic.Execute_Program;
+      else
+         --  Print prompt
+         M_Basic.Print_String ("> ");
+      end if;
+
+      Global.Error_In_Prompt := False;
+      Load_Input_Buffer (0);
+      if Input_Buffer_Length > 0 then
+         Put_Line ("Process_Commands  ");
+         M_Basic.Tokenize (True);
+         M_Basic.Execute_Program;
+      end if;
+
+   end loop;
 
 exception
    when others =>
