@@ -41,6 +41,7 @@ package body M_Basic is
       Audio.Vol_Right := 100;
       Commands.Option_Error_Skip := 0;
       File_IO.Option_File_Error_Abort := True;
+      --  Subfunctions contains pointers to program memory elenments
       for index in Subfunctions'Range loop
          Subfunctions (Index) := 0;
       end loop;
@@ -72,11 +73,13 @@ package body M_Basic is
       use Ada.Assertions;
       use C_Functions;
       use Command_And_Token_Functions;
+      use Flash;
       use Global;
       use String_Buffer_Package;
       Routine_Name       : constant String := "M_Basic.Defined_Subfunction ";
       --        Command            : constant String := Element (Token_Buffer, Command_Ptr);
       Callers_Line_Ptr   : constant Natural := Current_Line_Ptr;
+      --  Sub_Line_Ptr is pointer to a program memory elenment
       Sub_Line_Ptr       : constant Natural := Subfunctions (Index);
       Pos                : Positive := Sub_Line_Ptr + 1;  --  p
       Pos2               : Positive;                      --  ttp
@@ -110,8 +113,9 @@ package body M_Basic is
       --
       Put_Line (Routine_Name & "Fun_Name length: " &
                   Integer'Image (Integer (Length (Fun_Name))));
+      --  Subfunctions contains pointers to program memory elenments
       Assert (Is_Fun and then Get_Token_Buffer_Item (Pos) = "(" and then
-              Subfunctions (Sub_Line_Ptr) = cmdCFUN,
+              Prog_Memory_Array (Subfunctions (Sub_Line_Ptr)) = cmdCFUN,
               Routine_Name & "Function definition");
 
       --  488 Find the end of the caller's identifier, Name_Ptr is left pointing to
