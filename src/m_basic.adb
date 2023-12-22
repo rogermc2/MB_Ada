@@ -115,7 +115,7 @@ package body M_Basic is
                   Integer'Image (Integer (Length (Fun_Name))));
       --  Subfunctions contains pointers to program memory elenments
       Assert (Is_Fun and then Get_Token_Buffer_Item (Pos) = "(" and then
-              Prog_Memory_Array (Subfunctions (Sub_Line_Ptr)) = cmdCFUN,
+              Prog_Memory (Subfunctions (Sub_Line_Ptr)) = cmdCFUN,
               Routine_Name & "Function definition");
 
       --  488 Find the end of the caller's identifier, Name_Ptr is left pointing to
