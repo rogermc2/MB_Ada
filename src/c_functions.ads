@@ -14,4 +14,6 @@ package C_Functions is
      (Sub_Line_Ptr, Name_Ptr, Pos, Callers_Line_Ptr : Positive)
       return Unbounded_String;
 
+   procedure Check_Abort;
+
 end C_Functions;

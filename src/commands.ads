@@ -3,6 +3,8 @@ with Command_And_Token_Tables; use Command_And_Token_Tables;
 
 package Commands is
 
+   Option_Error_Skip : Integer := 0;
+
    procedure Check_Type_Specified
      (Pos                : Positive; Fun_Type : in out Unsigned_2Byte;
       Allow_Default_Type : Boolean);

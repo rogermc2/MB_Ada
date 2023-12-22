@@ -17,7 +17,6 @@ package body C_Functions is
 
    end Call_CFunction;
 
-
    function Call_CFunction
      (Sub_Line_Ptr, Name_Ptr, Pos, Callers_Line_Ptr : Positive)
       return Unbounded_String is
@@ -25,5 +24,11 @@ package body C_Functions is
       return To_Unbounded_String ("");
 
    end Call_CFunction;
+
+   procedure Check_Abort is
+   begin
+      null;
+
+   end Check_Abort;
 
 end C_Functions;
