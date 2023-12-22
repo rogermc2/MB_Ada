@@ -55,6 +55,15 @@ package body M_Basic is
      Ada.Unchecked_Conversion (Modular, Flash.UB_String_Access);
    pragma Warnings (On);
 
+   --  Defined_Subfunction function is responsible for executing a defined
+   --  subroutine or function.
+   --  isfun is true when executing a function.
+   --  Command_Ptr is a pointer to the command name in program memory that is
+   --              used by the caller.
+   --  Index       is an index into subfun[i] which points to the definition of
+   --              the subroutine or function.
+   --  fa, i64a, sa and typ are pointers to where the return value is to be
+   --                       stored (used by functions only).
    procedure Defined_Subfunction
      (Is_Fun : Boolean; Command_Ptr : Positive; Index  : Positive;
       Fa     : in out Configuration.MMFLOAT; I64a : in out Long_Long_Integer;
@@ -79,6 +88,7 @@ package body M_Basic is
       Found              : Boolean := False;
    begin
       Fun_Type := T_NOTYPE;
+      --  462
       Skip_Token_Buffer_Spaces (Pos);
       Pos2 := Pos;
       Current_Line_Ptr := Sub_Line_Ptr;
@@ -86,6 +96,7 @@ package body M_Basic is
       Pos := Pos + 1;
       Name_Ptr := 1;
 
+      --  473
       if Get_Token_Buffer_Item (Pos) = "$" or else
         Get_Token_Buffer_Item (Pos) = "%" or else
         Get_Token_Buffer_Item (Pos) = "!" then
@@ -95,11 +106,15 @@ package body M_Basic is
          Pos := Pos + 1;
          Name_Ptr := Name_Ptr + 1;
       end if;
-      --        Assert (Is_Fun and then Element (Token_Buffer, Pos) = "(" and then
-      --                Subfunctions (Sub_Line_Ptr) = cmdCFUN,
-      --                Routine_Name & "Function definition");
 
-      --  479 Find the end of the caller's identifier, Name_Ptr is left pointing to
+      --
+      Put_Line (Routine_Name & "Fun_Name length: " &
+                  Integer'Image (Integer (Length (Fun_Name))));
+      Assert (Is_Fun and then Get_Token_Buffer_Item (Pos) = "(" and then
+              Subfunctions (Sub_Line_Ptr) = cmdCFUN,
+              Routine_Name & "Function definition");
+
+      --  488 Find the end of the caller's identifier, Name_Ptr is left pointing to
       --  the start of the caller's argument list
       Current_Line_Ptr := Callers_Line_Ptr;
 
@@ -214,7 +229,7 @@ package body M_Basic is
 
       while not Done loop
          Put_Line (Routine_Name & "Token_Buffer (Token_Ptr): " &
-                  Get_Token_Buffer_Item (Token_Ptr));
+                     Get_Token_Buffer_Item (Token_Ptr));
          if Get_Token_Buffer_Item (Token_Ptr)(1) /= '0' and then
            Get_Token_Buffer_Item (Token_Ptr) /= "'" then
             --  239
@@ -296,7 +311,7 @@ package body M_Basic is
 
             --  225
             Put_Line (Routine_Name & "Token_Buffer (1); " &
-                     Get_Token_Buffer_Item (1));
+                        Get_Token_Buffer_Item (1));
             if Get_Token_Buffer_Item (Token_Ptr)(1) /= '0' then
                Execute_Command (Token_Ptr);
             end if;
@@ -321,7 +336,7 @@ package body M_Basic is
    --  returns with the index of the sub/function in the table or -1 if not found
    --  if type = 0 then look for a sub otherwise a function
    function Find_Subfunction (Token : String; Fun_Type : Function_Type)
-                           return Natural is
+                              return Natural is
       use Command_And_Token_Functions;
       use Ada.Characters.Handling;
       use Flash;

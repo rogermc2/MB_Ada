@@ -14,6 +14,7 @@ package M_Basic is
    Continue_Point   : Natural := 0;
    Local_Index      : Natural := 0;
 
+   --  Subfunctions is an array of pointers to program memory elements
    Subfunctions             : array (1 .. Configuration.MAXSUBFUN) of Natural :=
                                 (others => 0);
    Current_Subfunction_Name : array (1 .. Configuration.MAXVARLEN + 1) of
