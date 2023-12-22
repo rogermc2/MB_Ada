@@ -10,7 +10,7 @@ package M_Basic is
 
    MAXLINENBR       : constant integer := 65001;
 
-   Current_Line_Ptr : Natural := 0;
+   Current_Line_Pos : Natural := 0;
    Continue_Point   : Natural := 0;
    Local_Index      : Natural := 0;
 
