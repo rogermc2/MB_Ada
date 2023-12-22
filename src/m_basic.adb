@@ -276,55 +276,56 @@ package body M_Basic is
 
    procedure Execute_Program is
       use Global;
+      use Flash;
       Routine_Name : constant String := "M_Basic.Execute_Program ";
-      Token_Ptr    : Positive := 1;
+      Program_Ptr  : Positive := 1;
       Done         : Boolean := False;
    begin
       Put_Line (Routine_Name);
       --  194
-      Skip_Token_Buffer_Spaces (Token_Ptr);
+      Skip_Spaces (Program_Ptr);
 
       Put_Line (Routine_Name & "spaces skipped");
 
-      if Token_Buffer_Not_Empty then
-         Put_Line (Routine_Name & "Token_Buffer_Not_Empty");
-         while not Done and then Token_Ptr <= Positive (Token_Buffer_Length) loop
-            if Get_Token_Buffer_Item (Token_Ptr) = "0" then
-               token_Ptr := Token_Ptr + 1;
+      if Prog_Memory'Length > 0 then
+         Put_Line (Routine_Name & "Prog_Memory is Not Empty");
+         while not Done and then p <= Positive (Prog_Memory'Length) loop
+            if Get_Token_Buffer_Item (Program_Ptr) = "0" then
+               Program_Ptr := Program_Ptr + 1;
             end if;
 
             --  199
-            if Get_Token_Buffer_Item (Token_Ptr) = T_NEWLINE then
-               Current_Line_Pos := Token_Ptr;
-               Token_Ptr := Token_Ptr + 1;
+            if Prog_Memory (Program_Ptr) = T_NEWLINE then
+               Current_Line_Pos := Program_Ptr;
+               Program_Ptr := Program_Ptr + 1;
             end if;
 
             --  217
-            if Get_Token_Buffer_Item (Token_Ptr) = T_LINENBR then
-               Token_Ptr := Token_Ptr + 3;
+            if Prog_Memory (Program_Ptr) = T_LINENBR then
+               Program_Ptr := Program_Ptr + 3;
             end if;
-            Skip_Token_Buffer_Spaces (Token_Ptr);
+            Skip_Spaces (Program_Ptr);
 
-            if Get_Token_Buffer_Item (1) = T_LABEL then
+            if Prog_Memory (1) = T_LABEL then
                --  skip over the label
-               Token_Ptr := Integer'Value (Get_Token_Buffer_Item (2)) + 2;
-               Skip_Token_Buffer_Spaces (Token_Ptr);
+               Program_Ptr := Integer'Value (Prog_Memory (2)) + 2;
+               Skip_Spaces (Program_Ptr);
             end if;
 
             --  225
-            Put_Line (Routine_Name & "Token_Buffer (1); " &
-                        Get_Token_Buffer_Item (1));
-            if Get_Token_Buffer_Item (Token_Ptr)(1) /= '0' then
-               Execute_Command (Token_Ptr);
+            Put_Line (Routine_Name & "Program (1); " &
+                        To_String (Prog_Memory (1)));
+            if Element (Prog_Memory (Program_Ptr), 1) /= '0' then
+               Execute_Command (Program_Ptr);
             end if;
 
-            Put_Line (Routine_Name & "check Get_Token_Buffer_Item (1) /= 00");
-            Done := Get_Token_Buffer_Item (1) /= "00" and
-              Get_Token_Buffer_Item (1) /= "FF";
-            Token_Ptr := Token_Ptr + 1;
+            Put_Line (Routine_Name & "check program (1) /= 00");
+            Done := Prog_Memory (1) /= "00" and
+              Prog_Memory (1) /= "FF";
+            Program_Ptr := Program_Ptr + 1;
          end loop;
       else
-         Put_Line (Routine_Name & "Token_Buffer is empty");
+         Put_Line (Routine_Name & "Program is empty");
       end if;
 
    exception
