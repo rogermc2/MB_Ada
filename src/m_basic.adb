@@ -100,7 +100,7 @@ package body M_Basic is
       Name_Ptr := 1;
 
       --  473
-      if Get_Token_Buffer_Item (Pos) = "$" or else
+       if Get_Token_Buffer_Item (Pos) = "$" or else
         Get_Token_Buffer_Item (Pos) = "%" or else
         Get_Token_Buffer_Item (Pos) = "!" then
          Assert (Is_Fun, Routine_Name & "Type specification is invalid:");
@@ -110,11 +110,8 @@ package body M_Basic is
          Name_Ptr := Name_Ptr + 1;
       end if;
 
-      --
-      Put_Line (Routine_Name & "Fun_Name length: " &
-                  Integer'Image (Integer (Length (Fun_Name))));
-      --  Subfunctions contains pointers to program memory elenments
-      Assert (Is_Fun and then Get_Token_Buffer_Item (Pos) = "(" and then
+      --  484 Subfunctions contains pointers to program memory elenments
+      Assert (not Is_Fun or else Get_Token_Buffer_Item (Pos) = "(" or else
               Prog_Memory (Subfunctions (Sub_Line_Ptr)) = cmdCFUN,
               Routine_Name & "Function definition");
 
@@ -132,7 +129,7 @@ package body M_Basic is
                   Integer'Image (Name_Ptr));
       Put_Line (Routine_Name & "Fun_Name length: " &
                   Integer'Image (Integer (Length (Fun_Name))));
-      Assert (Is_Fun and then Element (Fun_Name, Name_Ptr) /= "$" and then
+      Assert (Element (Fun_Name, Name_Ptr) /= "$" and then
               Element (Fun_Name, Name_Ptr) /= "%" and then
               Element (Fun_Name, Name_Ptr) /= "!",
               Routine_Name & "Type specification is invalid");
@@ -354,9 +351,7 @@ package body M_Basic is
       Put_Line (Routine_Name & "Token: " & Token);
       while not Done and then index < Configuration.MAXSUBFUN loop
          Index := Index + 1;
-         Put_Line (Routine_Name & "Index " & Integer'Image (Index));
          Pos2 := Subfunctions (index);
-         Put_Line (Routine_Name & "Pos2 " & Integer'Image (Pos2));
          Done := Pos2 = 0;
 
          if not Done then
@@ -371,8 +366,6 @@ package body M_Basic is
                Pos2 := Pos2 + 1;
                Skip_Spaces (Pos2);
                --  418
-               Put_Line (Routine_Name & "Subfunctions (index): " &
-                           Integer'Image (Subfunctions (index)));
                if To_Upper (Token) =
                  To_Upper (Integer'Image (Subfunctions (index))) then
                   Pos1 := 2;
@@ -401,7 +394,6 @@ package body M_Basic is
       if not Done then
          Index := 0;
       end if;
-      Put_Line (Routine_Name & "done");
 
       return Index;
 

@@ -45,8 +45,6 @@ begin
       --           null;
       --        else
       Put_Line ("Ada Port Of Micromite Plus MMBasic");
-      --        M_Basic.Print_String ("Ada Port Of Micromite Plus MMBasic");
-      --        M_Basic.Print_String ("\r\n");
       --        end if;
    end if;
 
