@@ -37,7 +37,6 @@ begin
          Draw.GUI_Bcolour := Global.Prompt_Bcolour;
          if Draw.Current_X /= 0 then
             --  Prompt should be on a new line.
-            --                 M_Basic.Print_String ("\r\n");
             New_Line;
          end if;
       end if;
@@ -57,7 +56,6 @@ begin
 
       if Global.MM_Char_Pos > 1 then
          --  Prompt should be on a new line.
-         --              M_Basic.Print_String ("\r\n");
          New_Line;
       end if;
 

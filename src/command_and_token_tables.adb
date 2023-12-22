@@ -84,7 +84,8 @@ package body Command_And_Token_Tables is
    procedure Skip_Token_Buffer_Spaces (Pos : in out Positive) is
       use String_Buffer_Package;
    begin
-      while  Element (Token_Buffer, Pos)(1) = ' ' loop
+      while Pos <= Integer (Length (Token_Buffer)) and then
+        Element (Token_Buffer, Pos)(1) = ' ' loop
          Pos := Pos + 1;
       end loop;
 
