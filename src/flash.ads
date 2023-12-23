@@ -11,6 +11,7 @@ package Flash is
 
    FLASH_PAGE_SIZE : constant Positive := 4096;
    PROG_FLASH_SIZE : constant Positive := 16 * FLASH_PAGE_SIZE;
+   EDIT_BUFFER_SIZE : constant Positive := 46 * FLASH_PAGE_SIZE;
 
    type Prog_Memory_Array is array (1 .. PROG_FLASH_SIZE) of
      Unbounded_String;

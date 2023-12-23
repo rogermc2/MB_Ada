@@ -18,6 +18,7 @@ package Command_And_Token_Tables is
    type Unsigned_Byte is mod 256;
    type Unsigned_2Byte is mod 65536;
    type Unsigned_Byte_Ptr is access Unsigned_Byte;
+   type Unsigned_Byte_Array is array (Positive range <>) of Unsigned_Byte;
 
    subtype Function_Type is Unsigned_2Byte;
    type Function_Type_Ptr is access Function_Type;
