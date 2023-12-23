@@ -68,7 +68,7 @@ package body M_Basic is
    --  fa, i64a, sa and typ are pointers to where the return value is to be
    --                       stored (used by functions only).
    procedure Defined_Subfunction
-     (Is_Fun : Boolean; Command : String; Index  : Positive;
+     (Is_Fun : Boolean; Command : String; Subfun_Index  : Positive;
       Fa     : in out Configuration.MMFLOAT; I64a : in out Long_Long_Integer;
       Sa     : in out Unbounded_String; Fun_Type : in out Function_Type) is
       use Ada.Characters.Handling;
@@ -80,17 +80,18 @@ package body M_Basic is
       Routine_Name       : constant String := "M_Basic.Defined_Subfunction ";
       Callers_Line_Ptr   : constant Natural := Current_Line_Ptr;
       --  Sub_Line_Ptr is pointer to a program memory elenment
-      Sub_Line_Ptr       : constant Natural := Subfunctions (Index);
+      Sub_Line_Ptr       : constant Natural := Subfunctions (Subfun_Index);
       SL_Pos             : Positive := 1;      --  p points to Subfunctions
       --  character
       SL_Pos2            : Positive;           --  ttp
       SL_Pos3            : Positive;           --  pp
       Fun_Name           : Unbounded_String;
-      Name_Pos           : Positive := 1;           --  tp
+      Fun_Name_Pos       : Positive := 1;      --  tp
       I_Tmp              : Long_Long_Integer;
       --        Sub_Name : constant Unbounded_String := To_Unbounded_String (Name);
       Found              : Boolean := False;
    begin
+      Assert (Sub_Line_Ptr > 0, Routine_Name & "Sub_Line_Ptr = 0");
       Fun_Type := T_NOTYPE;
       --  462
       Skip_Spaces (SL_Pos);
@@ -102,7 +103,11 @@ package body M_Basic is
       Current_Line_Ptr := Sub_Line_Ptr;
       Append (Fun_Name, To_String (Prog_Memory (SL_Pos)));
       SL_Pos := SL_Pos + 1;
-      Name_Pos := Name_Pos + 1;
+      Fun_Name_Pos := Fun_Name_Pos + 1;
+      Put_Line (Routine_Name & "465 Subfun_Index; " &
+                  Integer'Image (Subfun_Index));
+      Put_Line (Routine_Name & "465 Sub_Line_Ptr; " &
+                  Integer'Image (Sub_Line_Ptr));
 
       --  473
       if Command (Command'First) = '$' or else
@@ -113,45 +118,43 @@ package body M_Basic is
          Fun_Name := Fun_Name & Command (Command'First);
          SL_Pos := SL_Pos + 1;
       end if;
-      Name_Pos := Command'First + 1;
+      Fun_Name_Pos := Command'First + 1;
 
       --  484 Subfunctions contains pointers to program memory elenments
-      Assert (not Is_Fun or else Command (Name_Pos) = '(' or else
+      Assert (not Is_Fun or else Command (Fun_Name_Pos) = '(' or else
               Prog_Memory (Subfunctions (Sub_Line_Ptr)) = cmdCFUN,
               Routine_Name & "Function definition");
 
-      --  488 Find the end of the caller's identifier, Name_Pos is left pointing to
+      --  488 Find the end of the caller's identifier, Fun_Name_Pos is left pointing to
       --  the start of the caller's argument list
       Current_Line_Ptr := Callers_Line_Ptr;
 
-      Name_Pos := 2;
-      while Name_Pos < Integer (Length (Fun_Name)) and then
-        Is_Name_Character (Element (Fun_Name, Name_Pos)) loop
-         Name_Pos := Name_Pos + 1;
+      Fun_Name_Pos := 2;
+      while Fun_Name_Pos < Integer (Length (Fun_Name)) and then
+        Is_Name_Character (Element (Fun_Name, Fun_Name_Pos)) loop
+         Fun_Name_Pos := Fun_Name_Pos + 1;
       end loop;
 
-      Put_Line (Routine_Name & "check Type specification for Name_Pos: " &
-                  Integer'Image (Name_Pos));
+      Put_Line (Routine_Name & "check Type specification for Fun_Name_Pos: " &
+                  Integer'Image (Fun_Name_Pos));
       Put_Line (Routine_Name & "Fun_Name length: " &
                   Integer'Image (Integer (Length (Fun_Name))));
       --  477
-      if Element (Fun_Name, Name_Pos) = '$' or else
-        Element (Fun_Name, Name_Pos) = '%' or else
-        Element (Fun_Name, Name_Pos) = '!' then
+      if Element (Fun_Name, Fun_Name_Pos) = '$' or else
+        Element (Fun_Name, Fun_Name_Pos) = '%' or else
+        Element (Fun_Name, Fun_Name_Pos) = '!' then
          Assert (Is_Fun, Routine_Name & "Type specification is invalid");
       else
          Append (Fun_Name, Command (SL_Pos));
          SL_Pos := SL_Pos + 1;
-         Name_Pos := Name_Pos + 1;
+         Fun_Name_Pos := Fun_Name_Pos + 1;
       end if;
 
-      Put_Line (Routine_Name & "499");
       --  499
       Assert (To_Upper (To_String (Prog_Memory (SL_Pos - 1))(1)) =
-                To_Upper (Element (Fun_Name, Name_Pos - 1)),
+                To_Upper (Element (Fun_Name, Fun_Name_Pos - 1)),
               Routine_Name & "Inconsistent type suffix");
 
-      Put_Line (Routine_Name & "503");
       --  503 If this is a function we check to find if the function's type
       --  has been specified with AS <type> and save it.
       Current_Line_Ptr := Sub_Line_Ptr;
@@ -167,16 +170,18 @@ package body M_Basic is
          Fun_Type := Fun_Type or V_FIND or V_DIM_VAR or V_LOCAL or V_EMPTY_OK;
       end if;
 
-      Put_Line (Routine_Name & "511");
-      --  511 from now on Name_Pos (tp) points to the caller's argument list
+      --  511 from now on Fun_Name_Pos (tp) points to the caller's argument list
       --      SL_Pos   (p) points to the Prog_Memory argument list
       --                  for the definition.
       Skip_Spaces (SL_Pos);
-      Skip_Spaces (Fun_Name, Name_Pos);
+      Skip_Spaces (Fun_Name, Fun_Name_Pos);
+      Put_Line (Routine_Name & "511 Sub_Line_Ptr: " &
+                  Integer'Image (Sub_Line_Ptr));
 
       if Prog_Memory (Sub_Line_Ptr) = cmdCFUN then
+         Put_Line (Routine_Name & "521");
          --  521
-         if Command (Name_Pos) = ')' then
+         if Command (Fun_Name_Pos) = ')' then
             SL_Pos3 := SL_Pos;
             Found := Prog_Memory (SL_Pos3) /= ")" and then
               Prog_Memory (SL_Pos3) /= "0";
@@ -198,24 +203,25 @@ package body M_Basic is
          --  537
          case Fun_Type is
             when T_INT => I64a :=
-                 Call_CFunction (Sub_Line_Ptr, Name_Pos, SL_Pos,
+                 Call_CFunction (Sub_Line_Ptr, Fun_Name_Pos, SL_Pos,
                                  Callers_Line_Ptr);
             when T_NBR => I_Tmp :=
-                 Call_CFunction (Sub_Line_Ptr, Name_Pos, SL_Pos,
+                 Call_CFunction (Sub_Line_Ptr, Fun_Name_Pos, SL_Pos,
                                  Callers_Line_Ptr);
                Fa := Configuration.MMFLOAT (I_Tmp);
             when T_STR => Sa :=
-                 Call_CFunction (Sub_Line_Ptr, Name_Pos, SL_Pos,
+                 Call_CFunction (Sub_Line_Ptr, Fun_Name_Pos, SL_Pos,
                                  Callers_Line_Ptr);
                Fa := Configuration.MMFLOAT (I_Tmp);
             when others =>
                Assert (False, Routine_Name & "function name: " &
-                         Element (Fun_Name, Name_Pos));
+                         Element (Fun_Name, Fun_Name_Pos));
          end case;
       end if;
 
       --  553
       Memory.Temp_Memory_Is_Changed := True;
+      Put_Line (Routine_Name & "done");
 
    end Defined_Subfunction;
 
@@ -259,7 +265,6 @@ package body M_Basic is
                                     Fa, I64a, Sa, Null_Function);
             end if;
             Put_Line (Routine_Name & "268 ");
-
             --              end if;
 
             --  268
@@ -298,8 +303,6 @@ package body M_Basic is
       --  194
       Skip_Spaces (Prog_Memory (1), Program_Ptr);
 
-      Put_Line (Routine_Name & "spaces skipped");
-
       if Prog_Memory'Length > 0 then
          Put_Line (Routine_Name & "Prog_Memory is Not Empty");
          while not Done and then Program_Ptr <= Positive (Prog_Memory'Length) loop
@@ -327,9 +330,9 @@ package body M_Basic is
             end if;
 
             --  225
-            Put_Line (Routine_Name & "Program (1); " &
-                        To_String (Prog_Memory (1)));
-            if Element (Prog_Memory (Program_Ptr), 1) /= '0' then
+            Put_Line (Routine_Name & "225 Program_Ptr; " &
+                        Integer'Image (Program_Ptr));
+            if Program_Ptr <= Prog_Memory'Length then
                Execute_Command (Prog_Memory (Program_Ptr));
             end if;
 
