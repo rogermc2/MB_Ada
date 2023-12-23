@@ -32,6 +32,7 @@ procedure Main is
    use String_Buffer_Package;
    Program_Name    : constant String := "Main ";
    Startup_Token   : constant String := "MM.Startup";
+   Token_Buffer    : String_Buffer;
    Watchdog_Set    : Boolean := False;
    Basic_Running   : Boolean := True;
    Error_In_Prompt : Boolean := False;
@@ -56,21 +57,21 @@ begin
       M_Basic.Prepare_Program (True);
 
       Except_Cause := Cause_MM_Startup;
-      Clear_Token_Buffer;
-      Token_Buffer_Append (Startup_Token);
+      Clear_Buffer (Token_Buffer);
+      Buffer_Append (Token_Buffer, Startup_Token);
 
       --  311
       if M_Basic.Find_Subfunction (Startup_Token, T_NOTYPE) /= 0 then
          Put_Line (Program_Name  & "Startup_Token found");
-         Token_Buffer_Append (Startup_Token);
-         Token_Buffer_Append ("/0");
+         Buffer_Append (Token_Buffer,Startup_Token);
+         Buffer_Append (Token_Buffer, "/0");
          M_Basic.Execute_Program (Token_Buffer);
       else
          Put_Line (Program_Name &
                      "Startup_Token not found,Token_Buffer_Length: " &
-                     Integer'Image (Token_Buffer_Length));
+                     Integer'Image (Buffer_Length (Token_Buffer)));
          Put_Line (Program_Name & "Token_Buffer (1): " &
-                     Get_Token_Buffer_Item (1));
+                     Buffer_Item (Token_Buffer, 1));
       end if;
    end if;
 
@@ -84,8 +85,8 @@ begin
       if not Global.Error_In_Prompt and M_Basic.Find_Subfunction
         ("MM.PROMPT", T_NOTYPE) /= 0 then
          Global.Error_In_Prompt := True;
-         Clear_Token_Buffer;
-         Token_Buffer_Append ("MM.PROMPT\0");
+         Clear_Buffer (Token_Buffer);
+         Buffer_Append (Token_Buffer, "MM.PROMPT\0");
          M_Basic.Execute_Program (Token_Buffer);
       else
          --  Print prompt
@@ -96,7 +97,7 @@ begin
       Load_Input_Buffer (0);
       if Input_Buffer_Length > 0 then
          Put_Line ("Process_Commands  ");
-         M_Basic.Tokenize (True);
+         M_Basic.Tokenize (Token_Buffer, True);
          M_Basic.Execute_Program (Token_Buffer);
       end if;
 

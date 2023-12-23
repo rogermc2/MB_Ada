@@ -318,22 +318,20 @@ package Command_And_Token_Tables is
                         (To_Unbounded_String ("op_shiftright"), T_NA, 0, Null_Address),
                         (To_Unbounded_String (""), T_NA, 0, Null_Address));
 
-   Token_Buffer : String_Buffer;
-
-   procedure Clear_Token_Buffer;
    function Get_Input_Character (Pos : Positive) return Character;
    function Get_Input_Slice (Pos1, Pos2 : Positive) return String;
-   function Get_Token_Buffer_Item (Pos : Positive) return String;
    function Input_Buffer_Length return Natural;
    procedure Load_Input_Buffer (File_Num : Natural);
    procedure Replace_In_Buffer_Character (Pos : Positive; aChar : Character);
    procedure Skip_In_Buffer_Spaces (Pos : in out Positive);
    procedure Skip_Spaces (Buffer : String_Buffer; Pos : in out Positive);
-   procedure Skip_Token_Buffer_Element (Pos : in out Positive);
-   procedure Skip_Token_Buffer_Spaces (Pos : in out Positive);
-   procedure Token_Buffer_Append (Item : String);
-   function Token_Buffer_Length return Natural;
-   function Token_Buffer_Not_Empty return Boolean;
+   procedure Skip_Buffer_Element (Buffer : String_Buffer;
+                                  Pos    : in out Positive);
+   procedure Skip_Buffer_Spaces (Buffer : in out String_Buffer;
+                                 Pos    : in out Positive);
+   procedure Buffer_Append (Buffer : in out String_Buffer; Item : String);
+   function Buffer_Length (Buffer : String_Buffer) return Natural;
+   function Buffer_Not_Empty (Buffer : String_Buffer) return Boolean;
    function Token_Type (Index : Integer) return Function_Type;
    procedure Trim_Input_Buffer (Side : Ada.Strings.Trim_End);
 

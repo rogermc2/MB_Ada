@@ -41,6 +41,6 @@ package M_Basic is
    procedure Skip_Spaces (Buffer : Unbounded_String; Pos : in out Positive);
    function Skip_Var (Pos : in out Positive) return Positive;
    function Token_Function (Index : Positive) return System.Address;
-   procedure Tokenize (From_Console : Boolean);
+   procedure Tokenize (Buffer : in out String_Buffer; From_Console : Boolean);
 
 end M_Basic;

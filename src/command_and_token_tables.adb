@@ -10,13 +10,6 @@ package body Command_And_Token_Tables is
 
    In_Buffer    : Unbounded_String;
 
-   procedure Clear_Token_Buffer is
-      use String_Buffer_Package;
-      begin
-      Token_Buffer := Empty_Vector;
-
-   end Clear_Token_Buffer;
-
    function Get_Input_Character (Pos : Positive) return Character is
    begin
       return Element (In_Buffer, Pos);
@@ -29,22 +22,15 @@ package body Command_And_Token_Tables is
 
    end Get_Input_Slice;
 
-   function Get_Token_Buffer_Item (Pos : Positive) return String is
-      use String_Buffer_Package;
-   begin
-      return Element (Token_Buffer, Pos);
-
-   end Get_Token_Buffer_Item;
-
    function Input_Buffer_Length return Natural is
-      begin
+   begin
       return Length (In_Buffer);
 
    end Input_Buffer_Length;
 
    procedure Load_Input_Buffer (File_Num : Natural) is
    begin
-       Serial_File_IO.MM_Get_Line (File_Num, In_Buffer);
+      Serial_File_IO.MM_Get_Line (File_Num, In_Buffer);
 
    end Load_Input_Buffer;
 
@@ -72,47 +58,49 @@ package body Command_And_Token_Tables is
    end Skip_Spaces;
 
    --  Skip_Element skips to the the zero char that preceeds an element
-   procedure Skip_Token_Buffer_Element (Pos : in out Positive) is
---        Routine_Name : constant String :=
---                         "Command_And_Token_Tables.Skip_Token_Buffer_Element";
+   procedure Skip_Buffer_Element (Buffer : String_Buffer;
+                                  Pos    : in out Positive) is
+      --        Routine_Name : constant String :=
+      --                         "Command_And_Token_Tables.Skip_Token_Buffer_Element";
       use String_Buffer_Package;
    begin
-      while Pos <= Token_Buffer_Length and then
-        Element (Token_Buffer, Pos)(1) /= '0' loop
+      while Pos <= Integer (Buffer.Length) and then
+        Buffer (Pos)(1) /= '0' loop
          Pos := Pos + 1;
       end loop;
 
-   end Skip_Token_Buffer_Element;
+   end Skip_Buffer_Element;
 
-   procedure Skip_Token_Buffer_Spaces (Pos : in out Positive) is
+   procedure Skip_Buffer_Spaces (Buffer : in out String_Buffer;
+                                 Pos    : in out Positive) is
       use String_Buffer_Package;
    begin
-      while Pos <= Integer (Length (Token_Buffer)) and then
-        Element (Token_Buffer, Pos)(1) = ' ' loop
+      while Pos <= Integer (Length (Buffer)) and then
+        Element (Buffer, Pos)(1) = ' ' loop
          Pos := Pos + 1;
       end loop;
 
-   end Skip_Token_Buffer_Spaces;
+   end Skip_Buffer_Spaces;
 
-   procedure Token_Buffer_Append (Item : String) is
+   procedure Buffer_Append (Buffer : in out String_Buffer; Item : String) is
       use String_Buffer_Package;
    begin
-      Append (Token_Buffer, Item);
+      Append (Buffer, Item);
 
-   end Token_Buffer_Append;
+   end Buffer_Append;
 
-   function Token_Buffer_Length return Natural is
-      begin
-      return Natural (Token_Buffer.Length);
+   function Buffer_Length (Buffer : String_Buffer) return Natural is
+   begin
+      return Natural (Buffer.Length);
 
-   end Token_Buffer_Length;
+   end Buffer_Length;
 
-   function Token_Buffer_Not_Empty return Boolean is
+   function Buffer_Not_Empty (Buffer : String_Buffer) return Boolean is
       use String_Buffer_Package;
-      begin
-      return not Is_Empty (Token_Buffer);
+   begin
+      return not Is_Empty (Buffer);
 
-      end Token_Buffer_Not_Empty;
+   end Buffer_Not_Empty;
 
    function Token_Type (Index : Integer) return Function_Type is
       T_Type : Function_Type := T_NA;
@@ -127,9 +115,9 @@ package body Command_And_Token_Tables is
    end Token_Type;
 
    procedure Trim_Input_Buffer (Side : Ada.Strings.Trim_End) is
-      begin
+   begin
       Trim (In_Buffer, Side);
 
-     end Trim_Input_Buffer;
+   end Trim_Input_Buffer;
 
 end  Command_And_Token_Tables;

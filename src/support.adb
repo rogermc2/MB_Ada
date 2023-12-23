@@ -2,7 +2,6 @@
 with Ada.Text_IO; use Ada.Text_IO;
 
 with Audio;
-with Command_And_Token_Tables; use Command_And_Token_Tables;
 with Configuration;
 with Draw;
 with Exceptions;
@@ -24,9 +23,25 @@ package body Support is
 
    Saved_Cause  : Setup_Exception := Cause_Nothing;
 
-   procedure Copy_Slice (Pos1 : in out Positive; Pos2 : Positive) is
+   function Buffer_Item (Buffer : String_Buffer;
+                         Pos    : Positive) return String is
+      use String_Buffer_Package;
    begin
-      Token_Buffer_Append (Get_Input_Slice (Pos1, Pos2));
+      return Element (Buffer, Pos);
+
+   end Buffer_Item;
+
+   procedure Clear_Buffer (Buffer : in out String_Buffer) is
+      use String_Buffer_Package;
+      begin
+      Buffer := Empty_Vector;
+
+   end Clear_Buffer;
+
+   procedure Copy_Slice (Buffer : in out String_Buffer;
+                         Pos1   : in out Positive; Pos2 : Positive) is
+   begin
+      Buffer_Append (Buffer, Get_Input_Slice (Pos1, Pos2));
       while Pos1 <= Pos2 loop
          Pos1 := Pos1 + 1;
       end loop;

@@ -7,7 +7,6 @@ with Command_And_Token_Tables; use Command_And_Token_Tables;
 with Command_And_Token_Functions;
 with Commands;
 with Configuration;
-with Global;
 with M_Basic; use M_Basic;
 with M_Misc;
 with Support;

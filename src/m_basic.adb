@@ -20,6 +20,7 @@ with Global;
 WITH M_Misc;
 with Memory;
 with Parse_Functions;
+with Support;
 
 package body M_Basic is
 
@@ -68,9 +69,11 @@ package body M_Basic is
    --  fa, i64a, sa and typ are pointers to where the return value is to be
    --                       stored (used by functions only).
    procedure Defined_Subfunction
-     (Is_Fun : Boolean; Command : String; Subfun_Index  : Positive;
-      Fa     : in out Configuration.MMFLOAT; I64a : in out Long_Long_Integer;
-      Sa     : in out Unbounded_String; Fun_Type : in out Function_Type) is
+     (Buffer        : String_Buffer; Is_Fun : Boolean; Command : String;
+      Subfun_Index  : Positive; Fa     : in out Configuration.MMFLOAT;
+      I64a          : in out Long_Long_Integer;
+      Sa            : in out Unbounded_String;
+      Fun_Type      : in out Function_Type) is
       use Ada.Characters.Handling;
       use Ada.Assertions;
       use C_Functions;
@@ -164,7 +167,7 @@ package body M_Basic is
          Skip_Spaces (SL_Pos2);
          if Prog_Memory (Subfunctions (SL_Pos2)) = Integer'Image (tokenAS) then
             SL_Pos2 := SL_Pos2 + 1;
-            Commands.Check_Type_Specified (SL_Pos2, Fun_Type, True);
+            Commands.Check_Type_Specified (Buffer, SL_Pos2, Fun_Type, True);
             Assert (Fun_Type = T_IMPLIED, Routine_Name & "invalid type");
          end if;
          Fun_Type := Fun_Type or V_FIND or V_DIM_VAR or V_LOCAL or V_EMPTY_OK;
@@ -194,7 +197,7 @@ package body M_Basic is
             Assert (Found, Routine_Name & "syntax error, ) or 0 expected.");
             SL_Pos3 := SL_Pos3 + 1;
             Skip_Spaces (SL_Pos3);
-            Commands.Check_Type_Specified (SL_Pos3, Fun_Type, False);
+            Commands.Check_Type_Specified (Buffer, SL_Pos3, Fun_Type, False);
             Fun_Type := Fun_Type and not T_IMPLIED;
          else
             Fun_Type := T_INT;
@@ -225,7 +228,7 @@ package body M_Basic is
 
    end Defined_Subfunction;
 
-   procedure Execute_Command (Command : Unbounded_String) is
+   procedure Execute_Command (Buffer : String_Buffer; Command : Unbounded_String) is
       use Ada.Assertions;
       Routine_Name       : constant String := "M_Basic.Execute_Command ";
       Command_Line       : constant String := To_String (Command);
@@ -261,7 +264,7 @@ package body M_Basic is
             Index :=
               Find_Subfunction (Command_Line, T_NA);
             if Index > 0 then
-               Defined_Subfunction (False, Command_Line, Index,
+               Defined_Subfunction (Buffer, False, Command_Line, Index,
                                     Fa, I64a, Sa, Null_Function);
             end if;
             Put_Line (Routine_Name & "268 ");
@@ -334,7 +337,7 @@ package body M_Basic is
                         Integer'Image (Program_Ptr));
             if Program_Ptr <= Positive (Buffer.Length) then
                Execute_Command
-                 (To_Unbounded_String (Element (Buffer, Program_Ptr)));
+                 (Buffer, To_Unbounded_String (Element (Buffer, Program_Ptr)));
             end if;
 
             Put_Line (Routine_Name & "check program (1) /= 00");
@@ -798,7 +801,7 @@ package body M_Basic is
 
    end Token_Function;
 
-   procedure Tokenize (From_Console : Boolean) is
+   procedure Tokenize (Buffer : in out String_Buffer; From_Console : Boolean) is
       use Interfaces;
       use Ada.Characters.Handling;
       use Ada.Strings;
@@ -815,9 +818,9 @@ package body M_Basic is
          end if;
       end loop;
 
-      Clear_Token_Buffer;
+      Support.Clear_Buffer (Buffer);
       if not From_Console then
-         Token_Buffer_Append (Global.T_NEWLINE);
+         Buffer_Append (Buffer, Global.T_NEWLINE);
       end if;
       Trim_Input_Buffer (Left);
 
@@ -832,9 +835,9 @@ package body M_Basic is
          Line_Num := Unsigned_64'Value (Get_Input_Slice (1, In_Ptr - 1));
          if not From_Console and Line_Num > 1 and
            Line_Num <= Unsigned_64 (MAXLINENBR) then
-            Token_Buffer_Append (Global.T_LINENBR);
-            Token_Buffer_Append (Unsigned_64'Image (Shift_Right (Line_Num, 8)));
-            Token_Buffer_Append (Unsigned_64'Image (Line_Num and 16#FF#));
+            Buffer_Append (Buffer, Global.T_LINENBR);
+            Buffer_Append (Buffer, Unsigned_64'Image (Shift_Right (Line_Num, 8)));
+            Buffer_Append (Buffer, Unsigned_64'Image (Line_Num and 16#FF#));
          end if;
       end if;
 
