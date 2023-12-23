@@ -19,13 +19,14 @@ package body M_Misc is
       P_Pos        : Positive := Temp_Memory'First;
       Buff_Pos     : Positive := Temp_Memory'First;
       aChar        : Character;
+      Char_Val     : Unsigned_2Byte;
       Crunch       : Boolean := False;
       OK           : Boolean := False;
    begin
       Assert (Current_Line_Ptr = 0, Routine_Name &
                 "Current_Line_Ptr should be 0.");
       if Command_Line'Length > 0 then
-         Crunch := To_Upper (Command_Line (1)) = 'C';
+         Crunch := To_Upper (Command_Line (Command_Line'First)) = 'C';
          Assert (Crunch, Routine_Name &"unknown command.");
       end if;
 
@@ -33,6 +34,9 @@ package body M_Misc is
       Crunch_Data (Temp_Memory, 0);
 
       OK := Console.Get_Console (aChar);
+      if OK then
+         Char_Val := Unsigned_2Byte (Character'Pos (aChar));
+      end if;
 
    end Autosave;
 
