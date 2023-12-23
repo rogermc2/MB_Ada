@@ -672,6 +672,11 @@ package body M_Basic is
 
    end Prepare_Program;
 
+   procedure Save_Program_To_Flash (Buffer: String; Msg : Boolean) is
+   begin
+      null;
+   end Save_Program_To_Flash;
+
    --  Skip_Element skips to the the zero char that preceeds an element
    procedure Skip_Element (aLine : String;
                            Pos   : in out Positive) is

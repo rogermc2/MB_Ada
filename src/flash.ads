@@ -70,6 +70,7 @@ package Flash is
    C_Function_Library : UB_String_Access := Null;
    Option : Option_Record;
 
+   procedure Clear_Saved_Variables;
    procedure Load_Options;
 
 end Flash;
