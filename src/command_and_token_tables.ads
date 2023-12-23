@@ -318,6 +318,8 @@ package Command_And_Token_Tables is
                         (To_Unbounded_String ("op_shiftright"), T_NA, 0, Null_Address),
                         (To_Unbounded_String (""), T_NA, 0, Null_Address));
 
+   Token_Buffer : String_Buffer;
+
    procedure Clear_Token_Buffer;
    function Get_Input_Character (Pos : Positive) return Character;
    function Get_Input_Slice (Pos1, Pos2 : Positive) return String;

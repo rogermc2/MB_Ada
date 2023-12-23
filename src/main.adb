@@ -64,7 +64,7 @@ begin
          Put_Line (Program_Name  & "Startup_Token found");
          Token_Buffer_Append (Startup_Token);
          Token_Buffer_Append ("/0");
-         M_Basic.Execute_Program;
+         M_Basic.Execute_Program (Token_Buffer);
       else
          Put_Line (Program_Name &
                      "Startup_Token not found,Token_Buffer_Length: " &
@@ -86,7 +86,7 @@ begin
          Global.Error_In_Prompt := True;
          Clear_Token_Buffer;
          Token_Buffer_Append ("MM.PROMPT\0");
-         M_Basic.Execute_Program;
+         M_Basic.Execute_Program (Token_Buffer);
       else
          --  Print prompt
          M_Basic.Print_String ("> ");
@@ -97,7 +97,7 @@ begin
       if Input_Buffer_Length > 0 then
          Put_Line ("Process_Commands  ");
          M_Basic.Tokenize (True);
-         M_Basic.Execute_Program;
+         M_Basic.Execute_Program (Token_Buffer);
       end if;
 
    end loop;

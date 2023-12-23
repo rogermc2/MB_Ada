@@ -25,7 +25,7 @@ package M_Basic is
    Default_Type     : Function_Type := T_NBR;
 
    procedure Clear_Program;
-   procedure Execute_Program;
+   procedure Execute_Program (Buffer : String_Buffer);
    function Find_Subfunction (Token : String; Fun_Type : Function_Type)
                               return Natural;
    procedure Init_Basic;

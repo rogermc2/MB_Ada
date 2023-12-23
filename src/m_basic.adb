@@ -292,57 +292,58 @@ package body M_Basic is
 
    end Execute_Command;
 
-   procedure Execute_Program is
+   procedure Execute_Program (Buffer : String_Buffer) is
       use Global;
-      use Flash;
+      use String_Buffer_Package;
       Routine_Name : constant String := "M_Basic.Execute_Program ";
       Program_Ptr  : Positive := 1;
       Done         : Boolean := False;
    begin
       Put_Line (Routine_Name);
       --  194
-      Skip_Spaces (Prog_Memory (1), Program_Ptr);
+      Skip_Spaces (Buffer.First_Element, Program_Ptr);
 
-      if Prog_Memory'Length > 0 then
-         Put_Line (Routine_Name & "Prog_Memory is Not Empty");
-         while not Done and then Program_Ptr <= Positive (Prog_Memory'Length) loop
-            if Prog_Memory (Program_Ptr) = "0" then
+      if not Is_Empty (Buffer) then
+         Put_Line (Routine_Name & "Buffer is Not Empty");
+         while not Done and then Program_Ptr <= Positive (Buffer.Last_Index) loop
+            if Buffer (Program_Ptr) = "0" then
                Program_Ptr := Program_Ptr + 1;
             end if;
 
             --  199
-            if Prog_Memory (Program_Ptr) = T_NEWLINE then
+            if Buffer (Program_Ptr) = T_NEWLINE then
                Current_Line_Ptr := Program_Ptr;
                Program_Ptr := Program_Ptr + 1;
             end if;
 
             --  217
-            if Prog_Memory (Program_Ptr) = T_LINENBR then
+            if Buffer (Program_Ptr) = T_LINENBR then
                Program_Ptr := Program_Ptr + 3;
             end if;
-            Skip_Spaces (Prog_Memory (Program_Ptr), Program_Ptr);
+            Skip_Spaces (Buffer (Program_Ptr), Program_Ptr);
 
-            if Prog_Memory (1) = T_LABEL then
+            if Buffer (1) = T_LABEL then
                --  skip over the label
                Program_Ptr := Program_Ptr +
-                 Integer'Value (To_String (Prog_Memory (Program_Ptr))) + 2;
-               Skip_Spaces (Prog_Memory (Program_Ptr), Program_Ptr);
+                 Integer'Value (Element (Buffer, Program_Ptr)) + 2;
+               Skip_Spaces (Buffer (Program_Ptr), Program_Ptr);
             end if;
 
             --  225
             Put_Line (Routine_Name & "225 Program_Ptr; " &
                         Integer'Image (Program_Ptr));
-            if Program_Ptr <= Prog_Memory'Length then
-               Execute_Command (Prog_Memory (Program_Ptr));
+            if Program_Ptr <= Positive (Buffer.Length) then
+               Execute_Command
+                 (To_Unbounded_String (Element (Buffer, Program_Ptr)));
             end if;
 
             Put_Line (Routine_Name & "check program (1) /= 00");
-            Done := Prog_Memory (1) /= "00" and
-              Prog_Memory (1) /= "FF";
+            Done := Buffer.First_Element /= "00" and
+              Buffer.First_Element /= "FF";
             Program_Ptr := Program_Ptr + 1;
          end loop;
       else
-         Put_Line (Routine_Name & "Program is empty");
+         Put_Line (Routine_Name & "Buffer is empty");
       end if;
 
    exception

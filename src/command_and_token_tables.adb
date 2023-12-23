@@ -9,7 +9,6 @@ with Serial_File_IO;
 package body Command_And_Token_Tables is
 
    In_Buffer    : Unbounded_String;
-   Token_Buffer : String_Buffer;
 
    procedure Clear_Token_Buffer is
       use String_Buffer_Package;
