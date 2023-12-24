@@ -246,7 +246,8 @@ package body M_Basic is
       --  228
       Skip_Spaces (Command_Line, Command_Line_Pos);
       Skip_Element (Command_Line, Next_Statement_Pos);
-      Done := Command_Line_Pos >= Flash.Prog_Memory'Length;
+      Done := Command_Line_Pos >= Flash.Prog_Memory'Length or else
+        Command_Line (Command_Line_Pos) = '\';  --  ignore comment line
       if Done then
          Put_Line (Routine_Name & "No more token buffer elements");
       end if;
@@ -264,6 +265,7 @@ package body M_Basic is
             Index :=
               Find_Subfunction (Command_Line, T_NA);
             if Index > 0 then
+               Put_Line (Routine_Name & "Index: " & Integer'Image (Index));
                Defined_Subfunction (Buffer, False, Command_Line, Index,
                                     Fa, I64a, Sa, Null_Function);
             end if;
@@ -342,7 +344,7 @@ package body M_Basic is
 
             Put_Line (Routine_Name & "check program (1) /= 00");
             Done := Buffer.First_Element /= "00" and
-              Buffer.First_Element /= "FF";
+              Buffer.First_Element /= "ff";
             Program_Ptr := Program_Ptr + 1;
          end loop;
       else
@@ -373,11 +375,11 @@ package body M_Basic is
       --  394
       Put_Line (Routine_Name & "Token: " & Token);
       while not Done and then index < Configuration.MAXSUBFUN loop
-         Index := Index + 1;
-         Pos2 := Subfunctions (index);
+         Pos2 := Subfunctions (Index + 1);
          Done := Pos2 = 0;
 
          if not Done then
+            Index := Index + 1;
             if Fun_Type = T_NOTYPE and then
               (Prog_Memory (Pos2) = cmdSUB or Prog_Memory (Pos2) = cmdCSUB) then
                null;
@@ -484,22 +486,28 @@ package body M_Basic is
       First_Nonwhite : Boolean := True;
       Label_Valid    : Boolean := True;
    begin
+      --  826
       while Ptr <= Buff_Length loop
          aChar := Get_Input_Character (Ptr);
          if aChar = ' ' then
             Ptr := Ptr + 1;
+         --  836
          elsif aChar = '"' then
             Process_Double_Quote (Buffer, Ptr, aChar);
+         --  850  copy anything after a comment
          elsif aChar = ''' then
             Process_Quote (Buffer, Ptr);
+         --  860
          elsif aChar = ':' then
             Process_Colon (Buffer, Ptr, First_Nonwhite);
+         --  875
          elsif Is_Digit (aChar) or aChar = '.' then
             --  not white space or string or comment so try a number
             Process_Try_Number (Buffer, Ptr);
+         --  895
          elsif First_Nonwhite then
             Process_First_Nonwhite (Buffer, Ptr, Label_Valid, First_Nonwhite);
-            --  892 not First_Nonwhite
+         --  985 not First_Nonwhite
          elsif Try_Function_Or_Keyword (Buffer, Ptr, First_Nonwhite) then
             null;
          elsif Is_Name_Start (Get_Input_Character (Ptr)) then
@@ -618,7 +626,6 @@ package body M_Basic is
       use Flash;
       Routine_Name : constant String := "M_Basic.Prepare_Program ";
       Num_Funcs    : Positive := 1;
-      --        Dump         : Natural := 0;
       Index1       : Positive := 1;
       Index2       : Natural := 0;
       Pos1         : Positive;
@@ -811,7 +818,7 @@ package body M_Basic is
       Line_Num       : Unsigned_64;
       OK             : Boolean := True;
    begin
-      --  make sure that only printable characters are in the line
+      --  786 make sure that only printable characters are in the line
       for index in 1 .. Input_Buffer_Length loop
          aChar := Get_Input_Character (index);
          if Character'Pos (aChar) < 32 or Character'Pos (aChar) > 127 then
@@ -820,18 +827,20 @@ package body M_Basic is
       end loop;
 
       Support.Clear_Buffer (Buffer);
+      --  798
       if not From_Console then
          Buffer_Append (Buffer, Global.T_NEWLINE);
       end if;
       Trim_Input_Buffer (Left);
 
-      --  if it a digit and not an 8 digit hex number
+      --  806 if it a digit and not an 8 digit hex number
       --  (ie, it is CFUNCTION data) then try for a line number
       while OK and then In_Ptr <= 8 loop
          OK := OK and Is_Hexadecimal_Digit (Get_Input_Character (In_Ptr));
          In_Ptr := In_Ptr + 1;
       end loop;
 
+      --  809
       if Is_Digit (Get_Input_Character (1)) and In_Ptr <= 8 then
          Line_Num := Unsigned_64'Value (Get_Input_Slice (1, In_Ptr - 1));
          if not From_Console and Line_Num > 1 and
@@ -842,7 +851,7 @@ package body M_Basic is
          end if;
       end if;
 
-      --  Process the rest of the line
+      --  824 Process the rest of the line
       Parse_Line (Buffer, In_Ptr);
 
    end Tokenize;
