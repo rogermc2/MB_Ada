@@ -78,7 +78,6 @@ begin
    --  Autorun code
 
    Except_Cause := Cause_Nothing;
-   Put_Line (Program_Name  & "Process_Commands");
    loop
       Process_Commands;
 
@@ -96,7 +95,7 @@ begin
       Global.Error_In_Prompt := False;
       Load_Input_Buffer (0);
       if Input_Buffer_Length > 0 then
-         Put_Line ("Process_Commands  ");
+         Put_Line (Program_Name & "Tokenize");
          M_Basic.Tokenize (Token_Buffer, True);
          M_Basic.Execute_Program (Token_Buffer);
       end if;

@@ -91,6 +91,7 @@ package body Support is
    end Initialize;
 
    procedure Process_Commands is
+--        Routine_Name : constant String := "Support.Process_Commands";
    begin
       if Flash.Option.DISPLAY_CONSOLE then
          Draw.Set_Font (Global.Prompt_Font);
@@ -101,6 +102,9 @@ package body Support is
             New_Line;
          end if;
       end if;
+
+--        Put_Line (Routine_Name & "Current_Line_Ptr: " &
+--                    Integer'Image (M_Basic.Current_Line_Ptr));
 
       if M_Basic.Current_Line_Ptr > 0 then
          Audio.Close_Audio;

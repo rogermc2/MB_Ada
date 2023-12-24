@@ -491,23 +491,23 @@ package body M_Basic is
          aChar := Get_Input_Character (Ptr);
          if aChar = ' ' then
             Ptr := Ptr + 1;
-         --  836
+            --  836
          elsif aChar = '"' then
             Process_Double_Quote (Buffer, Ptr, aChar);
-         --  850  copy anything after a comment
+            --  850  copy anything after a comment
          elsif aChar = ''' then
             Process_Quote (Buffer, Ptr);
-         --  860
+            --  860
          elsif aChar = ':' then
             Process_Colon (Buffer, Ptr, First_Nonwhite);
-         --  875
+            --  875
          elsif Is_Digit (aChar) or aChar = '.' then
             --  not white space or string or comment so try a number
             Process_Try_Number (Buffer, Ptr);
-         --  895
+            --  895
          elsif First_Nonwhite then
             Process_First_Nonwhite (Buffer, Ptr, Label_Valid, First_Nonwhite);
-         --  985 not First_Nonwhite
+            --  985 not First_Nonwhite
          elsif Try_Function_Or_Keyword (Buffer, Ptr, First_Nonwhite) then
             null;
          elsif Is_Name_Start (Get_Input_Character (Ptr)) then
@@ -813,6 +813,7 @@ package body M_Basic is
       use Ada.Characters.Handling;
       use Ada.Strings;
       use Support;
+      Routine_Name   : constant String := "M_Basic.Tokenize ";
       aChar          : Character;
       In_Ptr         : Positive := 1;
       Line_Num       : Unsigned_64;
@@ -825,7 +826,7 @@ package body M_Basic is
             Replace_In_Buffer_Character (index, ' ');
          end if;
       end loop;
-
+      Put_Line (Routine_Name & "aChar: " & aChar);
       Support.Clear_Buffer (Buffer);
       --  798
       if not From_Console then
@@ -835,24 +836,37 @@ package body M_Basic is
 
       --  806 if it a digit and not an 8 digit hex number
       --  (ie, it is CFUNCTION data) then try for a line number
-      while OK and then In_Ptr <= 8 loop
-         OK := OK and Is_Hexadecimal_Digit (Get_Input_Character (In_Ptr));
-         In_Ptr := In_Ptr + 1;
+      while OK and then In_Ptr <= Input_Buffer_Length and then In_Ptr <= 8 loop
+         Put_Line (Routine_Name & "In_Ptr: " & Integer'Image (In_Ptr) &
+                     ", Input_Character: " & Get_Input_Character (In_Ptr));
+         OK := OK and then In_Ptr <= Input_Buffer_Length and then
+           Is_Hexadecimal_Digit (Get_Input_Character (In_Ptr));
+         OK := OK and then In_Ptr < Input_Buffer_Length;
+         if OK then
+            In_Ptr := In_Ptr + 1;
+         end if;
       end loop;
 
-      --  809
-      if Is_Digit (Get_Input_Character (1)) and In_Ptr <= 8 then
-         Line_Num := Unsigned_64'Value (Get_Input_Slice (1, In_Ptr - 1));
-         if not From_Console and Line_Num > 1 and
-           Line_Num <= Unsigned_64 (MAXLINENBR) then
-            Buffer_Append (Buffer, Global.T_LINENBR);
-            Buffer_Append (Buffer, Unsigned_64'Image (Shift_Right (Line_Num, 8)));
-            Buffer_Append (Buffer, Unsigned_64'Image (Line_Num and 16#FF#));
+      Put_Line (Routine_Name & "OK: " & Boolean'Image (OK));
+
+      if OK then
+         --  809
+         if Is_Digit (Get_Input_Character (1)) and In_Ptr <= 8 then
+            Put_Line (Routine_Name & "809 In_Ptr: " & Integer'Image (In_Ptr));
+            Line_Num := Unsigned_64'Value (Get_Input_Slice (1, In_Ptr - 1));
+            if not From_Console and Line_Num > 1 and
+              Line_Num <= Unsigned_64 (MAXLINENBR) then
+               Buffer_Append (Buffer, Global.T_LINENBR);
+               Buffer_Append (Buffer, Unsigned_64'Image (Shift_Right (Line_Num, 8)));
+               Buffer_Append (Buffer, Unsigned_64'Image (Line_Num and 16#FF#));
+            end if;
+         end if;
+
+         --  824 Process the rest of the line
+         if In_Ptr <= Input_Buffer_Length then
+            Parse_Line (Buffer, In_Ptr);
          end if;
       end if;
-
-      --  824 Process the rest of the line
-      Parse_Line (Buffer, In_Ptr);
 
    end Tokenize;
 
