@@ -842,14 +842,14 @@ package body M_Basic is
                      ", Input_Character: " & Get_Input_Character (In_Ptr));
          OK := OK and then
            Is_Hexadecimal_Digit (Get_Input_Character (In_Ptr));
-         if In_Ptr = 8 then
-            Is_8_Digit_Hex := True;
-         else
+            Is_8_Digit_Hex := OK and then In_Ptr = 8;
             In_Ptr := In_Ptr + 1;
-         end if;
       end loop;
+      if In_Ptr > Input_Buffer_Length then
+         In_Ptr := Input_Buffer_Length;
+      end if;
 
-      Put_Line (Routine_Name & "OK: " & Boolean'Image (OK));
+      Put_Line (Routine_Name & "Is_8_Digit_Hex: " & Boolean'Image (OK));
 
       if not Is_8_Digit_Hex then
          --  809
