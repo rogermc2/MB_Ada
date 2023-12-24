@@ -814,10 +814,10 @@ package body M_Basic is
       use Ada.Strings;
       use Support;
       Routine_Name   : constant String := "M_Basic.Tokenize ";
+      In_Ptr         : constant Positive := 1;
       aChar          : Character;
-      In_Ptr         : Positive := 1;
       Line_Num       : Unsigned_64;
-      Is_8_Digit_Hex : Boolean := False;
+      Index2         : Natural := 0;
       OK             : Boolean := True;
    begin
       --  786 make sure that only printable characters are in the line
@@ -837,37 +837,29 @@ package body M_Basic is
 
       --  806 if it is a digit and not an 8 digit hex number
       --  (ie, it is CFUNCTION data) then try for a line number
-      while OK and then In_Ptr <= Input_Buffer_Length and then In_Ptr <= 8 loop
-         Put_Line (Routine_Name & "In_Ptr: " & Integer'Image (In_Ptr) &
-                     ", Input_Character: " & Get_Input_Character (In_Ptr));
+      while OK and then Index2 < Input_Buffer_Length and then Index2 < 8 loop
+         Index2 := Index2 + 1;
+         Put_Line (Routine_Name & "Index2: " & Integer'Image (Index2) );
+         Put_Line (Routine_Name & "Input_Character: " & Get_Input_Character (Index2));
          OK := OK and then
-           Is_Hexadecimal_Digit (Get_Input_Character (In_Ptr));
-            Is_8_Digit_Hex := OK and then In_Ptr = 8;
-            In_Ptr := In_Ptr + 1;
+           Is_Hexadecimal_Digit (Get_Input_Character (Index2));
       end loop;
-      if In_Ptr > Input_Buffer_Length then
-         In_Ptr := Input_Buffer_Length;
+
+      --  809
+      if Is_Digit (Get_Input_Character (In_Ptr)) and Index2 <= 8 then
+         Put_Line (Routine_Name & "809 In_Ptr: " & Integer'Image (In_Ptr));
+         Line_Num := Unsigned_64'Value (Get_Input_Slice (1, Index2 - 1));
+         if not From_Console and Line_Num > 1 and
+           Line_Num <= Unsigned_64 (MAXLINENBR) then
+            Buffer_Append (Buffer, Global.T_LINENBR);
+            Buffer_Append (Buffer, Unsigned_64'Image (Shift_Right (Line_Num, 8)));
+            Buffer_Append (Buffer, Unsigned_64'Image (Line_Num and 16#FF#));
+         end if;
       end if;
 
-      Put_Line (Routine_Name & "Is_8_Digit_Hex: " & Boolean'Image (OK));
-
-      if not Is_8_Digit_Hex then
-         --  809
-         if Is_Digit (Get_Input_Character (1)) and In_Ptr <= 8 then
-            Put_Line (Routine_Name & "809 In_Ptr: " & Integer'Image (In_Ptr));
-            Line_Num := Unsigned_64'Value (Get_Input_Slice (1, In_Ptr - 1));
-            if not From_Console and Line_Num > 1 and
-              Line_Num <= Unsigned_64 (MAXLINENBR) then
-               Buffer_Append (Buffer, Global.T_LINENBR);
-               Buffer_Append (Buffer, Unsigned_64'Image (Shift_Right (Line_Num, 8)));
-               Buffer_Append (Buffer, Unsigned_64'Image (Line_Num and 16#FF#));
-            end if;
-         end if;
-
-         --  824 Process the rest of the line
-         if In_Ptr <= Input_Buffer_Length then
-            Parse_Line (Buffer, In_Ptr);
-         end if;
+      --  824 Process the rest of the line
+      if In_Ptr <= Input_Buffer_Length then
+         Parse_Line (Buffer, In_Ptr);
       end if;
 
    end Tokenize;
