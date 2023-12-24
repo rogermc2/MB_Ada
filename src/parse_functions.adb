@@ -14,11 +14,11 @@ with Support;
 package body Parse_Functions is
 
    procedure Process_Command
-     (Buffer : in out String_Buffer; I_Pos : in out Positive;
+     (Buffer         : in out String_Buffer; I_Pos : in out Positive;
       Match_I_Pos    : Positive; Match_Index : Integer;
       First_Nonwhite : in out Boolean; Label_Valid : in out Boolean);
    procedure Try_Command
-     (Buffer : in out String_Buffer; I_Pos : in out Positive;
+     (Buffer      : in out String_Buffer; I_Pos : in out Positive;
       Label_Valid : in out Boolean; First_Nonwhite   : in out Boolean);
 
    function Get_Command_From_Input (I_Pos : in out Positive)
@@ -64,8 +64,14 @@ package body Parse_Functions is
 
    end Get_Command_Value;
 
+   function Get_Next_Character (I_Pos : in out Positive) return Character is
+   begin
+      I_Pos := I_Pos + 1;
+      return Get_Input_Character (I_Pos);
+   end Get_Next_Character;
+
    procedure Process_Colon
-     (Buffer : in out String_Buffer; I_Pos : in out Positive;
+     (Buffer           : in out String_Buffer; I_Pos : in out Positive;
       First_Nonwhite   : in out Boolean) is
       use Support;
    begin
@@ -81,7 +87,7 @@ package body Parse_Functions is
    end Process_Colon;
 
    procedure Process_Command
-     (Buffer : in out String_Buffer; I_Pos : in out Positive;
+     (Buffer         : in out String_Buffer; I_Pos : in out Positive;
       Match_I_Pos    : Positive; Match_Index : Integer;
       First_Nonwhite : in out Boolean; Label_Valid : in out Boolean) is
       use Ada.Characters.Handling;
@@ -90,7 +96,7 @@ package body Parse_Functions is
       --  879
       if Match_Index > -1 then
          Buffer_Append (Buffer, Integer'Image
-                              (M_Misc.C_Base_Token + Match_Index));
+                        (M_Misc.C_Base_Token + Match_Index));
          --  Step over the input buffer command.
          I_Pos := Match_I_Pos;
          if Match_Index + M_Misc.C_Base_Token =
@@ -111,7 +117,7 @@ package body Parse_Functions is
 
    procedure Process_Double_Quote
      (Buffer : in out String_Buffer; I_Pos : in out Positive;
-                                   aChar : Character) is
+      aChar  : Character) is
       use Support;
    begin
       while aChar /= '"' and I_Pos <= Input_Buffer_Length loop
@@ -129,7 +135,7 @@ package body Parse_Functions is
    procedure Process_Name_Start
      (Buffer : in out String_Buffer; I_Pos : in out Positive) is
    begin
-      null;
+      I_Pos := I_Pos + 1;
 
    end Process_Name_Start;
 
@@ -199,22 +205,43 @@ package body Parse_Functions is
 
    end Process_First_Nonwhite;
 
-   procedure Process_Try_Number
-     (Buffer : in out String_Buffer; I_Pos : in out Positive) is
-   begin
-      null;
-
-   end Process_Try_Number;
-
    procedure Process_Quote (Buffer : in out String_Buffer;
                             I_Pos  : in out Positive) is
    begin
-      null;
+      I_Pos := I_Pos + 1;
 
    end Process_Quote;
 
+   procedure Process_Variable_Name
+     (Buffer         : in out String_Buffer; Pos : in out Positive;
+      First_Nonwhite : in out Boolean; Label_Valid : in out Boolean) is
+      use Support;
+      Pos2  : Positive;
+      Name  : Unbounded_String;
+   begin
+      --  935
+      if First_Nonwhite then
+         --  First entry on the line?
+         Pos2 := Skip_Var (Pos);
+         if Get_Input_Character (Pos2) = '=' then
+            --  an implied let
+            Buffer_Append (Buffer, Integer'Image (Get_Command_Value ("Let")));
+         end if;
+      else
+         --  942 copy the variable name
+         while Is_Name_Character (Get_Input_Character (Pos)) loop
+            Name := Name & Get_Input_Character (Pos);
+            Pos := Pos + 1;
+         end loop;
+         Buffer_Append (Buffer, To_String (Name));
+
+         First_Nonwhite := False;
+         Label_Valid:= False;
+      end if;
+
+   end Process_Variable_Name;
    procedure Try_Command
-     (Buffer : in out String_Buffer; I_Pos : in out Positive;
+     (Buffer      : in out String_Buffer; I_Pos : in out Positive;
       Label_Valid : in out Boolean; First_Nonwhite  : in out Boolean) is
       use Ada.Characters.Handling;
       use Support;
@@ -351,33 +378,48 @@ package body Parse_Functions is
 
    end Try_Function_Or_Keyword;
 
-   procedure Process_Variable_Name
-     (Buffer : in out String_Buffer; Pos : in out Positive;
-      First_Nonwhite : in out Boolean; Label_Valid : in out Boolean) is
-      use Support;
-      Pos2  : Positive;
-      Name  : Unbounded_String;
+   procedure Try_Number
+     (Buffer         : in out String_Buffer; I_Pos : in out Positive;
+      First_Nonwhite : in out Boolean) is
+      use Ada.Characters.Handling;
+      Routine_Name : constant String := "Parse_Functions.Try_Number ";
+      aChar        : Character := Get_Input_Character (I_Pos);
+      Number       : Unbounded_String;
+      Done         : Boolean := False;
    begin
-      --  935
-      if First_Nonwhite then
-         --  First entry on the line?
-         Pos2 := Skip_Var (Pos);
-         if Get_Input_Character (Pos2) = '=' then
-            --  an implied let
-            Buffer_Append (Buffer, Integer'Image (Get_Command_Value ("Let")));
-         end if;
-      else
-         --  942 copy the variable name
-         while Is_Name_Character (Get_Input_Character (Pos)) loop
-            Name := Name & Get_Input_Character (Pos);
-            Pos := Pos + 1;
+      Put_Line (Routine_Name);
+      if Is_Digit (aChar) or else aChar = '.' then
+         while not Done
+           and then (Is_Digit (aChar) or else aChar = '.' or else aChar = 'E'
+                     or else aChar = 'e') loop
+            if aChar = 'E' or else aChar = 'e' then
+               Number := Number & aChar;
+               aChar := Get_Next_Character (I_Pos);
+               if aChar = '+' or else aChar = '-' then
+                  Number := Number & aChar;
+                  aChar := Get_Next_Character (I_Pos);
+               end if;
+               aChar := Get_Next_Character (I_Pos);
+            else
+               Number := Number & aChar;
+               Put_Line (Routine_Name & "Number: " & To_String (Number));
+--                 if I_Pos < Input_Buffer_Length then
+                  aChar := Get_Next_Character (I_Pos);
+--                 end if;
+            end if;
+            Done := I_Pos > Input_Buffer_Length;
+            delay (1.0);
          end loop;
-         Buffer_Append (Buffer, To_String (Name));
 
+         Put_Line (Routine_Name & "number built");
+
+         Support.Buffer_Append (Buffer, To_String (Number));
          First_Nonwhite := False;
-         Label_Valid:= False;
+
+      elsif First_Nonwhite then
+         null;
       end if;
 
-   end Process_Variable_Name;
+   end Try_Number;
 
 end Parse_Functions;

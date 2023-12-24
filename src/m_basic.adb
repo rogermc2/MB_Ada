@@ -306,7 +306,7 @@ package body M_Basic is
    begin
       if not Is_Empty (Buffer) then
          Put_Line (Routine_Name & "Buffer is Not Empty");
-      --  194
+         --  194
          Skip_Spaces (Buffer.First_Element, Program_Ptr);
          while not Done and then Program_Ptr <= Positive (Buffer.Last_Index) loop
             if Buffer (Program_Ptr) = "0" then
@@ -478,6 +478,7 @@ package body M_Basic is
    procedure Parse_Line (Buffer : in out String_Buffer; Pos : Positive) is
       use Ada.Characters.Handling;
       use Parse_Functions;
+      Routine_Name   : constant String := "M_Basic.Parse_Line ";
       Buff_Length    : constant Positive := Input_Buffer_Length;
       Ptr            : Positive := Pos;
       aChar          : Character;
@@ -485,8 +486,10 @@ package body M_Basic is
       Label_Valid    : Boolean := True;
    begin
       --  826
-      while Ptr <= Buff_Length loop
+      while Ptr < Buff_Length loop
          aChar := Get_Input_Character (Ptr);
+         Put_Line (Routine_Name & "Ptr: " & Integer'Image (Ptr) &
+                  ", aChar: " & aChar);
          if aChar = ' ' then
             Ptr := Ptr + 1;
             --  836
@@ -501,7 +504,7 @@ package body M_Basic is
             --  875
          elsif Is_Digit (aChar) or aChar = '.' then
             --  not white space or string or comment so try a number
-            Process_Try_Number (Buffer, Ptr);
+            Try_Number (Buffer, Ptr, First_Nonwhite);
             --  895
          elsif First_Nonwhite then
             Process_First_Nonwhite (Buffer, Ptr, Label_Valid, First_Nonwhite);
@@ -836,16 +839,18 @@ package body M_Basic is
 
       --  806 if it is a digit and not an 8 digit hex number
       --  (ie, it is CFUNCTION data) then try for a line number
-      while OK and then Index2 < Input_Buffer_Length and then Index2 < 8 loop
-         Index2 := Index2 + 1;
-         Put_Line (Routine_Name & "Index2: " & Integer'Image (Index2) );
-         Put_Line (Routine_Name & "Input_Character: " & Get_Input_Character (Index2));
-         OK := OK and then
-           Is_Hexadecimal_Digit (Get_Input_Character (Index2));
-      end loop;
+      if Input_Buffer_Length >= 8 then
+         while OK and then Index2 < 8 loop
+            Index2 := Index2 + 1;
+            Put_Line (Routine_Name & "Index2: " & Integer'Image (Index2) );
+            Put_Line (Routine_Name & "Input_Character: " & Get_Input_Character (Index2));
+            OK := OK and then
+              Is_Hexadecimal_Digit (Get_Input_Character (Index2));
+         end loop;
+      end if;
 
       --  809
-      if Is_Digit (Get_Input_Character (In_Ptr)) and Index2 <= 8 then
+      if Is_Digit (Get_Input_Character (In_Ptr)) and Index2 < 8 then
          while In_Ptr < Input_Buffer_Length and then
            Is_Digit (Get_Input_Character (In_Ptr)) loop
             In_Ptr := In_Ptr + 1;
@@ -869,9 +874,11 @@ package body M_Basic is
 
       Put_Line (Routine_Name & "824 In_Ptr: " & Integer'Image (In_Ptr));
       --  824 Process the rest of the line
-      if In_Ptr > 1 and then In_Ptr <= Input_Buffer_Length then
+      if Input_Buffer_Length > In_Ptr then
          Parse_Line (Buffer, In_Ptr);
       end if;
+
+      Put_Line (Routine_Name & "done");
 
    end Tokenize;
 
