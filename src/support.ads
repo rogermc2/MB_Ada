@@ -9,7 +9,10 @@ package Support is
 
    Except_Cause : Setup_Exception := Cause_Nothing;
 
+   procedure Buffer_Append (Buffer : in out String_Buffer; Item : String);
    function Buffer_Item (Buffer : String_Buffer; Pos : Positive) return String;
+   function Buffer_Length (Buffer : String_Buffer) return Natural;
+   function Buffer_Not_Empty (Buffer : String_Buffer) return Boolean;
    procedure Clear_Buffer (Buffer : in out String_Buffer);
    procedure Copy_Slice (Buffer : in out String_Buffer;
                          Pos1 : in out Positive; Pos2 : Positive);
@@ -18,5 +21,10 @@ package Support is
    procedure Process_Commands;
    procedure Restart;
    procedure Setup;
+   procedure Skip_Spaces (Buffer : String_Buffer; Pos : in out Positive);
+   procedure Skip_Buffer_Element (Buffer : String_Buffer;
+                                  Pos    : in out Positive);
+   procedure Skip_Buffer_Spaces (Buffer : in out String_Buffer;
+                                 Pos    : in out Positive);
 
 end Support;

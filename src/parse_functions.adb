@@ -67,6 +67,7 @@ package body Parse_Functions is
    procedure Process_Colon
      (Buffer : in out String_Buffer; I_Pos : in out Positive;
       First_Nonwhite   : in out Boolean) is
+      use Support;
    begin
       Buffer_Append (Buffer, "0");
       I_Pos := I_Pos + 1;
@@ -111,6 +112,7 @@ package body Parse_Functions is
    procedure Process_Double_Quote
      (Buffer : in out String_Buffer; I_Pos : in out Positive;
                                    aChar : Character) is
+      use Support;
    begin
       while aChar /= '"' and I_Pos <= Input_Buffer_Length loop
          I_Pos := I_Pos + 1;
@@ -134,6 +136,7 @@ package body Parse_Functions is
    procedure Process_First_Nonwhite
      (Buffer      : in out String_Buffer; I_Pos : in out Positive;
       Label_Valid : in out Boolean; First_Nonwhite : in out Boolean) is
+      use Support;
       aChar       : constant Character := Get_Input_Character (I_Pos);
       Match_Index : Natural := 0;
       Match_I_Pos : Positive;
@@ -214,6 +217,7 @@ package body Parse_Functions is
      (Buffer : in out String_Buffer; I_Pos : in out Positive;
       Label_Valid : in out Boolean; First_Nonwhite  : in out Boolean) is
       use Ada.Characters.Handling;
+      use Support;
       I_Pos2         : Positive;         --  tp2 an input character indeex
       Command        : Unbounded_String;
       In_Command     : Unbounded_String;
@@ -301,6 +305,7 @@ package body Parse_Functions is
       return Boolean is
       use Ada.Characters.Handling;
       use Command_And_Token_Functions;
+      use Support;
       Index  : Natural := 0;
       I_Char : Character;
       I_Pos2 : Positive;
@@ -349,6 +354,7 @@ package body Parse_Functions is
    procedure Process_Variable_Name
      (Buffer : in out String_Buffer; Pos : in out Positive;
       First_Nonwhite : in out Boolean; Label_Valid : in out Boolean) is
+      use Support;
       Pos2  : Positive;
       Name  : Unbounded_String;
    begin

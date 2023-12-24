@@ -805,6 +805,7 @@ package body M_Basic is
       use Interfaces;
       use Ada.Characters.Handling;
       use Ada.Strings;
+      use Support;
       aChar          : Character;
       In_Ptr         : Positive := 1;
       Line_Num       : Unsigned_64;

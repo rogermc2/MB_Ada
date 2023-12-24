@@ -324,14 +324,6 @@ package Command_And_Token_Tables is
    procedure Load_Input_Buffer (File_Num : Natural);
    procedure Replace_In_Buffer_Character (Pos : Positive; aChar : Character);
    procedure Skip_In_Buffer_Spaces (Pos : in out Positive);
-   procedure Skip_Spaces (Buffer : String_Buffer; Pos : in out Positive);
-   procedure Skip_Buffer_Element (Buffer : String_Buffer;
-                                  Pos    : in out Positive);
-   procedure Skip_Buffer_Spaces (Buffer : in out String_Buffer;
-                                 Pos    : in out Positive);
-   procedure Buffer_Append (Buffer : in out String_Buffer; Item : String);
-   function Buffer_Length (Buffer : String_Buffer) return Natural;
-   function Buffer_Not_Empty (Buffer : String_Buffer) return Boolean;
    function Token_Type (Index : Integer) return Function_Type;
    procedure Trim_Input_Buffer (Side : Ada.Strings.Trim_End);
 

@@ -68,6 +68,7 @@ package body Commands is
       use Ada.Characters.Handling;
       use M_Misc;
       use Parse_Functions;
+      use Support;
    begin
       Buffer_Append (Buffer, Integer'Image (C_Base_Token + Match_Index));
 

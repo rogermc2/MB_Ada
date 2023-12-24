@@ -23,6 +23,13 @@ package body Support is
 
    Saved_Cause  : Setup_Exception := Cause_Nothing;
 
+   procedure Buffer_Append (Buffer : in out String_Buffer; Item : String) is
+      use String_Buffer_Package;
+   begin
+      Append (Buffer, Item);
+
+   end Buffer_Append;
+
    function Buffer_Item (Buffer : String_Buffer;
                          Pos    : Positive) return String is
       use String_Buffer_Package;
@@ -30,6 +37,18 @@ package body Support is
       return Element (Buffer, Pos);
 
    end Buffer_Item;
+   function Buffer_Length (Buffer : String_Buffer) return Natural is
+   begin
+      return Natural (Buffer.Length);
+
+   end Buffer_Length;
+
+   function Buffer_Not_Empty (Buffer : String_Buffer) return Boolean is
+      use String_Buffer_Package;
+   begin
+      return not Is_Empty (Buffer);
+
+   end Buffer_Not_Empty;
 
    procedure Clear_Buffer (Buffer : in out String_Buffer) is
       use String_Buffer_Package;
@@ -135,5 +154,39 @@ package body Support is
       Touch.Init_Touch;
 
    end Setup;
+
+   procedure Skip_Spaces (Buffer : String_Buffer; Pos : in out Positive) is
+      use String_Buffer_Package;
+   begin
+      while  Element (Buffer, Pos)(1) = ' ' loop
+         Pos := Pos + 1;
+      end loop;
+
+   end Skip_Spaces;
+
+   --  Skip_Element skips to the the zero char that preceeds an element
+   procedure Skip_Buffer_Element (Buffer : String_Buffer;
+                                  Pos    : in out Positive) is
+      --        Routine_Name : constant String :=
+      --                         "Command_And_Token_Tables.Skip_Token_Buffer_Element";
+      use String_Buffer_Package;
+   begin
+      while Pos <= Integer (Buffer.Length) and then
+        Buffer (Pos)(1) /= '0' loop
+         Pos := Pos + 1;
+      end loop;
+
+   end Skip_Buffer_Element;
+
+   procedure Skip_Buffer_Spaces (Buffer : in out String_Buffer;
+                                 Pos    : in out Positive) is
+      use String_Buffer_Package;
+   begin
+      while Pos <= Integer (Length (Buffer)) and then
+        Element (Buffer, Pos)(1) = ' ' loop
+         Pos := Pos + 1;
+      end loop;
+
+   end Skip_Buffer_Spaces;
 
 end Support;
