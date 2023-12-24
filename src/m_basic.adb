@@ -333,14 +333,11 @@ package body M_Basic is
             end if;
 
             --  225
-            Put_Line (Routine_Name & "225 Program_Ptr; " &
-                        Integer'Image (Program_Ptr));
             if Program_Ptr <= Positive (Buffer.Length) then
                Execute_Command
                  (Buffer, To_Unbounded_String (Element (Buffer, Program_Ptr)));
             end if;
 
-            Put_Line (Routine_Name & "check program (1) /= 00");
             Done := Buffer.First_Element /= "00" and
               Buffer.First_Element /= "ff";
             Program_Ptr := Program_Ptr + 1;
@@ -478,7 +475,7 @@ package body M_Basic is
    procedure Parse_Line (Buffer : in out String_Buffer; Pos : Positive) is
       use Ada.Characters.Handling;
       use Parse_Functions;
-      Routine_Name   : constant String := "M_Basic.Parse_Line ";
+--        Routine_Name   : constant String := "M_Basic.Parse_Line ";
       Buff_Length    : constant Positive := Input_Buffer_Length;
       Ptr            : Positive := Pos;
       aChar          : Character;
@@ -488,8 +485,8 @@ package body M_Basic is
       --  826
       while Ptr < Buff_Length loop
          aChar := Get_Input_Character (Ptr);
-         Put_Line (Routine_Name & "Ptr: " & Integer'Image (Ptr) &
-                  ", aChar: " & aChar);
+--           Put_Line (Routine_Name & "Ptr: " & Integer'Image (Ptr) &
+--                    ", aChar: " & aChar);
          if aChar = ' ' then
             Ptr := Ptr + 1;
             --  836
@@ -814,7 +811,7 @@ package body M_Basic is
       use Ada.Characters.Handling;
       use Ada.Strings;
       use Support;
-      Routine_Name   : constant String := "M_Basic.Tokenize ";
+--        Routine_Name   : constant String := "M_Basic.Tokenize ";
       String1        : String (1 .. 1);
       In_Ptr         : Positive := 1;
       aChar          : Character;
@@ -842,8 +839,6 @@ package body M_Basic is
       if Input_Buffer_Length >= 8 then
          while OK and then Index2 < 8 loop
             Index2 := Index2 + 1;
-            Put_Line (Routine_Name & "Index2: " & Integer'Image (Index2) );
-            Put_Line (Routine_Name & "Input_Character: " & Get_Input_Character (Index2));
             OK := OK and then
               Is_Hexadecimal_Digit (Get_Input_Character (Index2));
          end loop;
@@ -872,13 +867,10 @@ package body M_Basic is
          end if;
       end if;
 
-      Put_Line (Routine_Name & "824 In_Ptr: " & Integer'Image (In_Ptr));
       --  824 Process the rest of the line
       if Input_Buffer_Length > In_Ptr then
          Parse_Line (Buffer, In_Ptr);
       end if;
-
-      Put_Line (Routine_Name & "done");
 
    end Tokenize;
 

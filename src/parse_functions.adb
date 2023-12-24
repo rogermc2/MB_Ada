@@ -387,11 +387,11 @@ package body Parse_Functions is
       Number       : Unbounded_String;
       Done         : Boolean := False;
    begin
-      Put_Line (Routine_Name);
       if Is_Digit (aChar) or else aChar = '.' then
          while not Done
            and then (Is_Digit (aChar) or else aChar = '.' or else aChar = 'E'
                      or else aChar = 'e') loop
+            Done := I_Pos >= Input_Buffer_Length;
             if aChar = 'E' or else aChar = 'e' then
                Number := Number & aChar;
                aChar := Get_Next_Character (I_Pos);
@@ -399,19 +399,16 @@ package body Parse_Functions is
                   Number := Number & aChar;
                   aChar := Get_Next_Character (I_Pos);
                end if;
-               aChar := Get_Next_Character (I_Pos);
+               if I_Pos < Input_Buffer_Length then
+                  aChar := Get_Next_Character (I_Pos);
+               end if;
             else
                Number := Number & aChar;
-               Put_Line (Routine_Name & "Number: " & To_String (Number));
---                 if I_Pos < Input_Buffer_Length then
+               if I_Pos < Input_Buffer_Length then
                   aChar := Get_Next_Character (I_Pos);
---                 end if;
+               end if;
             end if;
-            Done := I_Pos > Input_Buffer_Length;
-            delay (1.0);
          end loop;
-
-         Put_Line (Routine_Name & "number built");
 
          Support.Buffer_Append (Buffer, To_String (Number));
          First_Nonwhite := False;
