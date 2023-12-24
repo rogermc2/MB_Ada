@@ -817,6 +817,7 @@ package body M_Basic is
       aChar          : Character;
       In_Ptr         : Positive := 1;
       Line_Num       : Unsigned_64;
+      Is_8_Digit_Hex : Boolean := False;
       OK             : Boolean := True;
    begin
       --  786 make sure that only printable characters are in the line
@@ -834,22 +835,23 @@ package body M_Basic is
       end if;
       Trim_Input_Buffer (Left);
 
-      --  806 if it a digit and not an 8 digit hex number
+      --  806 if it is a digit and not an 8 digit hex number
       --  (ie, it is CFUNCTION data) then try for a line number
       while OK and then In_Ptr <= Input_Buffer_Length and then In_Ptr <= 8 loop
          Put_Line (Routine_Name & "In_Ptr: " & Integer'Image (In_Ptr) &
                      ", Input_Character: " & Get_Input_Character (In_Ptr));
-         OK := OK and then In_Ptr <= Input_Buffer_Length and then
+         OK := OK and then
            Is_Hexadecimal_Digit (Get_Input_Character (In_Ptr));
-         OK := OK and then In_Ptr < Input_Buffer_Length;
-         if OK then
+         if In_Ptr = 8 then
+            Is_8_Digit_Hex := True;
+         else
             In_Ptr := In_Ptr + 1;
          end if;
       end loop;
 
       Put_Line (Routine_Name & "OK: " & Boolean'Image (OK));
 
-      if OK then
+      if not Is_8_Digit_Hex then
          --  809
          if Is_Digit (Get_Input_Character (1)) and In_Ptr <= 8 then
             Put_Line (Routine_Name & "809 In_Ptr: " & Integer'Image (In_Ptr));
