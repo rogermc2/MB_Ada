@@ -814,7 +814,8 @@ package body M_Basic is
       use Ada.Strings;
       use Support;
       Routine_Name   : constant String := "M_Basic.Tokenize ";
-      In_Ptr         : constant Positive := 1;
+      String1        : String (1 .. 1);
+      In_Ptr         : Positive := 1;
       aChar          : Character;
       Line_Num       : Unsigned_64;
       Index2         : Natural := 0;
@@ -848,7 +849,19 @@ package body M_Basic is
       --  809
       if Is_Digit (Get_Input_Character (In_Ptr)) and Index2 <= 8 then
          Put_Line (Routine_Name & "809 In_Ptr: " & Integer'Image (In_Ptr));
-         Line_Num := Unsigned_64'Value (Get_Input_Slice (1, Index2 - 1));
+         while In_Ptr < Input_Buffer_Length and then
+           Is_Digit (Get_Input_Character (In_Ptr)) loop
+            In_Ptr := In_Ptr + 1;
+         end loop;
+         --  In_Ptr points to the character after the number unless
+         --  Input_Buffer_Length = 1
+         if In_Ptr = 1 then
+            String1(1) := Get_Input_Character (1);
+            Line_Num := Unsigned_64'Value (String1);
+         else
+            Line_Num := Unsigned_64'Value (Get_Input_Slice (1, In_Ptr - 1));
+         end if;
+
          if not From_Console and Line_Num > 1 and
            Line_Num <= Unsigned_64 (MAXLINENBR) then
             Buffer_Append (Buffer, Global.T_LINENBR);
@@ -857,6 +870,7 @@ package body M_Basic is
          end if;
       end if;
 
+      Put_Line (Routine_Name & "824 In_Ptr: " & Integer'Image (In_Ptr));
       --  824 Process the rest of the line
       if In_Ptr <= Input_Buffer_Length then
          Parse_Line (Buffer, In_Ptr);
