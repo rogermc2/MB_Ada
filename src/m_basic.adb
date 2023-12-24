@@ -475,7 +475,7 @@ package body M_Basic is
 
    end Is_Name_End;
 
-   procedure Parse_Line (Pos : Positive) is
+   procedure Parse_Line (Buffer : in out String_Buffer; Pos : Positive) is
       use Ada.Characters.Handling;
       use Parse_Functions;
       Buff_Length    : constant Positive := Input_Buffer_Length;
@@ -489,22 +489,22 @@ package body M_Basic is
          if aChar = ' ' then
             Ptr := Ptr + 1;
          elsif aChar = '"' then
-            Process_Double_Quote (Ptr, aChar);
+            Process_Double_Quote (Buffer, Ptr, aChar);
          elsif aChar = ''' then
-            Process_Quote (Ptr);
+            Process_Quote (Buffer, Ptr);
          elsif aChar = ':' then
-            Process_Colon (Ptr, First_Nonwhite);
+            Process_Colon (Buffer, Ptr, First_Nonwhite);
          elsif Is_Digit (aChar) or aChar = '.' then
             --  not white space or string or comment so try a number
-            Process_Try_Number (Ptr);
+            Process_Try_Number (Buffer, Ptr);
          elsif First_Nonwhite then
-            Process_First_Nonwhite (Ptr, Label_Valid, First_Nonwhite);
+            Process_First_Nonwhite (Buffer, Ptr, Label_Valid, First_Nonwhite);
             --  892 not First_Nonwhite
-         elsif Try_Function_Or_Keyword (Ptr, First_Nonwhite) then
+         elsif Try_Function_Or_Keyword (Buffer, Ptr, First_Nonwhite) then
             null;
          elsif Is_Name_Start (Get_Input_Character (Ptr)) then
             --  934
-            Process_Variable_Name (Ptr, First_Nonwhite, Label_Valid);
+            Process_Variable_Name (Buffer, Ptr, First_Nonwhite, Label_Valid);
          elsif Get_Input_Character (Ptr) = '(' then
             --  953 special case where the character to copy is an
             --  opening parenthesis.
@@ -842,7 +842,7 @@ package body M_Basic is
       end if;
 
       --  Process the rest of the line
-      Parse_Line (In_Ptr);
+      Parse_Line (Buffer, In_Ptr);
 
    end Tokenize;
 
