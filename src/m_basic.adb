@@ -304,12 +304,10 @@ package body M_Basic is
       Program_Ptr  : Positive := 1;
       Done         : Boolean := False;
    begin
-      Put_Line (Routine_Name);
-      --  194
-      Skip_Spaces (Buffer.First_Element, Program_Ptr);
-
       if not Is_Empty (Buffer) then
          Put_Line (Routine_Name & "Buffer is Not Empty");
+      --  194
+         Skip_Spaces (Buffer.First_Element, Program_Ptr);
          while not Done and then Program_Ptr <= Positive (Buffer.Last_Index) loop
             if Buffer (Program_Ptr) = "0" then
                Program_Ptr := Program_Ptr + 1;
@@ -817,7 +815,7 @@ package body M_Basic is
       String1        : String (1 .. 1);
       In_Ptr         : Positive := 1;
       aChar          : Character;
-      Line_Num       : Unsigned_64;
+      Line_Num       : Unsigned_64 := 0;
       Index2         : Natural := 0;
       OK             : Boolean := True;
    begin
@@ -828,7 +826,7 @@ package body M_Basic is
             Replace_In_Buffer_Character (index, ' ');
          end if;
       end loop;
-      Put_Line (Routine_Name & "aChar: " & aChar);
+
       Support.Clear_Buffer (Buffer);
       --  798
       if not From_Console then
@@ -848,7 +846,6 @@ package body M_Basic is
 
       --  809
       if Is_Digit (Get_Input_Character (In_Ptr)) and Index2 <= 8 then
-         Put_Line (Routine_Name & "809 In_Ptr: " & Integer'Image (In_Ptr));
          while In_Ptr < Input_Buffer_Length and then
            Is_Digit (Get_Input_Character (In_Ptr)) loop
             In_Ptr := In_Ptr + 1;
@@ -872,7 +869,7 @@ package body M_Basic is
 
       Put_Line (Routine_Name & "824 In_Ptr: " & Integer'Image (In_Ptr));
       --  824 Process the rest of the line
-      if In_Ptr <= Input_Buffer_Length then
+      if In_Ptr > 1 and then In_Ptr <= Input_Buffer_Length then
          Parse_Line (Buffer, In_Ptr);
       end if;
 
