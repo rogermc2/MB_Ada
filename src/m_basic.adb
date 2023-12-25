@@ -17,13 +17,14 @@ with Editor;
 with File_IO;
 with Flash;
 with Global;
-WITH M_Misc;
+with M_Misc;
 with Memory;
 with Parse_Functions;
 with Support;
 
 package body M_Basic is
 
+   Save_Local_Index   : Natural := 0;
    --     Trace_On : Boolean := False;
 
    procedure Clear_Runtime;
@@ -235,11 +236,14 @@ package body M_Basic is
       Next_Statement_Pos : Positive := 1;
       Command_Line_Pos   : Positive := 1;   --  p
       Null_Function      : Function_Type := T_NOTYPE;
+      Command_Token      : Unsigned_2Byte;
       Fa                 : Configuration.MMFLOAT := 0.0;
       I64a               : Long_Long_Integer := 0;
       Sa                 : Unbounded_String := To_Unbounded_String ("");
       Index              : Positive;
+      Save_Local_Index   : Natural := 0;
       Interupt_Check     : Integer := 0;
+      T_Arg              : Function_Type := T_NOTYPE;
       No_Abort           : Boolean := True;
       Done               : Boolean := False;
    begin
@@ -257,18 +261,25 @@ package body M_Basic is
            Command_Line (Command_Line_Pos) /= ''' then
             --  239
             --              if Set_Jump (Err_Next) = 0 then
-            --                 null;
+            Save_Local_Index := Local_Index;
+            if Command_Line_Pos > M_Misc.C_Base_Token and then
+              Command_Line_Pos - M_Misc.C_Base_Token < Command_Table_Size
+              and then Command_Table (Command_Line_Pos -
+              M_Misc.C_Base_Token).Command_Type = T_CMD then
+               Command_Token := Command_Line (Command_Line_Pos);
+               T_Arg := T_CMD;
+            end if;
             --              else
             --  249 do non-local jump
-            Assert (Is_Name_Start (Command_Line (Command_Line_Pos)),
-                    Routine_Name &"Invalid character ");
-            Index :=
-              Find_Subfunction (Command_Line, T_NA);
-            if Index > 0 then
-               Put_Line (Routine_Name & "Index: " & Integer'Image (Index));
-               Defined_Subfunction (Buffer, False, Command_Line, Index,
-                                    Fa, I64a, Sa, Null_Function);
-            end if;
+            --  Assert (Is_Name_Start (Command_Line (Command_Line_Pos)),
+            --          Routine_Name &"Invalid character ");
+            --  Index :=
+            --    Find_Subfunction (Command_Line, T_NA);
+            --  if Index > 0 then
+            --     Put_Line (Routine_Name & "Index: " & Integer'Image (Index));
+            --     Defined_Subfunction (Buffer, False, Command_Line, Index,
+            --                          Fa, I64a, Sa, Null_Function);
+            --  end if;
             Put_Line (Routine_Name & "268 ");
             --              end if;
 
