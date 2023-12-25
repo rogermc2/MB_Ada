@@ -236,7 +236,7 @@ package body M_Basic is
       Next_Statement_Pos : Positive := 1;
       Command_Line_Pos   : Positive := 1;   --  p
       Null_Function      : Function_Type := T_NOTYPE;
-      Command_Token      : Unsigned_2Byte;
+      Command_Token      : Character;
       Fa                 : Configuration.MMFLOAT := 0.0;
       I64a               : Long_Long_Integer := 0;
       Sa                 : Unbounded_String := To_Unbounded_String ("");
@@ -244,6 +244,7 @@ package body M_Basic is
       Save_Local_Index   : Natural := 0;
       Interupt_Check     : Integer := 0;
       T_Arg              : Function_Type := T_NOTYPE;
+      theCommand         : Function_Type;
       No_Abort           : Boolean := True;
       Done               : Boolean := False;
    begin
@@ -268,6 +269,10 @@ package body M_Basic is
               M_Misc.C_Base_Token).Command_Type = T_CMD then
                Command_Token := Command_Line (Command_Line_Pos);
                T_Arg := T_CMD;
+               --  Execute the command
+               theCommand := Command_Table
+                 (Command_Line_Pos - M_Misc.C_Base_Token).Function_Ptr.all;
+
             end if;
             --              else
             --  249 do non-local jump
@@ -805,7 +810,7 @@ package body M_Basic is
 
    end Skip_Var;
 
-   function Token_Function (Index : Positive) return System.Address is
+   function Token_Function (Index : Positive) return Function_Type_Ptr is
 
    begin
       if Index >= M_Misc.C_Base_Token and then

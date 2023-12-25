@@ -1,31 +1,29 @@
 
-with System; use System;
-
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 
 with Command_And_Token_Tables; use Command_And_Token_Tables;
 
 package Operators is
 
-   op_exp         : constant Address := Null_Address;
-   op_mul         : constant Address := Null_Address;
-   op_div         : constant Address := Null_Address;
-   op_divint      : constant Address := Null_Address;
-   op_add         : constant Address := Null_Address;
-   op_subtract    : constant Address := Null_Address;
-   op_mod         : constant Address := Null_Address;
-   op_ne          : constant Address := Null_Address;
-   op_gte         : constant Address := Null_Address;
-   op_lte         : constant Address := Null_Address;
-   op_lt          : constant Address := Null_Address;
-   op_gt          : constant Address := Null_Address;
-   op_equal       : constant Address := Null_Address;
-   op_and         : constant Address := Null_Address;
-   op_or          : constant Address := Null_Address;
-   op_xor         : constant Address := Null_Address;
-   op_not         : constant Address := Null_Address;
-   op_shiftleft   : constant Address := Null_Address;
-   op_shiftright  : constant Address := Null_Address;
+   op_exp         : constant Function_Type_Ptr :=  Null;
+   op_mul         : constant Function_Type_Ptr :=  Null;
+   op_div         : constant Function_Type_Ptr :=  Null;
+   op_divint      : constant Function_Type_Ptr :=  Null;
+   op_add         : constant Function_Type_Ptr :=  Null;
+   op_subtract    : constant Function_Type_Ptr :=  Null;
+   op_mod         : constant Function_Type_Ptr :=  Null;
+   op_ne          : constant Function_Type_Ptr :=  Null;
+   op_gte         : constant Function_Type_Ptr :=  Null;
+   op_lte         : constant Function_Type_Ptr :=  Null;
+   op_lt          : constant Function_Type_Ptr :=  Null;
+   op_gt          : constant Function_Type_Ptr :=  Null;
+   op_equal       : constant Function_Type_Ptr :=  Null;
+   op_and         : constant Function_Type_Ptr :=  Null;
+   op_or          : constant Function_Type_Ptr :=  Null;
+   op_xor         : constant Function_Type_Ptr :=  Null;
+   op_not         : constant Function_Type_Ptr :=  Null;
+   op_shiftleft   : constant Function_Type_Ptr :=  Null;
+   op_shiftright  : constant Function_Type_Ptr :=  Null;
 
    Operator_Types : array (1 .. Num_Operators) of Command_Table_Item :=
                       ((To_Unbounded_String ("^"),  T_OPER, 0, op_exp),

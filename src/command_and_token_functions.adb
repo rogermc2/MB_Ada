@@ -1,6 +1,4 @@
 
-with System;
-
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 --  with Ada.Text_IO; use Ada.Text_IO;
 
@@ -121,7 +119,7 @@ package body Command_And_Token_Functions is
       end loop;
 
       Command_Table (Command_Table'Last) :=
-        (To_Unbounded_String (""), T_NA, 0, System.Null_Address);
+        (To_Unbounded_String (""), T_NA, 0, Null);
 
       for index in Token_Table'Range loop
          Token_Table (index) := Command_Table (index);
