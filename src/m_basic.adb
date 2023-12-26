@@ -75,6 +75,7 @@ package body M_Basic is
       I64a          : in out Long_Long_Integer;
       Sa            : in out Unbounded_String;
       Fun_Type      : in out Function_Type) is
+      use Interfaces;
       use Ada.Characters.Handling;
       use Ada.Assertions;
       use C_Functions;
@@ -230,6 +231,7 @@ package body M_Basic is
    end Defined_Subfunction;
 
    procedure Execute_Command (Buffer : String_Buffer; Command : Unbounded_String) is
+      use Interfaces;
       use Ada.Assertions;
       Routine_Name       : constant String := "M_Basic.Execute_Command ";
       Command_Line       : constant String := To_String (Command);
@@ -374,6 +376,7 @@ package body M_Basic is
    --  if type = 0 then look for a sub otherwise a function
    function Find_Subfunction (Token : String; Fun_Type : Function_Type)
                               return Natural is
+      use Interfaces;
       use Command_And_Token_Functions;
       use Ada.Characters.Handling;
       use Flash;
@@ -730,6 +733,7 @@ package body M_Basic is
 
    --  2413 Skip_Var skips to the end of a variable
    function Skip_Var (Pos : in out Positive) return Positive is
+      use Interfaces;
       use Ada.Assertions;
       Routine_Name : constant String := "M_Basic.Skip_Var ";
       Pos2         : constant Positive := Pos;

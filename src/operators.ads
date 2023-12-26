@@ -1,29 +1,32 @@
 
+with System; use System;
+
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 
+with Command_And_Token_Functions; use Command_And_Token_Functions;
 with Command_And_Token_Tables; use Command_And_Token_Tables;
 
 package Operators is
 
-   op_exp         : constant Function_Type_Ptr :=  Null;
-   op_mul         : constant Function_Type_Ptr :=  Null;
-   op_div         : constant Function_Type_Ptr :=  Null;
-   op_divint      : constant Function_Type_Ptr :=  Null;
-   op_add         : constant Function_Type_Ptr :=  Null;
-   op_subtract    : constant Function_Type_Ptr :=  Null;
-   op_mod         : constant Function_Type_Ptr :=  Null;
-   op_ne          : constant Function_Type_Ptr :=  Null;
-   op_gte         : constant Function_Type_Ptr :=  Null;
-   op_lte         : constant Function_Type_Ptr :=  Null;
-   op_lt          : constant Function_Type_Ptr :=  Null;
-   op_gt          : constant Function_Type_Ptr :=  Null;
-   op_equal       : constant Function_Type_Ptr :=  Null;
-   op_and         : constant Function_Type_Ptr :=  Null;
-   op_or          : constant Function_Type_Ptr :=  Null;
-   op_xor         : constant Function_Type_Ptr :=  Null;
-   op_not         : constant Function_Type_Ptr :=  Null;
-   op_shiftleft   : constant Function_Type_Ptr :=  Null;
-   op_shiftright  : constant Function_Type_Ptr :=  Null;
+   op_exp         : constant Access_Procedure :=  Null;
+   op_mul         : constant Access_Procedure :=  Null;
+   op_div         : constant Access_Procedure :=  Null;
+   op_divint      : constant Access_Procedure :=  Null;
+   op_add         : constant Access_Procedure :=  Null;
+   op_subtract    : constant Access_Procedure :=  Null;
+   op_mod         : constant Access_Procedure :=  Null;
+   op_ne          : constant Access_Procedure :=  Null;
+   op_gte         : constant Access_Procedure :=  Null;
+   op_lte         : constant Access_Procedure :=  Null;
+   op_lt          : constant Access_Procedure :=  Null;
+   op_gt          : constant Access_Procedure :=  Null;
+   op_equal       : constant Access_Procedure :=  Null;
+   op_and         : constant Access_Procedure :=  Null;
+   op_or          : constant Access_Procedure :=  Null;
+   op_xor         : constant Access_Procedure :=  Null;
+   op_not         : constant Access_Procedure :=  Null;
+   op_shiftleft   : constant Access_Procedure :=  Null;
+   op_shiftright  : constant Access_Procedure :=  Null;
 
    Operator_Types : array (1 .. Num_Operators) of Command_Table_Item :=
                       ((To_Unbounded_String ("^"),  T_OPER, 0, op_exp),

@@ -1,11 +1,14 @@
 
+with Interfaces; use Interfaces;
 --  with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 
-with Command_And_Token_Tables; use Command_And_Token_Tables;
 with Configuration;
 with Exceptions;
 
 package Global is
+
+   F_Return : Float := 0.0;
+   E_Float  : Float := 0.0;
 
    --  Flags used in the program lines
    --  end of a command
@@ -22,21 +25,21 @@ package Global is
 
    --  these constants are used in the second argument of the findvar()
    --  function, they should be or"d together
-   V_FIND            : constant Unsigned_2Byte:= 0;
+   V_FIND            : constant Unsigned_16:= 0;
    --  a straight forward find, if the variable is not found
    --  it is created and set to zero
    --  throw an error if not found
-   V_NOFIND_ERR        : constant Unsigned_2Byte:= 16#0200#;
+   V_NOFIND_ERR        : constant Unsigned_16:= 16#0200#;
    --  return a null pointer if not found
-   V_NOFIND_NULL       : constant Unsigned_2Byte:= 16#0400#;
+   V_NOFIND_NULL       : constant Unsigned_16:= 16#0400#;
    --  dimension an array
-   V_DIM_VAR           : constant Unsigned_2Byte:= 16#0800#;
+   V_DIM_VAR           : constant Unsigned_16:= 16#0800#;
    --  create a local variable
-   V_LOCAL             : constant Unsigned_2Byte:= 16#1000#;
+   V_LOCAL             : constant Unsigned_16:= 16#1000#;
    --  allow an empty array variable.  ie, var()
-   V_EMPTY_OK          : constant Unsigned_2Byte:= 16#2000#;
+   V_EMPTY_OK          : constant Unsigned_16:= 16#2000#;
    --  define the name of a function
-   V_FUNCT             : constant Unsigned_2Byte:= 16#4000#;
+   V_FUNCT             : constant Unsigned_16:= 16#4000#;
 
    --  these flags are used in the last argument in expression()
    E_NOERROR           : Boolean := True;

@@ -1,25 +1,37 @@
 
+with System; use System;
+with System.Address_To_Access_Conversions;
+
+with Interfaces; use Interfaces;
+
 with Ada.Containers.Indefinite_Vectors;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 
+with Command_And_Token_Functions; use Command_And_Token_Functions;
 package Command_And_Token_Tables is
 
    package String_Buffer_Package is
      new Ada.Containers.Indefinite_Vectors (Positive, String);
    subtype String_Buffer is String_Buffer_Package.Vector;
 
+   package AAC_Functions is new
+     System.Address_To_Access_Conversions (Float);
+   use AAC_Functions;
+
    subtype Token_Cursor is String_Buffer_Package.Cursor;
    type Token_Pointer is access String;
 
    type Modular is mod 2**32;
+--
+--     type Unsigned_Byte is mod 256;
+--     type Unsigned_2Byte is mod 65536;
+   type Unsigned_Byte_Ptr is access Unsigned_8;
+   type Unsigned_Byte_Array is array (Positive range <>) of Unsigned_8;
 
-   type Unsigned_Byte is mod 256;
-   type Unsigned_2Byte is mod 65536;
-   type Unsigned_Byte_Ptr is access Unsigned_Byte;
-   type Unsigned_Byte_Array is array (Positive range <>) of Unsigned_Byte;
-
-   subtype Function_Type is Unsigned_2Byte;
-   type Function_Type_Ptr is access Function_Type;
+   subtype Function_Type is Unsigned_16;
+--     type Function_Type_Ptr is access Function_Type;
+   subtype Function_Type_Ptr is System.Address;
+   --     type Cos_Ptr is access Cos (X : Float) return float;
 
    T_NOTYPE  : constant Function_Type := 0;
    T_NBR     : constant Function_Type := 1;
@@ -51,7 +63,7 @@ package Command_And_Token_Tables is
       Name         : Unbounded_String;
       Command_Type : Function_Type := T_NOTYPE;
       Precedence   : Natural := 0;
-      Function_Ptr : Function_Type_Ptr := Null;
+      Function_Ptr : Access_Procedure := Null;
    end record;
 
    Num_Commands  : constant Positive := 45;
@@ -67,54 +79,54 @@ package Command_And_Token_Tables is
    Command_Table : array (1 .. Command_Table_Size) of Command_Table_Item;
    Token_Table   : array (1 .. Token_Table_Size) of Command_Table_Item;
 
-   op_invalid    : constant Function_Type_Ptr :=  Null;
-   fun_acos      : constant Function_Type_Ptr :=  Null;
-   fun_abs       : constant Function_Type_Ptr :=  Null;
-   fun_asc       : constant Function_Type_Ptr :=  Null;
-   fun_asin      : constant Function_Type_Ptr :=  Null;
-   fun_atn       : constant Function_Type_Ptr :=  Null;
-   fun_bin       : constant Function_Type_Ptr :=  Null;
-   fun_chr       : constant Function_Type_Ptr :=  Null;
-   fun_cint      : constant Function_Type_Ptr :=  Null;
-   fun_cos       : constant Function_Type_Ptr :=  Null;
-   fun_deg       : constant Function_Type_Ptr :=  Null;
-   fun_errno     : constant Function_Type_Ptr :=  Null;
-   fun_errmsg    : constant Function_Type_Ptr :=  Null;
-   fun_exp       : constant Function_Type_Ptr :=  Null;
-   fun_fix       : constant Function_Type_Ptr :=  Null;
-   fun_hex       : constant Function_Type_Ptr :=  Null;
-   fun_inkey     : constant Function_Type_Ptr :=  Null;
-   fun_instr     : constant Function_Type_Ptr :=  Null;
-   fun_int       : constant Function_Type_Ptr :=  Null;
-   fun_lcase     : constant Function_Type_Ptr :=  Null;
-   fun_ucase     : constant Function_Type_Ptr :=  Null;
-   fun_left      : constant Function_Type_Ptr :=  Null;
-   fun_len       : constant Function_Type_Ptr :=  Null;
-   fun_log       : constant Function_Type_Ptr :=  Null;
-   fun_mid       : constant Function_Type_Ptr :=  Null;
-   fun_version   : constant Function_Type_Ptr :=  Null;
-   fun_oct       : constant Function_Type_Ptr :=  Null;
-   fun_pi        : constant Function_Type_Ptr :=  Null;
-   fun_pos       : constant Function_Type_Ptr :=  Null;
-   fun_rad       : constant Function_Type_Ptr :=  Null;
-   fun_right     : constant Function_Type_Ptr :=  Null;
-   fun_rnd       : constant Function_Type_Ptr :=  Null;
-   fun_sgn       : constant Function_Type_Ptr :=  Null;
-   fun_sin       : constant Function_Type_Ptr :=  Null;
-   fun_tan       : constant Function_Type_Ptr :=  Null;
-   fun_space     : constant Function_Type_Ptr :=  Null;
-   fun_sqr       : constant Function_Type_Ptr :=  Null;
-   fun_str       : constant Function_Type_Ptr :=  Null;
-   fun_string    : constant Function_Type_Ptr :=  Null;
-   fun_tab       : constant Function_Type_Ptr :=  Null;
-   tan           : constant Function_Type_Ptr :=  Null;
-   un_ucase      : constant Function_Type_Ptr :=  Null;
-   fun_val       : constant Function_Type_Ptr :=  Null;
-   fun_eval      : constant Function_Type_Ptr :=  Null;
-   fun_max       : constant Function_Type_Ptr :=  Null;
-   fun_min       : constant Function_Type_Ptr :=  Null;
+   op_invalid    : constant Access_Procedure :=  Null;
+   fun_acos      : constant Access_Procedure :=  F_Cos_Ptr;
+   fun_abs       : constant Access_Procedure :=  Null;
+   fun_asc       : constant Access_Procedure :=  Null;
+   fun_asin      : constant Access_Procedure :=  Null;
+   fun_atn       : constant Access_Procedure :=  Null;
+   fun_bin       : constant Access_Procedure :=  Null;
+   fun_chr       : constant Access_Procedure :=  Null;
+   fun_cint      : constant Access_Procedure :=  Null;
+   fun_cos       : constant Access_Procedure :=  F_Cos_Ptr;
+   fun_deg       : constant Access_Procedure :=  Null;
+   fun_errno     : constant Access_Procedure :=  Null;
+   fun_errmsg    : constant Access_Procedure :=  Null;
+   fun_exp       : constant Access_Procedure :=  Null;
+   fun_fix       : constant Access_Procedure :=  Null;
+   fun_hex       : constant Access_Procedure :=  Null;
+   fun_inkey     : constant Access_Procedure :=  Null;
+   fun_instr     : constant Access_Procedure :=  Null;
+   fun_int       : constant Access_Procedure :=  Null;
+   fun_lcase     : constant Access_Procedure :=  Null;
+   fun_ucase     : constant Access_Procedure :=  Null;
+   fun_left      : constant Access_Procedure :=  Null;
+   fun_len       : constant Access_Procedure :=  Null;
+   fun_log       : constant Access_Procedure :=  Null;
+   fun_mid       : constant Access_Procedure :=  Null;
+   fun_version   : constant Access_Procedure :=  Null;
+   fun_oct       : constant Access_Procedure :=  Null;
+   fun_pi        : constant Access_Procedure :=  Null;
+   fun_pos       : constant Access_Procedure :=  Null;
+   fun_rad       : constant Access_Procedure :=  Null;
+   fun_right     : constant Access_Procedure :=  Null;
+   fun_rnd       : constant Access_Procedure :=  Null;
+   fun_sgn       : constant Access_Procedure :=  Null;
+   fun_sin       : constant Access_Procedure :=  Null;
+   fun_tan       : constant Access_Procedure :=  Null;
+   fun_space     : constant Access_Procedure :=  Null;
+   fun_sqr       : constant Access_Procedure :=  Null;
+   fun_str       : constant Access_Procedure :=  Null;
+   fun_string    : constant Access_Procedure :=  Null;
+   fun_tab       : constant Access_Procedure :=  Null;
+   tan           : constant Access_Procedure :=  Null;
+   un_ucase      : constant Access_Procedure :=  Null;
+   fun_val       : constant Access_Procedure :=  Null;
+   fun_eval      : constant Access_Procedure :=  Null;
+   fun_max       : constant Access_Procedure :=  Null;
+   fun_min       : constant Access_Procedure :=  Null;
 
-   cmd_nul       : constant Function_Type_Ptr :=  Null;
+   cmd_nul       : constant Access_Procedure :=  Null;
 
    Command_Types : array (1 .. Num_Commands) of Command_Table_Item :=
                      ((To_Unbounded_String ("ACos("),

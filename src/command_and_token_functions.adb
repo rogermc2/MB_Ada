@@ -1,4 +1,5 @@
 
+with Ada.Numerics.Generic_Elementary_Functions;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 --  with Ada.Text_IO; use Ada.Text_IO;
 
@@ -9,6 +10,10 @@ with M_Misc;
 with Operators; use Operators;
 
 package body Command_And_Token_Functions is
+
+   package Float_Math_Functions is new
+     Ada.Numerics.Generic_Elementary_Functions (Float);
+   use Float_Math_Functions;
 
    t_THEN         : Natural;
    t_ELSE         : Natural;
@@ -31,6 +36,90 @@ package body Command_And_Token_Functions is
    c_IRET         : Natural;
    c_CFUN         : Natural;
    c_CSUB         : Natural;
+
+   procedure F_Abs is
+      use Global;
+   begin
+      F_Return := Cos (E_Float);
+
+   end F_Abs;
+
+   procedure F_Asc is
+      use Global;
+   begin
+      F_Return := Cos (E_Float);
+
+   end F_Asc;
+
+   procedure F_ATan is
+      use Global;
+   begin
+      F_Return := Arctan (E_Float);
+
+   end F_ATan;
+
+   procedure F_Chr is
+      use Global;
+   begin
+      F_Return := Cos (E_Float);
+
+   end F_Chr;
+
+   procedure F_CInt is
+      use Global;
+   begin
+      F_Return := Cos (E_Float);
+
+   end F_CInt;
+
+   procedure F_Cos is
+      use Global;
+   begin
+      F_Return := Cos (E_Float);
+
+   end F_Cos;
+
+   procedure F_Deg is
+      use Global;
+   begin
+      F_Return := Cos (E_Float);
+
+   end F_Deg;
+
+   procedure F_Exp is
+      use Global;
+   begin
+      F_Return := Cos (E_Float);
+
+   end F_Exp;
+
+   procedure F_Hex is
+      use Global;
+   begin
+      F_Return := Cos (E_Float);
+
+   end F_Hex;
+
+   procedure F_Oct is
+      use Global;
+   begin
+      F_Return := Cos (E_Float);
+
+   end F_Oct;
+
+   procedure F_Bin is
+      use Global;
+   begin
+      F_Return := Cos (E_Float);
+
+   end F_Bin;
+
+   procedure F_In_String is
+      use Global;
+   begin
+      F_Return := Cos (E_Float);
+
+   end F_In_String;
 
    function Get_Command_Value (Token : String) return Natural is
       Index : Integer := Command_Table'First - 1;
@@ -314,5 +403,53 @@ package body Command_And_Token_Functions is
       end loop;
 
    end Skip_Spaces;
+
+begin
+
+   F_Abs_Ptr := F_Abs'Access;
+   F_Asc_Ptr := F_Asc'Access;
+   F_ATan_Ptr := F_ATan'Access;
+   F_Chr_Ptr := F_Chr'Access;
+   F_CInt_Ptr := F_CInt'Access;
+   F_Cos_Ptr := F_Cos'Access;
+   F_Deg_Ptr := F_Deg'Access;
+   F_Exp_Ptr := F_Exp'Access;
+   F_Hex_Ptr := F_Hex'Access;
+   F_Oct_Ptr := F_Oct'Access;
+   F_Bin_Ptr := F_Bin'Access;
+   F_In_String_Ptr := F_In_String'Access;
+
+   F_Int_Ptr := F_Deg'Access;
+   F_Fix_Ptr := F_Deg'Access;
+   F_Left_Ptr := F_Deg'Access;
+   F_Right_Ptr := F_Deg'Access;
+   F_Length_Ptr := F_Deg'Access;
+   F_Log_Ptr := F_Deg'Access;
+   F_Mid_Ptr := F_Deg'Access;
+   F_Pi_Ptr := F_Deg'Access;
+   F_Radian_Ptr := F_Deg'Access;
+   F_Random_Ptr := F_Deg'Access;
+   F_Sign_Ptr := F_Deg'Access;
+   F_Sine_Ptr := F_Deg'Access;
+   F_Sq_Root_Ptr := F_Deg'Access;
+   F_Tan_Ptr := F_Deg'Access;
+   F_Value_Ptr := F_Deg'Access;
+   F_Evaluate_Ptr := F_Deg'Access;
+   F_Error_Num_Ptr := F_Deg'Access;
+   F_Error_Message_Ptr := F_Deg'Access;
+   F_Space_Ptr := F_Deg'Access;
+   F_Decimal_String_Ptr := F_Deg'Access;
+   F_String_Ptr := F_Deg'Access;
+   F_Upper_Case_Ptr := F_Deg'Access;
+   F_Lower_Case_Ptr := F_Deg'Access;
+   F_Version_Ptr := F_Deg'Access;
+   F_Pos_Ptr := F_Deg'Access;
+   F_Tab_Ptr := F_Deg'Access;
+   F_In_Key_Ptr := F_Deg'Access;
+   F_Arcsinus_Ptr := F_Deg'Access;
+   F_Arcsine_Ptr := F_Deg'Access;
+   F_Arccos_Ptr := F_Deg'Access;
+   F_Max_Ptr := F_Deg'Access;
+   F_Min_Ptr := F_Deg'Access;
 
 end Command_And_Token_Functions;
