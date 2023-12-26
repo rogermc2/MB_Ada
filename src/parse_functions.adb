@@ -26,8 +26,8 @@ package body Parse_Functions is
    function Get_Command_From_Input (I_Pos : in out Positive)
                                     return Unbounded_String is
       use Ada.Characters.Handling;
-      --        Routine_Name  : constant String :=
-      --                          "Parse_Functions.Get_Command_From_Input ";
+      Routine_Name  : constant String :=
+                        "Parse_Functions.Get_Command_From_Input ";
       aChar         : Character;
       Command       : Unbounded_String;
       Done          : Boolean := False;
@@ -41,7 +41,7 @@ package body Parse_Functions is
          I_Pos := I_Pos + 1;
          Done := I_Pos > Input_Buffer_Length;
       end loop;
-      --        Put_Line (Routine_Name & "Command: " & To_String (Command));
+      Put_Line (Routine_Name & "Command: " & To_String (Command));
 
       return Command;
 
@@ -150,8 +150,8 @@ package body Parse_Functions is
      (Buffer      : in out String_Buffer; I_Pos : in out Positive;
       Label_Valid : in out Boolean; First_Nonwhite : in out Boolean) is
       use Support;
---        Routine_Name  : constant String :=
---                          "Parse_Functions.Process_First_Nonwhite ";
+      --        Routine_Name  : constant String :=
+      --                          "Parse_Functions.Process_First_Nonwhite ";
       aChar         : constant Character := Get_Input_Character (I_Pos);
       Match_Index   : Natural := 0;
       Match_I_Pos   : Positive;
@@ -258,7 +258,7 @@ package body Parse_Functions is
       use Interfaces;
       use Ada.Characters.Handling;
       use Support;
-      --        Routine_Name  : constant String := "Parse_Functions.Try_Command ";
+      Routine_Name  : constant String := "Parse_Functions.Try_Command ";
       In_Command    : constant String :=
                         To_String (Get_Command_From_Input (I_Pos));
       I_Pos2        : Positive;         --  tp2 an input character indeex
@@ -271,16 +271,20 @@ package body Parse_Functions is
       Done          : Boolean := I_Pos >= Input_Buffer_Length;
       OK            : Boolean := True;
    begin
+      Put_Line (Routine_Name & "In_Command: " & In_Command);
       while not Done and then CT_Index < Command_Table'Last loop
          CT_Index := CT_Index + 1;
          I_Pos2 := I_Pos + 1;  -- I_Pos2 (tp2) is I_Position of next input character
          Command := Command_Table (CT_Index).Name;
+         Put_Line (Routine_Name & "Command: " & To_String (Command));
 
          while I_Pos2 <= Input_Buffer_Length and then
            To_Upper (In_Command) =
            To_Upper (To_String (Command)) loop
+--              Put_Line (Routine_Name & "I_Pos2: " & Integer'Image (I_Pos2));
             while I_Pos2 < Input_Buffer_Length and then
               Get_Input_Character (I_Pos2) = ' '  loop
+              Put_Line (Routine_Name & "I_Pos2: " & Integer'Image (I_Pos2));
                I_Pos2 := I_Pos2 + 1;
             end loop;
 
