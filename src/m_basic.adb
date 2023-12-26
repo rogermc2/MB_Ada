@@ -472,13 +472,6 @@ package body M_Basic is
 
    end Is_Name_Character;
 
-   function Is_Name_Start (aChar : Character) return Boolean is
-      use Ada.Characters.Handling;
-   begin
-      return Is_Alphanumeric (aChar) or aChar = '_';
-
-   end Is_Name_Start;
-
    function Is_Name_End (aChar : Character) return Boolean is
    begin
       return Is_Line_Num (aChar) or else aChar = '_' or else
@@ -487,10 +480,19 @@ package body M_Basic is
 
    end Is_Name_End;
 
+   function Is_Name_Start (aChar : Character) return Boolean is
+      use Ada.Characters.Handling;
+      Routine_Name : constant String := "M_Basic.Is_Name_Start ";
+   begin
+      Put_Line (Routine_Name);
+      return Is_Alphanumeric (aChar) or aChar = '_';
+
+   end Is_Name_Start;
+
    procedure Parse_Line (Buffer : in out String_Buffer; Pos : Positive) is
       use Ada.Characters.Handling;
       use Parse_Functions;
---        Routine_Name   : constant String := "M_Basic.Parse_Line ";
+      Routine_Name   : constant String := "M_Basic.Parse_Line ";
       Buff_Length    : constant Positive := Input_Buffer_Length;
       Ptr            : Positive := Pos;
       aChar          : Character;
@@ -500,8 +502,8 @@ package body M_Basic is
       --  826
       while Ptr < Buff_Length loop
          aChar := Get_Input_Character (Ptr);
---           Put_Line (Routine_Name & "Ptr: " & Integer'Image (Ptr) &
---                    ", aChar: " & aChar);
+         Put_Line (Routine_Name & "Ptr: " & Integer'Image (Ptr) &
+                  ", aChar: " & aChar);
          if aChar = ' ' then
             Ptr := Ptr + 1;
             --  836

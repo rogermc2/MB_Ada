@@ -7,7 +7,7 @@ with Serial_File_IO;
 
 package body Command_And_Token_Tables is
 
-   In_Buffer    : Unbounded_String;
+   In_Buffer : Unbounded_String;
 
    function Get_Input_Character (Pos : Positive) return Character is
    begin

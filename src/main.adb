@@ -97,6 +97,7 @@ begin
       if Input_Buffer_Length > 0 then
          Put_Line (Program_Name & "Tokenize");
          M_Basic.Tokenize (Token_Buffer, True);
+         Put_Line (Program_Name & "Execute_Program");
          M_Basic.Execute_Program (Token_Buffer);
       end if;
 
