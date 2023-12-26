@@ -13,7 +13,6 @@ package body Command_And_Token_Functions is
 
    package Float_Math_Functions is new
      Ada.Numerics.Generic_Elementary_Functions (Float);
-   use Float_Math_Functions;
 
    t_THEN         : Natural;
    t_ELSE         : Natural;
@@ -40,18 +39,19 @@ package body Command_And_Token_Functions is
    procedure F_Abs is
       use Global;
    begin
-      F_Return := Cos (E_Float);
+      F_Return := abs (E_Float);
 
    end F_Abs;
 
    procedure F_Asc is
       use Global;
    begin
-      F_Return := Cos (E_Float);
+      null;
 
    end F_Asc;
 
    procedure F_ATan is
+      use Float_Math_Functions;
       use Global;
    begin
       F_Return := Arctan (E_Float);
@@ -61,18 +61,19 @@ package body Command_And_Token_Functions is
    procedure F_Chr is
       use Global;
    begin
-      F_Return := Cos (E_Float);
+      null;
 
    end F_Chr;
 
    procedure F_CInt is
       use Global;
    begin
-      F_Return := Cos (E_Float);
+      null;
 
    end F_CInt;
 
    procedure F_Cos is
+      use Float_Math_Functions;
       use Global;
    begin
       F_Return := Cos (E_Float);
@@ -82,44 +83,274 @@ package body Command_And_Token_Functions is
    procedure F_Deg is
       use Global;
    begin
-      F_Return := Cos (E_Float);
+      null;
 
    end F_Deg;
 
    procedure F_Exp is
+      use Float_Math_Functions;
       use Global;
    begin
-      F_Return := Cos (E_Float);
+      F_Return := Exp (E_Float);
 
    end F_Exp;
 
    procedure F_Hex is
       use Global;
    begin
-      F_Return := Cos (E_Float);
+      null;
 
    end F_Hex;
+
+   procedure F_Int is
+      use Global;
+   begin
+      null;
+
+   end F_Int;
+
+   procedure F_Fix is
+      use Global;
+   begin
+      null;
+
+   end F_Fix;
+
+   procedure F_Left is
+      use Global;
+   begin
+      null;
+
+   end F_Left;
+
+   procedure F_Right is
+      use Global;
+   begin
+      null;
+
+   end F_Right;
+
+   procedure F_Length is
+      use Global;
+   begin
+      null;
+
+   end F_Length;
+
+   procedure F_Log is
+      use Float_Math_Functions;
+      use Global;
+   begin
+      F_Return := Log (E_Float);
+
+   end F_Log;
+
+   procedure F_Mid is
+      use Global;
+   begin
+     null;
+
+   end F_Mid;
+
+   procedure F_Pi is
+      use Global;
+   begin
+      null;
+
+   end F_Pi;
+
+   procedure F_Radian is
+      use Global;
+   begin
+      null;
+
+   end F_Radian;
+
+   procedure F_Random is
+      use Global;
+   begin
+     null;
+
+   end F_Random;
+
+   procedure F_Sign is
+      use Global;
+   begin
+     null;
+
+   end F_Sign;
+
+   procedure F_Sine is
+      use Float_Math_Functions;
+      use Global;
+   begin
+      F_Return := Sin (E_Float);
+
+   end F_Sine;
 
    procedure F_Oct is
       use Global;
    begin
-      F_Return := Cos (E_Float);
+      null;
 
    end F_Oct;
 
    procedure F_Bin is
       use Global;
    begin
-      F_Return := Cos (E_Float);
+      null;
 
    end F_Bin;
 
    procedure F_In_String is
       use Global;
    begin
-      F_Return := Cos (E_Float);
+      null;
 
    end F_In_String;
+
+   procedure F_Sq_Root is
+      use Global;
+   begin
+      null;
+
+   end F_Sq_Root;
+
+   procedure F_Tan is
+      use Float_Math_Functions;
+      use Global;
+   begin
+      F_Return := Tan (E_Float);
+
+   end F_Tan;
+
+   procedure F_Value is
+      use Global;
+   begin
+      null;
+
+   end F_Value;
+
+   procedure F_Evaluate is
+      use Global;
+   begin
+      null;
+
+   end F_Evaluate;
+
+   procedure F_Error_Num is
+      use Global;
+   begin
+     null;
+
+   end F_Error_Num;
+
+   procedure F_Error_Message is
+      use Global;
+   begin
+      null;
+
+   end F_Error_Message;
+
+   procedure F_Space is
+      use Global;
+   begin
+      null;
+
+   end F_Space;
+
+   procedure F_Decimal_String is
+      use Global;
+   begin
+      null;
+
+   end F_Decimal_String;
+
+   procedure F_String is
+      use Global;
+   begin
+      null;
+
+   end F_String;
+
+   procedure F_Upper_Case is
+      use Global;
+   begin
+     null;
+
+   end F_Upper_Case;
+
+   procedure F_Lower_Case is
+      use Global;
+   begin
+      null;
+
+   end F_Lower_Case;
+
+   procedure F_Version is
+      use Global;
+   begin
+      null;
+
+   end F_Version;
+
+   procedure F_Pos is
+      use Global;
+   begin
+      null;
+
+   end F_Pos;
+
+   procedure F_Tab is
+      use Global;
+   begin
+      null;
+
+   end F_Tab;
+
+    procedure F_In_Key is
+      use Global;
+   begin
+      null;
+
+   end F_In_Key;
+
+   procedure F_Arcsinus is
+      use Global;
+   begin
+      null;
+
+   end F_Arcsinus;
+
+   procedure F_Arcsine is
+      use Float_Math_Functions;
+      use Global;
+   begin
+      F_Return := Arcsin (E_Float);
+
+   end F_Arcsine;
+
+   procedure F_Arccos is
+      use Float_Math_Functions;
+      use Global;
+   begin
+      F_Return := Arccos (E_Float);
+
+   end F_Arccos;
+
+   procedure F_Max is
+      use Global;
+   begin
+      null;
+
+   end F_Max;
+
+   procedure F_Min is
+      use Global;
+   begin
+      null;
+
+   end F_Min;
 
    function Get_Command_Value (Token : String) return Natural is
       Index : Integer := Command_Table'First - 1;
@@ -419,37 +650,37 @@ begin
    F_Bin_Ptr := F_Bin'Access;
    F_In_String_Ptr := F_In_String'Access;
 
-   F_Int_Ptr := F_Deg'Access;
-   F_Fix_Ptr := F_Deg'Access;
-   F_Left_Ptr := F_Deg'Access;
-   F_Right_Ptr := F_Deg'Access;
-   F_Length_Ptr := F_Deg'Access;
-   F_Log_Ptr := F_Deg'Access;
-   F_Mid_Ptr := F_Deg'Access;
-   F_Pi_Ptr := F_Deg'Access;
-   F_Radian_Ptr := F_Deg'Access;
-   F_Random_Ptr := F_Deg'Access;
-   F_Sign_Ptr := F_Deg'Access;
-   F_Sine_Ptr := F_Deg'Access;
-   F_Sq_Root_Ptr := F_Deg'Access;
-   F_Tan_Ptr := F_Deg'Access;
-   F_Value_Ptr := F_Deg'Access;
-   F_Evaluate_Ptr := F_Deg'Access;
-   F_Error_Num_Ptr := F_Deg'Access;
-   F_Error_Message_Ptr := F_Deg'Access;
-   F_Space_Ptr := F_Deg'Access;
-   F_Decimal_String_Ptr := F_Deg'Access;
-   F_String_Ptr := F_Deg'Access;
-   F_Upper_Case_Ptr := F_Deg'Access;
-   F_Lower_Case_Ptr := F_Deg'Access;
-   F_Version_Ptr := F_Deg'Access;
-   F_Pos_Ptr := F_Deg'Access;
-   F_Tab_Ptr := F_Deg'Access;
-   F_In_Key_Ptr := F_Deg'Access;
-   F_Arcsinus_Ptr := F_Deg'Access;
-   F_Arcsine_Ptr := F_Deg'Access;
-   F_Arccos_Ptr := F_Deg'Access;
-   F_Max_Ptr := F_Deg'Access;
-   F_Min_Ptr := F_Deg'Access;
+   F_Int_Ptr := F_Int'Access;
+   F_Fix_Ptr := F_Fix'Access;
+   F_Left_Ptr := F_Left'Access;
+   F_Right_Ptr := F_Right'Access;
+   F_Length_Ptr := F_Length'Access;
+   F_Log_Ptr := F_Log'Access;
+   F_Mid_Ptr := F_Mid'Access;
+   F_Pi_Ptr := F_Pi'Access;
+   F_Radian_Ptr := F_Radian'Access;
+   F_Random_Ptr := F_Random'Access;
+   F_Sign_Ptr := F_Sign'Access;
+   F_Sine_Ptr := F_Sine'Access;
+   F_Sq_Root_Ptr := F_Sq_Root'Access;
+   F_Tan_Ptr := F_Tan'Access;
+   F_Value_Ptr := F_Value'Access;
+   F_Evaluate_Ptr := F_Evaluate'Access;
+   F_Error_Num_Ptr := F_Error_Num'Access;
+   F_Error_Message_Ptr := F_Error_Message'Access;
+   F_Space_Ptr := F_Space'Access;
+   F_Decimal_String_Ptr := F_Decimal_String'Access;
+   F_String_Ptr := F_String'Access;
+   F_Upper_Case_Ptr := F_Upper_Case'Access;
+   F_Lower_Case_Ptr := F_Lower_Case'Access;
+   F_Version_Ptr := F_Version'Access;
+   F_Pos_Ptr := F_Pos'Access;
+   F_Tab_Ptr := F_Tab'Access;
+   F_In_Key_Ptr := F_In_Key'Access;
+   F_Arcsinus_Ptr := F_Arcsinus'Access;
+   F_Arcsine_Ptr := F_Arcsine'Access;
+   F_Arccos_Ptr := F_Arccos'Access;
+   F_Max_Ptr := F_Max'Access;
+   F_Min_Ptr := F_Min'Access;
 
 end Command_And_Token_Functions;

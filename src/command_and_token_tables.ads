@@ -16,7 +16,6 @@ package Command_And_Token_Tables is
 
    package AAC_Functions is new
      System.Address_To_Access_Conversions (Float);
-   use AAC_Functions;
 
    subtype Token_Cursor is String_Buffer_Package.Cursor;
    type Token_Pointer is access String;
@@ -119,8 +118,6 @@ package Command_And_Token_Tables is
    fun_str       : constant Access_Procedure :=  Null;
    fun_string    : constant Access_Procedure :=  Null;
    fun_tab       : constant Access_Procedure :=  Null;
-   tan           : constant Access_Procedure :=  Null;
-   un_ucase      : constant Access_Procedure :=  Null;
    fun_val       : constant Access_Procedure :=  Null;
    fun_eval      : constant Access_Procedure :=  Null;
    fun_max       : constant Access_Procedure :=  Null;
