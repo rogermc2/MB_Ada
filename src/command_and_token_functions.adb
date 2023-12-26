@@ -44,7 +44,7 @@ package body Command_And_Token_Functions is
    end F_Abs;
 
    procedure F_Asc is
-      use Global;
+--        use Global;
    begin
       null;
 
@@ -59,14 +59,14 @@ package body Command_And_Token_Functions is
    end F_ATan;
 
    procedure F_Chr is
-      use Global;
+--        use Global;
    begin
       null;
 
    end F_Chr;
 
    procedure F_CInt is
-      use Global;
+--        use Global;
    begin
       null;
 
@@ -81,7 +81,7 @@ package body Command_And_Token_Functions is
    end F_Cos;
 
    procedure F_Deg is
-      use Global;
+--        use Global;
    begin
       null;
 
@@ -96,42 +96,42 @@ package body Command_And_Token_Functions is
    end F_Exp;
 
    procedure F_Hex is
-      use Global;
+--        use Global;
    begin
       null;
 
    end F_Hex;
 
    procedure F_Int is
-      use Global;
+--        use Global;
    begin
       null;
 
    end F_Int;
 
    procedure F_Fix is
-      use Global;
+--        use Global;
    begin
       null;
 
    end F_Fix;
 
    procedure F_Left is
-      use Global;
+--        use Global;
    begin
       null;
 
    end F_Left;
 
    procedure F_Right is
-      use Global;
+--        use Global;
    begin
       null;
 
    end F_Right;
 
    procedure F_Length is
-      use Global;
+--        use Global;
    begin
       null;
 
@@ -146,35 +146,35 @@ package body Command_And_Token_Functions is
    end F_Log;
 
    procedure F_Mid is
-      use Global;
+--        use Global;
    begin
      null;
 
    end F_Mid;
 
    procedure F_Pi is
-      use Global;
+--        use Global;
    begin
       null;
 
    end F_Pi;
 
    procedure F_Radian is
-      use Global;
+--        use Global;
    begin
       null;
 
    end F_Radian;
 
    procedure F_Random is
-      use Global;
+--        use Global;
    begin
      null;
 
    end F_Random;
 
    procedure F_Sign is
-      use Global;
+--        use Global;
    begin
      null;
 
@@ -189,28 +189,28 @@ package body Command_And_Token_Functions is
    end F_Sine;
 
    procedure F_Oct is
-      use Global;
+--        use Global;
    begin
       null;
 
    end F_Oct;
 
    procedure F_Bin is
-      use Global;
+--        use Global;
    begin
       null;
 
    end F_Bin;
 
    procedure F_In_String is
-      use Global;
+--        use Global;
    begin
       null;
 
    end F_In_String;
 
    procedure F_Sq_Root is
-      use Global;
+--        use Global;
    begin
       null;
 
@@ -225,98 +225,98 @@ package body Command_And_Token_Functions is
    end F_Tan;
 
    procedure F_Value is
-      use Global;
+--        use Global;
    begin
       null;
 
    end F_Value;
 
    procedure F_Evaluate is
-      use Global;
+--        use Global;
    begin
       null;
 
    end F_Evaluate;
 
    procedure F_Error_Num is
-      use Global;
+--        use Global;
    begin
      null;
 
    end F_Error_Num;
 
    procedure F_Error_Message is
-      use Global;
+--        use Global;
    begin
       null;
 
    end F_Error_Message;
 
    procedure F_Space is
-      use Global;
+--        use Global;
    begin
       null;
 
    end F_Space;
 
    procedure F_Decimal_String is
-      use Global;
+--        use Global;
    begin
       null;
 
    end F_Decimal_String;
 
    procedure F_String is
-      use Global;
+--        use Global;
    begin
       null;
 
    end F_String;
 
    procedure F_Upper_Case is
-      use Global;
+--        use Global;
    begin
      null;
 
    end F_Upper_Case;
 
    procedure F_Lower_Case is
-      use Global;
+--        use Global;
    begin
       null;
 
    end F_Lower_Case;
 
    procedure F_Version is
-      use Global;
+--        use Global;
    begin
       null;
 
    end F_Version;
 
    procedure F_Pos is
-      use Global;
+--        use Global;
    begin
       null;
 
    end F_Pos;
 
    procedure F_Tab is
-      use Global;
+--        use Global;
    begin
       null;
 
    end F_Tab;
 
     procedure F_In_Key is
-      use Global;
+--        use Global;
    begin
       null;
 
    end F_In_Key;
 
    procedure F_Arcsinus is
-      use Global;
+--        use Global;
    begin
       null;
 
@@ -339,14 +339,14 @@ package body Command_And_Token_Functions is
    end F_Arccos;
 
    procedure F_Max is
-      use Global;
+--        use Global;
    begin
       null;
 
    end F_Max;
 
    procedure F_Min is
-      use Global;
+--        use Global;
    begin
       null;
 
@@ -357,7 +357,7 @@ package body Command_And_Token_Functions is
       Value : Natural := 0;
       Found : Boolean := False;
    begin
-      while Index < Command_Table'Last loop
+      while Index < Command_Table_Size loop
          Index := Index + 1;
          Found := Token = To_String (Command_Table (Index).Name);
          if Found then
@@ -438,12 +438,13 @@ package body Command_And_Token_Functions is
            Operator_Types (index);
       end loop;
 
-      Command_Table (Command_Table'Last) :=
+      Command_Table (Command_Table_Size) :=
         (To_Unbounded_String (""), T_NA, 0, Null);
 
       for index in Token_Table'Range loop
          Token_Table (index) := Command_Table (index);
       end loop;
+
    end Init_Operator_Functions;
 
    function tokenTHEN return Natural is

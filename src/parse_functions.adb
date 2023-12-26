@@ -261,7 +261,7 @@ package body Parse_Functions is
       Routine_Name  : constant String := "Parse_Functions.Try_Command ";
       In_Command    : constant String :=
                         To_String (Get_Command_From_Input (I_Pos));
-      I_Pos2        : Positive;         --  tp2 an input character indeex
+      I_Pos2        : Positive := I_Pos;         --  tp2 an input character indeex
       Command       : Unbounded_String;
       CT_Index      : Natural := 0;      --  tp  command table index
       Match_Index   : Integer := -1;
@@ -272,19 +272,20 @@ package body Parse_Functions is
       OK            : Boolean := True;
    begin
       Put_Line (Routine_Name & "In_Command: " & In_Command);
-      while not Done and then CT_Index < Command_Table'Last loop
+      while not Done and then CT_Index < Command_Table_Size loop
          CT_Index := CT_Index + 1;
-         I_Pos2 := I_Pos + 1;  -- I_Pos2 (tp2) is I_Position of next input character
+--           I_Pos2 := I_Pos + 1;  -- I_Pos2 (tp2) is I_Position of next input character
          Command := Command_Table (CT_Index).Name;
-         Put_Line (Routine_Name & "Command: " & To_String (Command));
+         Done := To_String (Command) = "";
+         if Done then
+            Put_Line ((Routine_Name & "invalid Command: " & In_Command));
+         end if;
 
-         while I_Pos2 <= Input_Buffer_Length and then
+         while not Done and then I_Pos2 <= Input_Buffer_Length and then
            To_Upper (In_Command) =
            To_Upper (To_String (Command)) loop
---              Put_Line (Routine_Name & "I_Pos2: " & Integer'Image (I_Pos2));
             while I_Pos2 < Input_Buffer_Length and then
               Get_Input_Character (I_Pos2) = ' '  loop
-              Put_Line (Routine_Name & "I_Pos2: " & Integer'Image (I_Pos2));
                I_Pos2 := I_Pos2 + 1;
             end loop;
 
@@ -302,7 +303,7 @@ package body Parse_Functions is
             end if;
          end loop;
 
-         if (I_Pos2 >= Length (Command) and then
+         if (not Done and then I_Pos2 >= Length (Command) and then
                not Is_Name_Character (Get_Input_Character (I_Pos2))) or
            Command_Table (CT_Index).Command_Type = T_FUN then
             Done := Element (Command, CT_Index) /= '(' and
@@ -322,7 +323,7 @@ package body Parse_Functions is
             Process_Command (Buffer, I_Pos, Match_I_Pos, Match_Index,
                              Label_Valid, First_Nonwhite);
 
-            --  875
+         --  875
          elsif Label_Valid and then
            Is_Name_Start (Get_Input_Character (I_Pos)) then
             I_Pos2 := I_Pos;
