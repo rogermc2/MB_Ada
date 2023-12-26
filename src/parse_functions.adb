@@ -268,7 +268,7 @@ package body Parse_Functions is
       Match_Length  : Integer := -1;
       Match_I_Pos   : Positive;
       Index         : Natural := 0;
-      Done          : Boolean := I_Pos >= Input_Buffer_Length;
+      Done          : Boolean := False;
       OK            : Boolean := True;
    begin
       Put_Line (Routine_Name & "In_Command: " & In_Command);
