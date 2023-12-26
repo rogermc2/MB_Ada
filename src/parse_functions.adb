@@ -150,8 +150,8 @@ package body Parse_Functions is
      (Buffer      : in out String_Buffer; I_Pos : in out Positive;
       Label_Valid : in out Boolean; First_Nonwhite : in out Boolean) is
       use Support;
-      Routine_Name  : constant String :=
-                        "Parse_Functions.Process_First_Nonwhite ";
+--        Routine_Name  : constant String :=
+--                          "Parse_Functions.Process_First_Nonwhite ";
       aChar         : constant Character := Get_Input_Character (I_Pos);
       Match_Index   : Natural := 0;
       Match_I_Pos   : Positive;
@@ -160,7 +160,6 @@ package body Parse_Functions is
       Index         : Natural := 0;
       Done          : Boolean := False;
    begin
-      Put_Line (Routine_Name);
       if aChar = '?' then
          Match_Index := Get_Command_Value ("Print") - M_Misc.C_Base_Token;
          if Get_Input_Character (I_Pos + 1) = ' ' then
@@ -170,52 +169,50 @@ package body Parse_Functions is
          end if;
 
       else
-         Put_Line (Routine_Name & "I_Pos: " & Integer'Image (I_Pos));
          Try_Command (Buffer, I_Pos, Label_Valid, First_Nonwhite);
       end if;
 
-      Put_Line (Routine_Name & "857");
-      --  857
-      if Match_Index > 0 then
-         Commands.Process_Command
-           (Buffer, Match_Index, Match_I_Pos, First_Nonwhite, Label_Valid);
+      if I_Pos < Input_Buffer_Length then
+         --  857
+         if Match_Index > 0 then
+            Commands.Process_Command
+              (Buffer, Match_Index, Match_I_Pos, First_Nonwhite, Label_Valid);
 
-         --   876 test if it is a label
-      elsif Label_Valid and then
-        Is_Name_Start (Get_Input_Character (I_Pos)) then
-         Put_Line (Routine_Name & "876");
-         --  search for the first invalid char
-         Pos2 := I_Pos;
-         Index := 0;
-         Done := False;
-         while not Done and then Index <= Configuration.MAXVARLEN loop
-            Index := Index + 1;
-            Pos2 := Pos2 + 1;
-            Done := not Is_Name_Character (Get_Input_Character (Pos2));
-         end loop;
-         --  Last character of name found
-
-         --  881
-         if Get_Input_Character (Pos2) = ':' then
-            --  is label
-            Label_Valid := False;
-            Buffer_Append (Buffer, Global.T_LABEL);
-
-            --  insert the length of the label
-            Buffer_Append (Buffer, Integer'Image (Pos2 - I_Pos));
-
-            --  copy the label
-            for pos3 in reverse 1 .. Pos2 - I_Pos loop
-               Append (Label, Get_Input_Character (I_Pos));
-               I_Pos := I_Pos + 1;
+            --   876 test if it is a label
+         elsif Label_Valid and then
+           Is_Name_Start (Get_Input_Character (I_Pos)) then
+            --  search for the first invalid char
+            Pos2 := I_Pos;
+            Index := 0;
+            Done := False;
+            while not Done and then Index <= Configuration.MAXVARLEN loop
+               Index := Index + 1;
+               Pos2 := Pos2 + 1;
+               Done := not Is_Name_Character (Get_Input_Character (Pos2));
             end loop;
+            --  Last character of name found
 
-            Buffer_Append (Buffer, To_String (Label));
-            --  step over the terminating colon
-            I_Pos := I_Pos + 1;
+            --  881
+            if Get_Input_Character (Pos2) = ':' then
+               --  is label
+               Label_Valid := False;
+               Buffer_Append (Buffer, Global.T_LABEL);
+
+               --  insert the length of the label
+               Buffer_Append (Buffer, Integer'Image (Pos2 - I_Pos));
+
+               --  copy the label
+               for pos3 in reverse 1 .. Pos2 - I_Pos loop
+                  Append (Label, Get_Input_Character (I_Pos));
+                  I_Pos := I_Pos + 1;
+               end loop;
+
+               Buffer_Append (Buffer, To_String (Label));
+               --  step over the terminating colon
+               I_Pos := I_Pos + 1;
+            end if;
          end if;
       end if;
-      Put_Line (Routine_Name & "done");
 
    end Process_First_Nonwhite;
 
@@ -261,7 +258,7 @@ package body Parse_Functions is
       use Interfaces;
       use Ada.Characters.Handling;
       use Support;
---        Routine_Name  : constant String := "Parse_Functions.Try_Command ";
+      --        Routine_Name  : constant String := "Parse_Functions.Try_Command ";
       In_Command    : constant String :=
                         To_String (Get_Command_From_Input (I_Pos));
       I_Pos2        : Positive;         --  tp2 an input character indeex
