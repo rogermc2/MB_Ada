@@ -1,4 +1,6 @@
 
+with Interfaces;
+
 with Ada.Characters.Handling;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Ada.Text_IO; use Ada.Text_IO;
@@ -242,7 +244,8 @@ package body Parse_Functions is
    end Process_Variable_Name;
    procedure Try_Command
      (Buffer      : in out String_Buffer; I_Pos : in out Positive;
-      Label_Valid : in out Boolean; First_Nonwhite  : in out Boolean) is
+      Label_Valid : in out Boolean; First_Nonwhite : in out Boolean) is
+      use Interfaces;
       use Ada.Characters.Handling;
       use Support;
       I_Pos2         : Positive;         --  tp2 an input character indeex
@@ -382,7 +385,7 @@ package body Parse_Functions is
      (Buffer         : in out String_Buffer; I_Pos : in out Positive;
       First_Nonwhite : in out Boolean) is
       use Ada.Characters.Handling;
-      Routine_Name : constant String := "Parse_Functions.Try_Number ";
+--        Routine_Name : constant String := "Parse_Functions.Try_Number ";
       aChar        : Character := Get_Input_Character (I_Pos);
       Number       : Unbounded_String;
       Done         : Boolean := False;

@@ -9,7 +9,6 @@ with Ada.Unchecked_Conversion;
 
 with Audio;
 with C_Functions;
-with Command_And_Token_Functions;
 with Commands;
 with Console;
 with Draw;
@@ -79,7 +78,6 @@ package body M_Basic is
       use Ada.Characters.Handling;
       use Ada.Assertions;
       use C_Functions;
-      use Command_And_Token_Functions;
       use Flash;
       use Global;
       Routine_Name       : constant String := "M_Basic.Defined_Subfunction ";
@@ -232,7 +230,6 @@ package body M_Basic is
 
    procedure Execute_Command (Buffer : String_Buffer; Command : Unbounded_String) is
       use Interfaces;
-      use Ada.Assertions;
       Routine_Name       : constant String := "M_Basic.Execute_Command ";
       Command_Line       : constant String := To_String (Command);
       Next_Statement_Pos : Positive := 1;
@@ -246,7 +243,7 @@ package body M_Basic is
       Save_Local_Index   : Natural := 0;
       Interupt_Check     : Integer := 0;
       T_Arg              : Function_Type := T_NOTYPE;
-      theCommand         : Function_Type;
+      theCommand         : Command_And_Token_Functions.Access_Procedure;
       No_Abort           : Boolean := True;
       Done               : Boolean := False;
    begin
@@ -273,7 +270,7 @@ package body M_Basic is
                T_Arg := T_CMD;
                --  Execute the command
                theCommand := Command_Table
-                 (Command_Line_Pos - M_Misc.C_Base_Token).Function_Ptr.all;
+                 (Command_Line_Pos - M_Misc.C_Base_Token).Function_Ptr;
 
             end if;
             --              else
@@ -377,7 +374,6 @@ package body M_Basic is
    function Find_Subfunction (Token : String; Fun_Type : Function_Type)
                               return Natural is
       use Interfaces;
-      use Command_And_Token_Functions;
       use Ada.Characters.Handling;
       use Flash;
       Routine_Name : constant String := "M_Basic.Find_Subfunctionm ";
@@ -557,7 +553,6 @@ package body M_Basic is
      (User_Mem_Start : Positive; Num_Funcs : in out Natural;
       C_Fun_Ptr      : in out Flash.UB_String_Access; Error_Abort : Boolean) is
       use Ada.Assertions;
-      use Command_And_Token_Functions;
       use Flash;
       Routine_Name : constant String := "M_Basic.Prepare_Program_Ext ";
       Pos          : Positive := User_Mem_Start;
@@ -814,7 +809,7 @@ package body M_Basic is
 
    end Skip_Var;
 
-   function Token_Function (Index : Positive) return Function_Type_Ptr is
+   function Token_Function (Index : Positive) return Access_Procedure is
 
    begin
       if Index >= M_Misc.C_Base_Token and then

@@ -2,6 +2,7 @@
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 
 with Command_And_Token_Tables; use Command_And_Token_Tables;
+with Command_And_Token_Functions; use Command_And_Token_Functions;
 with Configuration;
 
 package M_Basic is
@@ -38,7 +39,7 @@ package M_Basic is
    procedure Save_Program_To_Flash (Buffer: String; Msg : Boolean);
    procedure Skip_Spaces (Buffer : Unbounded_String; Pos : in out Positive);
    function Skip_Var (Pos : in out Positive) return Positive;
-   function Token_Function (Index : Positive) return Function_Type_Ptr;
+   function Token_Function (Index : Positive) return Access_Procedure;
    procedure Tokenize (Buffer : in out String_Buffer; From_Console : Boolean);
 
 end M_Basic;

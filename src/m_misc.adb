@@ -1,9 +1,11 @@
 
+with Interfaces;
+
 with Ada.Assertions; use Ada.Assertions;
 with Ada.Characters.Handling;
 with Ada.Text_IO; use Ada.Text_IO;
 
-with Command_And_Token_Tables; use Command_And_Token_Tables;
+--  with Command_And_Token_Tables; use Command_And_Token_Tables;
 with Console;
 with Flash;
 with M_Basic; use M_Basic;
@@ -19,10 +21,11 @@ package body M_Misc is
       OK           : Boolean := False;
 
       function End_Check return Boolean is
-         Char_Val     : Unsigned_2Byte;
+         use Interfaces;
+         Char_Val  :  Unsigned_16;
       begin
          OK := Console.Get_Console (aChar);
-         Char_Val := Unsigned_2Byte (Character'Pos (aChar));
+         Char_Val := Unsigned_16 (Character'Pos (aChar));
          Char_Val := Char_Val and 16#7f#;
          aChar := Character'Val (Integer (Char_Val));
          return Char_Val /= 16#1a#;

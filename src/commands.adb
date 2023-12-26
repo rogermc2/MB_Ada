@@ -13,7 +13,8 @@ with Support;
 package body Commands is
 
    procedure Check_Type_Specified
-     (Buffer : String_Buffer; Pos : Positive; Fun_Type : in out Unsigned_2Byte;
+     (Buffer   : String_Buffer; Pos : Positive;
+      Fun_Type           : in out Interfaces.Unsigned_16;
       Allow_Default_Type : Boolean) is
       use M_Basic;
       use Support;
