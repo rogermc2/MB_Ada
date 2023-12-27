@@ -99,7 +99,7 @@ package body Parse_Functions is
       use Support;
    begin
       Put_Line (Routine_Name);
-      --  879
+      --  MMBasic 879
       if Match_Index > -1 then
          Put_Line (Routine_Name & "879");
          Buffer_Append (Buffer, Integer'Image
@@ -108,7 +108,7 @@ package body Parse_Functions is
          I_Pos := Match_I_Pos;
          if Match_Index + M_Misc.C_Base_Token =
            Get_Command_Value ("Rem") then
-            --  886 copy everything
+            --  MMBasic 886 copy everything
             Copy_Slice (Buffer, I_Pos, Input_Buffer_Length);
          end if;
 
@@ -278,6 +278,7 @@ package body Parse_Functions is
                   Integer'Image (I_Pos) & ", " & Integer'Image (I_Pos2));
 
       Put_Line (Routine_Name & "In_Command: " & In_Command);
+      --  MMBasic 925
       while not Done and then CT_Index < Command_Table_Size loop
          CT_Index := CT_Index + 1;
          Command := Command_Table (CT_Index).Name;
@@ -291,19 +292,23 @@ package body Parse_Functions is
 --           Put_Line (Routine_Name & "I_Pos, I_Pos2: " &
 --                       Integer'Image (I_Pos) & ", " & Integer'Image (I_Pos2));
 
+         --  MMBasic 929
          while not Done and then I_Pos2 <= Input_Buffer_Length and then
            To_Upper (In_Command) =
            To_Upper (To_String (Command)) loop
-            while I_Pos2 < Input_Buffer_Length and then
-              Get_Input_Character (I_Pos2) = ' '  loop
+            if Get_Input_Character (I_Pos2) = ' '  then
+               Skip_In_Buffer_Spaces (I_Pos2);
+            else
                I_Pos2 := I_Pos2 + 1;
-            end loop;
+            end if;
 
             Done :=  I_Pos2 > Input_Buffer_Length and then
               I_Pos >= Input_Buffer_Length;
             if not Done then
                I_Pos := I_Pos + 1;
 
+         Put_Line (Routine_Name & "937");
+               --  MMBasic 937
                if Get_Input_Character (I_Pos) = '(' then
                   while I_Pos2 < Input_Buffer_Length and then
                     Get_Input_Character (I_Pos2) = ' '  loop
