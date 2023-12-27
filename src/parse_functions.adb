@@ -261,7 +261,9 @@ package body Parse_Functions is
       Routine_Name  : constant String := "Parse_Functions.Try_Command ";
       In_Command    : constant String :=
                         To_String (Get_Command_From_Input (I_Pos));
-      I_Pos2        : Positive := I_Pos;         --  tp2 an input character indeex
+      --  I_Pos (tp2) is the input character index to the character
+      --  following In_Command.
+      I_Pos2        : Positive := I_Pos;
       Command       : Unbounded_String;
       CT_Index      : Natural := 0;      --  tp  command table index
       Match_Index   : Integer := -1;
@@ -271,15 +273,22 @@ package body Parse_Functions is
       Done          : Boolean := False;
       OK            : Boolean := True;
    begin
+      Put_Line (Routine_Name & "I_Pos, I_Pos2: " &
+                  Integer'Image (I_Pos) & ", " & Integer'Image (I_Pos2));
+
       Put_Line (Routine_Name & "In_Command: " & In_Command);
       while not Done and then CT_Index < Command_Table_Size loop
          CT_Index := CT_Index + 1;
---           I_Pos2 := I_Pos + 1;  -- I_Pos2 (tp2) is I_Position of next input character
          Command := Command_Table (CT_Index).Name;
+         Put_Line (Routine_Name & "CT_Index, Command: " &
+                     Integer'Image (CT_Index) & ", " & To_String (Command));
          Done := To_String (Command) = "";
          if Done then
             Put_Line ((Routine_Name & "invalid Command: " & In_Command));
          end if;
+
+--           Put_Line (Routine_Name & "I_Pos, I_Pos2: " &
+--                       Integer'Image (I_Pos) & ", " & Integer'Image (I_Pos2));
 
          while not Done and then I_Pos2 <= Input_Buffer_Length and then
            To_Upper (In_Command) =
@@ -289,8 +298,9 @@ package body Parse_Functions is
                I_Pos2 := I_Pos2 + 1;
             end loop;
 
-            Done :=  I_Pos2 > Input_Buffer_Length;
-            if not done then
+            Done :=  I_Pos2 > Input_Buffer_Length and then
+              I_Pos >= Input_Buffer_Length;
+            if not Done then
                I_Pos := I_Pos + 1;
 
                if Get_Input_Character (I_Pos) = '(' then
@@ -302,8 +312,10 @@ package body Parse_Functions is
                Done := I_Pos2 >= Input_Buffer_Length;
             end if;
          end loop;
-
-         if (not Done and then I_Pos2 >= Length (Command) and then
+--           Put_Line (Routine_Name & "I_Pos, I_Pos2: " &
+--                       Integer'Image (I_Pos) & ", " & Integer'Image (I_Pos2));
+         Done := I_Pos2 >= Input_Buffer_Length;
+         if (not Done and then
                not Is_Name_Character (Get_Input_Character (I_Pos2))) or
            Command_Table (CT_Index).Command_Type = T_FUN then
             Done := Element (Command, CT_Index) /= '(' and
@@ -315,15 +327,17 @@ package body Parse_Functions is
                Match_Index := CT_Index;
             end if;
          end if;
+--           Put_Line (Routine_Name & "end outer loop done");
       end loop;
 
+      Put_Line (Routine_Name & "857");
       --  857
       if I_Pos < Input_Buffer_Length then
          if Match_Index > -1 then
             Process_Command (Buffer, I_Pos, Match_I_Pos, Match_Index,
                              Label_Valid, First_Nonwhite);
 
-         --  875
+            --  875
          elsif Label_Valid and then
            Is_Name_Start (Get_Input_Character (I_Pos)) then
             I_Pos2 := I_Pos;
