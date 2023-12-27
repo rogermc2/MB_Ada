@@ -289,9 +289,6 @@ package body Parse_Functions is
             Put_Line ((Routine_Name & "invalid Command: " & In_Command));
          end if;
 
-         --           Put_Line (Routine_Name & "I_Pos, I_Pos2: " &
-         --                       Integer'Image (I_Pos) & ", " & Integer'Image (I_Pos2));
-
          --  MMBasic 929  look for match with longest command name
          while not Done and then I_Pos2 <= Input_Buffer_Length and then
            To_Upper (In_Command) =
@@ -302,6 +299,8 @@ package body Parse_Functions is
                I_Pos2 := I_Pos2 + 1;
             end if;
 
+            Put_Line (Routine_Name & "I_Pos, I_Pos2: " &
+                        Integer'Image (I_Pos) & ", " & Integer'Image (I_Pos2));
             Done :=  I_Pos2 > Input_Buffer_Length and then
               I_Pos >= Input_Buffer_Length;
             if not Done then
@@ -315,17 +314,20 @@ package body Parse_Functions is
                end if;
             end if;
             Done := I_Pos2 >= Input_Buffer_Length;
+            Put_Line (Routine_Name & "Done in loop: " & Boolean'Image (Done));
          end loop;
          --           Put_Line (Routine_Name & "I_Pos, I_Pos2: " &
          --                       Integer'Image (I_Pos) & ", " & Integer'Image (I_Pos2));
          Done := I_Pos2 >= Input_Buffer_Length;
+         Put_Line (Routine_Name & "942, Done: " & Boolean'Image (Done));
+         --  MMBasic 942
          if (not Done and then
                not Is_Name_Character (Get_Input_Character (I_Pos2))) or
-           Command_Table (CT_Index).Command_Type = T_FUN then
+           (Command_Table (CT_Index).Command_Type and T_FUN) = T_FUN then
             Done := Element (Command, CT_Index) /= '(' and
               Is_Name_Character (Get_Input_Character (I_Pos2));
 
-            if not Done and then Length (Command) > Match_Length then
+            if Length (Command) > Match_Length then
                Match_I_Pos := I_Pos2;
                Match_Length := Length (Command);
                Match_Index := CT_Index;
@@ -334,14 +336,17 @@ package body Parse_Functions is
          --           Put_Line (Routine_Name & "end outer loop done");
       end loop;
 
-      Put_Line (Routine_Name & "857");
-      --  857
+      Put_Line (Routine_Name & "955");
+      Put_Line (Routine_Name & "Match_Index: " & Integer'Image (Match_Index));
+
+      --  MMBasic 955
       if I_Pos < Input_Buffer_Length then
          if Match_Index > -1 then
             Process_Command (Buffer, I_Pos, Match_I_Pos, Match_Index,
                              Label_Valid, First_Nonwhite);
 
-            --  875
+            Put_Line (Routine_Name & "976");
+            --  MMBasic 976
          elsif Label_Valid and then
            Is_Name_Start (Get_Input_Character (I_Pos)) then
             I_Pos2 := I_Pos;
@@ -369,7 +374,7 @@ package body Parse_Functions is
    function Try_Function_Or_Keyword
      (Buffer         : in out String_Buffer; I_Pos : in out Positive;
       First_Nonwhite : in out Boolean)
-   return Boolean is
+      return Boolean is
       use Ada.Characters.Handling;
       use Command_And_Token_Functions;
       use Support;
