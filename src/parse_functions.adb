@@ -26,22 +26,22 @@ package body Parse_Functions is
    function Get_Command_From_Input (I_Pos : in out Positive)
                                     return Unbounded_String is
       use Ada.Characters.Handling;
-      Routine_Name  : constant String :=
-                        "Parse_Functions.Get_Command_From_Input ";
+--        Routine_Name  : constant String :=
+--                          "Parse_Functions.Get_Command_From_Input ";
       aChar         : Character;
       Command       : Unbounded_String;
       Done          : Boolean := False;
    begin
       while not Done loop
          aChar := Get_Input_Character (I_Pos);
-         Done := not (aChar = '_' or Is_Alphanumeric (aChar));
+         Done :=  aChar = ' ' or else
+           (not (aChar = '_' or Is_Alphanumeric (aChar)));
          if not Done then
             Append (Command, aChar);
          end if;
          I_Pos := I_Pos + 1;
-         Done := I_Pos > Input_Buffer_Length;
+         Done := Done or else I_Pos > Input_Buffer_Length;
       end loop;
-      Put_Line (Routine_Name & "Command: " & To_String (Command));
 
       return Command;
 
@@ -273,6 +273,7 @@ package body Parse_Functions is
       Done          : Boolean := False;
       OK            : Boolean := True;
    begin
+      Put_Line (Routine_Name & "In_Buffer: " & Get_Input_Buffer);
       Put_Line (Routine_Name & "I_Pos, I_Pos2: " &
                   Integer'Image (I_Pos) & ", " & Integer'Image (I_Pos2));
 

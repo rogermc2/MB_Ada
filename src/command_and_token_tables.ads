@@ -370,6 +370,7 @@ package Command_And_Token_Tables is
                         (To_Unbounded_String ("op_shiftright"), T_NA, 0, Null),
                         (To_Unbounded_String (""), T_NA, 0, Null));
 
+   function Get_Input_Buffer return String;
    function Get_Input_Character (Pos : Positive) return Character;
    function Get_Input_Slice (Pos1, Pos2 : Positive) return String;
    function Input_Buffer_Length return Natural;

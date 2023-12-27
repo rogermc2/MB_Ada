@@ -1,6 +1,6 @@
 
 with Ada.Strings;
---  with Ada.Text_IO; use Ada.Text_IO;
+with Ada.Text_IO; use Ada.Text_IO;
 
 with M_Misc; use M_Misc;
 with Serial_File_IO;
@@ -8,6 +8,12 @@ with Serial_File_IO;
 package body Command_And_Token_Tables is
 
    In_Buffer : Unbounded_String;
+
+   function Get_Input_Buffer return String is
+   begin
+      return To_String (In_Buffer);
+
+   end Get_Input_Buffer;
 
    function Get_Input_Character (Pos : Positive) return Character is
    begin
@@ -30,6 +36,8 @@ package body Command_And_Token_Tables is
    procedure Load_Input_Buffer (File_Num : Natural) is
    begin
       Serial_File_IO.MM_Get_Line (File_Num, In_Buffer);
+      Put_Line ("Command_And_Token_Tables.Load_Input_Buffer In_Buffer: " &
+               To_String (In_Buffer));
 
    end Load_Input_Buffer;
 

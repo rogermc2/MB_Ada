@@ -492,7 +492,7 @@ package body M_Basic is
    procedure Parse_Line (Buffer : in out String_Buffer; Pos : Positive) is
       use Ada.Characters.Handling;
       use Parse_Functions;
---        Routine_Name   : constant String := "M_Basic.Parse_Line ";
+      Routine_Name   : constant String := "M_Basic.Parse_Line ";
       Buff_Length    : constant Positive := Input_Buffer_Length;
       Ptr            : Positive := Pos;
       aChar          : Character;
@@ -828,7 +828,7 @@ package body M_Basic is
       use Ada.Characters.Handling;
       use Ada.Strings;
       use Support;
---        Routine_Name   : constant String := "M_Basic.Tokenize ";
+      Routine_Name   : constant String := "M_Basic.Tokenize ";
       String1        : String (1 .. 1);
       In_Ptr         : Positive := 1;
       aChar          : Character;
@@ -884,6 +884,7 @@ package body M_Basic is
          end if;
       end if;
 
+      Put_Line (Routine_Name & "824 In_Buffer: " & Get_Input_Buffer);
       --  824 Process the rest of the line
       if Input_Buffer_Length > In_Ptr then
          Parse_Line (Buffer, In_Ptr);
