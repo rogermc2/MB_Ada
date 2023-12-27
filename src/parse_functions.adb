@@ -26,8 +26,8 @@ package body Parse_Functions is
    function Get_Command_From_Input (I_Pos : in out Positive)
                                     return Unbounded_String is
       use Ada.Characters.Handling;
---        Routine_Name  : constant String :=
---                          "Parse_Functions.Get_Command_From_Input ";
+      --        Routine_Name  : constant String :=
+      --                          "Parse_Functions.Get_Command_From_Input ";
       aChar         : Character;
       Command       : Unbounded_String;
       Done          : Boolean := False;
@@ -289,10 +289,10 @@ package body Parse_Functions is
             Put_Line ((Routine_Name & "invalid Command: " & In_Command));
          end if;
 
---           Put_Line (Routine_Name & "I_Pos, I_Pos2: " &
---                       Integer'Image (I_Pos) & ", " & Integer'Image (I_Pos2));
+         --           Put_Line (Routine_Name & "I_Pos, I_Pos2: " &
+         --                       Integer'Image (I_Pos) & ", " & Integer'Image (I_Pos2));
 
-         --  MMBasic 929
+         --  MMBasic 929  look for match with longest command name
          while not Done and then I_Pos2 <= Input_Buffer_Length and then
            To_Upper (In_Command) =
            To_Upper (To_String (Command)) loop
@@ -307,19 +307,17 @@ package body Parse_Functions is
             if not Done then
                I_Pos := I_Pos + 1;
 
-         Put_Line (Routine_Name & "937");
+               Put_Line (Routine_Name & "937");
                --  MMBasic 937
-               if Get_Input_Character (I_Pos) = '(' then
-                  while I_Pos2 < Input_Buffer_Length and then
-                    Get_Input_Character (I_Pos2) = ' '  loop
-                     I_Pos2 := I_Pos2 + 1;
-                  end loop;
+               if Get_Input_Character (I_Pos) = '(' and then
+                 I_Pos2 < Input_Buffer_Length then
+                  Skip_In_Buffer_Spaces (I_Pos2);
                end if;
-               Done := I_Pos2 >= Input_Buffer_Length;
             end if;
+            Done := I_Pos2 >= Input_Buffer_Length;
          end loop;
---           Put_Line (Routine_Name & "I_Pos, I_Pos2: " &
---                       Integer'Image (I_Pos) & ", " & Integer'Image (I_Pos2));
+         --           Put_Line (Routine_Name & "I_Pos, I_Pos2: " &
+         --                       Integer'Image (I_Pos) & ", " & Integer'Image (I_Pos2));
          Done := I_Pos2 >= Input_Buffer_Length;
          if (not Done and then
                not Is_Name_Character (Get_Input_Character (I_Pos2))) or
@@ -333,7 +331,7 @@ package body Parse_Functions is
                Match_Index := CT_Index;
             end if;
          end if;
---           Put_Line (Routine_Name & "end outer loop done");
+         --           Put_Line (Routine_Name & "end outer loop done");
       end loop;
 
       Put_Line (Routine_Name & "857");
@@ -371,7 +369,7 @@ package body Parse_Functions is
    function Try_Function_Or_Keyword
      (Buffer         : in out String_Buffer; I_Pos : in out Positive;
       First_Nonwhite : in out Boolean)
-      return Boolean is
+   return Boolean is
       use Ada.Characters.Handling;
       use Command_And_Token_Functions;
       use Support;
