@@ -264,6 +264,7 @@ package body Parse_Functions is
       --  I_Pos (tp2) is the input character index to the character
       --  following In_Command.
       I_Pos2        : Positive := I_Pos;
+      C_Pos         : Positive;
       Command       : Unbounded_String;
       CT_Index      : Natural := 0;      --  tp  command table index
       Match_Index   : Integer := -1;
@@ -290,14 +291,16 @@ package body Parse_Functions is
          end if;
 
          --  MMBasic 929  look for match with longest command name
+         C_Pos := 1;
          while not Done and then I_Pos2 <= Input_Buffer_Length and then
-           To_Upper (In_Command) =
-           To_Upper (To_String (Command)) loop
+           To_Upper (In_Command (I_Pos2)) =
+           To_Upper (Element (Command, C_Pos)) loop
             if Get_Input_Character (I_Pos2) = ' '  then
                Skip_In_Buffer_Spaces (I_Pos2);
             else
                I_Pos2 := I_Pos2 + 1;
             end if;
+            C_Pos := C_Pos + 1;
 
             Put_Line (Routine_Name & "I_Pos, I_Pos2: " &
                         Integer'Image (I_Pos) & ", " & Integer'Image (I_Pos2));
@@ -308,7 +311,7 @@ package body Parse_Functions is
 
                Put_Line (Routine_Name & "937");
                --  MMBasic 937
-               if Get_Input_Character (I_Pos) = '(' and then
+               if Element (Command, C_Pos) = '(' and then
                  I_Pos2 < Input_Buffer_Length then
                   Skip_In_Buffer_Spaces (I_Pos2);
                end if;
@@ -321,7 +324,7 @@ package body Parse_Functions is
          Done := I_Pos2 >= Input_Buffer_Length;
          Put_Line (Routine_Name & "942, Done: " & Boolean'Image (Done));
          --  MMBasic 942
-         if (not Done and then
+         if (not Done and then Element (Command, C_Pos) = ASCII.NUL and then
                not Is_Name_Character (Get_Input_Character (I_Pos2))) or
            (Command_Table (CT_Index).Command_Type and T_FUN) = T_FUN then
             Done := Element (Command, CT_Index) /= '(' and
