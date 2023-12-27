@@ -20,7 +20,7 @@ package body Parse_Functions is
       Match_I_Pos    : Positive; Match_Index : Integer;
       First_Nonwhite : in out Boolean; Label_Valid : in out Boolean);
    procedure Try_Command
-     (Buffer      : in out String_Buffer; I_Pos : in out Positive;
+     (Buffer      : in out String_Buffer; P : in out Positive;
       Label_Valid : in out Boolean; First_Nonwhite   : in out Boolean);
 
    function Get_Command_From_Input (I_Pos : in out Positive)
@@ -253,20 +253,20 @@ package body Parse_Functions is
    end Process_Variable_Name;
 
    procedure Try_Command
-     (Buffer      : in out String_Buffer; I_Pos : in out Positive;
+     (Buffer      : in out String_Buffer; P : in out Positive;
       Label_Valid : in out Boolean; First_Nonwhite : in out Boolean) is
       use Interfaces;
       use Ada.Characters.Handling;
       use Support;
       Routine_Name  : constant String := "Parse_Functions.Try_Command ";
       In_Command    : constant String :=
-                        To_String (Get_Command_From_Input (I_Pos));
-      --  I_Pos (tp2) is the input character index to the character
+                        To_String (Get_Command_From_Input (P));
+      --  I_Pos2 (tp2) is the input character index to the character
       --  following In_Command.
-      I_Pos2        : Positive := I_Pos;
-      C_Pos         : Positive;
+      TP2           : Positive := P;
+--        C_Pos         : Positive;
       Command       : Unbounded_String;
-      CT_Index      : Natural := 0;      --  tp  command table index
+      TP            : Natural := 0;      --  tp  command table index
       Match_Index   : Integer := -1;
       Match_Length  : Integer := -1;
       Match_I_Pos   : Positive;
@@ -275,65 +275,69 @@ package body Parse_Functions is
       OK            : Boolean := True;
    begin
       Put_Line (Routine_Name & "In_Buffer: " & Get_Input_Buffer);
-      Put_Line (Routine_Name & "I_Pos, I_Pos2: " &
-                  Integer'Image (I_Pos) & ", " & Integer'Image (I_Pos2));
+      Put_Line (Routine_Name & "P, TP2: " &
+                  Integer'Image (P) & ", " & Integer'Image (TP2));
 
       Put_Line (Routine_Name & "In_Command: " & In_Command);
       --  MMBasic 925
-      while not Done and then CT_Index < Command_Table_Size loop
-         CT_Index := CT_Index + 1;
-         Command := Command_Table (CT_Index).Name;
-         Put_Line (Routine_Name & "CT_Index, Command: " &
-                     Integer'Image (CT_Index) & ", " & To_String (Command));
+      while not Done and then TP < Command_Table_Size loop
+         TP := TP + 1;
+         Command := Command_Table (TP).Name;
+         Put_Line (Routine_Name & "TP, Command: " &
+                     Integer'Image (TP) & ", " & To_String (Command));
          Done := To_String (Command) = "";
          if Done then
             Put_Line ((Routine_Name & "invalid Command: " & In_Command));
          end if;
 
          --  MMBasic 929  look for match with longest command name
-         C_Pos := 1;
-         while not Done and then I_Pos2 <= Input_Buffer_Length and then
-           To_Upper (In_Command (I_Pos2)) =
-           To_Upper (Element (Command, C_Pos)) loop
-            if Get_Input_Character (I_Pos2) = ' '  then
-               Skip_In_Buffer_Spaces (I_Pos2);
+         TP := 1;
+         Put_Line (Routine_Name & "929 P, TP2: " &
+                     Integer'Image (P) & ", " & Integer'Image (TP2));
+         while not Done and then TP2 <= Input_Buffer_Length and then
+           To_Upper (In_Command (TP2)) =
+           To_Upper (Element (Command, TP)) loop
+            Put_Line (Routine_Name & "in loop P, TP2: " &
+                        Integer'Image (P) & ", " & Integer'Image (TP2));
+            if Get_Input_Character (TP2) = ' '  then
+               Skip_In_Buffer_Spaces (TP2);
             else
-               I_Pos2 := I_Pos2 + 1;
+               TP2 := TP2 + 1;
             end if;
-            C_Pos := C_Pos + 1;
+            TP := TP + 1;
 
-            Put_Line (Routine_Name & "I_Pos, I_Pos2: " &
-                        Integer'Image (I_Pos) & ", " & Integer'Image (I_Pos2));
-            Done :=  I_Pos2 > Input_Buffer_Length and then
-              I_Pos >= Input_Buffer_Length;
+            Put_Line (Routine_Name & "P, TP2: " &
+                        Integer'Image (P) & ", " & Integer'Image (TP2));
+            Done :=  TP2 > Input_Buffer_Length and then
+              P >= Input_Buffer_Length;
             if not Done then
-               I_Pos := I_Pos + 1;
+               P := P + 1;
 
                Put_Line (Routine_Name & "937");
                --  MMBasic 937
-               if Element (Command, C_Pos) = '(' and then
-                 I_Pos2 < Input_Buffer_Length then
-                  Skip_In_Buffer_Spaces (I_Pos2);
+               if Element (Command, TP) = '(' and then
+                 TP2 < Input_Buffer_Length then
+                  Skip_In_Buffer_Spaces (TP2);
                end if;
             end if;
-            Done := I_Pos2 >= Input_Buffer_Length;
+            Done := TP2 >= Input_Buffer_Length;
             Put_Line (Routine_Name & "Done in loop: " & Boolean'Image (Done));
          end loop;
-         --           Put_Line (Routine_Name & "I_Pos, I_Pos2: " &
-         --                       Integer'Image (I_Pos) & ", " & Integer'Image (I_Pos2));
-         Done := I_Pos2 >= Input_Buffer_Length;
+         --           Put_Line (Routine_Name & "P, TP2: " &
+         --                       Integer'Image (P) & ", " & Integer'Image (TP2));
+         Done := TP2 >= Input_Buffer_Length;
          Put_Line (Routine_Name & "942, Done: " & Boolean'Image (Done));
          --  MMBasic 942
-         if (not Done and then Element (Command, C_Pos) = ASCII.NUL and then
-               not Is_Name_Character (Get_Input_Character (I_Pos2))) or
-           (Command_Table (CT_Index).Command_Type and T_FUN) = T_FUN then
-            Done := Element (Command, CT_Index) /= '(' and
-              Is_Name_Character (Get_Input_Character (I_Pos2));
+         if (not Done and then Element (Command, TP) = ASCII.NUL and then
+               not Is_Name_Character (Get_Input_Character (TP2))) or
+           (Command_Table (TP).Command_Type and T_FUN) = T_FUN then
+            Done := Element (Command, TP) /= '(' and
+              Is_Name_Character (Get_Input_Character (TP2));
 
             if Length (Command) > Match_Length then
-               Match_I_Pos := I_Pos2;
+               Match_I_Pos := TP2;
                Match_Length := Length (Command);
-               Match_Index := CT_Index;
+               Match_Index := TP;
             end if;
          end if;
          --           Put_Line (Routine_Name & "end outer loop done");
@@ -343,31 +347,31 @@ package body Parse_Functions is
       Put_Line (Routine_Name & "Match_Index: " & Integer'Image (Match_Index));
 
       --  MMBasic 955
-      if I_Pos < Input_Buffer_Length then
+      if P < Input_Buffer_Length then
          if Match_Index > -1 then
-            Process_Command (Buffer, I_Pos, Match_I_Pos, Match_Index,
+            Process_Command (Buffer, P, Match_I_Pos, Match_Index,
                              Label_Valid, First_Nonwhite);
 
             Put_Line (Routine_Name & "976");
             --  MMBasic 976
          elsif Label_Valid and then
-           Is_Name_Start (Get_Input_Character (I_Pos)) then
-            I_Pos2 := I_Pos;
+           Is_Name_Start (Get_Input_Character (P)) then
+            TP2 := P;
             OK := True;
             while OK and then Index <= Configuration.MAXVARLEN loop
                Index := Index + 1;
-               I_Pos2 := I_Pos2 + 1;
-               OK := Is_Name_Character (Get_Input_Character (I_Pos2));
+               TP2 := TP2 + 1;
+               OK := Is_Name_Character (Get_Input_Character (TP2));
             end loop;
 
-            if OK and then Get_Input_Character (I_Pos2) = ':' then
+            if OK and then Get_Input_Character (TP2) = ':' then
                Label_Valid := False;
                Buffer_Append (Buffer, Global.T_LABEL);
-               Buffer_Append (Buffer, Integer'Image (I_Pos2 - I_Pos));
-               Buffer_Append (Buffer, Get_Input_Slice (I_Pos, I_Pos2 - 1));
+               Buffer_Append (Buffer, Integer'Image (TP2 - P));
+               Buffer_Append (Buffer, Get_Input_Slice (P, TP2 - 1));
             end if;
 
-            I_Pos := I_Pos + 1;
+            P := P + 1;
          end if;
       end if;
 
