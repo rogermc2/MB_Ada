@@ -333,6 +333,7 @@ package body Parse_Functions is
 
          Put_Line (Routine_Name & "942, TP2:" & Integer'Image (TP2) &
                      ", '" & Get_Input_Character (TP2) & "'");
+         Put_Line (Routine_Name & "942,  Done:" & Boolean'Image (Done));
          --  MMBasic 942  Also part of longest match search?
          if not Done and then
            (not Is_Name_Character (Get_Input_Character (TP2)) or else
@@ -341,7 +342,9 @@ package body Parse_Functions is
             Done := Element (Command.Name, TP - 1) /= '(' and
               Is_Name_Character (Get_Input_Character (TP2));
 
-            --  Put_Line (Routine_Name & "947, TP2:" & Integer'Image (TP2));
+            Put_Line (Routine_Name & "947,  Command.Name Length:" &
+                        Integer'Image (Length (Command.Name)));
+            Put_Line (Routine_Name & "947,  Done:" & Boolean'Image (Done));
             --  MMBasic 947
             if not Done and then Length (Command.Name) > Match_Length then
                Match_I_Pos := TP2;
