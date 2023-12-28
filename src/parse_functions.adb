@@ -276,7 +276,13 @@ package body Parse_Functions is
       Put_Line (Routine_Name & "In_Buffer: " & Get_Input_Buffer);
       Put_Line (Routine_Name & "P, TP2: " &
                   Integer'Image (P) & ", " & Integer'Image (TP2));
---        Put_Line (Routine_Name & "In_Command: " & In_Command);
+      --        Put_Line (Routine_Name & "In_Command: " & In_Command);
+      --  TO DO
+      --  Need to scan the entire table looking for the match with the longest
+      --  matching command name because we need to differentiate between
+      --  END and END SUB for example.
+      --  Without looking for the longest match we might think that we have a
+      --  match when we found just END.
 
       --  MMBasic 925
       TP := 0;
@@ -296,9 +302,9 @@ package body Parse_Functions is
          Put_Line ((Routine_Name & "Command found: " &
                      To_String (Command.Name)));
          Put_Line (Routine_Name & "TP2:" & Integer'Image (TP2) &
-                  ", '" & Get_Input_Character (TP2) & "'");
-      --  P and TP2 are pointing to the second character following the command
-      --  name, the first is a space
+                     ", '" & Get_Input_Character (TP2) & "'");
+         --  P and TP2 are pointing to the second character following the command
+         --  name, the first is a space
          Skip_In_Buffer_Spaces (P);  --  if there are any
          TP := 0;
          while not Done and then TP < Length (Command.Name) loop
@@ -306,16 +312,19 @@ package body Parse_Functions is
             TP := TP + 1;
             if not Done then
                --  MMBasic 931
-               if Element (Command.Name, TP) = ' ' and then
-                 TP2 < Input_Buffer_Length then
-                  Skip_In_Buffer_Spaces (TP2);
-               else
-                  TP2 := TP2 + 1;
-               end if;
+               --  This is concered with looking for the longest match
+               --  so belongs above in the MMBasic 925 section
+--                 if Element (Command.Name, TP) = ' ' and then
+--                   TP2 < Input_Buffer_Length then
+--                    Skip_In_Buffer_Spaces (TP2);
+--                 else
+--                    TP2 := TP2 + 1;
+--                 end if;
 
                --  MMBasic 937
                if Element (Command.Name, TP) = '(' and then
                  TP2 < Input_Buffer_Length then
+                  -- skip space between a keyword and bracket
                   Skip_In_Buffer_Spaces (TP2);
                end if;
             end if;
@@ -323,17 +332,17 @@ package body Parse_Functions is
          Done := TP2 >= Input_Buffer_Length;
 
          Put_Line (Routine_Name & "942, TP2:" & Integer'Image (TP2) &
-                  ", '" & Get_Input_Character (TP2) & "'");
-         --  MMBasic 942
+                     ", '" & Get_Input_Character (TP2) & "'");
+         --  MMBasic 942  Also part of longest match search?
          if not Done and then
-               (not Is_Name_Character (Get_Input_Character (TP2)) or else
-           Command.Command_Type = T_FUN) then
+           (not Is_Name_Character (Get_Input_Character (TP2)) or else
+            Command.Command_Type = T_FUN) then
             Put_Line (Routine_Name & "check '('" );
             Done := Element (Command.Name, TP - 1) /= '(' and
               Is_Name_Character (Get_Input_Character (TP2));
 
---              Put_Line (Routine_Name & "947, TP2:" & Integer'Image (TP2));
-         --  MMBasic 947
+            --  Put_Line (Routine_Name & "947, TP2:" & Integer'Image (TP2));
+            --  MMBasic 947
             if not Done and then Length (Command.Name) > Match_Length then
                Match_I_Pos := TP2;
                Match_Length := Length (Command.Name);
@@ -341,22 +350,25 @@ package body Parse_Functions is
             end if;
          end if;
 
---           Put_Line (Routine_Name & "956");
+         Put_Line (Routine_Name & "956");
+         Put_Line (Routine_Name & "P, Match_Index:" & Integer'Image (P) &
+                  ", " & Integer'Image (Match_Index));
          --  956
          if P < Input_Buffer_Length then
             if Match_Index > -1 then
                --  Match found
                Put_Line (Routine_Name & "Process_Command");
+               --  process rest of command line
                Process_Command (Buffer, P, Match_I_Pos, Match_Index,
                                 Label_Valid, First_Nonwhite);
 
-            --  MMBasic 976
+               --  MMBasic 976
             elsif Label_Valid and then
               Is_Name_Start (Get_Input_Character (P)) then
                OK := True;
---                 Put_Line (Routine_Name & "976, Command.Name: " &
---                             To_String (Command.Name));
---                 Put_Line (Routine_Name & "976, TP: " & Integer'Image (TP));
+               --                 Put_Line (Routine_Name & "976, Command.Name: " &
+               --                             To_String (Command.Name));
+               --                 Put_Line (Routine_Name & "976, TP: " & Integer'Image (TP));
                Index := 0;
                TP := 0;
                while OK and then TP < length (Command.Name) and then
@@ -366,8 +378,8 @@ package body Parse_Functions is
                   OK := Is_Name_Character (Element (Command.Name, TP));
                end loop;
 
---                 Put_Line (Routine_Name & "982, TP: " & Integer'Image (TP));
-            --  MMBasic 982
+               --                 Put_Line (Routine_Name & "982, TP: " & Integer'Image (TP));
+               --  MMBasic 982
                if OK and then Element (Command.Name, TP) = ':' then
                   Label_Valid := False;
                   Buffer_Append (Buffer, Global.T_LABEL);
