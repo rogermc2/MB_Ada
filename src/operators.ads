@@ -1,6 +1,4 @@
 
-with System; use System;
-
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 
 with Command_And_Token_Functions; use Command_And_Token_Functions;
