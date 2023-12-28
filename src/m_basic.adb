@@ -265,7 +265,7 @@ package body M_Basic is
             if Command_Line_Pos > M_Misc.C_Base_Token and then
               Command_Line_Pos - M_Misc.C_Base_Token < Command_Table_Size
               and then Command_Table (Command_Line_Pos -
-              M_Misc.C_Base_Token).Command_Type = T_CMD then
+                                        M_Misc.C_Base_Token).Command_Type = T_CMD then
                Command_Token := Command_Line (Command_Line_Pos);
                T_Arg := T_CMD;
                --  Execute the command
@@ -465,9 +465,14 @@ package body M_Basic is
 
    function Is_Name_Character (aChar : Character) return Boolean is
       use Ada.Characters.Handling;
-      Routine_Name : constant String := "M_Basic.Is_Name_Character ";
+--        Routine_Name : constant String := "M_Basic.Is_Name_Character ";
    begin
-      Put_Line (Routine_Name & "aChar: " & aChar);
+--        Put_Line (Routine_Name & "aChar: " & aChar);
+--        Put_Line (Routine_Name &
+--                    "returning Is_Alphanumeric (aChar) or aChar = _ or  :  " &
+--                    Boolean'Image (Is_Alphanumeric (aChar)) &
+--                    " or " &  Boolean'Image (aChar = '_')&
+--                    " or " &  Boolean'Image (aChar = ':'));
       return Is_Alphanumeric (aChar) or else aChar = '_' or else aChar = ':';
 
    end Is_Name_Character;
@@ -482,9 +487,12 @@ package body M_Basic is
 
    function Is_Name_Start (aChar : Character) return Boolean is
       use Ada.Characters.Handling;
-      Routine_Name : constant String := "M_Basic.Is_Name_Start ";
+--        Routine_Name : constant String := "M_Basic.Is_Name_Start ";
    begin
-      Put_Line (Routine_Name);
+--        Put_Line (Routine_Name &
+--                    "returning Is_Alphanumeric (aChar) or aChar = _: " &
+--                    Boolean'Image (Is_Alphanumeric (aChar)) &
+--                    " or " &  Boolean'Image (aChar = '_'));
       return Is_Alphanumeric (aChar) or aChar = '_';
 
    end Is_Name_Start;
@@ -492,7 +500,7 @@ package body M_Basic is
    procedure Parse_Line (Buffer : in out String_Buffer; Pos : Positive) is
       use Ada.Characters.Handling;
       use Parse_Functions;
-      Routine_Name   : constant String := "M_Basic.Parse_Line ";
+      --                  Routine_Name   : constant String := "M_Basic.Parse_Line ";
       Buff_Length    : constant Positive := Input_Buffer_Length;
       Ptr            : Positive := Pos;
       aChar          : Character;
@@ -502,8 +510,8 @@ package body M_Basic is
       --  826
       while Ptr < Buff_Length loop
          aChar := Get_Input_Character (Ptr);
---           Put_Line (Routine_Name & "Ptr: " & Integer'Image (Ptr) &
---                    ", aChar: " & aChar);
+         --           Put_Line (Routine_Name & "Ptr: " & Integer'Image (Ptr) &
+         --                    ", aChar: " & aChar);
          if aChar = ' ' then
             Ptr := Ptr + 1;
             --  836
