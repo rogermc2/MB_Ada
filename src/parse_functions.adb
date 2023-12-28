@@ -262,8 +262,6 @@ package body Parse_Functions is
       --  In_Command is the first word of Buffer
       In_Command    : constant String :=
                         To_Upper (To_String (Get_Command_From_Input (P)));
-      --  I_Pos2 (tp2) is the input character index to the character
-      --  following In_Command.
       TP2           : Positive := P;
       Command       : Command_Table_Item;
       TP            : Natural := 0;      --  tp  command table index
@@ -293,8 +291,15 @@ package body Parse_Functions is
       Done := not Found;
       if Done then
          Put_Line ((Routine_Name & "invalid Command: " & In_Command));
+
       else
-         Put_Line ((Routine_Name & "Command found: " & To_String (Command.Name)));
+         Put_Line ((Routine_Name & "Command found: " &
+                     To_String (Command.Name)));
+         Put_Line (Routine_Name & "TP2:" & Integer'Image (TP2) &
+                  ", '" & Get_Input_Character (TP2) & "'");
+      --  P and TP2 are pointing to the second character following the command
+      --  name, the first is a space
+         Skip_In_Buffer_Spaces (P);  --  if there are any
          TP := 0;
          while not Done and then TP < Length (Command.Name) loop
             TP2 := P;
@@ -317,7 +322,8 @@ package body Parse_Functions is
          end loop;
          Done := TP2 >= Input_Buffer_Length;
 
---           Put_Line (Routine_Name & "942, TP2:" & Integer'Image (TP2));
+         Put_Line (Routine_Name & "942, TP2:" & Integer'Image (TP2) &
+                  ", '" & Get_Input_Character (TP2) & "'");
          --  MMBasic 942
          if not Done and then
                (not Is_Name_Character (Get_Input_Character (TP2)) or else

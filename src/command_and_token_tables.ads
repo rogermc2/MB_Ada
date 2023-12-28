@@ -22,7 +22,7 @@ package Command_And_Token_Tables is
    type Token_Pointer is access String;
 
    type Modular is mod 2**32;
-   --
+
    --     type Unsigned_Byte is mod 256;
    --     type Unsigned_2Byte is mod 65536;
    type Unsigned_Byte_Ptr is access Unsigned_8;
@@ -39,20 +39,9 @@ package Command_And_Token_Tables is
    T_INT     : constant Function_Type := 4;
    T_PTR     : constant Function_Type := 8;
    T_CMD     : constant Function_Type := 16;
-   --                            T_NBRorImplied => 17,
-   --                            T_STRorImplied => 18,
-   --                            T_INTorImplied => 20,
    T_CONST   : constant Function_Type := 32;
    T_FUN     : constant Function_Type := 64;
-   --                            T_FUNorNBR => 65,
-   --                            T_FUNorSTR => 66,
-   --                            T_FUNorINT => 68,
-   --                            T_FUNorNBRorINT => 69,
-   --                            T_FUNorNBRorINTorSTR => 71,
    T_FNA     : constant Function_Type := 128;
-   --                            T_FNAorNBR => 129,
-   --                            T_FNAorSTR => 130,
-   --     T_FNAorINT => 132;
 
    T_NA      : constant Function_Type := T_NOTYPE;
    T_INV     : constant Function_Type := T_NA;
@@ -76,7 +65,8 @@ package Command_And_Token_Tables is
    Token_Table_Size   : constant Positive :=
                           Num_Functions + Num_Commands + Num_Operators + 1;
 
-   --  Command_Table and Token_Table loaded by Command_and_Token_Tables.adb initialization.
+   --  Command_Table and Token_Table are loaded by
+   --  Command_and_Token_Tables.adb initialization.
    Command_Table : array (1 .. Command_Table_Size) of Command_Table_Item;
    Token_Table   : array (1 .. Token_Table_Size) of Command_Table_Item;
 
