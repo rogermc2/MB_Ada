@@ -260,16 +260,17 @@ package body Parse_Functions is
       use Support;
       Routine_Name  : constant String := "Parse_Functions.Try_Command ";
       In_Command    : constant String :=
-                        To_String (Get_Command_From_Input (P));
+                        To_Upper (To_String (Get_Command_From_Input (P)));
       --  I_Pos2 (tp2) is the input character index to the character
       --  following In_Command.
       TP2           : Positive := P;
-      Command       : Unbounded_String;
+      Command       : Command_Table_Item;
       TP            : Natural := 0;      --  tp  command table index
       Match_Index   : Integer := -1;
       Match_Length  : Integer := -1;
       Match_I_Pos   : Positive;
       Index         : Natural := 0;
+      Found         : Boolean := False;
       Done          : Boolean := False;
       OK            : Boolean := True;
    begin
@@ -278,190 +279,220 @@ package body Parse_Functions is
                   Integer'Image (P) & ", " & Integer'Image (TP2));
 
       Put_Line (Routine_Name & "In_Command: " & In_Command);
-      --  MMBasic 925
-      while not Done and then TP < Command_Table_Size loop
+
+      TP := 0;
+      while TP <= Command_Table'Last and then not Found loop
          TP := TP + 1;
-         TP2 := P;
-         Command := Command_Table (TP).Name;
-         Put_Line (Routine_Name & "TP, Command: " &
-                     Integer'Image (TP) & ", " & To_String (Command));
-         Done := To_String (Command) = "";
-         if Done then
-            Put_Line ((Routine_Name & "invalid Command: " & In_Command));
+         Found := To_Upper (To_String (Command_Table (TP).Name)) = In_Command;
+         if Found then
+            Command := Command_Table (TP);
          end if;
+      end loop;
 
-         Put_Line (Routine_Name & "929 P, TP2, TP: " &
-                     Integer'Image (P) & ", " & Integer'Image (TP2) &
-                     ", " & Integer'Image (TP));
-         Put_Line ((Routine_Name & "Input_Buffer: " & Get_Input_Buffer));
-         Put_Line ((Routine_Name & "Input_Buffer (TP2): " &
-                     Get_Input_Buffer (TP2)));
-         Put_Line ((Routine_Name & "Command (TP): " & Element (Command, TP)));
-         --  MMBasic 929  look for match with longest command name
-         while not Done and then TP2 <= Input_Buffer_Length and then
-           To_Upper (Get_Input_Buffer (TP2)) =
-             To_Upper (Element (Command, TP)) loop
-            if Get_Input_Character (TP) = ' '  then
-               Skip_In_Buffer_Spaces (TP2);
-            else
-               TP2 := TP2 + 1;
-            end if;
+      Done := not Found;
+      if Done then
+         Put_Line ((Routine_Name & "invalid Command: " & In_Command));
+      else
+         TP := 0;
+         while not Done and then TP < Command_Table_Size loop
+            TP2 := P;
             TP := TP + 1;
-
-            Done := TP2 > Input_Buffer_Length and then
-              P >= Input_Buffer_Length;
             if not Done then
                Put_Line (Routine_Name & "937");
                --  MMBasic 937
-               if Element (Command, TP) = '(' and then
+               if Element (Command.Name, TP) = '(' and then
                  TP2 < Input_Buffer_Length then
                   Skip_In_Buffer_Spaces (TP2);
                end if;
             end if;
             Done := TP2 >= Input_Buffer_Length;
          end loop;
-         --           Put_Line (Routine_Name & "P, TP2: " &
-         --                       Integer'Image (P) & ", " & Integer'Image (TP2));
-         Done := TP2 >= Input_Buffer_Length;
-         --  MMBasic 942
-         if (not Done and then
-               not Is_Name_Character (Get_Input_Character (TP2))) or
-           Command_Table (TP).Command_Type = T_FUN then
-            Done := Element (Command, TP - 1) /= '(' and
-              Is_Name_Character (Get_Input_Character (TP2));
-
-            if not Done and then Length (Command) > Match_Length then
-               Match_I_Pos := TP2;
-               Match_Length := Length (Command);
-               Match_Index := TP;
-            end if;
-         end if;
-         --           Put_Line (Routine_Name & "end outer loop done");
-      end loop;
-
-      Put_Line (Routine_Name & "956");
-      --  956
-      if P < Input_Buffer_Length then
-         if Match_Index > -1 then
-            --  Match found
-            Process_Command (Buffer, P, Match_I_Pos, Match_Index,
-                             Label_Valid, First_Nonwhite);
-
-            --  976
-         elsif Label_Valid and then
-           Is_Name_Start (Get_Input_Character (P)) then
-            OK := True;
-            while OK and then Index <= Configuration.MAXVARLEN loop
-               Index := Index + 1;
-               TP := TP + 1;
-               OK := Is_Name_Character (Element (Command, TP));
-            end loop;
-
-            if OK and then Element (Command, TP) = ':' then
-               Label_Valid := False;
-               Buffer_Append (Buffer, Global.T_LABEL);
-               Buffer_Append (Buffer, Integer'Image (TP - P));
-               Buffer_Append (Buffer, Get_Input_Slice (1, TP - P));
-            end if;
-
-            P := P + 1;
-         end if;
       end if;
 
-   end Try_Command;
+      --  MMBasic 925
+      while not Done and then TP < Command_Table_Size loop
+         TP := TP + 1;
+         TP2 := P;
+         --           Command := Command_Table (TP).Name;
+         --           Put_Line (Routine_Name & "TP, Command: " &
+         --                       Integer'Image (TP) & ", " & To_String (Command));
+         --           Done := To_String (Command) = "";
+         --           if Done then
+         --              Put_Line ((Routine_Name & "invalid Command: " & In_Command));
+         --           end if;
+         --
+         --           Put_Line (Routine_Name & "929 P, TP2, TP: " &
+         --                       Integer'Image (P) & ", " & Integer'Image (TP2) &
+         --                       ", " & Integer'Image (TP));
+         --           Put_Line ((Routine_Name & "Input_Buffer: " & Get_Input_Buffer));
+         --           Put_Line ((Routine_Name & "Input_Buffer (TP2): " &
+         --                       Get_Input_Buffer (TP2)));
+         --           Put_Line ((Routine_Name & "Command (TP): " & Element (Command, TP)));
+         --           --  MMBasic 929  look for match with longest command name
+         --           while not Done and then TP2 <= Input_Buffer_Length and then
+         --             To_Upper (Get_Input_Buffer (TP2)) =
+         --               To_Upper (Element (Command, TP)) loop
+         --              if Get_Input_Character (TP) = ' '  then
+         --                 Skip_In_Buffer_Spaces (TP2);
+         --              else
+         --                 TP2 := TP2 + 1;
+         --              end if;
+         --              TP := TP + 1;
+         --
+         --              Done := TP2 > Input_Buffer_Length and then
+         --                P >= Input_Buffer_Length;
+--           if not Done then
+--              Put_Line (Routine_Name & "937");
+--              --  MMBasic 937
+--              if Element (Command, TP) = '(' and then
+--                TP2 < Input_Buffer_Length then
+--                 Skip_In_Buffer_Spaces (TP2);
+--              end if;
+--           end if;
+--           Done := TP2 >= Input_Buffer_Length;
+      end loop;
+      --           Put_Line (Routine_Name & "P, TP2: " &
+      --                       Integer'Image (P) & ", " & Integer'Image (TP2));
+      Done := TP2 >= Input_Buffer_Length;
+      --  MMBasic 942
+      if (not Done and then
+            not Is_Name_Character (Get_Input_Character (TP2))) or
+        Command_Table (TP).Command_Type = T_FUN then
+         Done := Element (Command, TP - 1) /= '(' and
+           Is_Name_Character (Get_Input_Character (TP2));
 
-   --  893
-   function Try_Function_Or_Keyword
-     (Buffer         : in out String_Buffer; I_Pos : in out Positive;
-      First_Nonwhite : in out Boolean)
-      return Boolean is
-      use Ada.Characters.Handling;
-      use Command_And_Token_Functions;
-      use Support;
-      Index  : Natural := 0;
-      I_Char : Character;
-      I_Pos2 : Positive;
-      T_Pos  : Positive;
-      Name   : Unbounded_String;
-      Done   : Boolean;
-      Found  : Boolean := False;
-   begin
-      while Index <= Token_Table'Last loop
-         Index := Index + 1;
-         I_Pos2 := I_Pos;
-         Name := Token_Table (Index).Name;
-         T_Pos := 1;
-         I_Char := Get_Input_Character (I_Pos);
-         Done := False;
-         --  900
-         while not Done and then
-           To_Upper (I_Char) = To_Upper (Element (Name, T_Pos)) loop
-            I_Pos2 := I_Pos2 + 1;
-            T_Pos := T_Pos + 1;
-            if I_Char = '(' then
-               I_Pos := I_Pos + 1;
-               Skip_In_Buffer_Spaces (I_Pos);
-            end if;
+         if not Done and then Length (Command) > Match_Length then
+            Match_I_Pos := TP2;
+            Match_Length := Length (Command);
+            Match_Index := TP;
+         end if;
+      end if;
+--        --           Put_Line (Routine_Name & "end outer loop done");
+--     end loop;
+--
+   Put_Line (Routine_Name & "956");
+   --  956
+   if P < Input_Buffer_Length then
+      if Match_Index > -1 then
+         --  Match found
+         Process_Command (Buffer, P, Match_I_Pos, Match_Index,
+                          Label_Valid, First_Nonwhite);
 
-            Done := not Is_Name_End (Element (Name, T_Pos - 1)) or
-              not Is_Name_Character (Get_Input_Character (I_Pos2));
+         --  976
+      elsif Label_Valid and then
+        Is_Name_Start (Get_Input_Character (P)) then
+         OK := True;
+         while OK and then Index <= Configuration.MAXVARLEN loop
+            Index := Index + 1;
+            TP := TP + 1;
+            OK := Is_Name_Character (Element (Command, TP));
          end loop;
 
-         --  911
-         Found := Index /= Token_Table'Last;
-         if Found then
-            Index := Index + M_Misc.C_Base_Token;
-            Buffer_Append (Buffer, To_String (Token_Table (Index).Name));
-            I_Pos := I_Pos2;
+         if OK and then Element (Command, TP) = ':' then
+            Label_Valid := False;
+            Buffer_Append (Buffer, Global.T_LABEL);
+            Buffer_Append (Buffer, Integer'Image (TP - P));
+            Buffer_Append (Buffer, Get_Input_Slice (1, TP - P));
          end if;
 
-         --  921
-         First_Nonwhite := Index = tokenTHEN or else Index = tokenELSE;
+         P := P + 1;
+      end if;
+   end if;
+
+end Try_Command;
+
+--  893
+function Try_Function_Or_Keyword
+  (Buffer         : in out String_Buffer; I_Pos : in out Positive;
+   First_Nonwhite : in out Boolean)
+      return Boolean is
+   use Ada.Characters.Handling;
+   use Command_And_Token_Functions;
+   use Support;
+   Index  : Natural := 0;
+   I_Char : Character;
+   I_Pos2 : Positive;
+   T_Pos  : Positive;
+   Name   : Unbounded_String;
+   Done   : Boolean;
+   Found  : Boolean := False;
+begin
+   while Index <= Token_Table'Last loop
+      Index := Index + 1;
+      I_Pos2 := I_Pos;
+      Name := Token_Table (Index).Name;
+      T_Pos := 1;
+      I_Char := Get_Input_Character (I_Pos);
+      Done := False;
+      --  900
+      while not Done and then
+        To_Upper (I_Char) = To_Upper (Element (Name, T_Pos)) loop
+         I_Pos2 := I_Pos2 + 1;
+         T_Pos := T_Pos + 1;
+         if I_Char = '(' then
+            I_Pos := I_Pos + 1;
+            Skip_In_Buffer_Spaces (I_Pos);
+         end if;
+
+         Done := not Is_Name_End (Element (Name, T_Pos - 1)) or
+           not Is_Name_Character (Get_Input_Character (I_Pos2));
       end loop;
 
-      return Found;
+      --  911
+      Found := Index /= Token_Table'Last;
+      if Found then
+         Index := Index + M_Misc.C_Base_Token;
+         Buffer_Append (Buffer, To_String (Token_Table (Index).Name));
+         I_Pos := I_Pos2;
+      end if;
 
-   end Try_Function_Or_Keyword;
+      --  921
+      First_Nonwhite := Index = tokenTHEN or else Index = tokenELSE;
+   end loop;
 
-   procedure Try_Number
-     (Buffer         : in out String_Buffer; I_Pos : in out Positive;
-      First_Nonwhite : in out Boolean) is
-      use Ada.Characters.Handling;
-      --        Routine_Name : constant String := "Parse_Functions.Try_Number ";
-      aChar        : Character := Get_Input_Character (I_Pos);
-      Number       : Unbounded_String;
-      Done         : Boolean := False;
-   begin
-      if Is_Digit (aChar) or else aChar = '.' then
-         while not Done
-           and then (Is_Digit (aChar) or else aChar = '.' or else aChar = 'E'
-                     or else aChar = 'e') loop
-            Done := I_Pos >= Input_Buffer_Length;
-            if aChar = 'E' or else aChar = 'e' then
+   return Found;
+
+end Try_Function_Or_Keyword;
+
+procedure Try_Number
+  (Buffer         : in out String_Buffer; I_Pos : in out Positive;
+   First_Nonwhite : in out Boolean) is
+   use Ada.Characters.Handling;
+   --        Routine_Name : constant String := "Parse_Functions.Try_Number ";
+   aChar        : Character := Get_Input_Character (I_Pos);
+   Number       : Unbounded_String;
+   Done         : Boolean := False;
+begin
+   if Is_Digit (aChar) or else aChar = '.' then
+      while not Done
+        and then (Is_Digit (aChar) or else aChar = '.' or else aChar = 'E'
+                  or else aChar = 'e') loop
+         Done := I_Pos >= Input_Buffer_Length;
+         if aChar = 'E' or else aChar = 'e' then
+            Number := Number & aChar;
+            aChar := Get_Next_Character (I_Pos);
+            if aChar = '+' or else aChar = '-' then
                Number := Number & aChar;
                aChar := Get_Next_Character (I_Pos);
-               if aChar = '+' or else aChar = '-' then
-                  Number := Number & aChar;
-                  aChar := Get_Next_Character (I_Pos);
-               end if;
-               if I_Pos < Input_Buffer_Length then
-                  aChar := Get_Next_Character (I_Pos);
-               end if;
-            else
-               Number := Number & aChar;
-               if I_Pos < Input_Buffer_Length then
-                  aChar := Get_Next_Character (I_Pos);
-               end if;
             end if;
-         end loop;
+            if I_Pos < Input_Buffer_Length then
+               aChar := Get_Next_Character (I_Pos);
+            end if;
+         else
+            Number := Number & aChar;
+            if I_Pos < Input_Buffer_Length then
+               aChar := Get_Next_Character (I_Pos);
+            end if;
+         end if;
+      end loop;
 
-         Support.Buffer_Append (Buffer, To_String (Number));
-         First_Nonwhite := False;
+      Support.Buffer_Append (Buffer, To_String (Number));
+      First_Nonwhite := False;
 
-      elsif First_Nonwhite then
-         null;
-      end if;
+   elsif First_Nonwhite then
+      null;
+   end if;
 
-   end Try_Number;
+end Try_Number;
 
 end Parse_Functions;

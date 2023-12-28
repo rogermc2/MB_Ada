@@ -423,27 +423,6 @@ package body Command_And_Token_Functions is
       c_CFUN := Get_Command_Value ("CFunction");
       c_CSUB := Get_Command_Value ("CSub");
 
---        for index in Function_Types'Range loop
---           Command_Table (index) := Function_Types (index);
---        end loop;
---
---        for index in Command_Types'Range loop
---           Command_Table (Function_Types'Length + index) := Command_Types (index);
---        end loop;
---
---        for index in Operator_Types'Range loop
---           Command_Table
---             (Function_Types'Length + Command_Types'Length + index) :=
---             Operator_Types (index);
---        end loop;
---
---        Command_Table (Command_Table_Size) :=
---          (To_Unbounded_String (""), T_NA, 0, Null);
-
-      for index in Token_Table'Range loop
-         Token_Table (index) := Command_Table (index);
-      end loop;
-
    end Init_Operator_Functions;
 
    function tokenTHEN return Natural is

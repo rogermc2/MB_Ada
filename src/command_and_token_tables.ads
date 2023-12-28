@@ -76,6 +76,7 @@ package Command_And_Token_Tables is
    Token_Table_Size   : constant Positive :=
                           Num_Functions + Num_Commands + Num_Operators + 1;
 
+   --  Command_Table and Token_Table loaded by Command_and_Token_Tables.adb initialization.
    Command_Table : array (1 .. Command_Table_Size) of Command_Table_Item;
    Token_Table   : array (1 .. Token_Table_Size) of Command_Table_Item;
 
