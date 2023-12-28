@@ -281,7 +281,7 @@ package body Parse_Functions is
       Put_Line (Routine_Name & "In_Command: " & In_Command);
 
       TP := 0;
-      while TP <= Command_Table'Last and then not Found loop
+      while TP < Command_Table'Last and then not Found loop
          TP := TP + 1;
          Found := To_Upper (To_String (Command_Table (TP).Name)) = In_Command;
          if Found then
@@ -303,6 +303,7 @@ package body Parse_Functions is
                --  MMBasic 937
                if Element (Command.Name, TP) = '(' and then
                  TP2 < Input_Buffer_Length then
+                  Put_Line (Routine_Name & "937 Skip_In_Buffer_Spaces");
                   Skip_In_Buffer_Spaces (TP2);
                end if;
             end if;
