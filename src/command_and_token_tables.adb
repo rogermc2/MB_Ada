@@ -323,4 +323,20 @@ begin
    Command_Table (Command_Table_Size) :=
      (To_Unbounded_String (""), T_NA, 0, Null);
 
+   for index in 1 .. Num_Functions loop
+      Token_Table (index) := Function_Types (index);
+   end loop;
+
+   for index in 1 .. Num_Commands loop
+      Command_Table (Num_Functions + index) := Command_Types (index);
+   end loop;
+
+   for index in 1 ..Num_Operators loop
+      Token_Table (Num_Functions + Num_Commands + index) :=
+        Operators.Operator_Types (index);
+   end loop;
+
+   Token_Table (Token_Table_Size) :=
+     (To_Unbounded_String (""), T_NA, 0, Null);
+
 end  Command_And_Token_Tables;
