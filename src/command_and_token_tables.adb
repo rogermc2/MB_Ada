@@ -177,7 +177,7 @@ package body Command_And_Token_Tables is
                         (To_Unbounded_String ("End CFunction"), T_CMD,
                          0, cmd_null),
                         (To_Unbounded_String ("CSub"),T_CMD, 0, cmd_cfunction),
-                        (To_Unbounded_String ("End CSub"),T_CMD, 0, cmd_null),
+                        (To_Unbounded_String ("End CSub"), T_CMD, 0, cmd_null),
                         (To_Unbounded_String ("DefineFont"), T_CMD,
                          0, cmd_cfunction),
                         (To_Unbounded_String ("End DefineFont"), T_CMD,

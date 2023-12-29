@@ -465,14 +465,14 @@ package body M_Basic is
 
    function Is_Name_Character (aChar : Character) return Boolean is
       use Ada.Characters.Handling;
---        Routine_Name : constant String := "M_Basic.Is_Name_Character ";
+      --        Routine_Name : constant String := "M_Basic.Is_Name_Character ";
    begin
---        Put_Line (Routine_Name & "aChar: " & aChar);
---        Put_Line (Routine_Name &
---                    "returning Is_Alphanumeric (aChar) or aChar = _ or  :  " &
---                    Boolean'Image (Is_Alphanumeric (aChar)) &
---                    " or " &  Boolean'Image (aChar = '_')&
---                    " or " &  Boolean'Image (aChar = ':'));
+      --        Put_Line (Routine_Name & "aChar: " & aChar);
+      --        Put_Line (Routine_Name &
+      --                    "returning Is_Alphanumeric (aChar) or aChar = _ or  :  " &
+      --                    Boolean'Image (Is_Alphanumeric (aChar)) &
+      --                    " or " &  Boolean'Image (aChar = '_')&
+      --                    " or " &  Boolean'Image (aChar = ':'));
       return Is_Alphanumeric (aChar) or else aChar = '_' or else aChar = ':';
 
    end Is_Name_Character;
@@ -487,12 +487,12 @@ package body M_Basic is
 
    function Is_Name_Start (aChar : Character) return Boolean is
       use Ada.Characters.Handling;
---        Routine_Name : constant String := "M_Basic.Is_Name_Start ";
+      --        Routine_Name : constant String := "M_Basic.Is_Name_Start ";
    begin
---        Put_Line (Routine_Name &
---                    "returning Is_Alphanumeric (aChar) or aChar = _: " &
---                    Boolean'Image (Is_Alphanumeric (aChar)) &
---                    " or " &  Boolean'Image (aChar = '_'));
+      --        Put_Line (Routine_Name &
+      --                    "returning Is_Alphanumeric (aChar) or aChar = _: " &
+      --                    Boolean'Image (Is_Alphanumeric (aChar)) &
+      --                    " or " &  Boolean'Image (aChar = '_'));
       return Is_Alphanumeric (aChar) or aChar = '_';
 
    end Is_Name_Start;
@@ -704,6 +704,21 @@ package body M_Basic is
       end if;
 
    end Prepare_Program;
+
+   procedure Remove_Spaces (Buffer : in out Unbounded_String) is
+      Pos     : Natural := 0;
+      Updated : Unbounded_String;
+   begin
+      while Pos <= Length (Buffer) loop
+         Pos := Pos + 1;
+         if Element (Buffer, Pos) /= ' ' then
+            Append (Updated, Element (Buffer, Pos));
+         end if;
+      end loop;
+
+      Buffer :=  Updated;
+
+     end Remove_Spaces;
 
    procedure Save_Program_To_Flash (Buffer: String; Msg : Boolean) is
    begin

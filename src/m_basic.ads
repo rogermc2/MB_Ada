@@ -36,6 +36,7 @@ package M_Basic is
    pragma Inline (Is_Name_Start);
    procedure Print_String (theString : String);
    procedure Prepare_Program (Error_Abort : Boolean);
+   procedure Remove_Spaces (Buffer : in out Unbounded_String);
    procedure Save_Program_To_Flash (Buffer: String; Msg : Boolean);
    procedure Skip_Spaces (Buffer : Unbounded_String; Pos : in out Positive);
    function Skip_Var (Pos : in out Positive) return Positive;

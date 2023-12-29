@@ -68,6 +68,35 @@ package body Parse_Functions is
 
    end Get_Command_Value;
 
+   function Get_Long_Command_From_Input (I_Pos : in out Positive)
+                                      return Unbounded_String is
+      use Ada.Characters.Handling;
+      --        Routine_Name  : constant String :=
+      --                          "Parse_Functions.Get_Long_Command_From_Input ";
+      aChar         : Character;
+      Command       : Unbounded_String;
+      Done          : Boolean := False;
+   begin
+      Command := Get_Command_From_Input (I_Pos);
+      Skip_In_Buffer_Spaces (I_Pos);
+      Done := I_Pos > Input_Buffer_Length;
+
+      while not Done loop
+         --  get second command word
+         aChar := Get_Input_Character (I_Pos);
+         Done :=  aChar = ' ' or else
+           (not (aChar = '_' or Is_Alphanumeric (aChar)));
+         if not Done then
+            Append (Command, aChar);
+         end if;
+         I_Pos := I_Pos + 1;
+         Done := Done or else I_Pos > Input_Buffer_Length;
+      end loop;
+
+      return Command;
+
+   end Get_Long_Command_From_Input;
+
    function Get_Next_Character (I_Pos : in out Positive) return Character is
    begin
       I_Pos := I_Pos + 1;
@@ -273,10 +302,10 @@ package body Parse_Functions is
       Done          : Boolean := False;
       OK            : Boolean := True;
    begin
-      Put_Line (Routine_Name & "In_Buffer: " & Get_Input_Buffer);
+      Put_Line (Routine_Name & "In_Buffer: '" & Get_Input_Buffer & "'");
       Put_Line (Routine_Name & "P, TP2: " &
                   Integer'Image (P) & ", " & Integer'Image (TP2));
-      --        Put_Line (Routine_Name & "In_Command: " & In_Command);
+      Put_Line (Routine_Name & "In_Command: '" & In_Command & "'");
       --  TO DO
       --  Need to scan the entire table looking for the match with the longest
       --  matching command name because we need to differentiate between
@@ -286,18 +315,58 @@ package body Parse_Functions is
 
       --  MMBasic 925
       TP := 0;
-      while TP < Command_Table'Last and then not Found loop
+      while TP < Command_Table'Last - 1 and then not Found loop
          TP := TP + 1;
          Found := To_Upper (To_String (Command_Table (TP).Name)) = In_Command;
          if Found then
+            Put_Line ((Routine_Name & "Command found for: '" &
+                        In_Command & "'"));
+            Put_Line ((Routine_Name & "Command found: '" &
+                        To_String (Command_Table (TP).Name) & "'"));
             Command := Command_Table (TP);
+            Put_Line ((Routine_Name & "Command found: '" &
+                        To_String (Command.Name) & "'"));
             Match_Index := TP;
             Match_Length := Length (Command.Name);
          end if;
       end loop;
 
+      if not Found then
+         Put_Line ((Routine_Name & "Command not found: " & In_Command));
+         P := 1;
+         declare
+            In_Command : constant String :=
+                           To_Upper (To_String (Get_Long_Command_From_Input (P)));
+            CT_Name    : Unbounded_String;
+         begin
+            Put_Line (Routine_Name & "long In_Command: '" & In_Command & "'");
+            TP := 0;
+            while TP < Command_Table'Last - 1 and then not Found loop
+               TP := TP + 1;
+               CT_Name := Command_Table (TP).Name;
+               Remove_Spaces (CT_Name);
+
+               Put_Line (Routine_Name & "CT_Name, In_Command: " &
+                         To_Upper (To_String (CT_Name)) & ", " & In_Command);
+               Found :=
+                 To_Upper (To_String (CT_Name)) = In_Command;
+               if Found then
+                  Put_Line (Routine_Name & "long Command found for: '" &
+                              In_Command & "'");
+                  Put_Line (Routine_Name & "long Command found: '" &
+                              To_String (Command_Table (TP).Name) & "'");
+                  Command := Command_Table (TP);
+                  Put_Line (Routine_Name & "long Command found: '" &
+                              To_String (Command.Name) & "'");
+                  Match_Index := TP;
+                  Match_Length := Length (Command.Name);
+               end if;
+            end loop;
+         end;
+      end if;
+
       Done := not Found;
-      if not  Done then
+      if Done then
          Put_Line ((Routine_Name & "invalid Command: " & In_Command));
 
       else
@@ -314,9 +383,12 @@ package body Parse_Functions is
                   Command := Command_Table (TP);
                   Match_Index := TP;
                   Match_Length := Length (Command.Name);
+                  Put_Line ((Routine_Name & "longer Command found: " &
+                              To_String (Command.Name)));
                end if;
             end if;
          end loop;
+         Put_Line ((Routine_Name & "Command: " & To_String (Command.Name)));
 
          TP := 0;
          while not Done and then TP < Length (Command.Name) loop
