@@ -13,7 +13,7 @@ package Parse_Functions is
    procedure Process_Name_Start (Buffer : in out String_Buffer;
                                  I_Pos  : in out Positive);
    procedure Process_First_Nonwhite
-     (Buffer      : in out String_Buffer; I_Pos  : in out Positive;
+     (Buffer      : out String_Buffer; I_Pos  : in out Positive;
       Label_Valid : in out Boolean; First_Nonwhite : in out Boolean);
    procedure Process_Quote (Buffer : in out String_Buffer;
                             I_Pos  : in out Positive);
@@ -21,10 +21,10 @@ package Parse_Functions is
      (Buffer         : in out String_Buffer; Pos : in out Positive;
       First_Nonwhite : in out Boolean; Label_Valid : in out Boolean);
    function Try_Function_Or_Keyword
-     (Buffer         : in out String_Buffer; I_Pos : in out Positive;
+     (Buffer         : out String_Buffer; I_Pos : in out Positive;
       First_Nonwhite : in out Boolean) return Boolean;
    procedure Try_Number
-     (Buffer         : in out String_Buffer; I_Pos : in out Positive;
+     (Buffer         : out String_Buffer; I_Pos : in out Positive;
       First_Nonwhite : in out Boolean);
 
 end Parse_Functions;

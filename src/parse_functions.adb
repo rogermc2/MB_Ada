@@ -16,11 +16,11 @@ with Support;
 package body Parse_Functions is
 
    procedure Process_Command
-     (Buffer         : in out String_Buffer; I_Pos : in out Positive;
+     (Buffer         : out String_Buffer; I_Pos : in out Positive;
       Match_I_Pos    : Positive; Match_Index : Integer;
       First_Nonwhite : in out Boolean; Label_Valid : in out Boolean);
    procedure Try_Command
-     (Buffer      : in out String_Buffer; P : in out Positive;
+     (Buffer      : out String_Buffer; P : in out Positive;
       Label_Valid : in out Boolean; First_Nonwhite   : in out Boolean);
 
    function Get_Command_From_Input (I_Pos : in out Positive)
@@ -120,7 +120,7 @@ package body Parse_Functions is
    end Process_Colon;
 
    procedure Process_Command
-     (Buffer         : in out String_Buffer; I_Pos : in out Positive;
+     (Buffer         : out String_Buffer; I_Pos : in out Positive;
       Match_I_Pos    : Positive; Match_Index : Integer;
       First_Nonwhite : in out Boolean; Label_Valid : in out Boolean) is
       Routine_Name  : constant String := "Parse_Functions.Process_Command ";
@@ -177,7 +177,7 @@ package body Parse_Functions is
    end Process_Name_Start;
 
    procedure Process_First_Nonwhite
-     (Buffer      : in out String_Buffer; I_Pos : in out Positive;
+     (Buffer      : out String_Buffer; I_Pos : in out Positive;
       Label_Valid : in out Boolean; First_Nonwhite : in out Boolean) is
       use Support;
       --        Routine_Name  : constant String :=
@@ -284,7 +284,7 @@ package body Parse_Functions is
    end Process_Variable_Name;
 
    procedure Try_Command
-     (Buffer      : in out String_Buffer; P : in out Positive;
+     (Buffer      : out String_Buffer; P : in out Positive;
       Label_Valid : in out Boolean; First_Nonwhite : in out Boolean) is
       use Interfaces;
       use Ada.Characters.Handling;
@@ -373,21 +373,11 @@ package body Parse_Functions is
          end;
       end if;
 
-      Done := not Found;
-      if Done then
+      if not Found then
          Put_Line ((Routine_Name & "invalid Command: " & In_Command));
 
-      else
+      elsif not Done then
          --           Put_Line (Routine_Name & "Command: " & To_String (Command.Name));
-         TP := 0;
-         while not Done and then TP < Length (Command.Name) loop
-            TP2 := P;
-            TP := TP + 1;
-            --              Put_Line (Routine_Name & "C937 character: " &
-            --                          Element (Command.Name, TP));
-            --              Put_Line (Routine_Name & "C937 character: " &
-            --                          Element (Command.Name, TP));
-         end loop;
          Done := TP2 >= Input_Buffer_Length;
 
          --           Put_Line (Routine_Name & "942,  Done: " & Boolean'Image (Done));
@@ -553,7 +543,7 @@ package body Parse_Functions is
 
    --  893
    function Try_Function_Or_Keyword
-     (Buffer         : in out String_Buffer; I_Pos : in out Positive;
+     (Buffer         : out String_Buffer; I_Pos : in out Positive;
       First_Nonwhite : in out Boolean)
       return Boolean is
       use Ada.Characters.Handling;
@@ -605,7 +595,7 @@ package body Parse_Functions is
    end Try_Function_Or_Keyword;
 
    procedure Try_Number
-     (Buffer         : in out String_Buffer; I_Pos : in out Positive;
+     (Buffer         : out String_Buffer; I_Pos : in out Positive;
       First_Nonwhite : in out Boolean) is
       use Ada.Characters.Handling;
       --        Routine_Name : constant String := "Parse_Functions.Try_Number ";

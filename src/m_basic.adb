@@ -502,7 +502,7 @@ package body M_Basic is
 
    end Is_Name_Start;
 
-   procedure Parse_Line (Buffer : in out String_Buffer; Pos : Positive) is
+   procedure Parse_Line (Buffer : out String_Buffer; Pos : Positive) is
       use Ada.Characters.Handling;
       use Parse_Functions;
       --                  Routine_Name   : constant String := "M_Basic.Parse_Line ";
@@ -852,7 +852,7 @@ package body M_Basic is
 
    end Token_Function;
 
-   procedure Tokenize (Buffer : in out String_Buffer; From_Console : Boolean) is
+   procedure Tokenize (Buffer : out String_Buffer; From_Console : Boolean) is
       use Interfaces;
       use Ada.Characters.Handling;
       use Ada.Strings;
