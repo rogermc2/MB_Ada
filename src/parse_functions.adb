@@ -127,7 +127,8 @@ package body Parse_Functions is
       use Ada.Characters.Handling;
       use Support;
    begin
-      Put_Line (Routine_Name);
+      Put_Line (Routine_Name & "Buffer length" &
+                  Integer'Image (Integer (Buffer.Length)));
       --  MMBasic 879
       if Match_Index > -1 then
          Put_Line (Routine_Name & "879");
@@ -214,6 +215,7 @@ package body Parse_Functions is
             Pos2 := I_Pos;
             Index := 0;
             Done := False;
+
             while not Done and then Index <= Configuration.MAXVARLEN loop
                Index := Index + 1;
                Pos2 := Pos2 + 1;

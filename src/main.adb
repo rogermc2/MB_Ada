@@ -98,6 +98,8 @@ begin
          Put_Line (Program_Name & "Tokenize");
          M_Basic.Tokenize (Token_Buffer, True);
          Put_Line (Program_Name & "Execute_Program");
+--           Put_Line (Program_Name & "Token_Buffer (1): " &
+--                       Element (Token_Buffer, 1));
          M_Basic.Execute_Program (Token_Buffer);
       end if;
 

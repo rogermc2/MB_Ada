@@ -247,6 +247,7 @@ package body M_Basic is
       No_Abort           : Boolean := True;
       Done               : Boolean := False;
    begin
+      Put_Line (Routine_Name);
       --  228
       Skip_Spaces (Command_Line, Command_Line_Pos);
       Skip_Element (Command_Line, Next_Statement_Pos);
@@ -323,11 +324,14 @@ package body M_Basic is
          Put_Line (Routine_Name & "Buffer is Not Empty");
          --  194
          Skip_Spaces (Buffer.First_Element, Program_Ptr);
+         Put_Line (Routine_Name & "Buffer.Last_Index: " &
+                  Integer'Image (Positive (Buffer.Last_Index)));
          while not Done and then Program_Ptr <= Positive (Buffer.Last_Index) loop
             if Buffer (Program_Ptr) = "0" then
                Program_Ptr := Program_Ptr + 1;
             end if;
 
+            Put_Line (Routine_Name & "199");
             --  199
             if Buffer (Program_Ptr) = T_NEWLINE then
                Current_Line_Ptr := Program_Ptr;
@@ -347,6 +351,7 @@ package body M_Basic is
                Skip_Spaces (Buffer (Program_Ptr), Program_Ptr);
             end if;
 
+            Put_Line (Routine_Name & "225");
             --  225
             if Program_Ptr <= Positive (Buffer.Length) then
                Execute_Command
