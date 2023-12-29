@@ -323,7 +323,8 @@ package body Parse_Functions is
          end if;
       end loop;
 
-      if not Found then
+      Done := TP2 >= Input_Buffer_Length;
+      if not Done and then not Found then
 --           Put_Line ((Routine_Name & "Command not found: " & In_Command));
          P := 1;
          declare
