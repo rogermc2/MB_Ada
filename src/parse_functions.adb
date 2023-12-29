@@ -127,18 +127,16 @@ package body Parse_Functions is
       use Ada.Characters.Handling;
       use Support;
    begin
-      Put_Line (Routine_Name & "Buffer length" &
-                  Integer'Image (Integer (Buffer.Length)));
-      --  MMBasic 879
+      --  MMBasic 957
       if Match_Index > -1 then
-         Put_Line (Routine_Name & "879");
+         Put_Line (Routine_Name & "957");
          Buffer_Append (Buffer, Integer'Image
                         (M_Misc.C_Base_Token + Match_Index));
          --  Step over the input buffer command.
          I_Pos := Match_I_Pos;
          if Match_Index + M_Misc.C_Base_Token =
            Get_Command_Value ("Rem") then
-            --  MMBasic 886 copy everything
+            --  MMBasic 962 copy everything
             Copy_Slice (Buffer, I_Pos, Input_Buffer_Length);
          end if;
 
