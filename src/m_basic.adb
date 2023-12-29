@@ -706,10 +706,11 @@ package body M_Basic is
    end Prepare_Program;
 
    procedure Remove_Spaces (Buffer : in out Unbounded_String) is
+--        Routine_Name : constant String := "M_Basic.Remove_Spaces ";
       Pos     : Natural := 0;
       Updated : Unbounded_String;
    begin
-      while Pos <= Length (Buffer) loop
+      while Pos < Length (Buffer) loop
          Pos := Pos + 1;
          if Element (Buffer, Pos) /= ' ' then
             Append (Updated, Element (Buffer, Pos));

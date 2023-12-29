@@ -69,7 +69,7 @@ package body Parse_Functions is
    end Get_Command_Value;
 
    function Get_Long_Command_From_Input (I_Pos : in out Positive)
-                                      return Unbounded_String is
+                                         return Unbounded_String is
       use Ada.Characters.Handling;
       --        Routine_Name  : constant String :=
       --                          "Parse_Functions.Get_Long_Command_From_Input ";
@@ -302,16 +302,10 @@ package body Parse_Functions is
       Done          : Boolean := False;
       OK            : Boolean := True;
    begin
-      Put_Line (Routine_Name & "In_Buffer: '" & Get_Input_Buffer & "'");
-      Put_Line (Routine_Name & "P, TP2: " &
-                  Integer'Image (P) & ", " & Integer'Image (TP2));
-      Put_Line (Routine_Name & "In_Command: '" & In_Command & "'");
-      --  TO DO
-      --  Need to scan the entire table looking for the match with the longest
-      --  matching command name because we need to differentiate between
-      --  END and END SUB for example.
-      --  Without looking for the longest match we might think that we have a
-      --  match when we found just END.
+      --        Put_Line (Routine_Name & "In_Buffer: '" & Get_Input_Buffer & "'");
+      --        Put_Line (Routine_Name & "P, TP2: " &
+      --                    Integer'Image (P) & ", " & Integer'Image (TP2));
+--        Put_Line (Routine_Name & "In_Command: '" & In_Command & "'");
 
       --  MMBasic 925
       TP := 0;
@@ -319,47 +313,43 @@ package body Parse_Functions is
          TP := TP + 1;
          Found := To_Upper (To_String (Command_Table (TP).Name)) = In_Command;
          if Found then
-            Put_Line ((Routine_Name & "Command found for: '" &
-                        In_Command & "'"));
-            Put_Line ((Routine_Name & "Command found: '" &
-                        To_String (Command_Table (TP).Name) & "'"));
+--              Put_Line ((Routine_Name & "Command found: '" &
+--                          To_String (Command_Table (TP).Name) & "'"));
             Command := Command_Table (TP);
-            Put_Line ((Routine_Name & "Command found: '" &
-                        To_String (Command.Name) & "'"));
+--              Put_Line ((Routine_Name & "Command found: '" &
+--                          To_String (Command.Name) & "'"));
             Match_Index := TP;
             Match_Length := Length (Command.Name);
          end if;
       end loop;
 
       if not Found then
-         Put_Line ((Routine_Name & "Command not found: " & In_Command));
+--           Put_Line ((Routine_Name & "Command not found: " & In_Command));
          P := 1;
          declare
             In_Command : constant String :=
                            To_Upper (To_String (Get_Long_Command_From_Input (P)));
             CT_Name    : Unbounded_String;
          begin
-            Put_Line (Routine_Name & "long In_Command: '" & In_Command & "'");
+--              Put_Line (Routine_Name & "long In_Command: '" & In_Command & "'");
             TP := 0;
             while TP < Command_Table'Last - 1 and then not Found loop
                TP := TP + 1;
                CT_Name := Command_Table (TP).Name;
                Remove_Spaces (CT_Name);
 
-               Put_Line (Routine_Name & "CT_Name, In_Command: " &
-                         To_Upper (To_String (CT_Name)) & ", " & In_Command);
+               --                 Put_Line (Routine_Name & "CT_Name, In_Command: " &
+               --                           To_Upper (To_String (CT_Name)) & ", " & In_Command);
                Found :=
                  To_Upper (To_String (CT_Name)) = In_Command;
                if Found then
-                  Put_Line (Routine_Name & "long Command found for: '" &
-                              In_Command & "'");
-                  Put_Line (Routine_Name & "long Command found: '" &
-                              To_String (Command_Table (TP).Name) & "'");
+--                    Put_Line (Routine_Name & "long Command found for: '" &
+--                                In_Command & "'");
                   Command := Command_Table (TP);
-                  Put_Line (Routine_Name & "long Command found: '" &
-                              To_String (Command.Name) & "'");
                   Match_Index := TP;
                   Match_Length := Length (Command.Name);
+--                    Put_Line (Routine_Name & "long Command found: '" &
+--                                To_String (Command.Name) & "'");
                end if;
             end loop;
          end;
@@ -383,52 +373,47 @@ package body Parse_Functions is
                   Command := Command_Table (TP);
                   Match_Index := TP;
                   Match_Length := Length (Command.Name);
-                  Put_Line ((Routine_Name & "longer Command found: " &
-                              To_String (Command.Name)));
+--                    Put_Line ((Routine_Name & "longer Command found: " &
+--                                To_String (Command.Name)));
                end if;
             end if;
          end loop;
-         Put_Line ((Routine_Name & "Command: " & To_String (Command.Name)));
+--           Put_Line (Routine_Name & "Command: " & To_String (Command.Name));
 
          TP := 0;
          while not Done and then TP < Length (Command.Name) loop
             TP2 := P;
             TP := TP + 1;
-            if not Done then
-               --  MMBasic 931
-               --  This is concered with looking for the longest match
-               --  so belongs above in the MMBasic 925 section
-               --                 if Element (Command.Name, TP) = ' ' and then
-               --                   TP2 < Input_Buffer_Length then
-               --                    Skip_In_Buffer_Spaces (TP2);
-               --                 else
-               --                    TP2 := TP2 + 1;
-               --                 end if;
-
-               --  MMBasic 937
-               if Element (Command.Name, TP) = '(' and then
-                 TP2 < Input_Buffer_Length then
-                  --  skip space between a keyword and bracket
-                  Skip_In_Buffer_Spaces (TP2);
-               end if;
+--              Put_Line (Routine_Name & "C937 character: " &
+--                          Element (Command.Name, TP));
+            --  MMBasic 937
+            if Element (Command.Name, TP) = '(' and then
+              TP2 < Input_Buffer_Length then
+--                 Put_Line ((Routine_Name & "Command.Name: " &
+--                                To_String (Command.Name)));
+               --  skip space between a keyword and bracket
+               Skip_In_Buffer_Spaces (TP2);
             end if;
+--              Put_Line (Routine_Name & "C937 character: " &
+--                          Element (Command.Name, TP));
          end loop;
          Done := TP2 >= Input_Buffer_Length;
 
-         Put_Line (Routine_Name & "942, TP2:" & Integer'Image (TP2) &
-                     ", '" & Get_Input_Character (TP2) & "'");
-         Put_Line (Routine_Name & "942,  Done: " & Boolean'Image (Done));
+--           Put_Line (Routine_Name & "942,  Done: " & Boolean'Image (Done));
          --  MMBasic 942  Also part of longest match search?
          if not Done and then
            (not Is_Name_Character (Get_Input_Character (TP2)) or else
             Command.Command_Type = T_FUN) then
-            Put_Line (Routine_Name & "check '('" );
+--              Put_Line (Routine_Name & "TP2:" & Integer'Image (TP2));
+--              Put_Line (Routine_Name & "character" &
+--                          Get_Input_Character (TP2) & "'");
+--              Put_Line (Routine_Name & "check '('" );
             Done := Element (Command.Name, TP - 1) /= '(' and
               Is_Name_Character (Get_Input_Character (TP2));
 
-            Put_Line (Routine_Name & "947,  Command.Name Length:" &
-                        Integer'Image (Length (Command.Name)));
-            Put_Line (Routine_Name & "947,  Done:" & Boolean'Image (Done));
+--              Put_Line (Routine_Name & "947,  Command.Name Length:" &
+--                          Integer'Image (Length (Command.Name)));
+--              Put_Line (Routine_Name & "947,  Done:" & Boolean'Image (Done));
             --  MMBasic 947
             if not Done and then Length (Command.Name) > Match_Length then
                Match_I_Pos := TP2;
@@ -437,9 +422,9 @@ package body Parse_Functions is
             end if;
          end if;
 
-         Put_Line (Routine_Name & "956");
-         Put_Line (Routine_Name & "P, Match_Index:" & Integer'Image (P) &
-                     ", " & Integer'Image (Match_Index));
+--           Put_Line (Routine_Name & "956");
+--           Put_Line (Routine_Name & "P, Match_Index:" & Integer'Image (P) &
+--                       ", " & Integer'Image (Match_Index));
          --  956
          if P < Input_Buffer_Length then
             if Match_Index > -1 then
