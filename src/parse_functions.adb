@@ -192,6 +192,7 @@ package body Parse_Functions is
       Done          : Boolean := False;
    begin
       if aChar = '?' then
+         --  MMBasic 914
          Match_Index := Get_Command_Value ("Print") - M_Misc.C_Base_Token;
          if Get_Input_Character (I_Pos + 1) = ' ' then
             --  eat a trailing space
@@ -200,51 +201,10 @@ package body Parse_Functions is
          end if;
 
       else
+         --  MMBasic 925
          Try_Command (Buffer, I_Pos, Label_Valid, First_Nonwhite);
       end if;
 
-      if I_Pos < Input_Buffer_Length then
-         --  857
-         if Match_Index > 0 then
-            Commands.Process_Command
-              (Buffer, Match_Index, Match_I_Pos, First_Nonwhite, Label_Valid);
-
-            --   876 test if it is a label
-         elsif Label_Valid and then
-           Is_Name_Start (Get_Input_Character (I_Pos)) then
-            --  search for the first invalid char
-            Pos2 := I_Pos;
-            Index := 0;
-            Done := False;
-
-            while not Done and then Index <= Configuration.MAXVARLEN loop
-               Index := Index + 1;
-               Pos2 := Pos2 + 1;
-               Done := not Is_Name_Character (Get_Input_Character (Pos2));
-            end loop;
-            --  Last character of name found
-
-            --  881
-            if Get_Input_Character (Pos2) = ':' then
-               --  is label
-               Label_Valid := False;
-               Buffer_Append (Buffer, Global.T_LABEL);
-
-               --  insert the length of the label
-               Buffer_Append (Buffer, Integer'Image (Pos2 - I_Pos));
-
-               --  copy the label
-               for pos3 in reverse 1 .. Pos2 - I_Pos loop
-                  Append (Label, Get_Input_Character (I_Pos));
-                  I_Pos := I_Pos + 1;
-               end loop;
-
-               Buffer_Append (Buffer, To_String (Label));
-               --  step over the terminating colon
-               I_Pos := I_Pos + 1;
-            end if;
-         end if;
-      end if;
 
    end Process_First_Nonwhite;
 
