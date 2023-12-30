@@ -973,8 +973,8 @@ package body M_Basic is
          end if;
       end if;
 
-      Put_Line (Routine_Name & "824 In_Buffer: " & Get_Input_Buffer);
-      --  824 Process the rest of the line
+      Put_Line (Routine_Name & "834 In_Buffer: " & Get_Input_Buffer);
+      --  834 Process the rest of the line
       if Input_Buffer_Length > In_Ptr then
          Parse_Line (Buffer, In_Ptr);
       end if;

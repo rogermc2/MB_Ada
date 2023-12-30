@@ -6,7 +6,7 @@ with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Ada.Text_IO; use Ada.Text_IO;
 
 with Command_And_Token_Functions;
-with Commands;
+--  with Commands;
 with Configuration;
 with Global;
 with M_Basic; use M_Basic;
@@ -104,8 +104,7 @@ package body Parse_Functions is
    end Get_Next_Character;
 
    procedure Process_Colon
-     (Buffer           : in out String_Buffer; I_Pos : in out Positive;
-      First_Nonwhite   : in out Boolean) is
+     (Buffer : in out String_Buffer; I_Pos : in out Positive) is
       use Support;
    begin
       Buffer_Append (Buffer, "0");
@@ -114,8 +113,6 @@ package body Parse_Functions is
          Buffer_Append (Buffer, "0");
          I_Pos := I_Pos + 1;
       end loop;
-
-      First_Nonwhite := True;
 
    end Process_Colon;
 
@@ -154,9 +151,9 @@ package body Parse_Functions is
    end Process_Command;
 
    procedure Process_Double_Quote
-     (Buffer : in out String_Buffer; I_Pos : in out Positive;
-      aChar  : Character) is
+     (Buffer : in out String_Buffer; I_Pos : in out Positive) is
       use Support;
+      aChar  : Character := ' ';
    begin
       while aChar /= '"' and I_Pos <= Input_Buffer_Length loop
          I_Pos := I_Pos + 1;
@@ -204,7 +201,6 @@ package body Parse_Functions is
          --  MMBasic 925
          Try_Command (Buffer, I_Pos, Label_Valid, First_Nonwhite);
       end if;
-
 
    end Process_First_Nonwhite;
 
@@ -571,8 +567,7 @@ package body Parse_Functions is
    end Try_Function_Or_Keyword;
 
    procedure Try_Number
-     (Buffer         : out String_Buffer; I_Pos : in out Positive;
-      First_Nonwhite : in out Boolean) is
+     (Buffer : out String_Buffer; I_Pos : in out Positive) is
       use Ada.Characters.Handling;
       --        Routine_Name : constant String := "Parse_Functions.Try_Number ";
       aChar        : Character := Get_Input_Character (I_Pos);
@@ -603,10 +598,6 @@ package body Parse_Functions is
          end loop;
 
          Support.Buffer_Append (Buffer, To_String (Number));
-         First_Nonwhite := False;
-
-      elsif First_Nonwhite then
-         null;
       end if;
 
    end Try_Number;

@@ -5,11 +5,9 @@ package Parse_Functions is
 
    function Get_Command_Value (Command : String) return Integer;
    procedure Process_Colon
-     (Buffer         : in out String_Buffer; I_Pos : in out Positive;
-      First_Nonwhite : in out Boolean);
+     (Buffer : in out String_Buffer; I_Pos : in out Positive);
    procedure Process_Double_Quote
-     (Buffer : in out String_Buffer; I_Pos  : in out Positive;
-      aChar  : Character);
+     (Buffer : in out String_Buffer; I_Pos  : in out Positive);
    procedure Process_Name_Start (Buffer : in out String_Buffer;
                                  I_Pos  : in out Positive);
    procedure Process_First_Nonwhite
@@ -24,7 +22,6 @@ package Parse_Functions is
      (Buffer         : out String_Buffer; I_Pos : in out Positive;
       First_Nonwhite : in out Boolean) return Boolean;
    procedure Try_Number
-     (Buffer         : out String_Buffer; I_Pos : in out Positive;
-      First_Nonwhite : in out Boolean);
+     (Buffer : out String_Buffer; I_Pos : in out Positive);
 
 end Parse_Functions;
