@@ -129,25 +129,27 @@ package body Parse_Functions is
    begin
       --  MMBasic 957
       if Match_Index > -1 then
-         Put_Line (Routine_Name & "957");
          Buffer_Append (Buffer, Integer'Image
                         (M_Misc.C_Base_Token + Match_Index));
          --  Step over the input buffer command.
          I_Pos := Match_I_Pos;
 
+         Put_Line (Routine_Name & "I_Pos" & Integer'Image (I_Pos));
+         Put_Line (Routine_Name & "Input_Character (I_Pos): " &
+                     Get_Input_Character (I_Pos));
          if Match_Index + M_Misc.C_Base_Token =
            Get_Command_Value ("Rem") then
             --  MMBasic 962 copy everything
             Copy_Slice (Buffer, I_Pos, Input_Buffer_Length);
+
+         elsif Is_Alphanumeric (Get_Input_Character (I_Pos - 1)) and then
+           Get_Input_Character (I_Pos) = ' ' then
+            I_Pos := I_Pos + 1;
          end if;
 
-      elsif Is_Alphanumeric (Get_Input_Character (I_Pos - 1)) and then
-        Get_Input_Character (I_Pos) = ' ' then
-         I_Pos := I_Pos + 1;
+         First_Nonwhite := False;
+         Label_Valid := False;
       end if;
-
-      First_Nonwhite := False;
-      Label_Valid := False;
 
    end Process_Command;
 
@@ -297,7 +299,7 @@ package body Parse_Functions is
       TP            : Natural := 0;      --  tp  command table index
       Match_Index   : Integer := -1;
       Match_Length  : Integer := -1;
-      Match_I_Pos   : Positive;
+      Match_I_Pos   : Integer := -1;
       Index         : Natural := 0;
       Found         : Boolean := False;
       Done          : Boolean := False;
@@ -326,6 +328,7 @@ package body Parse_Functions is
                end if;
             end if;
 
+            Match_I_Pos := TP2;
             Match_Index := TP;
             Match_Length := Length (Command.Name);
          end if;
@@ -363,6 +366,7 @@ package body Parse_Functions is
                         Skip_In_Buffer_Spaces (TP2);
                      end if;
                   end if;
+                  Match_I_Pos := TP2;
                   Match_Index := TP;
                   Match_Length := Length (Command.Name);
                   --                    Put_Line (Routine_Name & "long Command found: '" &
@@ -376,7 +380,8 @@ package body Parse_Functions is
          Put_Line ((Routine_Name & "invalid Command: " & In_Command));
 
       elsif not Done then
-         --           Put_Line (Routine_Name & "Command: " & To_String (Command.Name));
+         --           Put_Line (Routine_Name & "command found Match_I_Pos" &
+         --                       Integer'Image (Match_I_Pos));
          Done := TP2 >= Input_Buffer_Length;
 
          --           Put_Line (Routine_Name & "942,  Done: " & Boolean'Image (Done));
@@ -408,6 +413,9 @@ package body Parse_Functions is
          --  956
          if P < Input_Buffer_Length then
             if Match_Index > -1 then
+               --                 Put_Line (Routine_Name & "Match_Index, Match_I_Pos" &
+               --                             Integer'Image (Match_Index) & ", " &
+               --                             Integer'Image (Match_I_Pos));
                --  Match found
                Put_Line (Routine_Name & "Process_Command");
                --  process rest of command line
@@ -548,14 +556,17 @@ package body Parse_Functions is
       use Ada.Characters.Handling;
       use Command_And_Token_Functions;
       use Support;
-      Index  : Natural := 0;
-      I_Char : Character;
-      I_Pos2 : Positive;
-      T_Pos  : Positive;
-      Name   : Unbounded_String;
-      Done   : Boolean;
-      Found  : Boolean := False;
+      Routine_Name  : constant String :=
+                        "Parse_Functions.Try_Function_Or_Keyword ";
+      Index         : Natural := 0;
+      I_Char        : Character;
+      I_Pos2        : Positive;
+      T_Pos         : Positive;
+      Name          : Unbounded_String;
+      Done          : Boolean;
+      Found         : Boolean := False;
    begin
+      Put_Line (Routine_Name);
       while Index <= Token_Table'Last loop
          Index := Index + 1;
          I_Pos2 := I_Pos;
@@ -563,6 +574,7 @@ package body Parse_Functions is
          T_Pos := 1;
          I_Char := Get_Input_Character (I_Pos);
          Done := False;
+         Put_Line (Routine_Name & "900");
          --  900
          while not Done and then
            To_Upper (I_Char) = To_Upper (Element (Name, T_Pos)) loop
@@ -577,6 +589,7 @@ package body Parse_Functions is
               not Is_Name_Character (Get_Input_Character (I_Pos2));
          end loop;
 
+         Put_Line (Routine_Name & "911");
          --  911
          Found := Index /= Token_Table'Last;
          if Found then
@@ -585,9 +598,11 @@ package body Parse_Functions is
             I_Pos := I_Pos2;
          end if;
 
+         Put_Line (Routine_Name & "921");
          --  921
          First_Nonwhite := Index = tokenTHEN or else Index = tokenELSE;
       end loop;
+      Put_Line (Routine_Name & "done");
 
       return Found;
 
