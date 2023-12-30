@@ -53,9 +53,9 @@ package body Parse_Functions is
       Found         : Boolean := False;
       index         : Natural := 0;
    begin
-      while not Found and then index in Command_Table'Range loop
+      while not Found and then index <= Command_Table'Length loop
          index := index + 1;
-         Found := Command_Table (index).Name = Command;
+         Found := To_String (Command_Table (index).Name) = Command;
       end loop;
 
       if Found then
@@ -134,6 +134,7 @@ package body Parse_Functions is
                         (M_Misc.C_Base_Token + Match_Index));
          --  Step over the input buffer command.
          I_Pos := Match_I_Pos;
+
          if Match_Index + M_Misc.C_Base_Token =
            Get_Command_Value ("Rem") then
             --  MMBasic 962 copy everything
