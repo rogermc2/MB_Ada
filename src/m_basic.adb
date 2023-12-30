@@ -325,7 +325,7 @@ package body M_Basic is
          --  194
          Skip_Spaces (Buffer.First_Element, Program_Ptr);
          Put_Line (Routine_Name & "Buffer.Last_Index: " &
-                  Integer'Image (Positive (Buffer.Last_Index)));
+                     Integer'Image (Positive (Buffer.Last_Index)));
          while not Done and then Program_Ptr <= Positive (Buffer.Last_Index) loop
             if Buffer (Program_Ptr) = "0" then
                Program_Ptr := Program_Ptr + 1;
@@ -502,54 +502,70 @@ package body M_Basic is
 
    end Is_Name_Start;
 
-   procedure Parse_Line (Buffer : out String_Buffer; Pos : Positive) is
+   procedure Parse_Line (Buffer : out String_Buffer; Match_Index : Positive) is
       use Ada.Characters.Handling;
       use Parse_Functions;
       --                  Routine_Name   : constant String := "M_Basic.Parse_Line ";
       Buff_Length    : constant Positive := Input_Buffer_Length;
-      Ptr            : Positive := Pos;
+      Ptr            : Positive := Match_Index;
       aChar          : Character;
       First_Nonwhite : Boolean := True;
       Label_Valid    : Boolean := True;
+      Done           : Boolean := False;
    begin
       --  826
       while Ptr < Buff_Length loop
          aChar := Get_Input_Character (Ptr);
          --           Put_Line (Routine_Name & "Ptr: " & Integer'Image (Ptr) &
          --                    ", aChar: " & aChar);
+         Done := False;
+         --  839
          if aChar = ' ' then
             Ptr := Ptr + 1;
-            --  836
+            Done := True;
          elsif aChar = '"' then
+            --  848
             Process_Double_Quote (Buffer, Ptr, aChar);
-            --  850  copy anything after a comment
+            Done := True;
          elsif aChar = ''' then
+            --  862  copy anything after a comment
             Process_Quote (Buffer, Ptr);
-            --  860
+            Done := True;
          elsif aChar = ':' then
+            --  871
             Process_Colon (Buffer, Ptr, First_Nonwhite);
-            --  875
+            Done := True;
          elsif Is_Digit (aChar) or aChar = '.' then
+            --  887
             --  not white space or string or comment so try a number
             Try_Number (Buffer, Ptr, First_Nonwhite);
-            --  895
+            Done := True;
          elsif First_Nonwhite then
+            --  907
             Process_First_Nonwhite (Buffer, Ptr, Label_Valid, First_Nonwhite);
-            --  985 not First_Nonwhite
-         elsif Try_Function_Or_Keyword (Buffer, Ptr, First_Nonwhite) then
+         else  -- Process not First_Nonwhite
             null;
-         elsif Is_Name_Start (Get_Input_Character (Ptr)) then
-            --  934
-            Process_Variable_Name (Buffer, Ptr, First_Nonwhite, Label_Valid);
-         elsif Get_Input_Character (Ptr) = '(' then
-            --  953 special case where the character to copy is an
-            --  opening parenthesis.
-            --  Search back to see if the previous non space char was the end
-            --  of an identifier.
-            --  If it is, remove any spaces following the identifier to enable
-            --  programmers to put spaces after function names or
-            --  array identifiers without causing confusing errors.
-            null;
+         end if;
+
+         if not Done then
+            if Match_Index > -1 then
+               null;
+               Done := True;
+            elsif Try_Function_Or_Keyword (Buffer, Ptr, First_Nonwhite) then
+               null;  --  ???
+            elsif Label_Valid and then Is_Name_Start (Get_Input_Character (Ptr)) then
+               --  978
+               Process_Variable_Name (Buffer, Ptr, First_Nonwhite, Label_Valid);
+            elsif Get_Input_Character (Ptr) = '(' then
+               --  953 special case where the character to copy is an
+               --  opening parenthesis.
+               --  Search back to see if the previous non space char was the end
+               --  of an identifier.
+               --  If it is, remove any spaces following the identifier to enable
+               --  programmers to put spaces after function names or
+               --  array identifiers without causing confusing errors.
+               null;
+            end if;
          end if;
 
       end loop;
@@ -711,7 +727,7 @@ package body M_Basic is
    end Prepare_Program;
 
    procedure Remove_Spaces (Buffer : in out Unbounded_String) is
---        Routine_Name : constant String := "M_Basic.Remove_Spaces ";
+      --        Routine_Name : constant String := "M_Basic.Remove_Spaces ";
       Pos     : Natural := 0;
       Updated : Unbounded_String;
    begin
@@ -724,7 +740,7 @@ package body M_Basic is
 
       Buffer :=  Updated;
 
-     end Remove_Spaces;
+   end Remove_Spaces;
 
    procedure Save_Program_To_Flash (Buffer: String; Msg : Boolean) is
    begin

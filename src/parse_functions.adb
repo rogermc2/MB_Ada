@@ -575,6 +575,8 @@ package body Parse_Functions is
          I_Char := Get_Input_Character (I_Pos);
          Done := False;
          Put_Line (Routine_Name & "900");
+         Put_Line (Routine_Name & "Element (Name, T_Pos): " &
+                  Element (Name, T_Pos));
          --  900
          while not Done and then
            To_Upper (I_Char) = To_Upper (Element (Name, T_Pos)) loop
@@ -593,7 +595,7 @@ package body Parse_Functions is
          --  911
          Found := Index /= Token_Table'Last;
          if Found then
-            Index := Index + M_Misc.C_Base_Token;
+--              Index := Index + M_Misc.C_Base_Token;
             Buffer_Append (Buffer, To_String (Token_Table (Index).Name));
             I_Pos := I_Pos2;
          end if;
