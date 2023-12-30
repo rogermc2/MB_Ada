@@ -503,8 +503,7 @@ package body M_Basic is
    end Is_Name_Start;
 
    procedure Parse_Line (Buffer : out String_Buffer; Match_Index : Positive) is
-      use Ada.Characters.Handling;
-      use Parse_Functions;
+        use Parse_Functions;
       --                  Routine_Name   : constant String := "M_Basic.Parse_Line ";
       Buff_Length    : constant Positive := Input_Buffer_Length;
       Ptr            : Positive := Match_Index;
@@ -519,82 +518,14 @@ package body M_Basic is
          --           Put_Line (Routine_Name & "Ptr: " & Integer'Image (Ptr) &
          --                    ", aChar: " & aChar);
          Done := False;
-         --  839
-         if aChar = ' ' then
-            Ptr := Ptr + 1;
-            Done := True;
-         elsif aChar = '"' then
-            --  848
-            Process_Double_Quote (Buffer, Ptr, aChar);
-            Done := True;
-         elsif aChar = ''' then
-            --  862  copy anything after a comment
-            Process_Quote (Buffer, Ptr);
-            Done := True;
-         elsif aChar = ':' then
-            --  871
-            Process_Colon (Buffer, Ptr, First_Nonwhite);
-            Done := True;
-         elsif Is_Digit (aChar) or aChar = '.' then
-            --  887
-            --  not white space or string or comment so try a number
-            Try_Number (Buffer, Ptr, First_Nonwhite);
-            Done := True;
-         elsif First_Nonwhite then
-            --  907
-            Process_First_Nonwhite (Buffer, Ptr, Label_Valid, First_Nonwhite);
-         else  -- Process not First_Nonwhite
-            --  925
-            null;
-         end if;
-
          if not Done then
             --  957
             if Match_Index > -1 then
                null;
                Done := True;
---              if I_Pos < Input_Buffer_Length then
---                 --  857
---                 if Match_Index > 0 then
---                    Commands.Process_Command
---                      (Buffer, Match_Index, Match_I_Pos, First_Nonwhite, Label_Valid);
---
---                    --   876 test if it is a label
---                 elsif Label_Valid and then
---                   Is_Name_Start (Get_Input_Character (I_Pos)) then
---                    --  search for the first invalid char
---                    Pos2 := I_Pos;
---                    Index := 0;
---                    Done := False;
---
---                    while not Done and then Index <= Configuration.MAXVARLEN loop
---                       Index := Index + 1;
---                       Pos2 := Pos2 + 1;
---                       Done := not Is_Name_Character (Get_Input_Character (Pos2));
---                    end loop;
---                    --  Last character of name found
---
---                    --  881
---                    if Get_Input_Character (Pos2) = ':' then
---                       --  is label
---                       Label_Valid := False;
---                       Buffer_Append (Buffer, Global.T_LABEL);
---
---                       --  insert the length of the label
---                       Buffer_Append (Buffer, Integer'Image (Pos2 - I_Pos));
---
---                       --  copy the label
---                       for pos3 in reverse 1 .. Pos2 - I_Pos loop
---                          Append (Label, Get_Input_Character (I_Pos));
---                          I_Pos := I_Pos + 1;
---                       end loop;
---
---                       Buffer_Append (Buffer, To_String (Label));
---                       --  step over the terminating colon
---                       I_Pos := I_Pos + 1;
---                    end if;
---                 end if;
---              end if;
+               --
+               --  ---------------------------
+            --  996
             elsif Try_Function_Or_Keyword (Buffer, Ptr, First_Nonwhite) then
                null;  --  ???
             elsif Label_Valid and then Is_Name_Start (Get_Input_Character (Ptr)) then
@@ -900,85 +831,6 @@ package body M_Basic is
 
    end Skip_Var;
 
-   function Token_Function (Index : Positive) return Access_Procedure is
 
-   begin
-      if Index >= M_Misc.C_Base_Token and then
-        Index < Token_Table'Length then
-         return Token_Table (Index - M_Misc.C_Base_Token + 1).Function_Ptr;
-      else
-         return Token_Table (Token_Table'First).Function_Ptr;
-      end if;
-
-   end Token_Function;
-
-   procedure Tokenize (Buffer : out String_Buffer; From_Console : Boolean) is
-      use Interfaces;
-      use Ada.Characters.Handling;
-      use Ada.Strings;
-      use Support;
-      Routine_Name   : constant String := "M_Basic.Tokenize ";
-      String1        : String (1 .. 1);
-      In_Ptr         : Positive := 1;
-      aChar          : Character;
-      Line_Num       : Unsigned_64 := 0;
-      Index2         : Natural := 0;
-      OK             : Boolean := True;
-   begin
-      --  786 make sure that only printable characters are in the line
-      for index in 1 .. Input_Buffer_Length loop
-         aChar := Get_Input_Character (index);
-         if Character'Pos (aChar) < 32 or Character'Pos (aChar) > 127 then
-            Replace_In_Buffer_Character (index, ' ');
-         end if;
-      end loop;
-
-      Support.Clear_Buffer (Buffer);
-      --  798
-      if not From_Console then
-         Buffer_Append (Buffer, Global.T_NEWLINE);
-      end if;
-      Trim_Input_Buffer (Left);
-
-      --  806 if it is a digit and not an 8 digit hex number
-      --  (ie, it is CFUNCTION data) then try for a line number
-      if Input_Buffer_Length >= 8 then
-         while OK and then Index2 < 8 loop
-            Index2 := Index2 + 1;
-            OK := OK and then
-              Is_Hexadecimal_Digit (Get_Input_Character (Index2));
-         end loop;
-      end if;
-
-      --  809
-      if Is_Digit (Get_Input_Character (In_Ptr)) and Index2 < 8 then
-         while In_Ptr < Input_Buffer_Length and then
-           Is_Digit (Get_Input_Character (In_Ptr)) loop
-            In_Ptr := In_Ptr + 1;
-         end loop;
-         --  In_Ptr points to the character after the number unless
-         --  Input_Buffer_Length = 1
-         if In_Ptr = 1 then
-            String1(1) := Get_Input_Character (1);
-            Line_Num := Unsigned_64'Value (String1);
-         else
-            Line_Num := Unsigned_64'Value (Get_Input_Slice (1, In_Ptr - 1));
-         end if;
-
-         if not From_Console and Line_Num > 1 and
-           Line_Num <= Unsigned_64 (MAXLINENBR) then
-            Buffer_Append (Buffer, Global.T_LINENBR);
-            Buffer_Append (Buffer, Unsigned_64'Image (Shift_Right (Line_Num, 8)));
-            Buffer_Append (Buffer, Unsigned_64'Image (Line_Num and 16#FF#));
-         end if;
-      end if;
-
-      Put_Line (Routine_Name & "834 In_Buffer: " & Get_Input_Buffer);
-      --  834 Process the rest of the line
-      if Input_Buffer_Length > In_Ptr then
-         Parse_Line (Buffer, In_Ptr);
-      end if;
-
-   end Tokenize;
 
 end M_Basic;
