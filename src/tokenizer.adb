@@ -8,6 +8,7 @@ with Ada.Text_IO; use Ada.Text_IO;
 --  with Command_And_Token_Functions; use Command_And_Token_Functions;
 --  with Configuration;
 with Global;
+with M_Basic;
 with Parse_Functions;
 with Support;
 
@@ -69,6 +70,9 @@ package body Tokenizer is
       aChar          : Character;
       First_Nonwhite : Boolean := True;
       Label_Valid    : Boolean := True;
+      Match_I        : Integer := -1;
+      Match_L        : Integer := -1;
+      Match_P        : Integer := -1;
       Done           : Boolean;
    begin
       while Ptr < Input_Buffer_Length loop
@@ -97,8 +101,19 @@ package body Tokenizer is
             First_Nonwhite := False;
             Done := True;
          elsif First_Nonwhite then
-            --  MMBasic  907
-            Process_First_Nonwhite (Buffer, Ptr, Label_Valid, First_Nonwhite);
+            --  MMBasic  907 - 958
+            Process_First_Nonwhite (Buffer, Ptr, Label_Valid, First_Nonwhite,
+                                    Match_I, Match_L, Match_P);
+            if Match_I > -1 then
+               Process_Command (Buffer, Match_I, Match_P);
+               First_Nonwhite := False;
+               Label_Valid := False;
+               Done := True;
+            end if;
+
+         elsif Label_Valid and then
+           M_Basic.Is_Name_Start (Get_Input_Character (Ptr)) then
+            null;
          end if;
 
       end loop;

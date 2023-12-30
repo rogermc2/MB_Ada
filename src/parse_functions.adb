@@ -176,13 +176,12 @@ package body Parse_Functions is
 
    procedure Process_First_Nonwhite
      (Buffer      : out String_Buffer; I_Pos : in out Positive;
-      Label_Valid : in out Boolean; First_Nonwhite : in out Boolean) is
+      Label_Valid : in out Boolean; First_Nonwhite : in out Boolean;
+      Match_I, Match_L, Match_P : in out Integer) is
       use Support;
       --        Routine_Name  : constant String :=
       --                          "Parse_Functions.Process_First_Nonwhite ";
       aChar         : constant Character := Get_Input_Character (I_Pos);
-      Match_Index   : Natural := 0;
-      Match_I_Pos   : Positive;
       Label         : Unbounded_String;
       Pos2          : Positive;
       Index         : Natural := 0;
@@ -190,11 +189,11 @@ package body Parse_Functions is
    begin
       if aChar = '?' then
          --  MMBasic 914
-         Match_Index := Get_Command_Value ("Print") - M_Misc.C_Base_Token;
+         Match_I := Get_Command_Value ("Print") - M_Misc.C_Base_Token;
          if Get_Input_Character (I_Pos + 1) = ' ' then
             --  eat a trailing space
             I_Pos := I_Pos + 1;
-            Match_I_Pos := I_Pos;
+            Match_P := I_Pos;
          end if;
 
       else
