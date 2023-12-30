@@ -55,13 +55,15 @@ package Command_And_Token_Tables is
       Function_Ptr : Access_Procedure := Null;
    end record;
 
-   Num_Commands  : constant Positive := 45;
-   Num_Functions : constant Positive := 118;
-   Num_Tokens    : constant Positive := 9;
-   Num_Operators : constant Positive := 19;
+   Num_Commands          : constant Positive := 53;
+   Num_Function_Commands : constant Positive := 45;
+   Num_Functions         : constant Positive := 118;
+   Num_Tokens            : constant Positive := 9;
+   Num_Operators         : constant Positive := 19;
 
    Command_Table_Size : constant Positive :=
-                          Num_Functions + Num_Commands + Num_Operators + 1;
+                          Num_Functions + Num_Commands + Num_Function_Commands
+                            + Num_Operators + 1;
    Token_Table_Size   : constant Positive :=
                           Num_Functions + Num_Commands + Num_Operators + 1;
 
@@ -128,6 +130,44 @@ package Command_And_Token_Tables is
    cmd_watchdog       : constant Access_Procedure :=  Null;
    cmd_cpu            : constant Access_Procedure :=  Null;
    cmd_cfunction      : constant Access_Procedure :=  Null;
+
+   cmd_clear          : constant Access_Procedure :=  Null;
+   cmd_continue       : constant Access_Procedure :=  Null;
+   cmd_dim            : constant Access_Procedure :=  Null;
+   cmd_do             : constant Access_Procedure :=  Null;
+   cmd_else           : constant Access_Procedure :=  Null;
+   cmd_end            : constant Access_Procedure :=  Null;
+   cmd_endfun         : constant Access_Procedure :=  Null;
+   cmd_endsub         : constant Access_Procedure :=  Null;
+   cmd_erase          : constant Access_Procedure :=  Null;
+   cmd_error          : constant Access_Procedure :=  Null;
+   cmd_exit           : constant Access_Procedure :=  Null;
+   cmd_exitfor        : constant Access_Procedure :=  Null;
+   cmd_for            : constant Access_Procedure :=  Null;
+   cmd_subfun         : constant Access_Procedure :=  Null;
+   cmd_gosub          : constant Access_Procedure :=  Null;
+   cmd_goto           : constant Access_Procedure :=  Null;
+   cmd_if             : constant Access_Procedure :=  Null;
+   cmd_input          : constant Access_Procedure :=  Null;
+   cmd_let            : constant Access_Procedure :=  Null;
+   cmd_lineinput      : constant Access_Procedure :=  Null;
+   cmd_list           : constant Access_Procedure :=  Null;
+   cmd_loop           : constant Access_Procedure :=  Null;
+   cmd_new            : constant Access_Procedure :=  Null;
+   cmd_next           : constant Access_Procedure :=  Null;
+   cmd_on             : constant Access_Procedure :=  Null;
+   cmd_print          : constant Access_Procedure :=  Null;
+   cmd_randomize      : constant Access_Procedure :=  Null;
+   cmd_read           : constant Access_Procedure :=  Null;
+   cmd_restore        : constant Access_Procedure :=  Null;
+   cmd_return         : constant Access_Procedure :=  Null;
+   cmd_run            : constant Access_Procedure :=  Null;
+   cmd_troff          : constant Access_Procedure :=  Null;
+   cmd_tron           : constant Access_Procedure :=  Null;
+   cmd_trace          : constant Access_Procedure :=  Null;
+   cmd_const          : constant Access_Procedure :=  Null;
+   cmd_select         : constant Access_Procedure :=  Null;
+   cmd_case           : constant Access_Procedure :=  Null;
 
    function Get_Input_Buffer return String;
    function Get_Input_Character (Pos : Positive) return Character;
