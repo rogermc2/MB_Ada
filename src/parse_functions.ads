@@ -6,14 +6,17 @@ package Parse_Functions is
    function Get_Command_Value (Command : String) return Integer;
    procedure Process_Colon
      (Buffer : in out String_Buffer; I_Pos : in out Positive);
+   procedure Process_Command
+     (Buffer      : out String_Buffer; I_Pos : in out Positive;
+      Match_I_Pos : Positive; Match_Index : Integer);
    procedure Process_Double_Quote
      (Buffer : in out String_Buffer; I_Pos  : in out Positive);
    procedure Process_Name_Start (Buffer : in out String_Buffer;
                                  I_Pos  : in out Positive);
    procedure Process_First_Nonwhite
-     (Buffer      : out String_Buffer; I_Pos  : in out Positive;
-      Label_Valid : in out Boolean; First_Nonwhite : in out Boolean;
-     Match_I, Match_L, Match_P : in out Integer);
+     (Buffer                    : out String_Buffer; I_Pos  : in out Positive;
+      Label_Valid               : in out Boolean; First_Nonwhite : in out Boolean;
+      Match_I, Match_L, Match_P : in out Integer);
    procedure Process_Quote (Buffer : in out String_Buffer;
                             I_Pos  : in out Positive);
    procedure Process_Variable_Name

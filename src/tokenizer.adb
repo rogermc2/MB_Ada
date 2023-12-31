@@ -5,11 +5,11 @@ with Ada.Strings;
 --  with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Ada.Text_IO; use Ada.Text_IO;
 
-with Command_And_Token_Functions; use Command_And_Token_Functions;
+--  with Command_And_Token_Functions; use Command_And_Token_Functions;
 --  with Configuration;
 with Global;
 with M_Basic;
-with M_Misc;
+--  with M_Misc;
 with Parse_Functions;
 with Support;
 
@@ -17,17 +17,17 @@ package body Tokenizer is
 
    MAXLINENBR       : constant integer := 65001;
 
-   function Get_Token_Function (Index : Positive) return Access_Procedure is
+   --     function Get_Token_Function (Index : Positive) return Access_Procedure is
 
-   begin
-      if Index >= M_Misc.C_Base_Token and then
-        Index < Token_Table'Length then
-         return Token_Table (Index - M_Misc.C_Base_Token + 1).Function_Ptr;
-      else
-         return Token_Table (Token_Table'First).Function_Ptr;
-      end if;
-
-   end Get_Token_Function;
+   --     begin
+   --        if Index >= M_Misc.C_Base_Token and then
+   --          Index < Token_Table'Length then
+   --           return Token_Table (Index - M_Misc.C_Base_Token + 1).Function_Ptr;
+   --        else
+   --           return Token_Table (Token_Table'First).Function_Ptr;
+   --        end if;
+   --
+   --     end Get_Token_Function;
 
    procedure Less_Than_8_Digits
      (Buffer       : in out String_Buffer; In_Ptr : in out Positive;
@@ -79,7 +79,8 @@ package body Tokenizer is
    procedure Parse_Line (Buffer : out String_Buffer; Ptr : in out Positive) is
       use Ada.Characters.Handling;
       use Parse_Functions;
---        Routine_Name   : constant String := "Tokenizer.Parse_Line ";
+      --        Routine_Name   : constant String := "Tokenizer.Parse_Line ";
+      String1        : String (1 .. 1);
       aChar          : Character;
       First_Nonwhite : Boolean := True;
       Label_Valid    : Boolean := True;
@@ -119,15 +120,25 @@ package body Tokenizer is
                                     Match_I, Match_L, Match_P);
             --  MMBasic  958
             if Match_I > -1 then
-               Process_Command (Buffer, Match_I, Match_P);
+               Process_Command (Buffer, Ptr, Match_I, Match_P);
                First_Nonwhite := False;
                Label_Valid := False;
                Done := True;
             end if;
 
+            --  MMBasic  976
          elsif Label_Valid and then
            M_Basic.Is_Name_Start (Get_Input_Character (Ptr)) then
             null;
+         elsif M_Basic.Is_Name_Start (Get_Input_Character (Ptr)) then
+            null;
+         elsif aChar = '(' then
+            null;
+         else
+            String1 (1) := aChar;
+            Support.Buffer_Append (Buffer, String1);
+            Label_Valid := False;
+            First_Nonwhite := False;
          end if;
 
       end loop;

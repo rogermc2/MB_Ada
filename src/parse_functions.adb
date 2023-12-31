@@ -15,10 +15,6 @@ with Support;
 
 package body Parse_Functions is
 
-   procedure Process_Command
-     (Buffer         : out String_Buffer; I_Pos : in out Positive;
-      Match_I_Pos    : Positive; Match_Index : Integer;
-      First_Nonwhite : in out Boolean; Label_Valid : in out Boolean);
    procedure Try_Command
      (Buffer      : out String_Buffer; P : in out Positive;
       Label_Valid : in out Boolean; First_Nonwhite   : in out Boolean);
@@ -117,35 +113,29 @@ package body Parse_Functions is
    end Process_Colon;
 
    procedure Process_Command
-     (Buffer         : out String_Buffer; I_Pos : in out Positive;
-      Match_I_Pos    : Positive; Match_Index : Integer;
-      First_Nonwhite : in out Boolean; Label_Valid : in out Boolean) is
+     (Buffer      : out String_Buffer; I_Pos : in out Positive;
+      Match_I_Pos : Positive; Match_Index : Integer) is
       Routine_Name  : constant String := "Parse_Functions.Process_Command ";
       use Ada.Characters.Handling;
       use Support;
    begin
       --  MMBasic 957
-      if Match_Index > -1 then
-         Buffer_Append (Buffer, Integer'Image
-                        (M_Misc.C_Base_Token + Match_Index));
-         --  Step over the input buffer command.
-         I_Pos := Match_I_Pos;
+      Buffer_Append (Buffer, Integer'Image
+                     (M_Misc.C_Base_Token + Match_Index));
+      --  Step over the input buffer command.
+      I_Pos := Match_I_Pos;
 
-         Put_Line (Routine_Name & "I_Pos" & Integer'Image (I_Pos));
-         Put_Line (Routine_Name & "Input_Character (I_Pos): " &
-                     Get_Input_Character (I_Pos));
-         if Match_Index + M_Misc.C_Base_Token =
-           Get_Command_Value ("Rem") then
-            --  MMBasic 962 copy everything
-            Copy_Slice (Buffer, I_Pos, Input_Buffer_Length);
+      Put_Line (Routine_Name & "I_Pos" & Integer'Image (I_Pos));
+      Put_Line (Routine_Name & "Input_Character (I_Pos): " &
+                  Get_Input_Character (I_Pos));
+      if Match_Index + M_Misc.C_Base_Token =
+        Get_Command_Value ("Rem") then
+         --  MMBasic 962 copy everything
+         Copy_Slice (Buffer, I_Pos, Input_Buffer_Length);
 
-         elsif Is_Alphanumeric (Get_Input_Character (I_Pos - 1)) and then
-           Get_Input_Character (I_Pos) = ' ' then
-            I_Pos := I_Pos + 1;
-         end if;
-
-         First_Nonwhite := False;
-         Label_Valid := False;
+      elsif Is_Alphanumeric (Get_Input_Character (I_Pos - 1)) and then
+        Get_Input_Character (I_Pos) = ' ' then
+         I_Pos := I_Pos + 1;
       end if;
 
    end Process_Command;
@@ -175,17 +165,13 @@ package body Parse_Functions is
    end Process_Name_Start;
 
    procedure Process_First_Nonwhite
-     (Buffer      : out String_Buffer; I_Pos : in out Positive;
-      Label_Valid : in out Boolean; First_Nonwhite : in out Boolean;
+     (Buffer                    : out String_Buffer; I_Pos : in out Positive;
+      Label_Valid               : in out Boolean;
+      First_Nonwhite            : in out Boolean;
       Match_I, Match_L, Match_P : in out Integer) is
-      use Support;
       --        Routine_Name  : constant String :=
       --                          "Parse_Functions.Process_First_Nonwhite ";
       aChar         : constant Character := Get_Input_Character (I_Pos);
-      Label         : Unbounded_String;
-      Pos2          : Positive;
-      Index         : Natural := 0;
-      Done          : Boolean := False;
    begin
       if aChar = '?' then
          --  MMBasic 914
@@ -374,8 +360,7 @@ package body Parse_Functions is
                --  Match found
                Put_Line (Routine_Name & "Process_Command");
                --  process rest of command line
-               Process_Command (Buffer, P, Match_I_Pos, Match_Index,
-                                Label_Valid, First_Nonwhite);
+               Process_Command (Buffer, P, Match_I_Pos, Match_Index);
 
                --  MMBasic 976
             elsif Label_Valid and then
@@ -531,7 +516,7 @@ package body Parse_Functions is
          Done := False;
          Put_Line (Routine_Name & "900");
          Put_Line (Routine_Name & "Element (Name, T_Pos): " &
-                  Element (Name, T_Pos));
+                     Element (Name, T_Pos));
          --  900
          while not Done and then
            To_Upper (I_Char) = To_Upper (Element (Name, T_Pos)) loop
@@ -550,7 +535,7 @@ package body Parse_Functions is
          --  911
          Found := Index /= Token_Table'Last;
          if Found then
---              Index := Index + M_Misc.C_Base_Token;
+            --              Index := Index + M_Misc.C_Base_Token;
             Buffer_Append (Buffer, To_String (Token_Table (Index).Name));
             I_Pos := I_Pos2;
          end if;
