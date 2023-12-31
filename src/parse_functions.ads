@@ -3,6 +3,7 @@ with Command_And_Token_Tables; use Command_And_Token_Tables;
 
 package Parse_Functions is
 
+   function Check_Function_Or_Keyword (P : in out Positive) return Boolean;
    function Get_Command_Value (Command : String) return Integer;
    procedure Process_Colon
      (Buffer : in out String_Buffer; I_Pos : in out Positive);

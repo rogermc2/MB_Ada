@@ -91,9 +91,12 @@ package body Tokenizer is
       while Ptr < Input_Buffer_Length loop
          Done := False;
          aChar := Get_Input_Character (Ptr);
-         Put_Line (Routine_Name & "First_Nonwhite, aChar: " &
+         Put_Line (Routine_Name & "Ptr, First_Nonwhite, aChar: " &
+                     Integer'Image (Ptr) & ", " &
                         Boolean'Image (First_Nonwhite) & ", " & aChar);
-
+         Put_Line (Routine_Name & "Input_Buffer_Length : " &
+                     Integer'Image (Input_Buffer_Length));
+         delay (1.0);
          if aChar = ' ' then
             Ptr := Ptr + 1;
             Done := True;
@@ -135,10 +138,12 @@ package body Tokenizer is
             Put_Line (Routine_Name & "Label_Valid and Name_Start: " &
                         Get_Input_Character (Ptr));
             null;
+            --  MMBasic  997
          elsif M_Basic.Is_Name_Start (Get_Input_Character (Ptr)) then
-            Put_Line (Routine_Name & "Name_Start: " &
-                        Get_Input_Character (Ptr));
-            null;
+            if Check_Function_Or_Keyword (Ptr) then
+               null;
+            end if;
+
          elsif aChar = '(' then
             null;
          else

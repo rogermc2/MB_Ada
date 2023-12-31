@@ -19,6 +19,48 @@ package body Parse_Functions is
      (Buffer      : out String_Buffer; P : in out Positive;
       Label_Valid : in out Boolean; First_Nonwhite   : in out Boolean);
 
+   function Check_Function_Or_Keyword (P : in out Positive) return Boolean is
+      use Ada.Characters.Handling;
+      TP2      : Positive := P;
+      TP_Index : Positive := 1;
+      TP       : Unbounded_String;
+      Index    : Natural := 0;
+      Char1    : Character;
+      Char2    : Character;
+      Done     : Boolean := False;
+      Result   : Boolean := False;
+   begin
+      while not Done and then Index < Token_Table'Last loop
+         Index := Index + 1;
+         TP := Token_Table (Index).Name;
+         Char1 := To_Upper (Get_Input_Character (TP2));
+         Char2 := To_Upper (Element (TP, TP_Index));
+         while Char2 = Char1 loop
+            TP2 := TP2 + 1;
+            TP_Index := TP_Index + 1;
+            Char2 := Element (TP, TP_Index);
+            if Char2 = '(' then
+               Skip_In_Buffer_Spaces (TP2);
+            else
+               Char2 := To_Upper (Char2);
+            end if;
+            Char1 := To_Upper (Get_Input_Character (TP2));
+         end loop;
+
+         Done := TP2 >= Input_Buffer_Length or else
+           (Element (TP, TP_Index) = ASCII.NUL and then
+           (not Is_Name_End (Element (TP, TP_Index - 1)) or else
+            Is_Name_Character (Get_Input_Character (TP2))));
+      end loop;
+
+      if Index < Token_Table_Size then
+         null;
+      end if;
+
+      return Result;
+
+   end Check_Function_Or_Keyword;
+
    function Get_Command_From_Input (I_Pos : in out Positive)
                                     return Unbounded_String is
       use Ada.Characters.Handling;
@@ -113,8 +155,8 @@ package body Parse_Functions is
    end Process_Colon;
 
    procedure Process_Command
-     (Buffer      : out String_Buffer; I_Pos : in out Positive;
-      Match_I_Pos : Positive; Match_Index : Integer;
+     (Buffer                      : out String_Buffer; I_Pos : in out Positive;
+      Match_I_Pos                 : Positive; Match_Index : Integer;
       First_Nonwhite, Label_Valid : in out Boolean) is
       Routine_Name  : constant String := "Parse_Functions.Process_Command ";
       use Ada.Characters.Handling;
