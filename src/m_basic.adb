@@ -9,6 +9,7 @@ with Ada.Unchecked_Conversion;
 
 with Audio;
 with C_Functions;
+with Command_And_Token_Functions; use Command_And_Token_Functions;
 with Commands;
 with Console;
 with Draw;
@@ -18,12 +19,10 @@ with Flash;
 with Global;
 with M_Misc;
 with Memory;
-with Parse_Functions;
-with Support;
 
 package body M_Basic is
 
-   Save_Local_Index   : Natural := 0;
+--     Save_Local_Index   : Natural := 0;
    --     Trace_On : Boolean := False;
 
    procedure Clear_Runtime;
@@ -502,51 +501,6 @@ package body M_Basic is
 
    end Is_Name_Start;
 
-   procedure Parse_Line (Buffer : out String_Buffer; Match_Index : Positive) is
-        use Parse_Functions;
-      --                  Routine_Name   : constant String := "M_Basic.Parse_Line ";
-      Buff_Length    : constant Positive := Input_Buffer_Length;
-      Ptr            : Positive := Match_Index;
-      aChar          : Character;
-      First_Nonwhite : Boolean := True;
-      Label_Valid    : Boolean := True;
-      Done           : Boolean := False;
-   begin
-      --  826
-      while Ptr < Buff_Length loop
-         aChar := Get_Input_Character (Ptr);
-         --           Put_Line (Routine_Name & "Ptr: " & Integer'Image (Ptr) &
-         --                    ", aChar: " & aChar);
-         Done := False;
-         if not Done then
-            --  957
-            if Match_Index > -1 then
-               null;
-               Done := True;
-               --
-               --  ---------------------------
-            --  996
-            elsif Try_Function_Or_Keyword (Buffer, Ptr, First_Nonwhite) then
-               null;  --  ???
-            elsif Label_Valid and then Is_Name_Start (Get_Input_Character (Ptr)) then
-               --  978
-               Process_Variable_Name (Buffer, Ptr, First_Nonwhite, Label_Valid);
-            elsif Get_Input_Character (Ptr) = '(' then
-               --  953 special case where the character to copy is an
-               --  opening parenthesis.
-               --  Search back to see if the previous non space char was the end
-               --  of an identifier.
-               --  If it is, remove any spaces following the identifier to enable
-               --  programmers to put spaces after function names or
-               --  array identifiers without causing confusing errors.
-               null;
-            end if;
-         end if;
-
-      end loop;
-
-   end Parse_Line;
-
    procedure Print_String (theString : String) is
    begin
       Put (theString);
@@ -830,7 +784,5 @@ package body M_Basic is
       return Pos2;
 
    end Skip_Var;
-
-
 
 end M_Basic;

@@ -24,6 +24,7 @@ with P32mx470f512h;
 with SPI_LCD;
 with SSD_1963;
 with Support; use Support;
+with Tokenizer;
 with Touch;
 with Watchdog_Timer;
 
@@ -96,7 +97,7 @@ begin
       Load_Input_Buffer (0);
       if Input_Buffer_Length > 0 then
          Put_Line (Program_Name & "Tokenize");
-         M_Basic.Tokenize (Token_Buffer, True);
+         Tokenizer.Tokenize (Token_Buffer, True);
          Put_Line (Program_Name & "Execute_Program");
 --           Put_Line (Program_Name & "Token_Buffer (1): " &
 --                       Element (Token_Buffer, 1));
