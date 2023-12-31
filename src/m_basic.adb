@@ -22,7 +22,7 @@ with Memory;
 
 package body M_Basic is
 
---     Save_Local_Index   : Natural := 0;
+   --     Save_Local_Index   : Natural := 0;
    --     Trace_On : Boolean := False;
 
    procedure Clear_Runtime;
@@ -228,13 +228,15 @@ package body M_Basic is
    end Defined_Subfunction;
 
    procedure Execute_Command (Buffer : String_Buffer; Command : Unbounded_String) is
+      use String_Buffer_Package;
       use Interfaces;
       Routine_Name       : constant String := "M_Basic.Execute_Command ";
       Command_Line       : constant String := To_String (Command);
       Next_Statement_Pos : Positive := 1;
       Command_Line_Pos   : Positive := 1;   --  p
+      Token              : Integer;
       Null_Function      : Function_Type := T_NOTYPE;
-      Command_Token      : Character;
+--        Command_Token      : Unbounded_String;
       Fa                 : Configuration.MMFLOAT := 0.0;
       I64a               : Long_Long_Integer := 0;
       Sa                 : Unbounded_String := To_Unbounded_String ("");
@@ -254,23 +256,36 @@ package body M_Basic is
         Command_Line (Command_Line_Pos) = '\';  --  ignore comment line
       if Done then
          Put_Line (Routine_Name & "No more token buffer elements");
-      end if;
-
-      while not Done loop
+      else
          if Command_Line (Command_Line_Pos) /= '0' and then
            Command_Line (Command_Line_Pos) /= ''' then
             --  239
             --              if Set_Jump (Err_Next) = 0 then
             Save_Local_Index := Local_Index;
-            if Command_Line_Pos > M_Misc.C_Base_Token and then
-              Command_Line_Pos - M_Misc.C_Base_Token < Command_Table_Size
-              and then Command_Table (Command_Line_Pos -
-                                        M_Misc.C_Base_Token).Command_Type = T_CMD then
-               Command_Token := Command_Line (Command_Line_Pos);
+            Token := Integer'Value (Element (Buffer, Command_Line_Pos));
+--              Put_Line (Routine_Name & "Token > C_Base_Token: " &
+--                          Boolean'Image (Token > M_Misc.C_Base_Token ));
+--              Put_Line
+--                (Routine_Name & "Token - C_Base_Token < Command_Table_Size: "
+--                 & Boolean'Image
+--                   (Token - M_Misc.C_Base_Token < Command_Table_Size));
+--              Put_Line
+--                (Routine_Name & "Command_Table " &
+--                "(Token - C_Base_Token).Command_Type = T_CMD: " &
+--                   Boolean'Image (Token > M_Misc.C_Base_Token ));
+
+            if Token > M_Misc.C_Base_Token and then
+              Token - M_Misc.C_Base_Token < Command_Table_Size
+              and then Command_Table
+                (Token - M_Misc.C_Base_Token).Command_Type = T_CMD
+            then
+--                 Command_Token := To_Unbounded_String  (Integer'Image (Token));
                T_Arg := T_CMD;
                --  Execute the command
-               theCommand := Command_Table
-                 (Command_Line_Pos - M_Misc.C_Base_Token).Function_Ptr;
+               Put_Line (Routine_Name & "Executing command, Token: " &
+                           Integer'Image (Token));
+               theCommand :=
+                 Command_Table (Token - M_Misc.C_Base_Token).Function_Ptr;
 
             end if;
             --              else
@@ -308,7 +323,7 @@ package body M_Basic is
                   Command_Line (Command_Line_Pos + 1) = '0') or else
            (Command_Line (Command_Line_Pos) = 'f' and then
             Command_Line (Command_Line_Pos + 1) = 'f');
-      end loop;
+      end if;
 
    end Execute_Command;
 
