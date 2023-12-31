@@ -17,10 +17,14 @@ package body Parse_Functions is
 
    procedure Try_Command
      (Buffer      : out String_Buffer; P : in out Positive;
-      Label_Valid : in out Boolean; First_Nonwhite   : in out Boolean);
+      Label_Valid : in out Boolean; First_Nonwhite : in out Boolean);
 
-   function Check_Function_Or_Keyword (P : in out Positive) return Boolean is
+   procedure Check_Function_Or_Keyword
+     (Buffer : in out String_Buffer; P : in out Positive;
+     First_Nonwhite : in out Boolean) is
       use Ada.Characters.Handling;
+      use Command_And_Token_Functions;
+      use String_Buffer_Package;
       TP2      : Positive := P;
       TP_Index : Positive := 1;
       TP       : Unbounded_String;
@@ -28,7 +32,6 @@ package body Parse_Functions is
       Char1    : Character;
       Char2    : Character;
       Done     : Boolean := False;
-      Result   : Boolean := False;
    begin
       while not Done and then Index < Token_Table'Last loop
          Index := Index + 1;
@@ -54,10 +57,11 @@ package body Parse_Functions is
       end loop;
 
       if Index < Token_Table_Size then
-         null;
+         Index := M_Misc.C_Base_Token + Index;
+         Append (Buffer, Integer'Image (Index));
+         P := TP2;
+         First_Nonwhite := Index = tokenTHEN or else Index = tokenELSE;
       end if;
-
-      return Result;
 
    end Check_Function_Or_Keyword;
 
@@ -189,7 +193,7 @@ package body Parse_Functions is
    procedure Process_Double_Quote
      (Buffer : in out String_Buffer; I_Pos : in out Positive) is
       use Support;
-      aChar  : Character := ' ';
+      aChar  : constant Character := ' ';
    begin
       while aChar /= '"' and I_Pos <= Input_Buffer_Length loop
          I_Pos := I_Pos + 1;

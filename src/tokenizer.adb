@@ -128,7 +128,7 @@ package body Tokenizer is
             if Match_I > -1 then
                Process_Command (Buffer, Ptr, Match_I, Match_P,
                                 First_Nonwhite, Label_Valid);
-            Put_Line (Routine_Name & "Command processed");
+               Put_Line (Routine_Name & "Command processed");
                Done := True;
             end if;
 
@@ -140,9 +140,7 @@ package body Tokenizer is
             null;
             --  MMBasic  997
          elsif M_Basic.Is_Name_Start (Get_Input_Character (Ptr)) then
-            if Check_Function_Or_Keyword (Ptr) then
-               null;
-            end if;
+            Check_Function_Or_Keyword (Buffer, Ptr, First_Nonwhite);
 
          elsif aChar = '(' then
             null;

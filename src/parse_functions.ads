@@ -3,13 +3,15 @@ with Command_And_Token_Tables; use Command_And_Token_Tables;
 
 package Parse_Functions is
 
-   function Check_Function_Or_Keyword (P : in out Positive) return Boolean;
+   procedure Check_Function_Or_Keyword
+     (Buffer         : in out String_Buffer; P : in out Positive;
+      First_Nonwhite : in out Boolean);
    function Get_Command_Value (Command : String) return Integer;
    procedure Process_Colon
      (Buffer : in out String_Buffer; I_Pos : in out Positive);
    procedure Process_Command
-     (Buffer      : out String_Buffer; I_Pos : in out Positive;
-      Match_I_Pos : Positive; Match_Index : Integer;
+     (Buffer                      : out String_Buffer; I_Pos : in out Positive;
+      Match_I_Pos                 : Positive; Match_Index : Integer;
       First_Nonwhite, Label_Valid : in out Boolean);
    procedure Process_Double_Quote
      (Buffer : in out String_Buffer; I_Pos  : in out Positive);

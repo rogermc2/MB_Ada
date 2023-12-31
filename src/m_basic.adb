@@ -357,8 +357,9 @@ package body M_Basic is
                  (Buffer, To_Unbounded_String (Element (Buffer, Program_Ptr)));
             end if;
 
-            Done := Buffer.First_Element /= "00" and
-              Buffer.First_Element /= "ff";
+            --  279
+            Done := Buffer.First_Element = "00" and
+              Buffer.First_Element = "ff";
             Program_Ptr := Program_Ptr + 1;
          end loop;
       else
@@ -471,12 +472,6 @@ package body M_Basic is
       use Ada.Characters.Handling;
       --        Routine_Name : constant String := "M_Basic.Is_Name_Character ";
    begin
-      --        Put_Line (Routine_Name & "aChar: " & aChar);
-      --        Put_Line (Routine_Name &
-      --                    "returning Is_Alphanumeric (aChar) or aChar = _ or  :  " &
-      --                    Boolean'Image (Is_Alphanumeric (aChar)) &
-      --                    " or " &  Boolean'Image (aChar = '_')&
-      --                    " or " &  Boolean'Image (aChar = ':'));
       return Is_Alphanumeric (aChar) or else aChar = '_' or else aChar = ':';
 
    end Is_Name_Character;
@@ -493,10 +488,6 @@ package body M_Basic is
       use Ada.Characters.Handling;
       --        Routine_Name : constant String := "M_Basic.Is_Name_Start ";
    begin
-      --        Put_Line (Routine_Name &
-      --                    "returning Is_Alphanumeric (aChar) or aChar = _: " &
-      --                    Boolean'Image (Is_Alphanumeric (aChar)) &
-      --                    " or " &  Boolean'Image (aChar = '_'));
       return Is_Alphanumeric (aChar) or aChar = '_';
 
    end Is_Name_Start;
