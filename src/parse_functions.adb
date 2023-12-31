@@ -114,7 +114,8 @@ package body Parse_Functions is
 
    procedure Process_Command
      (Buffer      : out String_Buffer; I_Pos : in out Positive;
-      Match_I_Pos : Positive; Match_Index : Integer) is
+      Match_I_Pos : Positive; Match_Index : Integer;
+      First_Nonwhite, Label_Valid : in out Boolean) is
       Routine_Name  : constant String := "Parse_Functions.Process_Command ";
       use Ada.Characters.Handling;
       use Support;
@@ -125,6 +126,8 @@ package body Parse_Functions is
       --  Step over the input buffer command.
       I_Pos := Match_I_Pos;
 
+      Put_Line (Routine_Name & "C_Base_Token + Match_Index: " &
+                  Integer'Image (M_Misc.C_Base_Token + Match_Index));
       Put_Line (Routine_Name & "I_Pos" & Integer'Image (I_Pos));
       Put_Line (Routine_Name & "Input_Character (I_Pos): " &
                   Get_Input_Character (I_Pos));
@@ -137,7 +140,8 @@ package body Parse_Functions is
         Get_Input_Character (I_Pos) = ' ' then
          I_Pos := I_Pos + 1;
       end if;
-
+      First_Nonwhite := False;
+      Label_Valid := False;
    end Process_Command;
 
    procedure Process_Double_Quote
@@ -331,8 +335,8 @@ package body Parse_Functions is
            (not Is_Name_Character (Get_Input_Character (TP2)) or else
             Command.Command_Type = T_FUN) then
             --              Put_Line (Routine_Name & "TP2:" & Integer'Image (TP2));
-            --              Put_Line (Routine_Name & "character" &
-            --                          Get_Input_Character (TP2) & "'");
+            Put_Line (Routine_Name & "character" &
+                        Get_Input_Character (TP2) & "'");
             --              Put_Line (Routine_Name & "check '('" );
             Done := Element (Command.Name, TP - 1) /= '(' and
               Is_Name_Character (Get_Input_Character (TP2));
@@ -360,7 +364,8 @@ package body Parse_Functions is
                --  Match found
                Put_Line (Routine_Name & "Process_Command");
                --  process rest of command line
-               Process_Command (Buffer, P, Match_I_Pos, Match_Index);
+               Process_Command (Buffer, P, Match_I_Pos, Match_Index,
+                                First_Nonwhite, Label_Valid);
 
                --  MMBasic 976
             elsif Label_Valid and then

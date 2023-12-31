@@ -10,7 +10,7 @@ with Ada.Text_IO; use Ada.Text_IO;
 with Global;
 with M_Basic;
 --  with M_Misc;
-with Parse_Functions;
+with Parse_Functions; use Parse_Functions;
 with Support;
 
 package body Tokenizer is
@@ -78,8 +78,7 @@ package body Tokenizer is
 
    procedure Parse_Line (Buffer : out String_Buffer; Ptr : in out Positive) is
       use Ada.Characters.Handling;
-      use Parse_Functions;
-      --        Routine_Name   : constant String := "Tokenizer.Parse_Line ";
+      Routine_Name   : constant String := "Tokenizer.Parse_Line ";
       String1        : String (1 .. 1);
       aChar          : Character;
       First_Nonwhite : Boolean := True;
@@ -92,6 +91,8 @@ package body Tokenizer is
       while Ptr < Input_Buffer_Length loop
          Done := False;
          aChar := Get_Input_Character (Ptr);
+         Put_Line (Routine_Name & "First_Nonwhite, aChar: " &
+                        Boolean'Image (First_Nonwhite) & ", " & aChar);
 
          if aChar = ' ' then
             Ptr := Ptr + 1;
@@ -116,21 +117,27 @@ package body Tokenizer is
             Done := True;
          elsif First_Nonwhite then
             --  MMBasic  907 - 955
+            Put_Line (Routine_Name & "First_Nonwhite, Match_P: " &
+                        Integer'Image (Match_P));
             Process_First_Nonwhite (Buffer, Ptr, Label_Valid, First_Nonwhite,
                                     Match_I, Match_L, Match_P);
             --  MMBasic  958
             if Match_I > -1 then
-               Process_Command (Buffer, Ptr, Match_I, Match_P);
-               First_Nonwhite := False;
-               Label_Valid := False;
+               Process_Command (Buffer, Ptr, Match_I, Match_P,
+                                First_Nonwhite, Label_Valid);
+            Put_Line (Routine_Name & "Command processed");
                Done := True;
             end if;
 
             --  MMBasic  976
          elsif Label_Valid and then
            M_Basic.Is_Name_Start (Get_Input_Character (Ptr)) then
+            Put_Line (Routine_Name & "Label_Valid and Name_Start: " &
+                        Get_Input_Character (Ptr));
             null;
          elsif M_Basic.Is_Name_Start (Get_Input_Character (Ptr)) then
+            Put_Line (Routine_Name & "Name_Start: " &
+                        Get_Input_Character (Ptr));
             null;
          elsif aChar = '(' then
             null;
@@ -140,6 +147,8 @@ package body Tokenizer is
             Label_Valid := False;
             First_Nonwhite := False;
          end if;
+         Put_Line (Routine_Name & "end loop First_Nonwhite: " &
+                        Boolean'Image (First_Nonwhite));
 
       end loop;
 

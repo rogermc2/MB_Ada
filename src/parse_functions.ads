@@ -8,7 +8,8 @@ package Parse_Functions is
      (Buffer : in out String_Buffer; I_Pos : in out Positive);
    procedure Process_Command
      (Buffer      : out String_Buffer; I_Pos : in out Positive;
-      Match_I_Pos : Positive; Match_Index : Integer);
+      Match_I_Pos : Positive; Match_Index : Integer;
+      First_Nonwhite, Label_Valid : in out Boolean);
    procedure Process_Double_Quote
      (Buffer : in out String_Buffer; I_Pos  : in out Positive);
    procedure Process_Name_Start (Buffer : in out String_Buffer;
