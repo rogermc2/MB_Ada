@@ -29,37 +29,25 @@ package body Parse_Functions is
       TP2          : Positive := P;
       TP_Index     : Positive := 1;
       TP           : Unbounded_String;
-      Index        : Natural := 0;
+      TT_Index     : Natural := 0;
       Char1        : Character;
       Char2        : Character;
       Done         : Boolean := False;
       OK           : Boolean := False;
    begin
       --  MMBasic  997
-      while not Done and then Index < Token_Table'Last loop
-         Index := Index + 1;
+      while not Done and then TT_Index < Token_Table'Last loop
+         TT_Index := TT_Index + 1;
          TP2 := P;
          TP_Index := 1;
-         TP := Token_Table (Index).Name;
+         TP := Token_Table (TT_Index).Name;
          if Length (TP) > 0 then
---              Put_Line (Routine_Name & "Index, TP_Index: " &
---                          Integer'Image (Index) & ", " &
---                          Integer'Image (TP_Index));
---              Put_Line (Routine_Name & "Token_Table'Last, Length: " &
---                          Integer'Image (Token_Table'Last) &
---                          Integer'Image (Token_Table'Length));
---              Put_Line (Routine_Name & "TP: '" & To_String (TP) & "'");
---              Put_Line (Routine_Name & "TP2: " & Integer'Image (TP2));
             Char1 := To_Upper (Get_Input_Character (TP2));
             Char2 := To_Upper (Element (TP, TP_Index));
---              Put_Line (Routine_Name & "Char2: " & Char2);
             while TP2 < Input_Buffer_Length and then
               TP_Index < Token_Table'Last and then Char2 = Char1 loop
                TP2 := TP2 + 1;
                TP_Index := TP_Index + 1;
---                 Put_Line (Routine_Name & "TP2, TP_Index: " &
---                             Integer'Image (TP2) & ", " &
---                             Integer'Image (TP_Index));
                Char2 := Element (TP, TP_Index);
                if Char2 = '(' then
                   Skip_In_Buffer_Spaces (TP2);
@@ -67,23 +55,21 @@ package body Parse_Functions is
                   Char2 := To_Upper (Char2);
                end if;
                Char1 := To_Upper (Get_Input_Character (TP2));
---                 Put_Line (Routine_Name & "Char1, Char2: " & Char1 & ", " &
---                             Char2);
             end loop;
 
          --  MMBasic  1011
          Done := TP2 >= Input_Buffer_Length or else
-           (Element (TP, TP_Index) = ASCII.NUL and then
+           (TP_Index > Length (TP) and then
                 (not Is_Name_End (Element (TP, TP_Index - 1)) or else
                  Is_Name_Character (Get_Input_Character (TP2))));
          end if;
       end loop;
 
       --  MMBasic  1015
-      if Index < Token_Table_Size then
-         Index := M_Misc.C_Base_Token + Index;
-         Append (Buffer, Integer'Image (Index));
-         First_Nonwhite := Index = tokenTHEN or else Index = tokenELSE;
+      if TT_Index < Token_Table_Size then
+         TT_Index := M_Misc.C_Base_Token + TT_Index;
+         Append (Buffer, Integer'Image (TT_Index));
+         First_Nonwhite := TT_Index = tokenTHEN or else TT_Index = tokenELSE;
       end if;
 
       OK := TP2 > P;

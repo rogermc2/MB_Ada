@@ -86,7 +86,7 @@ begin
         ("MM.PROMPT", T_NOTYPE) /= 0 then
          Global.Error_In_Prompt := True;
          Clear_Buffer (Token_Buffer);
-         Buffer_Append (Token_Buffer, "MM.PROMPT\0");
+         Buffer_Append (Token_Buffer, "MM.PROMPT");
          M_Basic.Execute_Program (Token_Buffer);
       else
          --  Print prompt
