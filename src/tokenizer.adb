@@ -79,6 +79,7 @@ package body Tokenizer is
 
    procedure Parse_Line (Buffer : out String_Buffer; Ptr : in out Positive) is
       use Ada.Characters.Handling;
+      use String_Buffer_Package;
       Routine_Name           : constant String := "Tokenizer.Parse_Line ";
       String1                : String (1 .. 1);
       aChar                  : Character;
@@ -147,17 +148,11 @@ package body Tokenizer is
          elsif Check_Function_Or_Keyword (Buffer, Ptr, First_Nonwhite) then
             Put_Line (Routine_Name & "Function_Or_Keyword found");
             null;
-            --              if not (Ptr > Last_Ptr) then
-            --                 Put_Line (Routine_Name &
-            --                             "Check_Function_Or_Keyword did not increment Ptr");
-            --                 Put_Line (Routine_Name & "First_Nonwhite: " &
-            --                             Boolean'Image (First_Nonwhite));
-            --              end if;
-
          elsif aChar = '(' then
-            Put_Line (Routine_Name & "aChar = '(' not implemented");
+            Put_Line (Routine_Name & "aChar = '(' not implemented: " &
+                     Buffer.Last_Element);
             Ptr := Ptr + 1;
-         else
+         else  --  None of the above so just copy the one character
             Put_Line (Routine_Name & "else");
             String1 (1) := aChar;
             Support.Buffer_Append (Buffer, String1);
@@ -168,6 +163,8 @@ package body Tokenizer is
          Put_Line (Routine_Name & "end loop First_Nonwhite: " &
                      Boolean'Image (First_Nonwhite));
       end loop;
+
+      Append (Buffer, "000");
 
       Put_Line (Routine_Name & "done");
 
