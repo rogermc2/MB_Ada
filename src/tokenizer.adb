@@ -87,15 +87,11 @@ package body Tokenizer is
       Match_I                : Integer := -1;
       Match_L                : Integer := -1;
       Match_P                : Integer := -1;
-      Is_Function_Or_Keyword : Boolean := True;
       Last_Ptr               : Positive := Ptr;
       --        Done           : Boolean := False;
    begin
       while Ptr < Input_Buffer_Length loop
          Put_Line (Routine_Name & "Last_Ptr : " & Integer'Image (Last_Ptr));
-         --           if Ptr = Last_Ptr then
-         --              Ptr := Ptr + 1;
-         --           end if;
          Last_Ptr := Ptr;
          --           Done := False;
          aChar := Get_Input_Character (Ptr);
@@ -148,19 +144,15 @@ package body Tokenizer is
                         Get_Input_Character (Ptr));
             Try_Label (Buffer, Ptr, Label_Valid);
             --  MMBasic  997
-         elsif Is_Function_Or_Keyword and then
-           M_Basic.Is_Name_Start (Get_Input_Character (Ptr)) then
-            Put_Line (Routine_Name & "Check_Function_Or_Keyword");
-            Is_Function_Or_Keyword :=
-              Check_Function_Or_Keyword (Buffer, Ptr, First_Nonwhite);
-            if not (Ptr > Last_Ptr) then
-               Put_Line (Routine_Name &
-                           "Check_Function_Or_Keyword did not increment Ptr");
-               Put_Line (Routine_Name & "First_Nonwhite: " &
-                           Boolean'Image (First_Nonwhite));
-            end if;
-            --              Assert (Ptr > Last_Ptr, Routine_Name &
-            --                        "Check_Function_Or_Keyword did not increment Ptr");
+         elsif Check_Function_Or_Keyword (Buffer, Ptr, First_Nonwhite) then
+            Put_Line (Routine_Name & "Function_Or_Keyword found");
+            null;
+            --              if not (Ptr > Last_Ptr) then
+            --                 Put_Line (Routine_Name &
+            --                             "Check_Function_Or_Keyword did not increment Ptr");
+            --                 Put_Line (Routine_Name & "First_Nonwhite: " &
+            --                             Boolean'Image (First_Nonwhite));
+            --              end if;
 
          elsif aChar = '(' then
             Put_Line (Routine_Name & "aChar = '(' not implemented");

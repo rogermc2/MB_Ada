@@ -24,8 +24,8 @@ package body Parse_Functions is
       use Ada.Characters.Handling;
       use Command_And_Token_Functions;
       use String_Buffer_Package;
-      Routine_Name : constant String :=
-                       "Parse_Functions.Check_Function_Or_Keyword ";
+--        Routine_Name : constant String :=
+--                         "Parse_Functions.Check_Function_Or_Keyword ";
       TP2          : Positive := P;
       TP_Index     : Positive := 1;
       TP           : Unbounded_String;
@@ -74,7 +74,6 @@ package body Parse_Functions is
 
       OK := TP2 > P;
       P := TP2;
-      Put_Line (Routine_Name & "done.");
 
       return OK;
 
