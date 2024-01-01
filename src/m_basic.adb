@@ -380,6 +380,7 @@ package body M_Basic is
       else
          Put_Line (Routine_Name & "Buffer is empty");
       end if;
+      Put_Line (Routine_Name & "done");
 
    exception
       when others =>

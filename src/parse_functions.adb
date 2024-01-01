@@ -69,11 +69,10 @@ package body Parse_Functions is
       if TT_Index < Token_Table_Size then
          TT_Index := M_Misc.C_Base_Token + TT_Index;
          Append (Buffer, Integer'Image (TT_Index));
+         P := TP2;
          First_Nonwhite := TT_Index = tokenTHEN or else TT_Index = tokenELSE;
+         OK := True;
       end if;
-
-      OK := TP2 > P;
-      P := TP2;
 
       return OK;
 
