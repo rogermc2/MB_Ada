@@ -129,6 +129,8 @@ package body Tokenizer is
                         Integer'Image (Match_P));
             Process_First_Nonwhite (Buffer, Ptr, Label_Valid, First_Nonwhite,
                                     Match_I, Match_L, Match_P);
+            Put_Line (Routine_Name & "First_Nonwhite, Ptr: " &
+                        Get_Input_Character(Ptr));
             --  MMBasic  958
             if Match_I > -1 then
                Put_Line (Routine_Name & "Process_Command");
@@ -146,15 +148,15 @@ package body Tokenizer is
             Try_Label (Buffer, Ptr, Label_Valid);
             --  MMBasic  997
          elsif Check_Function_Or_Keyword (Buffer, Ptr, First_Nonwhite) then
-            Put_Line (Routine_Name & "Function_Or_Keyword found");
+            Put_Line (Routine_Name & "Function_Or_Keyword found: " &
+                     Buffer.Last_Element);
             null;
          elsif aChar = '(' then
-            Put_Line (Routine_Name & "aChar = '(' not implemented: " &
-                     Buffer.Last_Element);
+            Put_Line (Routine_Name & "aChar = '(' not implemented: ");
             Ptr := Ptr + 1;
          else  --  None of the above so just copy the one character
-            Put_Line (Routine_Name & "else");
             String1 (1) := aChar;
+            Put_Line (Routine_Name & "else aChar: " & String1);
             Support.Buffer_Append (Buffer, String1);
             Label_Valid := False;
             First_Nonwhite := False;
