@@ -1,5 +1,6 @@
 with Interfaces;
 
+with Ada.Assertions; use Ada.Assertions;
 with Ada.Characters.Handling;
 with Ada.Strings;
 --  with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
@@ -78,50 +79,53 @@ package body Tokenizer is
 
    procedure Parse_Line (Buffer : out String_Buffer; Ptr : in out Positive) is
       use Ada.Characters.Handling;
-      Routine_Name   : constant String := "Tokenizer.Parse_Line ";
-      String1        : String (1 .. 1);
-      aChar          : Character;
-      First_Nonwhite : Boolean := True;
-      Label_Valid    : Boolean := True;
-      Match_I        : Integer := -1;
-      Match_L        : Integer := -1;
-      Match_P        : Integer := -1;
-      Done           : Boolean;
+      Routine_Name           : constant String := "Tokenizer.Parse_Line ";
+      String1                : String (1 .. 1);
+      aChar                  : Character;
+      First_Nonwhite         : Boolean := True;
+      Label_Valid            : Boolean := True;
+      Match_I                : Integer := -1;
+      Match_L                : Integer := -1;
+      Match_P                : Integer := -1;
+      Is_Function_Or_Keyword : Boolean := True;
+      Last_Ptr               : Positive := Ptr;
+      --        Done           : Boolean := False;
    begin
       while Ptr < Input_Buffer_Length loop
-         Done := False;
+         Put_Line (Routine_Name & "Last_Ptr : " & Integer'Image (Last_Ptr));
+         --           if Ptr = Last_Ptr then
+         --              Ptr := Ptr + 1;
+         --           end if;
+         Last_Ptr := Ptr;
+         --           Done := False;
          aChar := Get_Input_Character (Ptr);
-         Put_Line (Routine_Name & "Ptr, First_Nonwhite, aChar: " &
-                     Integer'Image (Ptr) & ", " &
-                        Boolean'Image (First_Nonwhite) & ", " & aChar);
+         Put_Line (Routine_Name & "Ptr, aChar, First_Nonwhite: " &
+                     Integer'Image (Ptr) & ", " & aChar & ", " &
+                     Boolean'Image (First_Nonwhite) );
          Put_Line (Routine_Name & "Input_Buffer_Length : " &
                      Integer'Image (Input_Buffer_Length));
          delay (1.0);
          if aChar = ' ' then
+            Put_Line (Routine_Name & "aChar = ' '");
             Ptr := Ptr + 1;
-            Done := True;
          elsif aChar = '"' then
             Put_Line (Routine_Name & '"');
             Process_Double_Quote (Buffer, Ptr);
-            Done := True;
          elsif aChar = ''' then
             --  MMBasic 862  copy anything after a comment
             Put_Line (Routine_Name & "'");
             Process_Quote (Buffer, Ptr);
-            Done := True;
          elsif aChar = ':' then
             --  MMBasic 871
             Put_Line (Routine_Name & ':');
             Process_Colon (Buffer, Ptr);
             First_Nonwhite := True;
-            Done := True;
          elsif Is_Digit (aChar) or aChar = '.' then
             --  MMBasic 887
             --  not white space or string or comment so try a number
             Put_Line (Routine_Name & "Try number");
             Try_Number (Buffer, Ptr);
             First_Nonwhite := False;
-            Done := True;
          elsif First_Nonwhite then
             --  MMBasic  907 - 955
             Put_Line (Routine_Name & "First_Nonwhite, Match_P: " &
@@ -130,10 +134,11 @@ package body Tokenizer is
                                     Match_I, Match_L, Match_P);
             --  MMBasic  958
             if Match_I > -1 then
+               Put_Line (Routine_Name & "Process_Command");
                Process_Command (Buffer, Ptr, Match_I, Match_P,
                                 First_Nonwhite, Label_Valid);
                Put_Line (Routine_Name & "Command processed");
-               Done := True;
+               Assert (Ptr > Last_Ptr, Routine_Name & "Ptr not incremented");
             end if;
 
             --  MMBasic  976
@@ -143,24 +148,36 @@ package body Tokenizer is
                         Get_Input_Character (Ptr));
             Try_Label (Buffer, Ptr, Label_Valid);
             --  MMBasic  997
-         elsif M_Basic.Is_Name_Start (Get_Input_Character (Ptr)) then
+         elsif Is_Function_Or_Keyword and then
+           M_Basic.Is_Name_Start (Get_Input_Character (Ptr)) then
             Put_Line (Routine_Name & "Check_Function_Or_Keyword");
-            Check_Function_Or_Keyword (Buffer, Ptr, First_Nonwhite);
+            Is_Function_Or_Keyword :=
+              Check_Function_Or_Keyword (Buffer, Ptr, First_Nonwhite);
+            if not (Ptr > Last_Ptr) then
+               Put_Line (Routine_Name &
+                           "Check_Function_Or_Keyword did not increment Ptr");
+               Put_Line (Routine_Name & "First_Nonwhite: " &
+                           Boolean'Image (First_Nonwhite));
+            end if;
+            --              Assert (Ptr > Last_Ptr, Routine_Name &
+            --                        "Check_Function_Or_Keyword did not increment Ptr");
 
          elsif aChar = '(' then
             Put_Line (Routine_Name & "aChar = '(' not implemented");
-            null;
+            Ptr := Ptr + 1;
          else
             Put_Line (Routine_Name & "else");
             String1 (1) := aChar;
             Support.Buffer_Append (Buffer, String1);
             Label_Valid := False;
             First_Nonwhite := False;
+            Ptr := Ptr + 1;
          end if;
          Put_Line (Routine_Name & "end loop First_Nonwhite: " &
-                        Boolean'Image (First_Nonwhite));
-
+                     Boolean'Image (First_Nonwhite));
       end loop;
+
+      Put_Line (Routine_Name & "done");
 
    end Parse_Line;
 

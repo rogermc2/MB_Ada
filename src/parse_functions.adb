@@ -6,7 +6,6 @@ with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Ada.Text_IO; use Ada.Text_IO;
 
 with Command_And_Token_Functions;
---  with Commands;
 with Configuration;
 with Global;
 with M_Basic; use M_Basic;
@@ -19,9 +18,9 @@ package body Parse_Functions is
      (Buffer      : out String_Buffer; P : in out Positive;
       Label_Valid : in out Boolean; First_Nonwhite : in out Boolean);
 
-   procedure Check_Function_Or_Keyword
+   function Check_Function_Or_Keyword
      (Buffer         : in out String_Buffer; P : in out Positive;
-      First_Nonwhite : in out Boolean) is
+      First_Nonwhite : in out Boolean) return Boolean is
       use Ada.Characters.Handling;
       use Command_And_Token_Functions;
       use String_Buffer_Package;
@@ -34,6 +33,7 @@ package body Parse_Functions is
       Char1        : Character;
       Char2        : Character;
       Done         : Boolean := False;
+      OK           : Boolean := False;
    begin
       --  MMBasic  997
       while not Done and then Index < Token_Table'Last loop
@@ -79,14 +79,18 @@ package body Parse_Functions is
          end if;
       end loop;
 
-      Put_Line (Routine_Name & "1015");
       --  MMBasic  1015
       if Index < Token_Table_Size then
          Index := M_Misc.C_Base_Token + Index;
          Append (Buffer, Integer'Image (Index));
-         P := TP2;
          First_Nonwhite := Index = tokenTHEN or else Index = tokenELSE;
       end if;
+
+      OK := TP2 > P;
+      P := TP2;
+      Put_Line (Routine_Name & "done.");
+
+      return OK;
 
    end Check_Function_Or_Keyword;
 
@@ -187,7 +191,7 @@ package body Parse_Functions is
      (Buffer                      : out String_Buffer; I_Pos : in out Positive;
       Match_I_Pos                 : Positive; Match_Index : Integer;
       First_Nonwhite, Label_Valid : in out Boolean) is
-      Routine_Name  : constant String := "Parse_Functions.Process_Command ";
+--        Routine_Name  : constant String := "Parse_Functions.Process_Command ";
       use Ada.Characters.Handling;
       use Support;
    begin
@@ -213,6 +217,7 @@ package body Parse_Functions is
       end if;
       First_Nonwhite := False;
       Label_Valid := False;
+
    end Process_Command;
 
    procedure Process_Double_Quote
@@ -236,6 +241,7 @@ package body Parse_Functions is
      (Buffer : in out String_Buffer; I_Pos : in out Positive) is
    begin
       I_Pos := I_Pos + 1;
+      Put_Line ("Parse_Functions.Process_Name_Start not implemeted");
 
    end Process_Name_Start;
 

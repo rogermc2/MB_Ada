@@ -3,9 +3,9 @@ with Command_And_Token_Tables; use Command_And_Token_Tables;
 
 package Parse_Functions is
 
-   procedure Check_Function_Or_Keyword
+   function Check_Function_Or_Keyword
      (Buffer         : in out String_Buffer; P : in out Positive;
-      First_Nonwhite : in out Boolean);
+      First_Nonwhite : in out Boolean) return Boolean;
    function Get_Command_Value (Command : String) return Integer;
    procedure Process_Colon
      (Buffer : in out String_Buffer; I_Pos : in out Positive);
