@@ -702,7 +702,7 @@ package body M_Basic is
 
    procedure Skip_Spaces (aLine : String; Pos : in out Positive) is
    begin
-      while aLine (Pos) = ' ' loop
+      while Pos < aLine'Length and then aLine (Pos) = ' ' loop
          Pos := Pos + 1;
       end loop;
 
