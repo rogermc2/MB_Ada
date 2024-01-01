@@ -168,7 +168,8 @@ package body Tokenizer is
 
       Append (Buffer, "000");
 
-      Put_Line (Routine_Name & "done");
+      Put_Line (Routine_Name & "Buffer");
+      Support.Print_Buffer (Buffer);
 
    end Parse_Line;
 

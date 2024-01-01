@@ -90,6 +90,16 @@ package body Support is
       end if;
    end Initialize;
 
+   procedure Print_Buffer (Buffer : String_Buffer) is
+      use String_Buffer_Package;
+   begin
+      for index in Buffer.First_Index .. Buffer.Last_Index loop
+         Put (Element (Buffer, index) & " ");
+      end loop;
+      New_Line;
+
+   end Print_Buffer;
+
    procedure Process_Commands is
 --        Routine_Name : constant String := "Support.Process_Commands";
    begin

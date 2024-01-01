@@ -18,6 +18,7 @@ package Support is
                          Pos1 : in out Positive; Pos2 : Positive);
    procedure Do_PIN;
    procedure Initialize;
+   procedure Print_Buffer (Buffer : String_Buffer);
    procedure Process_Commands;
    procedure Restart;
    procedure Setup;
