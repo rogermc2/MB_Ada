@@ -39,24 +39,27 @@ package body Parse_Functions is
       while not Done and then Index < Token_Table'Last loop
          Index := Index + 1;
          TP2 := P;
+         TP_Index := 1;
          TP := Token_Table (Index).Name;
          if Length (TP) > 0 then
-            Put_Line (Routine_Name & "Index, TP_Index: " & Integer'Image (Index) &
-                        ", " & Integer'Image (TP_Index));
-            Put_Line (Routine_Name & "Token_Table'Last, Length: " &
-                        Integer'Image (Token_Table'Last) &
-                        Integer'Image (Token_Table'Length));
-            Put_Line (Routine_Name & "TP: '" & To_String (TP) & "'");
+--              Put_Line (Routine_Name & "Index, TP_Index: " &
+--                          Integer'Image (Index) & ", " &
+--                          Integer'Image (TP_Index));
+--              Put_Line (Routine_Name & "Token_Table'Last, Length: " &
+--                          Integer'Image (Token_Table'Last) &
+--                          Integer'Image (Token_Table'Length));
+--              Put_Line (Routine_Name & "TP: '" & To_String (TP) & "'");
+--              Put_Line (Routine_Name & "TP2: " & Integer'Image (TP2));
             Char1 := To_Upper (Get_Input_Character (TP2));
             Char2 := To_Upper (Element (TP, TP_Index));
-            Put_Line (Routine_Name & "Char1, Char2: " & Char1 & ", " & Char2);
+--              Put_Line (Routine_Name & "Char2: " & Char2);
             while TP2 < Input_Buffer_Length and then
               TP_Index < Token_Table'Last and then Char2 = Char1 loop
                TP2 := TP2 + 1;
                TP_Index := TP_Index + 1;
-               Put_Line (Routine_Name & "TP2, TP_Index: " &
-                           Integer'Image (TP2) & ", " &
-                           Integer'Image (TP_Index));
+--                 Put_Line (Routine_Name & "TP2, TP_Index: " &
+--                             Integer'Image (TP2) & ", " &
+--                             Integer'Image (TP_Index));
                Char2 := Element (TP, TP_Index);
                if Char2 = '(' then
                   Skip_In_Buffer_Spaces (TP2);
@@ -64,7 +67,8 @@ package body Parse_Functions is
                   Char2 := To_Upper (Char2);
                end if;
                Char1 := To_Upper (Get_Input_Character (TP2));
-               Put_Line (Routine_Name & "Char1, Char2: " & Char1 & ", " & Char2);
+--                 Put_Line (Routine_Name & "Char1, Char2: " & Char1 & ", " &
+--                             Char2);
             end loop;
 
          --  MMBasic  1011
@@ -193,11 +197,11 @@ package body Parse_Functions is
       --  Step over the input buffer command.
       I_Pos := Match_I_Pos;
 
-      Put_Line (Routine_Name & "C_Base_Token + Match_Index: " &
-                  Integer'Image (M_Misc.C_Base_Token + Match_Index));
-      Put_Line (Routine_Name & "I_Pos" & Integer'Image (I_Pos));
-      Put_Line (Routine_Name & "Input_Character (I_Pos): " &
-                  Get_Input_Character (I_Pos));
+--        Put_Line (Routine_Name & "C_Base_Token + Match_Index: " &
+--                    Integer'Image (M_Misc.C_Base_Token + Match_Index));
+--        Put_Line (Routine_Name & "I_Pos" & Integer'Image (I_Pos));
+--        Put_Line (Routine_Name & "Input_Character (I_Pos): " &
+--                    Get_Input_Character (I_Pos));
       if Match_Index + M_Misc.C_Base_Token =
         Get_Command_Value ("Rem") then
          --  MMBasic 962 copy everything

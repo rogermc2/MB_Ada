@@ -96,7 +96,7 @@ package body Tokenizer is
                         Boolean'Image (First_Nonwhite) & ", " & aChar);
          Put_Line (Routine_Name & "Input_Buffer_Length : " &
                      Integer'Image (Input_Buffer_Length));
---           delay (1.0);
+         delay (1.0);
          if aChar = ' ' then
             Ptr := Ptr + 1;
             Done := True;

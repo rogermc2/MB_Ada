@@ -398,11 +398,11 @@ begin
    Command_Table (Command_Table_Size) :=
      (To_Unbounded_String (""), T_NA, 0, Null);
 
-   for index in 1 .. Num_Functions loop
+   for index in 1 .. Num_Functions loop  --  118
       Token_Table (index) := Function_Types (index);
    end loop;
 
-   for index in 1 .. Num_Function_Commands loop
+   for index in 1 .. Num_Function_Commands loop  --  45
       Token_Table (Num_Functions + index) := Function_Commands (index);
    end loop;
 
