@@ -20,42 +20,63 @@ package body Parse_Functions is
       Label_Valid : in out Boolean; First_Nonwhite : in out Boolean);
 
    procedure Check_Function_Or_Keyword
-     (Buffer : in out String_Buffer; P : in out Positive;
-     First_Nonwhite : in out Boolean) is
+     (Buffer         : in out String_Buffer; P : in out Positive;
+      First_Nonwhite : in out Boolean) is
       use Ada.Characters.Handling;
       use Command_And_Token_Functions;
       use String_Buffer_Package;
-      TP2      : Positive := P;
-      TP_Index : Positive := 1;
-      TP       : Unbounded_String;
-      Index    : Natural := 0;
-      Char1    : Character;
-      Char2    : Character;
-      Done     : Boolean := False;
+      Routine_Name : constant String :=
+                       "Parse_Functions.Check_Function_Or_Keyword ";
+      TP2          : Positive := P;
+      TP_Index     : Positive := 1;
+      TP           : Unbounded_String;
+      Index        : Natural := 0;
+      Char1        : Character;
+      Char2        : Character;
+      Done         : Boolean := False;
    begin
+      --  MMBasic  997
       while not Done and then Index < Token_Table'Last loop
          Index := Index + 1;
+         TP2 := P;
          TP := Token_Table (Index).Name;
-         Char1 := To_Upper (Get_Input_Character (TP2));
-         Char2 := To_Upper (Element (TP, TP_Index));
-         while Char2 = Char1 loop
-            TP2 := TP2 + 1;
-            TP_Index := TP_Index + 1;
-            Char2 := Element (TP, TP_Index);
-            if Char2 = '(' then
-               Skip_In_Buffer_Spaces (TP2);
-            else
-               Char2 := To_Upper (Char2);
-            end if;
+         if Length (TP) > 0 then
+            Put_Line (Routine_Name & "Index, TP_Index: " & Integer'Image (Index) &
+                        ", " & Integer'Image (TP_Index));
+            Put_Line (Routine_Name & "Token_Table'Last, Length: " &
+                        Integer'Image (Token_Table'Last) &
+                        Integer'Image (Token_Table'Length));
+            Put_Line (Routine_Name & "TP: '" & To_String (TP) & "'");
             Char1 := To_Upper (Get_Input_Character (TP2));
-         end loop;
+            Char2 := To_Upper (Element (TP, TP_Index));
+            Put_Line (Routine_Name & "Char1, Char2: " & Char1 & ", " & Char2);
+            while TP2 < Input_Buffer_Length and then
+              TP_Index < Token_Table'Last and then Char2 = Char1 loop
+               TP2 := TP2 + 1;
+               TP_Index := TP_Index + 1;
+               Put_Line (Routine_Name & "TP2, TP_Index: " &
+                           Integer'Image (TP2) & ", " &
+                           Integer'Image (TP_Index));
+               Char2 := Element (TP, TP_Index);
+               if Char2 = '(' then
+                  Skip_In_Buffer_Spaces (TP2);
+               else
+                  Char2 := To_Upper (Char2);
+               end if;
+               Char1 := To_Upper (Get_Input_Character (TP2));
+               Put_Line (Routine_Name & "Char1, Char2: " & Char1 & ", " & Char2);
+            end loop;
 
+         --  MMBasic  1011
          Done := TP2 >= Input_Buffer_Length or else
            (Element (TP, TP_Index) = ASCII.NUL and then
-           (not Is_Name_End (Element (TP, TP_Index - 1)) or else
-            Is_Name_Character (Get_Input_Character (TP2))));
+                (not Is_Name_End (Element (TP, TP_Index - 1)) or else
+                 Is_Name_Character (Get_Input_Character (TP2))));
+         end if;
       end loop;
 
+      Put_Line (Routine_Name & "1015");
+      --  MMBasic  1015
       if Index < Token_Table_Size then
          Index := M_Misc.C_Base_Token + Index;
          Append (Buffer, Integer'Image (Index));
@@ -602,7 +623,7 @@ package body Parse_Functions is
    end Try_Function_Or_Keyword;
 
    procedure Try_Label
-     (Buffer : out String_Buffer; I_Pos : in out Positive;
+     (Buffer      : out String_Buffer; I_Pos : in out Positive;
       Label_Valid : in out Boolean) is
       use String_Buffer_Package;
       TP    : Positive := I_Pos;

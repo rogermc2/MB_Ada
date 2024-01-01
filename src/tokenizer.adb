@@ -144,12 +144,14 @@ package body Tokenizer is
             Try_Label (Buffer, Ptr, Label_Valid);
             --  MMBasic  997
          elsif M_Basic.Is_Name_Start (Get_Input_Character (Ptr)) then
+            Put_Line (Routine_Name & "Check_Function_Or_Keyword");
             Check_Function_Or_Keyword (Buffer, Ptr, First_Nonwhite);
 
          elsif aChar = '(' then
             Put_Line (Routine_Name & "aChar = '(' not implemented");
             null;
          else
+            Put_Line (Routine_Name & "else");
             String1 (1) := aChar;
             Support.Buffer_Append (Buffer, String1);
             Label_Valid := False;
