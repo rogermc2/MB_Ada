@@ -601,6 +601,32 @@ package body Parse_Functions is
 
    end Try_Function_Or_Keyword;
 
+   procedure Try_Label
+     (Buffer : out String_Buffer; I_Pos : in out Positive;
+      Label_Valid : in out Boolean) is
+      use String_Buffer_Package;
+      TP    : Positive := I_Pos;
+      Index : Natural := 0;
+      Found : Boolean := False;
+   begin
+      while not Found and then TP < Input_Buffer_Length and then
+        index < Configuration.MAXVARLEN loop
+         Index := Index + 1;
+         TP := TP + 1;
+         Found := not Is_Name_Character (Get_Input_Character (TP));
+      end loop;
+
+      if Found and then Get_Input_Character (TP) = ':' then
+         --  Label found
+         Label_Valid := False;
+         Append (Buffer, Global.T_LABEL);
+         Append (Buffer, Integer'Image (TP - I_Pos));
+         Append (Buffer, Get_Input_Slice (I_Pos, TP));
+         I_Pos := TP + 1;  --  Step over label and terminating :
+      end if;
+
+   end Try_Label;
+
    procedure Try_Number
      (Buffer : out String_Buffer; I_Pos : in out Positive) is
       use Ada.Characters.Handling;

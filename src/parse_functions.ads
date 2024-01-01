@@ -29,6 +29,9 @@ package Parse_Functions is
    function Try_Function_Or_Keyword
      (Buffer         : out String_Buffer; I_Pos : in out Positive;
       First_Nonwhite : in out Boolean) return Boolean;
+   procedure Try_Label
+     (Buffer : out String_Buffer; I_Pos  : in out Positive;
+      Label_Valid : in out Boolean);
    procedure Try_Number
      (Buffer : out String_Buffer; I_Pos : in out Positive);
 

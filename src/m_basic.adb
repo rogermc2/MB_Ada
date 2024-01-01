@@ -260,7 +260,7 @@ package body M_Basic is
          if Command_Line (Command_Line_Pos) /= '0' and then
            Command_Line (Command_Line_Pos) /= ''' then
             --  239
-            --              if Set_Jump (Err_Next) = 0 then
+            --              if setjmp (ErrNext) = 0 then
             Save_Local_Index := Local_Index;
             Token := Integer'Value (Element (Buffer, Command_Line_Pos));
 --              Put_Line (Routine_Name & "Token > C_Base_Token: " &

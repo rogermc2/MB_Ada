@@ -96,25 +96,29 @@ package body Tokenizer is
                         Boolean'Image (First_Nonwhite) & ", " & aChar);
          Put_Line (Routine_Name & "Input_Buffer_Length : " &
                      Integer'Image (Input_Buffer_Length));
-         delay (1.0);
+--           delay (1.0);
          if aChar = ' ' then
             Ptr := Ptr + 1;
             Done := True;
          elsif aChar = '"' then
+            Put_Line (Routine_Name & '"');
             Process_Double_Quote (Buffer, Ptr);
             Done := True;
          elsif aChar = ''' then
             --  MMBasic 862  copy anything after a comment
+            Put_Line (Routine_Name & "'");
             Process_Quote (Buffer, Ptr);
             Done := True;
          elsif aChar = ':' then
             --  MMBasic 871
+            Put_Line (Routine_Name & ':');
             Process_Colon (Buffer, Ptr);
             First_Nonwhite := True;
             Done := True;
          elsif Is_Digit (aChar) or aChar = '.' then
             --  MMBasic 887
             --  not white space or string or comment so try a number
+            Put_Line (Routine_Name & "Try number");
             Try_Number (Buffer, Ptr);
             First_Nonwhite := False;
             Done := True;
@@ -137,12 +141,13 @@ package body Tokenizer is
            M_Basic.Is_Name_Start (Get_Input_Character (Ptr)) then
             Put_Line (Routine_Name & "Label_Valid and Name_Start: " &
                         Get_Input_Character (Ptr));
-            null;
+            Try_Label (Buffer, Ptr, Label_Valid);
             --  MMBasic  997
          elsif M_Basic.Is_Name_Start (Get_Input_Character (Ptr)) then
             Check_Function_Or_Keyword (Buffer, Ptr, First_Nonwhite);
 
          elsif aChar = '(' then
+            Put_Line (Routine_Name & "aChar = '(' not implemented");
             null;
          else
             String1 (1) := aChar;
