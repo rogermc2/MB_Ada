@@ -24,8 +24,8 @@ package body Parse_Functions is
       use Ada.Characters.Handling;
       use Command_And_Token_Functions;
       use String_Buffer_Package;
---        Routine_Name : constant String :=
---                         "Parse_Functions.Check_Function_Or_Keyword ";
+      --        Routine_Name : constant String :=
+      --                         "Parse_Functions.Check_Function_Or_Keyword ";
       TP2          : Positive := P;
       TP_Index     : Positive := 1;
       TP           : Unbounded_String;
@@ -57,11 +57,11 @@ package body Parse_Functions is
                Char1 := To_Upper (Get_Input_Character (TP2));
             end loop;
 
-         --  MMBasic  1011
-         Done := TP2 >= Input_Buffer_Length or else
-           (TP_Index > Length (TP) and then
-                (not Is_Name_End (Element (TP, TP_Index - 1)) or else
-                 Is_Name_Character (Get_Input_Character (TP2))));
+            --  MMBasic  1011
+            Done := TP2 >= Input_Buffer_Length or else
+              (TP_Index > Length (TP) and then
+                   (not Is_Name_End (Element (TP, TP_Index - 1)) or else
+                    Is_Name_Character (Get_Input_Character (TP2))));
          end if;
       end loop;
 
@@ -108,7 +108,7 @@ package body Parse_Functions is
       Found         : Boolean := False;
       index         : Natural := 0;
    begin
-      while not Found and then index <= Command_Table'Length loop
+      while not Found and then index < Command_Table'Length loop
          index := index + 1;
          Found := To_String (Command_Table (index).Name) = Command;
       end loop;
@@ -175,7 +175,7 @@ package body Parse_Functions is
      (Buffer                      : out String_Buffer; I_Pos : in out Positive;
       Match_I_Pos                 : Positive; Match_Index : Integer;
       First_Nonwhite, Label_Valid : in out Boolean) is
---        Routine_Name  : constant String := "Parse_Functions.Process_Command ";
+      --        Routine_Name  : constant String := "Parse_Functions.Process_Command ";
       use Ada.Characters.Handling;
       use Support;
    begin
@@ -185,11 +185,11 @@ package body Parse_Functions is
       --  Step over the input buffer command.
       I_Pos := Match_I_Pos;
 
---        Put_Line (Routine_Name & "C_Base_Token + Match_Index: " &
---                    Integer'Image (M_Misc.C_Base_Token + Match_Index));
---        Put_Line (Routine_Name & "I_Pos" & Integer'Image (I_Pos));
---        Put_Line (Routine_Name & "Input_Character (I_Pos): " &
---                    Get_Input_Character (I_Pos));
+      --        Put_Line (Routine_Name & "C_Base_Token + Match_Index: " &
+      --                    Integer'Image (M_Misc.C_Base_Token + Match_Index));
+      --        Put_Line (Routine_Name & "I_Pos" & Integer'Image (I_Pos));
+      --        Put_Line (Routine_Name & "Input_Character (I_Pos): " &
+      --                    Get_Input_Character (I_Pos));
       if Match_Index + M_Misc.C_Base_Token =
         Get_Command_Value ("Rem") then
          --  MMBasic 962 copy everything
@@ -222,12 +222,33 @@ package body Parse_Functions is
    end Process_Double_Quote;
 
    procedure Process_Name_Start
-     (Buffer : in out String_Buffer; I_Pos : in out Positive;
-      First_Nonwhite : in out Boolean) is
+     (Buffer         : in out String_Buffer; I_Pos : in out Positive;
+      First_Nonwhite : in out Boolean; Label_Valid : in out Boolean) is
+      use String_Buffer_Package;
+      Routine_Name  : constant String := "Parse_Functions.Process_Name_Start ";
+      TP            : Positive;
+      Command       : Unbounded_String;
    begin
-      I_Pos := I_Pos + 1;
-      Put_Line ("Parse_Functions.Process_Name_Start not implemeted");
+      Put_Line (Routine_Name);
+      if First_Nonwhite then
+         TP := Skip_Var (I_Pos);
+         Skip_In_Buffer_Spaces (TP);
+         if Get_Input_Character (TP) = '=' then
+            Append (Buffer, Integer'Image (Get_Command_Value ("Let")));
+         end if;
+      end if;
+
+      while I_Pos <= Input_Buffer_Length and then
+        Is_Name_Character (Get_Input_Character (I_Pos)) loop
+         Put_Line (Routine_Name & "input char: " & Get_Input_Character (I_Pos));
+         Append (Command, Get_Input_Character (I_Pos));
+         I_Pos := I_Pos + 1;
+      end loop;
+      Put_Line (Routine_Name & "Command: " & To_String (Command));
+      Append (Buffer, Integer'Image (Get_Command_Value (To_String (Command))));
+
       First_Nonwhite := False;
+      Label_Valid := False;
 
    end Process_Name_Start;
 

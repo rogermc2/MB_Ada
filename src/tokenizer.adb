@@ -153,8 +153,7 @@ package body Tokenizer is
             null;
             --  MMBasic  1035
          elsif M_Basic.Is_Name_Start (aChar) then
-            Process_Name_Start (Buffer, Ptr, First_Nonwhite);
-            Label_Valid := False;
+            Process_Name_Start (Buffer, Ptr, First_Nonwhite, Label_Valid);
             --  MMBasic  1054
          elsif aChar = '(' then
             Put_Line (Routine_Name & "aChar = '(' not implemented: ");
