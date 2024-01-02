@@ -260,29 +260,6 @@ package body M_Basic is
 
    end Defined_Subfunction;
 
-   --  Evaluate evaluates an expression.
-   --  Evaluate returns either the float or string in the pointer arguments
-   --  *t points to an integer which holds the type of variable we are looking for
-   --  if *t = T_STR or T_NBR or T_INT throw an error will be thrown if the
-   --  result is not the correct type
-   --  if *t = T_NOTYPE it will not throw an error and will return the type
-   --  found in *t
-   --  this will check that the expression is terminated correctly and throw
-   --  an error if not.
-   --  flags & E_NOERROR will suppress that check.
-   function Evaluate
-     (Expression : String; Fa : Configuration.MMFLOAT; Ia : Long_Long_Integer;
-      Sa         : in out String; Ta : Integer; Flags : Integer) return Long_Long_Integer is
-      Result   : Long_Long_Integer;
-      O        : Integer;
-      T        : Integer := Ta;
-      Func     : Unbounded_String;
-   begin
-      --        Get_Value ();
-      return Result;
-
-   end Evaluate;
-
    procedure Execute_Command (Buffer : String_Buffer; Command : Unbounded_String) is
       use Interfaces;
       use Ada.Assertions;
