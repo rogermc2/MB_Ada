@@ -91,6 +91,8 @@ package body Tokenizer is
       Last_Ptr               : Positive := Ptr;
       --        Done           : Boolean := False;
    begin
+      Put_Line (Routine_Name & "Token Buffer start: ");
+      Support.Print_Buffer (Buffer);
       while Ptr < Input_Buffer_Length loop
          Put_Line (Routine_Name & "Last_Ptr : " & Integer'Image (Last_Ptr));
          Last_Ptr := Ptr;
@@ -101,7 +103,9 @@ package body Tokenizer is
                      Boolean'Image (First_Nonwhite) );
          Put_Line (Routine_Name & "Input_Buffer_Length : " &
                      Integer'Image (Input_Buffer_Length));
-         delay (1.0);
+         Put_Line (Routine_Name & "Token Buffer: ");
+         Support.Print_Buffer (Buffer);
+--           delay (1.0);
          if aChar = ' ' then
             Put_Line (Routine_Name & "aChar = ' '");
             Ptr := Ptr + 1;

@@ -175,7 +175,7 @@ package body Parse_Functions is
      (Buffer                      : out String_Buffer; I_Pos : in out Positive;
       Match_I_Pos                 : Positive; Match_Index : Integer;
       First_Nonwhite, Label_Valid : in out Boolean) is
-      --        Routine_Name  : constant String := "Parse_Functions.Process_Command ";
+      Routine_Name  : constant String := "Parse_Functions.Process_Command ";
       use Ada.Characters.Handling;
       use Support;
    begin
@@ -184,12 +184,13 @@ package body Parse_Functions is
                      (M_Misc.C_Base_Token + Match_Index));
       --  Step over the input buffer command.
       I_Pos := Match_I_Pos;
-
-      --        Put_Line (Routine_Name & "C_Base_Token + Match_Index: " &
-      --                    Integer'Image (M_Misc.C_Base_Token + Match_Index));
-      --        Put_Line (Routine_Name & "I_Pos" & Integer'Image (I_Pos));
-      --        Put_Line (Routine_Name & "Input_Character (I_Pos): " &
-      --                    Get_Input_Character (I_Pos));
+      Put_Line (Routine_Name & "C_Base_Token, Match_Index: " &
+                  Integer'Image (M_Misc.C_Base_Token) & ", " &
+                  Integer'Image (Match_Index));
+      Put_Line (Routine_Name & "C_Base_Token + Match_Index: " &
+                  Integer'Image (M_Misc.C_Base_Token + Match_Index));
+      Put_Line (Routine_Name & "Buffer:");
+      Support.Print_Buffer (Buffer);
       if Match_Index + M_Misc.C_Base_Token =
         Get_Command_Value ("Rem") then
          --  MMBasic 962 copy everything
@@ -332,20 +333,18 @@ package body Parse_Functions is
       Done          : Boolean := False;
       OK            : Boolean := True;
    begin
-      --        Put_Line (Routine_Name & "In_Buffer: '" & Get_Input_Buffer & "'");
-      --        Put_Line (Routine_Name & "P, TP2: " &
-      --                    Integer'Image (P) & ", " & Integer'Image (TP2));
       Put_Line (Routine_Name & "In_Command: '" & In_Command & "'");
 
       --  MMBasic 925
       TP := 0;
       while TP < Command_Table'Last - 1 and then not Found loop
          TP := TP + 1;
+         TP2 := P;
          Found := To_Upper (To_String (Command_Table (TP).Name)) = In_Command;
          if Found then
             Command := Command_Table (TP);
-            --              Put_Line (Routine_Name & "Command found: '" &
-            --                          To_String (Command.Name) & "'");
+            Put_Line (Routine_Name & "Command found: '" &
+                        To_String (Command.Name) & "'");
             --  MMBasic 937
             if TP <  Length (Command.Name) and then
               Element (Command.Name, TP) = '(' then
@@ -370,17 +369,16 @@ package body Parse_Functions is
                            To_Upper (To_String (Get_Long_Command_From_Input (P)));
             CT_Name    : Unbounded_String;
          begin
-            --              Put_Line (Routine_Name & "long In_Command: '" & In_Command & "'");
             TP := 0;
             while TP < Command_Table'Last - 1 and then not Found loop
                TP := TP + 1;
                CT_Name := Command_Table (TP).Name;
                Remove_Spaces (CT_Name);
-
-               --                 Put_Line (Routine_Name & "CT_Name, In_Command: " &
-               --                           To_Upper (To_String (CT_Name)) & ", " & In_Command);
+               Put_Line (Routine_Name & "CT_Name, In_Command: " &
+                           To_Upper (To_String (CT_Name)) & ", " & In_Command);
                Found :=
                  To_Upper (To_String (CT_Name)) = In_Command;
+
                if Found then
                   Put_Line (Routine_Name & "long Command found for: '" &
                               In_Command & "'");
@@ -396,8 +394,6 @@ package body Parse_Functions is
                   Match_I_Pos := TP2;
                   Match_Index := TP;
                   Match_Length := Length (Command.Name);
-                  --                    Put_Line (Routine_Name & "long Command found: '" &
-                  --                                To_String (Command.Name) & "'");
                end if;
             end loop;
          end;

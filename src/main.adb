@@ -96,7 +96,8 @@ begin
       Global.Error_In_Prompt := False;
       Load_Input_Buffer (0);
       if Input_Buffer_Length > 0 then
-         Put_Line (Program_Name & "Tokenize");
+         Put_Line (Program_Name & "Tokenize buffer:");
+         Print_Buffer (Token_Buffer);
          Tokenizer.Tokenize (Token_Buffer, True);
          Put_Line (Program_Name & "Execute_Program");
 --           Put_Line (Program_Name & "Token_Buffer (1): " &
