@@ -19,6 +19,7 @@ with Flash;
 with Global;
 with M_Misc;
 with Memory;
+with Support;
 
 package body M_Basic is
 
@@ -244,7 +245,7 @@ package body M_Basic is
       Save_Local_Index   : Natural := 0;
       Interupt_Check     : Integer := 0;
       T_Arg              : Function_Type := T_NOTYPE;
-      theCommand         : Command_And_Token_Functions.Access_Procedure;
+      Command_Ptr        : Command_And_Token_Functions.Access_Procedure;
       No_Abort           : Boolean := True;
       Done               : Boolean := False;
    begin
@@ -254,6 +255,7 @@ package body M_Basic is
       Skip_Element (Command_Line, Next_Statement_Pos);
       Done := Command_Line_Pos >= Flash.Prog_Memory'Length or else
         Command_Line (Command_Line_Pos) = '\';  --  ignore comment line
+
       if Done then
          Put_Line (Routine_Name & "No more token buffer elements");
       else
@@ -263,8 +265,8 @@ package body M_Basic is
             --              if setjmp (ErrNext) = 0 then
             Save_Local_Index := Local_Index;
             Token := Integer'Value (Element (Buffer, Command_Line_Pos));
---              Put_Line (Routine_Name & "Token > C_Base_Token: " &
---                          Boolean'Image (Token > M_Misc.C_Base_Token ));
+            Put_Line (Routine_Name & "239 Token > C_Base_Token: " &
+                        Boolean'Image (Token > M_Misc.C_Base_Token ));
 --              Put_Line
 --                (Routine_Name & "Token - C_Base_Token < Command_Table_Size: "
 --                 & Boolean'Image
@@ -279,13 +281,15 @@ package body M_Basic is
               and then Command_Table
                 (Token - M_Misc.C_Base_Token).Command_Type = T_CMD
             then
---                 Command_Token := To_Unbounded_String  (Integer'Image (Token));
+               --                 Command_Token := To_Unbounded_String  (Integer'Image (Token));
+               --  246
                T_Arg := T_CMD;
                --  Execute the command
-               Put_Line (Routine_Name & "Executing command, Token: " &
+               Put_Line (Routine_Name & "247 Executing command, Token: " &
                            Integer'Image (Token));
-               theCommand :=
+               Command_Ptr :=
                  Command_Table (Token - M_Misc.C_Base_Token).Function_Ptr;
+               Command_Ptr.all;
 
             end if;
             --              else
@@ -335,17 +339,17 @@ package body M_Basic is
       Done         : Boolean := False;
    begin
       if not Is_Empty (Buffer) then
-         Put_Line (Routine_Name & "Buffer is Not Empty");
+         Put_Line (Routine_Name & "Buffer");
+         Support.Print_Buffer (Buffer);
          --  194
          Skip_Spaces (Buffer.First_Element, Program_Ptr);
-         Put_Line (Routine_Name & "Buffer.Last_Index: " &
-                     Integer'Image (Positive (Buffer.Last_Index)));
+--           Put_Line (Routine_Name & "Buffer length: " &
+--                       Integer'Image (Positive (Buffer.Last_Index)));
          while not Done and then Program_Ptr <= Positive (Buffer.Last_Index) loop
             if Buffer (Program_Ptr) = "0" then
                Program_Ptr := Program_Ptr + 1;
             end if;
 
-            Put_Line (Routine_Name & "199");
             --  199
             if Buffer (Program_Ptr) = T_NEWLINE then
                Current_Line_Ptr := Program_Ptr;
