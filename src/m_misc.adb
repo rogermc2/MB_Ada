@@ -3,11 +3,13 @@ with Interfaces;
 
 with Ada.Assertions; use Ada.Assertions;
 with Ada.Characters.Handling;
+with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Ada.Text_IO; use Ada.Text_IO;
-
 --  with Command_And_Token_Tables; use Command_And_Token_Tables;
+with Commands;
 with Console;
 with Flash;
+with Global;
 with M_Basic; use M_Basic;
 package body M_Misc is
 
@@ -90,14 +92,18 @@ package body M_Misc is
 
    end Check_Interrupt;
 
-   procedure Command_Option is
-      Routine_Name : constant String := "M_Misc.Command_Option ";
+   procedure Option_Cmd is
+      Routine_Name : constant String := "M_Misc.Option_Cmd ";
       TP : Positive;
    begin
       Put_Line (Routine_Name);
-      check_s
+      TP := Check_String (To_String (Global.E_UB_String), "BASE");
+      if TP > 0 then
+            Assert (not Commands.Dim_Used, Routine_Name & "Option must be before DIM or LOCAL");
+         Option_Base := Get_Int (TP, 0, 1);
+      end if;
 
-   end Command_Option;
+   end Option_Cmd;
 
    procedure Crunch_Data (Pos : Positive; aChar : Character) is
       Routine_Name : constant String := "M_Misc.Crunch_Data ";

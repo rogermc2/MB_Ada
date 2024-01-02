@@ -260,6 +260,29 @@ package body M_Basic is
 
    end Defined_Subfunction;
 
+   --  Evaluate evaluates an expression.
+   --  Evaluate returns either the float or string in the pointer arguments
+   --  *t points to an integer which holds the type of variable we are looking for
+   --  if *t = T_STR or T_NBR or T_INT throw an error will be thrown if the
+   --  result is not the correct type
+   --  if *t = T_NOTYPE it will not throw an error and will return the type
+   --  found in *t
+   --  this will check that the expression is terminated correctly and throw
+   --  an error if not.
+   --  flags & E_NOERROR will suppress that check.
+   function Evaluate
+     (Expression : String; Fa : Configuration.MMFLOAT; Ia : Long_Long_Integer;
+      Sa         : in out String; Ta : Integer; Flags : Integer) return Long_Long_Integer is
+      Result   : Long_Long_Integer;
+      O        : Integer;
+      T        : Integer := Ta;
+      Func     : Unbounded_String;
+   begin
+      --        Get_Value ();
+      return Result;
+
+   end Evaluate;
+
    procedure Execute_Command (Buffer : String_Buffer; Command : Unbounded_String) is
       use Interfaces;
       use Ada.Assertions;
@@ -320,12 +343,12 @@ package body M_Basic is
                --  Execute the command
                Put_Line (Routine_Name &
                            "247 Executing command, Token, Command_Table index: "
-                            & Integer'Image (Token) & ", " &
+                         & Integer'Image (Token) & ", " &
                            Integer'Image (Token - M_Misc.C_Base_Token));
                Command_Ptr :=
                  Command_Table (Token - M_Misc.C_Base_Token).Function_Ptr;
                Assert (Command_Ptr /= null, Routine_Name &
-                           "247 Command_Ptr is null");
+                         "247 Command_Ptr is null");
                Command_Ptr.all;
 
             end if;
@@ -507,6 +530,83 @@ package body M_Basic is
       return Copy_From_Mod (Mod_Ptr);
 
    end Get_C_Fun_Ptr;
+
+   function Get_Int (aString : String; Lo, Hi : Positive) return Integer is
+      Result : Integer;
+   begin
+
+      return Result;
+
+   end Get_Int;
+
+   function Get_Integer (aString : String; Lo, Hi : Positive)
+                         return Long_Long_Integer is
+      theType : Function_Type := T_INT;
+      F       : Configuration.MMFLOAT;
+      I64     : Long_Long_Integer;
+      S       : Unbounded_String;
+   begin
+
+      return I64;
+
+   end Get_Integer;
+
+   function Get_Value
+     (Expression : Unbounded_String; Fa : in out Configuration.MMFLOAT;
+      Ia         :  in out Long_Long_Integer; Sa : in out Unbounded_String;
+      OO         :  in out Integer; Ta : in out Function_Type)
+      return Unbounded_String is
+      use Interfaces;
+      use Ada.Assertions;
+      Routine_Name : constant String := "M_Basic.Get_Value ";
+      F            : Configuration.MMFLOAT := 0.0;
+      I64          : Long_Long_Integer := 0;
+      S            : Unbounded_String;
+      theType      : Function_Type := T_NOTYPE;  -- t
+      P            : Positive := 1;
+      Ro           : Positive;
+      Token        : Unbounded_String;
+   begin
+      --        Test_Stack_Overflow;
+      Skip_Spaces (Expression, P);
+      Token := To_Unbounded_String (Slice (Expression, P, Length (Expression)));
+      if Token_Function (To_String (Token)) = "Not" then
+         P := P + 1;
+         --  Recursion, get the next value
+         Token := Get_Value (Token, F, I64, S, RO, theType);
+         if theType and T_NBR = T_NBR then
+            --  Invert the returned value
+            if F = 0.0 then
+               F := 1.0;
+            else
+               F := 0.0;
+            end if;
+
+         elsif theType and T_INT = T_INT then
+            --  Invert the returned value
+            if I64 = 0 then
+               I64 := 1;
+            else
+               I64 := 0;
+            end if;
+         else
+            Assert (False, Routine_Name & "invalid type, expected a number.");
+         end if;
+
+         Skip_Spaces (Expression, P);
+         Fa := F;
+         Ia := I64;
+         Sa := S;
+         Ta := theType;
+         OO := Ro;
+
+      elsif Token_Function (To_String (Token)) = "-" then
+         null;
+      end if;
+
+      return Token;
+
+   end Get_Value;
 
    procedure Init_Basic is
       Routine_Name : constant String := "M_Basic.Init_Basic ";
@@ -832,5 +932,21 @@ package body M_Basic is
       return Pos2;
 
    end Skip_Var;
+
+   function Token_Function (Token : String) return Unbounded_String is
+      use M_Misc;
+      Token_Value : constant Positive := Integer'Value (Token);
+      Result      : Unbounded_String;
+   begin
+      if Token_Value >= C_Base_Token and then
+        Token_Value < Token_Table_Size + C_Base_Token then
+         Result := Token_Table (Token_Value - C_Base_Token).Name;
+      else
+         Result := Token_Table (1).Name;
+      end if;
+
+      return Result;
+
+   end Token_Function;
 
 end M_Basic;

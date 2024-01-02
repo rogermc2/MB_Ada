@@ -1,14 +1,18 @@
 
 with Interfaces; use Interfaces;
---  with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
+
+with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 
 with Configuration;
 with Exceptions;
 
 package Global is
 
-   F_Return : Float := 0.0;
-   E_Float  : Float := 0.0;
+   F_Return    : Float := 0.0;
+   E_Float     : Float := 0.0;
+   I_Return    : Integer := 0;
+   E_Integer   : Integer := 0;
+   E_UB_String : Unbounded_String;
 
    --  Flags used in the program lines
    --  end of a command

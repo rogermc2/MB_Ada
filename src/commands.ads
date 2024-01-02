@@ -5,6 +5,7 @@ with Command_And_Token_Tables; use Command_And_Token_Tables;
 
 package Commands is
 
+   Dim_Used          : Boolean := False;
    Option_Error_Skip : Integer := 0;
 
    procedure Check_Type_Specified

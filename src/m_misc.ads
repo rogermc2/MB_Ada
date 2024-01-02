@@ -6,6 +6,6 @@ package M_Misc is
 
    procedure Autosave (Current_Line_Ptr : Natural; Command_Line : String);
    function Check_Interrupt return Integer;
-   procedure Command_Option;
+   procedure Option_Cmd;
 
 end M_Misc;

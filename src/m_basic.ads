@@ -11,6 +11,7 @@ package M_Basic is
    Current_Line_Ptr : Natural := 0;
    Continue_Point   : Natural := 0;
    Local_Index      : Natural := 0;
+   Option_Base      : Natural := 0;
 
    --  Subfunctions is an array of pointers to program memory elements
    Subfunctions             : array (1 .. Configuration.MAXSUBFUN) of Natural :=
@@ -40,5 +41,6 @@ package M_Basic is
    procedure Save_Program_To_Flash (Buffer: String; Msg : Boolean);
    procedure Skip_Spaces (Buffer : Unbounded_String; Pos : in out Positive);
    function Skip_Var (Pos : in out Positive) return Positive;
+   function Token_Function (Token : String) return Unbounded_String;
 
 end M_Basic;

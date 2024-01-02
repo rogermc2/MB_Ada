@@ -120,8 +120,7 @@ package Command_And_Token_Tables is
 
    cmd_null           : constant Access_Procedure :=  Null;
    cmd_autosave       : constant Access_Procedure :=  Null;
-   cmd_option         : constant Access_Procedure :=
-                          M_Misc.Command_Option'Access;
+   cmd_option         : constant Access_Procedure := M_Misc.Option_Cmd'Access;
    cmd_pause          : constant Access_Procedure :=  Null;
    cmd_timer          : constant Access_Procedure :=  Null;
    cmd_date           : constant Access_Procedure :=  Null;
