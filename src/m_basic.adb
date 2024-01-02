@@ -531,7 +531,7 @@ package body M_Basic is
 
    end Get_C_Fun_Ptr;
 
-   function Get_Int (aString : String; Lo, Hi : Positive) return Integer is
+   function Get_Int (aString : String; Lo, Hi : Natural) return Integer is
       Result : Integer;
    begin
 
@@ -539,7 +539,7 @@ package body M_Basic is
 
    end Get_Int;
 
-   function Get_Integer (aString : String; Lo, Hi : Positive)
+   function Get_Integer (aString : String; Lo, Hi : Natural)
                          return Long_Long_Integer is
       theType : Function_Type := T_INT;
       F       : Configuration.MMFLOAT;

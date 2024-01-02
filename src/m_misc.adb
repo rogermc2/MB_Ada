@@ -92,19 +92,6 @@ package body M_Misc is
 
    end Check_Interrupt;
 
-   procedure Option_Cmd is
-      Routine_Name : constant String := "M_Misc.Option_Cmd ";
-      TP : Positive;
-   begin
-      Put_Line (Routine_Name);
-      TP := Check_String (To_String (Global.E_UB_String), "BASE");
-      if TP > 0 then
-            Assert (not Commands.Dim_Used, Routine_Name & "Option must be before DIM or LOCAL");
-         Option_Base := Get_Int (TP, 0, 1);
-      end if;
-
-   end Option_Cmd;
-
    procedure Crunch_Data (Pos : Positive; aChar : Character) is
       Routine_Name : constant String := "M_Misc.Crunch_Data ";
    begin

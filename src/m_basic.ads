@@ -28,6 +28,7 @@ package M_Basic is
    procedure Execute_Program (Buffer : String_Buffer);
    function Find_Subfunction (Token : String; Fun_Type : Function_Type)
                               return Natural;
+   function Get_Int (aString : String; Lo, Hi : Natural) return Integer;
    procedure Init_Basic;
    function Is_Name_Character (aChar : Character) return Boolean;
    pragma Inline (Is_Name_Character);
