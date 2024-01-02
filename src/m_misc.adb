@@ -90,9 +90,19 @@ package body M_Misc is
 
    end Check_Interrupt;
 
-   procedure Crunch_Data (Pos : Positive; aChar : Character) is
+   procedure Command_Option is
+      Routine_Name : constant String := "M_Misc.Command_Option ";
+      TP : Positive;
    begin
-      null;
+      Put_Line (Routine_Name);
+      check_s
+
+   end Command_Option;
+
+   procedure Crunch_Data (Pos : Positive; aChar : Character) is
+      Routine_Name : constant String := "M_Misc.Crunch_Data ";
+   begin
+      Put_Line (Routine_Name & "not implemented");
 
    end Crunch_Data;
 

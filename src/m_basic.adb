@@ -30,6 +30,38 @@ package body M_Basic is
    procedure Skip_Element (aLine : String; Pos : in out Positive);
    procedure Skip_Spaces (aLine : String; Pos : in out Positive);
 
+   --  Check_String checks if the next text in an element (a basic statement)
+   --  corresponds to an alpha string.
+   --  Leading white space is skipped and the string must be terminated with a
+   --  valid terminating character
+   --  (space, null, comma, opening bracket or comment).
+   --  Check_String returns a pointer to the next non space character
+   --  after the matched string if found or 0 otherwise.
+   function Check_String (aString, Token : String) return Natural is
+      use Ada.Characters.Handling;
+      S_Pos  : Positive := 1;
+      T_Pos  : Positive := 1;
+      Result : Natural := 0;
+   begin
+      Skip_Spaces (aString, S_Pos);
+      while T_Pos <= Token'Length and then
+        To_Upper (Token (T_Pos)) = To_Upper (aString (S_Pos)) loop
+         S_Pos := S_Pos + 1;
+         T_Pos := T_Pos + 1;
+      end loop;
+
+      if T_Pos = Token'Length then
+         if aString (S_Pos) = ' ' or else aString (S_Pos) = ''' or else
+           aString (S_Pos) = '\'  or else aString (S_Pos) = '(' then
+            Skip_Spaces (aString, S_Pos);
+            Result := S_Pos;
+         end if;
+      end if;
+
+      return Result;
+
+   end Check_String;
+
    procedure Clear_Program is
    begin
       Clear_Runtime;

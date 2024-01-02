@@ -8,6 +8,7 @@ with Ada.Containers.Indefinite_Vectors;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 
 with Command_And_Token_Functions; use Command_And_Token_Functions;
+with M_Misc;
 
 package Command_And_Token_Tables is
 
@@ -119,7 +120,8 @@ package Command_And_Token_Tables is
 
    cmd_null           : constant Access_Procedure :=  Null;
    cmd_autosave       : constant Access_Procedure :=  Null;
-   cmd_option         : constant Access_Procedure :=  Null;
+   cmd_option         : constant Access_Procedure :=
+                          M_Misc.Command_Option'Access;
    cmd_pause          : constant Access_Procedure :=  Null;
    cmd_timer          : constant Access_Procedure :=  Null;
    cmd_date           : constant Access_Procedure :=  Null;
