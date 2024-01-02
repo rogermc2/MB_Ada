@@ -15,8 +15,9 @@ package Parse_Functions is
       First_Nonwhite, Label_Valid : in out Boolean);
    procedure Process_Double_Quote
      (Buffer : in out String_Buffer; I_Pos  : in out Positive);
-   procedure Process_Name_Start (Buffer : in out String_Buffer;
-                                 I_Pos  : in out Positive);
+   procedure Process_Name_Start
+     (Buffer : in out String_Buffer; I_Pos  : in out Positive;
+      First_Nonwhite : Boolean);
    procedure Process_First_Nonwhite
      (Buffer                    : out String_Buffer; I_Pos  : in out Positive;
       Label_Valid               : in out Boolean; First_Nonwhite : in out Boolean;

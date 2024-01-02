@@ -222,7 +222,8 @@ package body Parse_Functions is
    end Process_Double_Quote;
 
    procedure Process_Name_Start
-     (Buffer : in out String_Buffer; I_Pos : in out Positive) is
+     (Buffer : in out String_Buffer; I_Pos : in out Positive;
+      First_Nonwhite : Boolean) is
    begin
       I_Pos := I_Pos + 1;
       Put_Line ("Parse_Functions.Process_Name_Start not implemeted");

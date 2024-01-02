@@ -151,6 +151,10 @@ package body Tokenizer is
             Put_Line (Routine_Name & "Function_Or_Keyword found: " &
                      Buffer.Last_Element);
             null;
+            --  MMBasic  1035
+         elsif M_Basic.Is_Name_Start (aChar) then
+            Process_Name_Start (Buffer, Ptr, First_Nonwhite);
+            --  MMBasic  1054
          elsif aChar = '(' then
             Put_Line (Routine_Name & "aChar = '(' not implemented: ");
             Ptr := Ptr + 1;
