@@ -229,15 +229,16 @@ package body M_Basic is
    end Defined_Subfunction;
 
    procedure Execute_Command (Buffer : String_Buffer; Command : Unbounded_String) is
-      use String_Buffer_Package;
       use Interfaces;
+      use Ada.Assertions;
+      use String_Buffer_Package;
       Routine_Name       : constant String := "M_Basic.Execute_Command ";
       Command_Line       : constant String := To_String (Command);
       Next_Statement_Pos : Positive := 1;
       Command_Line_Pos   : Positive := 1;   --  p
       Token              : Integer;
       Null_Function      : Function_Type := T_NOTYPE;
---        Command_Token      : Unbounded_String;
+      --        Command_Token      : Unbounded_String;
       Fa                 : Configuration.MMFLOAT := 0.0;
       I64a               : Long_Long_Integer := 0;
       Sa                 : Unbounded_String := To_Unbounded_String ("");
@@ -265,30 +266,34 @@ package body M_Basic is
             --              if setjmp (ErrNext) = 0 then
             Save_Local_Index := Local_Index;
             Token := Integer'Value (Element (Buffer, Command_Line_Pos));
+            --  C_Base_Token is the base of the token numbers.
             Put_Line (Routine_Name & "239 Token > C_Base_Token: " &
                         Boolean'Image (Token > M_Misc.C_Base_Token ));
---              Put_Line
---                (Routine_Name & "Token - C_Base_Token < Command_Table_Size: "
---                 & Boolean'Image
---                   (Token - M_Misc.C_Base_Token < Command_Table_Size));
---              Put_Line
---                (Routine_Name & "Command_Table " &
---                "(Token - C_Base_Token).Command_Type = T_CMD: " &
---                   Boolean'Image (Token > M_Misc.C_Base_Token ));
+            --              Put_Line
+            --                (Routine_Name & "Token - C_Base_Token < Command_Table_Size: "
+            --                 & Boolean'Image
+            --                   (Token - M_Misc.C_Base_Token < Command_Table_Size));
+            --              Put_Line
+            --                (Routine_Name & "Command_Table " &
+            --                "(Token - C_Base_Token).Command_Type = T_CMD: " &
+            --                   Boolean'Image (Token > M_Misc.C_Base_Token ));
 
             if Token > M_Misc.C_Base_Token and then
               Token - M_Misc.C_Base_Token < Command_Table_Size
               and then Command_Table
                 (Token - M_Misc.C_Base_Token).Command_Type = T_CMD
             then
-               --                 Command_Token := To_Unbounded_String  (Integer'Image (Token));
                --  246
                T_Arg := T_CMD;
                --  Execute the command
-               Put_Line (Routine_Name & "247 Executing command, Token: " &
-                           Integer'Image (Token));
+               Put_Line (Routine_Name &
+                           "247 Executing command, Token, Command_Table index: "
+                            & Integer'Image (Token) & ", " &
+                           Integer'Image (Token - M_Misc.C_Base_Token));
                Command_Ptr :=
                  Command_Table (Token - M_Misc.C_Base_Token).Function_Ptr;
+               Assert (Command_Ptr /= null, Routine_Name &
+                           "247 Command_Ptr is null");
                Command_Ptr.all;
 
             end if;
@@ -343,8 +348,8 @@ package body M_Basic is
          Support.Print_Buffer (Buffer);
          --  194
          Skip_Spaces (Buffer.First_Element, Program_Ptr);
---           Put_Line (Routine_Name & "Buffer length: " &
---                       Integer'Image (Positive (Buffer.Last_Index)));
+         --           Put_Line (Routine_Name & "Buffer length: " &
+         --                       Integer'Image (Positive (Buffer.Last_Index)));
          while not Done and then Program_Ptr <= Positive (Buffer.Last_Index) loop
             if Buffer (Program_Ptr) = "0" then
                Program_Ptr := Program_Ptr + 1;

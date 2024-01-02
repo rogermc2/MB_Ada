@@ -376,11 +376,11 @@ package body Command_And_Token_Tables is
    end Trim_Input_Buffer;
 
 begin
-   for index in 1 .. Num_Functions loop
+   for index in 1 .. Num_Functions loop   --  118
       Command_Table (index) := Function_Types (index);
    end loop;
 
-   for index in 1 .. Num_Commands loop
+   for index in 1 .. Num_Commands loop    --  53
       Command_Table (Num_Functions + index) := Command_Types (index);
    end loop;
 
