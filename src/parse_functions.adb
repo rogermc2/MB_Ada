@@ -229,7 +229,6 @@ package body Parse_Functions is
       TP            : Positive;
       Command       : Unbounded_String;
    begin
-      Put_Line (Routine_Name);
       if First_Nonwhite then
          TP := Skip_Var (I_Pos);
          Skip_In_Buffer_Spaces (TP);
@@ -240,12 +239,11 @@ package body Parse_Functions is
 
       while I_Pos <= Input_Buffer_Length and then
         Is_Name_Character (Get_Input_Character (I_Pos)) loop
-         Put_Line (Routine_Name & "input char: " & Get_Input_Character (I_Pos));
          Append (Command, Get_Input_Character (I_Pos));
          I_Pos := I_Pos + 1;
       end loop;
       Put_Line (Routine_Name & "Command: " & To_String (Command));
-      Append (Buffer, Integer'Image (Get_Command_Value (To_String (Command))));
+      Append (Buffer, To_String (Command));
 
       First_Nonwhite := False;
       Label_Valid := False;
