@@ -223,10 +223,11 @@ package body Parse_Functions is
 
    procedure Process_Name_Start
      (Buffer : in out String_Buffer; I_Pos : in out Positive;
-      First_Nonwhite : Boolean) is
+      First_Nonwhite : in out Boolean) is
    begin
       I_Pos := I_Pos + 1;
       Put_Line ("Parse_Functions.Process_Name_Start not implemeted");
+      First_Nonwhite := False;
 
    end Process_Name_Start;
 
