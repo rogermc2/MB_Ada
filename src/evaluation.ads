@@ -16,7 +16,7 @@ package Evaluation is
    T_Arg  : Function_Type;
 
    function Get_Int
-     (Expression : Unbounded_String; Lo, Hi : Natural) return Integer;
+     (Expression : in out Unbounded_String; Lo, Hi : Integer) return Integer;
    function Get_Integer
      (Expression : in out Unbounded_String) return Long_Long_Integer;
    function Get_Value

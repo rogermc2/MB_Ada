@@ -202,12 +202,15 @@ package body Evaluation is
 
    end Evaluate;
 
-   function Get_Int (Expression : Unbounded_String; Lo, Hi : Natural)
+   function Get_Int (Expression : in out Unbounded_String; Lo, Hi : Integer)
                      return Integer is
-      Result : Integer;
+      Routine_Name : constant String := "M_Basic.Get_Int ";
+      Value : constant Integer := Integer (Get_Integer (Expression));
    begin
-
-      return Result;
+      Assert (Value >= Lo and then Value <= Hi, Routine_Name &
+                Integer'Image (Value) & " is invalid, should be in the range " &
+             Integer'Image (Lo) & " -" & Integer'Image (Hi));
+      return Value;
 
    end Get_Int;
 
