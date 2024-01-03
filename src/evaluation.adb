@@ -1,6 +1,7 @@
 
 with Interfaces;
 with Ada.Assertions; use Ada.Assertions;
+with Ada.Strings;
 
 with Command_And_Token_Functions; use Command_And_Token_Functions;
 with Global;
@@ -17,19 +18,19 @@ package body Evaluation is
       use Interfaces;
       use Configuration;
       Routine_Name : constant String := "M_Basic.Do_Expression ";
-      New_Exp : Unbounded_String;
-      Fa1     : Configuration.MMFLOAT := Fa;
-      Fa2	  : Configuration.MMFLOAT := 0.0;
-      Ia1     : Long_Long_Integer := Ia;
-      Ia2     : Long_Long_Integer := 0;
+      New_Exp      : Unbounded_String;
+      Fa1          : Configuration.MMFLOAT := Fa;
+      Fa2	         : Configuration.MMFLOAT := 0.0;
+      Ia1          : Long_Long_Integer := Ia;
+      Ia2          : Long_Long_Integer := 0;
       --  O1      : Natural := OO;
-      O2      : Natural := 0;
+      O2           : Natural := 0;
       --  Sa1     : Unbounded_String := Sa;
-      Sa2     : Unbounded_String;
-      T1      : Function_Type := Ta;
-      T2      : Function_Type := T_NA;
-      Func    : Access_Procedure;
-      Done    : Boolean := False;
+      Sa2          : Unbounded_String;
+      T1           : Function_Type := Ta;
+      T2           : Function_Type := T_NA;
+      Func         : Access_Procedure;
+      Done         : Boolean := False;
    begin
       --  MMBasic 1116
       New_Exp := Get_Value (Expression, Fa2, Ia2, Sa2, O2, T2);
@@ -41,7 +42,7 @@ package body Evaluation is
          else
             --  MMBasic 1120
             Assert ((T1 and T_STR) = (T2 and T_STR), Routine_Name &
-                   "incompatible exptesion types.");
+                      "incompatible exptesion types.");
             T_Arg := Token_Table (OO).Command_Type and (T_NBR or T_INT);
             if T_Arg = T_NBR then
                if (T1 and T_INT) = T_INT then
@@ -157,24 +158,50 @@ package body Evaluation is
    function Evaluate
      (Expression : in out Unbounded_String; Fa : in out Configuration.MMFLOAT;
       Ia         : in out Long_Long_Integer; Sa : in out Unbounded_String;
-      Ta         : in out Function_Type; Flags : Integer)
-      return Long_Long_Integer is
+      Ta         : in out Function_Type; Flags : Interfaces.Unsigned_16)
+      return Unbounded_String is
       use Interfaces;
-      OO         : Natural := 0;
-      New_Exp    : Unbounded_String :=
-        Get_Value (Expression, Fa, Ia, Sa, OO, Ta);
-      Result     : Long_Long_Integer;
+      use Ada.Strings;
+      Routine_Name : constant String := "M_Basic.Evaluate ";
+      O            : Natural := 0;
+      S            : Unbounded_String;
+      T            : Function_Type := Ta;
    begin
-      while OO /= Global.E_END loop
-         New_Exp := Do_Expression (New_Exp, Fa, Ia, Sa, OO, Ta);
+      --  1122 get the left hand side of the expression,
+      --  the operator is returned in o
+      Expression := Get_Value (Expression, Fa, Ia, S, O, T);
+      while O /= Global.E_END loop
+         Expression := Do_Expression (Expression, Fa, Ia, S, O, T);
       end loop;
-      if (Ta and T_NBR) = T_NBR then
-         Result := Long_Long_Integer (Fa);
-      else
-         Result := Ia;
+
+      Assert ((T and T_STR) /= T_STR or else
+                not (((Ta and T_NBR) = T_NBR) or else
+                    ((Ta and T_INT) = T_INT)), Routine_Name &
+                "expected a nmber.");
+      Assert ((T and T_STR) /= T_STR or else
+                not (((T and T_NBR) = T_NBR) or else
+                    ((T and T_INT) = T_INT)), Routine_Name & "expected a str.");
+      Assert (O = Global.E_END, Routine_Name & "invalid number of arguments.");
+
+      if (Ta and T_NBR) = T_NBR and then (T and T_INT) = T_INT then
+         Fa := Configuration.MMFLOAT (Ia);
+      elsif (Ta and T_INT) = T_INT and then (T and T_NBR) = T_NBR then
+         Ia := Long_Long_Integer (Fa);
       end if;
 
-      return Result;
+      Ta := T;
+      Sa := S;
+
+      if (Flags and Global.E_NOERROR) /= Global.E_NOERROR then
+         Expression := Trim (Expression, Left);
+         Assert (Length (Expression) = 0 or else
+                 Element (Expression, 1) = ',' or else
+                 Element (Expression, 1) = ')' or else
+                 Element (Expression, 1) = ''',
+                 Routine_Name & "invalid syntax");
+      end if;
+
+      return Expression;
 
    end Evaluate;
 

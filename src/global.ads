@@ -46,7 +46,7 @@ package Global is
    V_FUNCT             : constant Unsigned_16:= 16#4000#;
 
    --  these flags are used in the last argument in expression()
-   E_NOERROR           : Boolean := True;
+   E_NOERROR           : constant Unsigned_16 := 1;
    E_ERROR             : constant Natural:= 0;
    E_DONE_GETVAL       : constant Natural:= 2;
 
