@@ -2,43 +2,59 @@
 with Interfaces;
 with Ada.Assertions; use Ada.Assertions;
 
+with Global;
 with M_Basic;
 
 package body Values is
+   function Do_Expression
+     (Expression : in out Unbounded_String; Fa : in out Configuration.MMFLOAT;
+      Ia         : in out Long_Long_Integer; Sa : in out Unbounded_String;
+      OO         : in out Unbounded_String; Ta  : in out Function_Type)
+      return Unbounded_String is
+      New_Exp : Unbounded_String :=
+                  Get_Value (Expression, Fa, Ia, Sa, OO, Ta);
+      Result  : Unbounded_String;
+   begin
+      return Result;
+
+   end Do_Expression;
 
    function Do_Not
      (Prev_Token : Unbounded_String; P : in out Positive;
       Fa         : in out Configuration.MMFLOAT; Ia : in out Long_Long_Integer;
-      Sa         : in out Unbounded_String; RO    : in out Integer;
+      Sa         : in out Unbounded_String; RO    : in out Unbounded_String;
       Ta         : in out Function_Type) return Unbounded_String is
       use Interfaces;
       Routine_Name : constant String := "M_Basic.Do_Not ";
       Token        : Unbounded_String;
    begin
       P := P + 1;
-      Token := To_Unbounded_String (Slice (Prev_Token, P, Length (Prev_Token)));
-      --  Recursion, get the next value
-      Token := Get_Value (Token, Fa, Ia, Sa, RO, Ta);
-      if (Ta and T_NBR) = T_NBR then
-         --  Invert the returned value
-         if Fa = 0.0 then
-            Fa := 1.0;
+      --  Terminate recursion when end of Prev_Token processd.
+      if P <= Length (Prev_Token) then
+         Token := To_Unbounded_String (Slice (Prev_Token, P, Length (Prev_Token)));
+         --  Recursion, get the next value
+         Token := Get_Value (Token, Fa, Ia, Sa, RO, Ta);
+         if (Ta and T_NBR) = T_NBR then
+            --  Invert the returned value
+            if Fa = 0.0 then
+               Fa := 1.0;
+            else
+               Fa := 0.0;
+            end if;
+
+         elsif (Ta and T_INT) = T_INT then
+            --  Invert the returned value
+            if Ia = 0 then
+               Ia := 1;
+            else
+               Ia := 0;
+            end if;
          else
-            Fa := 0.0;
+            Assert (False, Routine_Name & "invalid type, expected a number.");
          end if;
 
-      elsif (Ta and T_INT) = T_INT then
-         --  Invert the returned value
-         if Ia = 0 then
-            Ia := 1;
-         else
-            Ia := 0;
-         end if;
-      else
-         Assert (False, Routine_Name & "invalid type, expected a number.");
+         M_Basic.Skip_Spaces (Token, P);
       end if;
-
-      M_Basic.Skip_Spaces (Token, P);
 
       return Token;
 
@@ -55,19 +71,31 @@ package body Values is
    --  an error if not.
    --  flags & E_NOERROR will suppress that check.
    function Evaluate
-     (Expression : in out String; Fa : Configuration.MMFLOAT; Ia : Long_Long_Integer;
-      Sa         : in out String; Ta : Integer; Flags : Integer) return Long_Long_Integer is
-      Result   : Long_Long_Integer;
-      O        : Integer;
-      T        : Integer := Ta;
-      Func     : Unbounded_String;
+     (Expression : in out Unbounded_String; Fa : in out Configuration.MMFLOAT;
+      Ia         : in out Long_Long_Integer; Sa : in out Unbounded_String;
+      Ta         : in out Function_Type; Flags : Integer)
+      return Long_Long_Integer is
+      use Interfaces;
+      OO         : Unbounded_String;
+      New_Exp    : Unbounded_String :=
+                     Get_Value (Expression, Fa, Ia, Sa, OO, Ta);
+      Result     : Long_Long_Integer;
    begin
-      --        Get_Value ();
+      while To_String (OO) /= Global.E_END loop
+         New_Exp := Do_Expression (New_Exp, Fa, Ia, Sa, OO, Ta);
+      end loop;
+      if (Ta and T_NBR) = T_NBR then
+         Result := Long_Long_Integer (Fa);
+      else
+         Result := Ia;
+      end if;
+
       return Result;
 
    end Evaluate;
 
-   function Get_Int (aString : String; Lo, Hi : Natural) return Integer is
+   function Get_Int (aString : Unbounded_String; Lo, Hi : Natural)
+                     return Integer is
       Result : Integer;
    begin
 
@@ -75,13 +103,13 @@ package body Values is
 
    end Get_Int;
 
-   function Get_Integer (aString : String; Lo, Hi : Natural)
-                         return Long_Long_Integer is
-      theType : Function_Type := T_INT;
-      F       : Configuration.MMFLOAT;
-      I64     : Long_Long_Integer;
-      S       : Unbounded_String;
+   function Get_Integer (aString : in out Unbounded_String) return Long_Long_Integer is
+      T   : Function_Type := T_INT;
+      F   : Configuration.MMFLOAT := 0.0;
+      S   : Unbounded_String;
+      I64 : Long_Long_Integer := 0;
    begin
+      I64 := Evaluate (aString, F, I64, S, T, 0);
 
       return I64;
 
@@ -90,23 +118,23 @@ package body Values is
    function Get_Value
      (Expression : Unbounded_String; Fa : in out Configuration.MMFLOAT;
       Ia         :  in out Long_Long_Integer; Sa : in out Unbounded_String;
-      OO         :  in out Integer; Ta : in out Function_Type)
+      OO         :  in out Unbounded_String; Ta : in out Function_Type)
       return Unbounded_String is
---        Routine_Name : constant String := "M_Basic.Get_Value ";
+      --        Routine_Name : constant String := "M_Basic.Get_Value ";
       P            : Positive := 1;
-      Token        : Unbounded_String;
+      Data         : Unbounded_String;
    begin
       --        Test_Stack_Overflow;
       M_Basic.Skip_Spaces (Expression, P);
-      Token := To_Unbounded_String (Slice (Expression, P, Length (Expression)));
-      if M_Basic.Token_Function (To_String (Token)) = "Not" then
-         Token := Do_Not (Token, P, Fa, Ia, Sa, OO, Ta);
+      Data := To_Unbounded_String (Slice (Expression, P, Length (Expression)));
+      if M_Basic.Token_Function (To_String (Data)) = "Not" then
+         Data := Do_Not (Data, P, Fa, Ia, Sa, OO, Ta);
 
-      elsif M_Basic.Token_Function (To_String (Token)) = "-" then
+      elsif M_Basic.Token_Function (To_String (Data)) = "-" then
          null;
       end if;
 
-      return Token;
+      return Data;
 
    end Get_Value;
 
