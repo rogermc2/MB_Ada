@@ -3,7 +3,7 @@ with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Command_And_Token_Tables; use Command_And_Token_Tables;
 with Configuration;
 
-package Values is
+package Evaluation is
    F_Arg1 : Configuration.MMFLOAT;
    F_Arg2 : Configuration.MMFLOAT;
    F_Ret  : Configuration.MMFLOAT;
@@ -24,4 +24,4 @@ package Values is
       Ia         : in out Long_Long_Integer; Sa : in out Unbounded_String;
       OO : in out Natural; Ta : in out Function_Type) return Unbounded_String;
 
-end Values;
+end Evaluation;

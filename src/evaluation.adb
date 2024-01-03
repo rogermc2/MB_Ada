@@ -6,7 +6,7 @@ with Command_And_Token_Functions; use Command_And_Token_Functions;
 with Global;
 with M_Basic;
 
-package body Values is
+package body Evaluation is
 
    --  MMBasic 1101 doexpr
    function Do_Expression
@@ -160,7 +160,7 @@ package body Values is
       Ta         : in out Function_Type; Flags : Integer)
       return Long_Long_Integer is
       use Interfaces;
-      OO         : Natural;
+      OO         : Natural := 0;
       New_Exp    : Unbounded_String :=
         Get_Value (Expression, Fa, Ia, Sa, OO, Ta);
       Result     : Long_Long_Integer;
@@ -222,4 +222,4 @@ package body Values is
 
    end Get_Value;
 
-end Values;
+end Evaluation;
