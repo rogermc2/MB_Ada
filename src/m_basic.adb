@@ -31,7 +31,7 @@ package body M_Basic is
    procedure Skip_Spaces (aLine : String; Pos : in out Positive);
 
    --  Check_String checks if the next text in an element (a basic statement)
-   --  corresponds to an alpha string.
+   --  corresponds to an alphabetic string.
    --  Leading white space is skipped and the string must be terminated with a
    --  valid terminating character
    --  (space, null, comma, opening bracket or comment).
@@ -43,8 +43,10 @@ package body M_Basic is
       T_Pos  : Positive := 1;
       Result : Natural := 0;
    begin
+      --  MMBasic 2704
       Skip_Spaces (aString, S_Pos);
       while T_Pos <= Token'Length and then
+        S_Pos <= aString'Length and then
         To_Upper (Token (T_Pos)) = To_Upper (aString (S_Pos)) loop
          S_Pos := S_Pos + 1;
          T_Pos := T_Pos + 1;
@@ -260,7 +262,8 @@ package body M_Basic is
 
    end Defined_Subfunction;
 
-   procedure Execute_Command (Buffer : String_Buffer; Command : Unbounded_String) is
+   procedure Execute_Command (Buffer  : String_Buffer;
+                              Command : Unbounded_String) is
       use Interfaces;
       use Ada.Assertions;
       use String_Buffer_Package;
@@ -269,12 +272,12 @@ package body M_Basic is
       Next_Statement_Pos : Positive := 1;
       Command_Line_Pos   : Positive := 1;   --  p
       Token              : Integer;
-      Null_Function      : Function_Type := T_NOTYPE;
+--        Null_Function      : Function_Type := T_NOTYPE;
       --        Command_Token      : Unbounded_String;
-      Fa                 : Configuration.MMFLOAT := 0.0;
-      I64a               : Long_Long_Integer := 0;
-      Sa                 : Unbounded_String := To_Unbounded_String ("");
-      Index              : Positive;
+--        Fa                 : Configuration.MMFLOAT := 0.0;
+--        I64a               : Long_Long_Integer := 0;
+--        Sa                 : Unbounded_String := To_Unbounded_String ("");
+--        Index              : Positive;
       Save_Local_Index   : Natural := 0;
       Interupt_Check     : Integer := 0;
       T_Arg              : Function_Type := T_NOTYPE;
@@ -282,7 +285,7 @@ package body M_Basic is
       No_Abort           : Boolean := True;
       Done               : Boolean := False;
    begin
-      Put_Line (Routine_Name);
+      Put_Line (Routine_Name & "Command: " & To_String (Command));
       --  228
       Skip_Spaces (Command_Line, Command_Line_Pos);
       Skip_Element (Command_Line, Next_Statement_Pos);
@@ -340,7 +343,6 @@ package body M_Basic is
             --     Defined_Subfunction (Buffer, False, Command_Line, Index,
             --                          Fa, I64a, Sa, Null_Function);
             --  end if;
-            Put_Line (Routine_Name & "268 ");
             --              end if;
 
             --  268
@@ -406,7 +408,6 @@ package body M_Basic is
                Skip_Spaces (Buffer (Program_Ptr), Program_Ptr);
             end if;
 
-            Put_Line (Routine_Name & "225");
             --  225
             if Program_Ptr <= Positive (Buffer.Length) then
                Execute_Command
