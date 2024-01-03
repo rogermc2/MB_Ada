@@ -1,19 +1,27 @@
-
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 
 with Command_And_Token_Tables; use Command_And_Token_Tables;
 with Configuration;
 
 package Values is
+   F_Arg1 : Configuration.MMFLOAT;
+   F_Arg2 : Configuration.MMFLOAT;
+   F_Ret  : Configuration.MMFLOAT;
+   I_Arg1 : Long_Long_Integer;
+   I_Arg2 : Long_Long_Integer;
+   I_Ret  : Long_Long_Integer;
+   S_Arg1 : Unbounded_String;
+   S_Arg2 : Unbounded_String;
+   S_Ret  : Unbounded_String;
+   T_Arg  : Function_Type;
 
-   function Get_Int (aString : Unbounded_String; Lo, Hi : Natural)
-                     return Integer;
-   function Get_Integer (aString : in out Unbounded_String)
-                         return Long_Long_Integer;
+   function Get_Int
+     (aString : Unbounded_String; Lo, Hi : Natural) return Integer;
+   function Get_Integer
+     (aString : in out Unbounded_String) return Long_Long_Integer;
    function Get_Value
-     (Expression : Unbounded_String; Fa : in out Configuration.MMFLOAT;
-      Ia         :  in out Long_Long_Integer; Sa : in out Unbounded_String;
-      OO         :  in out Unbounded_String; Ta : in out Function_Type)
-      return Unbounded_String;
+     (Expression :        Unbounded_String; Fa : in out Configuration.MMFLOAT;
+      Ia         : in out Long_Long_Integer; Sa : in out Unbounded_String;
+      OO : in out Natural; Ta : in out Function_Type) return Unbounded_String;
 
 end Values;

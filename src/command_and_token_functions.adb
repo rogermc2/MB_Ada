@@ -567,7 +567,7 @@ package body Command_And_Token_Functions is
    begin
       while OK and then Pos <= C_Base_Token loop
          --  look for the zero marking the start of an element
-         if Prog_Memory (Pos) /= T_NEWLINE then
+         if Prog_Memory (Pos) /= Integer'Image (T_NEWLINE) then
             while Prog_Memory (Pos) /= "0" loop
                Pos := Pos + 1;
             end loop;
@@ -581,20 +581,20 @@ package body Command_And_Token_Functions is
             end if;
 
          else
-            if Prog_Memory (Pos) = T_NEWLINE then
+            if Prog_Memory (Pos) = Integer'Image (T_NEWLINE) then
                if Current_Line > 0 then
                   Current_Line := Pos;
                end if;
                Pos := Pos + 1;
             end if;
 
-            if Prog_Memory (Pos) = T_LINENBR then
+            if Prog_Memory (Pos) = Integer'Image (T_LINENBR) then
                Pos := Pos + 3;
             end if;
 
             Skip_Spaces (Pos);
 
-            if Prog_Memory (1) = T_LABEL then
+            if Prog_Memory (1) = Integer'Image (T_LABEL) then
                --  skip over the label
                Pos := Pos + Integer'Value (To_String (Prog_Memory (2))) + 2;
                Skip_Spaces (Pos);

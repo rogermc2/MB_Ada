@@ -465,7 +465,7 @@ package body Parse_Functions is
                --  MMBasic 982
                if OK and then Element (Command.Name, TP) = ':' then
                   Label_Valid := False;
-                  Buffer_Append (Buffer, Global.T_LABEL);
+                  Buffer_Append (Buffer, Integer'Image (Global.T_LABEL));
                   Buffer_Append (Buffer, Integer'Image (TP - P));
                   Buffer_Append (Buffer, Get_Input_Slice (1, TP - P));
                end if;
@@ -651,7 +651,7 @@ package body Parse_Functions is
       if Found and then Get_Input_Character (TP) = ':' then
          --  Label found
          Label_Valid := False;
-         Append (Buffer, Global.T_LABEL);
+         Append (Buffer, Integer'Image (Global.T_LABEL));
          Append (Buffer, Integer'Image (TP - I_Pos));
          Append (Buffer, Get_Input_Slice (I_Pos, TP));
          I_Pos := TP + 1;  --  Step over label and terminating :

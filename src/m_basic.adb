@@ -390,18 +390,18 @@ package body M_Basic is
             end if;
 
             --  199
-            if Buffer (Program_Ptr) = T_NEWLINE then
+            if Buffer (Program_Ptr) = Integer'Image (T_NEWLINE) then
                Current_Line_Ptr := Program_Ptr;
                Program_Ptr := Program_Ptr + 1;
             end if;
 
             --  217
-            if Buffer (Program_Ptr) = T_LINENBR then
+            if Buffer (Program_Ptr) = Integer'Image (T_LINENBR) then
                Program_Ptr := Program_Ptr + 3;
             end if;
             Skip_Spaces (Buffer (Program_Ptr), Program_Ptr);
 
-            if Buffer (1) = T_LABEL then
+            if Buffer (1) = Integer'Image (T_LABEL) then
                --  skip over the label
                Program_Ptr := Program_Ptr +
                  Integer'Value (Element (Buffer, Program_Ptr)) + 2;

@@ -69,7 +69,7 @@ package body Tokenizer is
 
          if not From_Console and Line_Num > 1 and
            Line_Num <= Unsigned_64 (MAXLINENBR) then
-            Buffer_Append (Buffer, Global.T_LINENBR);
+            Buffer_Append (Buffer, Integer'Image (Global.T_LINENBR));
             Buffer_Append (Buffer, Unsigned_64'Image (Shift_Right (Line_Num, 8)));
             Buffer_Append (Buffer, Unsigned_64'Image (Line_Num and 16#FF#));
          end if;
@@ -209,7 +209,7 @@ package body Tokenizer is
       Support.Clear_Buffer (Buffer);
       --  MMBasic 798
       if not From_Console then
-         Buffer_Append (Buffer, Global.T_NEWLINE);
+         Buffer_Append (Buffer, Integer'Image (Global.T_NEWLINE));
       end if;
       Trim_Input_Buffer (Left);
 
