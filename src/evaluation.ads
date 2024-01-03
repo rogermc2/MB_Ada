@@ -16,11 +16,11 @@ package Evaluation is
    T_Arg  : Function_Type;
 
    function Get_Int
-     (aString : Unbounded_String; Lo, Hi : Natural) return Integer;
+     (Expression : Unbounded_String; Lo, Hi : Natural) return Integer;
    function Get_Integer
-     (aString : in out Unbounded_String) return Long_Long_Integer;
+     (Expression : in out Unbounded_String) return Long_Long_Integer;
    function Get_Value
-     (Expression :        Unbounded_String; Fa : in out Configuration.MMFLOAT;
+     (Expression : Unbounded_String; Fa : in out Configuration.MMFLOAT;
       Ia         : in out Long_Long_Integer; Sa : in out Unbounded_String;
       OO : in out Natural; Ta : in out Function_Type) return Unbounded_String;
 

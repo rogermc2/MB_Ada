@@ -155,11 +155,10 @@ package body Evaluation is
    --  this will check that the expression is terminated correctly and throw
    --  an error if not.
    --  flags & E_NOERROR will suppress that check.
-   function Evaluate
+   procedure Evaluate
      (Expression : in out Unbounded_String; Fa : in out Configuration.MMFLOAT;
       Ia         : in out Long_Long_Integer; Sa : in out Unbounded_String;
-      Ta         : in out Function_Type; Flags : Interfaces.Unsigned_16)
-      return Unbounded_String is
+      Ta         : in out Function_Type; Flags : Interfaces.Unsigned_16) is
       use Interfaces;
       use Ada.Strings;
       Routine_Name : constant String := "M_Basic.Evaluate ";
@@ -201,11 +200,9 @@ package body Evaluation is
                  Routine_Name & "invalid syntax");
       end if;
 
-      return Expression;
-
    end Evaluate;
 
-   function Get_Int (aString : Unbounded_String; Lo, Hi : Natural)
+   function Get_Int (Expression : Unbounded_String; Lo, Hi : Natural)
                      return Integer is
       Result : Integer;
    begin
@@ -214,15 +211,21 @@ package body Evaluation is
 
    end Get_Int;
 
-   function Get_Integer (aString : in out Unbounded_String) return Long_Long_Integer is
-      T   : Function_Type := T_INT;
-      F   : Configuration.MMFLOAT := 0.0;
-      S   : Unbounded_String;
-      I64 : Long_Long_Integer := 0;
+   function Get_Integer (Expression : in out Unbounded_String)
+                         return Long_Long_Integer is
+      use Interfaces;
+      T    : Function_Type := T_INT;
+      F    : Configuration.MMFLOAT := 0.0;
+      S    : Unbounded_String;
+      I64  : Long_Long_Integer := 0;
    begin
-      I64 := Evaluate (aString, F, I64, S, T, 0);
+      Evaluate (Expression, F, I64, S, T, 0);
 
-      return I64;
+      if (T and T_NBR) = T_NBR then
+         return Long_Long_Integer (F);
+      else
+         return I64;
+      end if;
 
    end Get_Integer;
 
