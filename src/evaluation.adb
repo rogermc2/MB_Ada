@@ -11,10 +11,9 @@ package body Evaluation is
 
    --  MMBasic 1101 doexpr
    function Do_Expression
-     (Expression : in out Unbounded_String;
-      Fa         : in out Configuration.MMFLOAT; Ia : in out Long_Long_Integer;
-      Sa         : in out Unbounded_String; OO : in out Natural;
-      Ta         : in out Function_Type) return Unbounded_String
+     (Expression : in out Unbounded_String; Fa : in out Configuration.MMFLOAT;
+      Ia         : in out Long_Long_Integer; Sa : in out Unbounded_String;
+      OO : in out Natural; Ta : in out Function_Type) return Unbounded_String
    is
       use Interfaces;
       use Configuration;
@@ -37,8 +36,7 @@ package body Evaluation is
       New_Exp := Get_Value (Expression, Fa2, Ia2, Sa2, O2, T2);
       while not Done loop
          if OO /= Global.E_END
-           and then Token_Table (OO).Precedence >
-             Token_Table (OO).Precedence
+           and then Token_Table (OO).Precedence > Token_Table (OO).Precedence
          then
             --  MMBasic 1155
             New_Exp := Do_Expression (New_Exp, Fa, Ia, Sa, OO, Ta);
@@ -70,13 +68,11 @@ package body Evaluation is
             end if;
 
             if T_Arg = (T_NBR or T_INT) then
-               if (T1 and T_NBR) = T_NBR and then (T2 and T_INT) = T_INT
-               then
+               if (T1 and T_NBR) = T_NBR and then (T2 and T_INT) = T_INT then
                   Fa2 := MMFLOAT (Ia2);
                   T2  := T_NBR;
                end if;
-               if (T1 and T_INT) = T_INT and then (T2 and T_NBR) = T_NBR
-               then
+               if (T1 and T_INT) = T_INT and then (T2 and T_NBR) = T_NBR then
                   Fa1 := MMFLOAT (Ia1);
                   T1  := T_NBR;
                end if;
@@ -125,8 +121,7 @@ package body Evaluation is
       --  Terminate recursion when end of Prev_Token processd.
       if P <= Length (Prev_Token) then
          Token :=
-           To_Unbounded_String
-             (Slice (Prev_Token, P, Length (Prev_Token)));
+           To_Unbounded_String (Slice (Prev_Token, P, Length (Prev_Token)));
          --  Recursion, get the next value
          Token := Get_Value (Token, Fa, Ia, Sa, RO, Ta);
          if (Ta and T_NBR) = T_NBR then
@@ -145,8 +140,7 @@ package body Evaluation is
                Ia := 0;
             end if;
          else
-            Assert
-              (False, Routine_Name & "invalid type, expected a number.");
+            Assert (False, Routine_Name & "invalid type, expected a number.");
          end if;
 
          M_Basic.Skip_Spaces (Token, P);
@@ -155,6 +149,39 @@ package body Evaluation is
       return Token;
 
    end Do_Not;
+
+   function Do_Subtract
+     (Prev_Token :        Unbounded_String; P : in out Positive;
+      F         : in out Configuration.MMFLOAT; I64 : in out Long_Long_Integer;
+      S         : in out Unbounded_String; RO : in out Natural;
+      T         : in out Function_Type) return Unbounded_String
+   is
+      use Interfaces;
+      Routine_Name : constant String := "M_Basic.Do_Subtract ";
+      Token        : Unbounded_String;
+   begin
+      P := P + 1;
+      T := T_Notype;
+      --  Terminate recursion when end of Prev_Token processd.
+      if P <= Length (Prev_Token) then
+         Token :=
+           To_Unbounded_String (Slice (Prev_Token, P, Length (Prev_Token)));
+         --  Recursion, get the next value
+         Token := Get_Value (Token, F, I64, S, RO, T);
+         if (T and T_NBR) = T_NBR then
+               F := -F;
+         elsif (T and T_INT) = T_INT then
+               I64 := -I64;
+         else
+            Assert (False, Routine_Name & "invalid type, expected a number.");
+         end if;
+
+         M_Basic.Skip_Spaces (Token, P);
+      end if;
+
+      return Token;
+
+   end Do_Subtract;
 
    --  Evaluate evaluates an expression.
    --  Evaluate returns either the float or string in the pointer arguments
@@ -167,10 +194,9 @@ package body Evaluation is
    --  an error if not.
    --  flags & E_NOERROR will suppress that check.
    procedure Evaluate
-     (Expression : in out Unbounded_String;
-      Fa         : in out Configuration.MMFLOAT; Ia : in out Long_Long_Integer;
-      Sa         : in out Unbounded_String; Ta : in out Function_Type;
-      Flags      :        Interfaces.Unsigned_16)
+     (Expression : in out Unbounded_String; Fa : in out Configuration.MMFLOAT;
+      Ia         : in out Long_Long_Integer; Sa : in out Unbounded_String;
+      Ta         : in out Function_Type; Flags : Interfaces.Unsigned_16)
    is
       use Interfaces;
       use Ada.Strings;
@@ -193,12 +219,9 @@ package body Evaluation is
          Routine_Name & "expected a nmber.");
       Assert
         ((T and T_STR) /= T_STR
-         or else not
-         (((T and T_NBR) = T_NBR) or else ((T and T_INT) = T_INT)),
+         or else not (((T and T_NBR) = T_NBR) or else ((T and T_INT) = T_INT)),
          Routine_Name & "expected a str.");
-      Assert
-        (O = Global.E_END,
-         Routine_Name & "invalid number of arguments.");
+      Assert (O = Global.E_END, Routine_Name & "invalid number of arguments.");
 
       if (Ta and T_NBR) = T_NBR and then (T and T_INT) = T_INT then
          Fa := Configuration.MMFLOAT (Ia);
@@ -221,8 +244,7 @@ package body Evaluation is
    end Evaluate;
 
    function Get_Int
-     (Expression : in out Unbounded_String; Lo, Hi : Integer)
-      return Integer
+     (Expression : in out Unbounded_String; Lo, Hi : Integer) return Integer
    is
       Routine_Name : constant String  := "M_Basic.Get_Int ";
       Value        : constant Integer := Integer (Get_Integer (Expression));
@@ -230,8 +252,8 @@ package body Evaluation is
       Assert
         (Value >= Lo and then Value <= Hi,
          Routine_Name & Integer'Image (Value) &
-         " is invalid, should be in the range " & Integer'Image (Lo) &
-         " -" & Integer'Image (Hi));
+         " is invalid, should be in the range " & Integer'Image (Lo) & " -" &
+         Integer'Image (Hi));
       return Value;
 
    end Get_Int;
@@ -258,19 +280,18 @@ package body Evaluation is
    function Get_Value
      (Expression :        Unbounded_String; Fa : in out Configuration.MMFLOAT;
       Ia         : in out Long_Long_Integer; Sa : in out Unbounded_String;
-      OO         : in out Natural; Ta : in out Function_Type)
-      return Unbounded_String
+      OO : in out Natural; Ta : in out Function_Type) return Unbounded_String
    is
       use Interfaces;
       use Ada.Characters.Handling;
       use M_Basic;
-      Routine_Name : constant String := "M_Basic.Get_Value ";
-      F	          : Configuration.MMFloat  := 0.0;
-      I64          : Long_Long_Integer := 0;
+      Routine_Name : constant String       := "M_Basic.Get_Value ";
+      F            : Configuration.MMFLOAT := 0.0;
+      I64          : Long_Long_Integer     := 0;
       S            : Unbounded_String;
-      T            : Function_Type := T_NA;
-      P            : Positive := 1;
-      TP           : Positive  := P;
+      T            : Function_Type         := T_NA;
+      P            : Positive              := 1;
+      TP           : Positive              := P;
       Data         : Unbounded_String;
       Data_TP      : Unbounded_String;
       Op           : Unbounded_String;
@@ -280,8 +301,7 @@ package body Evaluation is
    begin
       --  MMBasic 1190  Test_Stack_Overflow;
       M_Basic.Skip_Spaces (Expression, P);
-      Data   :=
-        To_Unbounded_String (Slice (Expression, P, Length (Expression)));
+      Data := To_Unbounded_String (Slice (Expression, P, Length (Expression)));
       Op     := Token_Function (To_String (Data));
       Op_Val := Unsigned_16'Value (To_String (Op));
 
@@ -291,7 +311,7 @@ package body Evaluation is
 
       elsif Op = "-" then
          --  MMBasic 1220
-         null;
+         Data := Do_Subtract (Data, P, Fa, Ia, Sa, OO, Ta);
       elsif (Op_Val and (T_FUN or T_FNA)) = (T_FUN or T_FNA) then
          --  MMBasic 1242
          if (Op_Val and T_FUN) = T_FUN then
@@ -301,17 +321,14 @@ package body Evaluation is
 
          --  MMBasic 1242
          P       := P + 1;
-         Data_TP :=
-           To_Unbounded_String (Slice (Data, TP, Length (Data)));
+         Data_TP := To_Unbounded_String (Slice (Data, TP, Length (Data)));
          T_Arg   := Type_Mask (Data_TP);
          Temp    := T_Arg;
          Op      := Token_Function (To_String (Data_TP));
-         Func    :=
-           Token_Table (Integer'Value (To_String (Op))).Function_Ptr;
+         Func    := Token_Table (Integer'Value (To_String (Op))).Function_Ptr;
          Func.all;
 
-         Assert
-           ((Temp and T_Arg) /= 0, Routine_Name & "internal error.");
+         Assert ((Temp and T_Arg) /= 0, Routine_Name & "internal error.");
 
       elsif Op = "(" then
          --  MMBasic 1265
@@ -328,7 +345,8 @@ package body Evaluation is
       elsif Is_Digit (Element (Data, P)) or else Op = "+"
         or else Token_Function (To_String (Data)) = "-" or else Op = "-"
         or else Token_Function (To_String (Data)) = "+" or else Op = "+"
-        or else Op = "." then
+        or else Op = "."
+      then
          --  MMBasic 1338
          null;
       else
@@ -339,7 +357,7 @@ package body Evaluation is
       Fa := F;
       Ia := I64;
       Sa := S;
-      Ta	:= T;
+      Ta := T;
 
       return Data;
 
