@@ -10,6 +10,10 @@ with M_Basic;
 
 package body Evaluation is
 
+   procedure Evaluate
+     (Expression : in out Unbounded_String; Fa : in out Configuration.MMFLOAT;
+      Ia         : in out Long_Long_Integer; Sa : in out Unbounded_String;
+      Ta         : in out Function_Type; Flags : Interfaces.Unsigned_16);
    function Get_Close_Bracket
      (Expression : Unbounded_String) return Positive;
 
@@ -192,6 +196,21 @@ package body Evaluation is
 
    end Do_Not;
 
+   procedure Do_Open_Bracket
+     (Expression : in out Unbounded_String; P : in out Positive;
+      F          : in out Configuration.MMFLOAT; I64 : in out Long_Long_Integer;
+      S          : in out Unbounded_String;  T  : in out Function_Type) is
+      Routine_Name : constant String := "M_Basic.Do_Subtract ";
+   begin
+      --  MMBasic 1385
+      P := P + 1;
+      Evaluate (Expression, F, I64, S, T, 1);
+      Assert (Element (Expression, P) = ')', Routine_Name &
+                "no closing bracket");
+      P := P + 1;
+
+   end Do_Open_Bracket;
+
    function Do_Subtract
      (Prev_Token :        Unbounded_String; P : in out Positive;
       F          : in out Configuration.MMFLOAT; I64 : in out Long_Long_Integer;
@@ -238,8 +257,7 @@ package body Evaluation is
    procedure Evaluate
      (Expression : in out Unbounded_String; Fa : in out Configuration.MMFLOAT;
       Ia         : in out Long_Long_Integer; Sa : in out Unbounded_String;
-      Ta         : in out Function_Type; Flags : Interfaces.Unsigned_16)
-   is
+      Ta         : in out Function_Type; Flags : Interfaces.Unsigned_16) is
       use Interfaces;
       use Ada.Strings;
       Routine_Name : constant String := "M_Basic.Evaluate ";
@@ -356,7 +374,7 @@ package body Evaluation is
    end Get_Integer;
 
    function Get_Value
-     (Expression :        Unbounded_String; Fa : in out Configuration.MMFLOAT;
+     (Expression : in out Unbounded_String; Fa : in out Configuration.MMFLOAT;
       Ia         : in out Long_Long_Integer; Sa : in out Unbounded_String;
       OO         : in out Natural; Ta : in out Function_Type) return Unbounded_String
    is
@@ -364,14 +382,12 @@ package body Evaluation is
       use Ada.Characters.Handling;
       use M_Basic;
       Routine_Name : constant String       := "M_Basic.Get_Value ";
-      TP           : Constant Positive     := P;
       F            : Configuration.MMFLOAT := 0.0;
       I64          : Long_Long_Integer     := 0;
       S            : Unbounded_String;
       T            : Function_Type         := T_NA;
       P            : Positive              := 1;
       Data         : Unbounded_String;
-      Data_TP      : Unbounded_String;
       Op           : Unbounded_String;
       Op_Val       : Unsigned_16;
       Temp         : Function_Type;
@@ -398,20 +414,12 @@ package body Evaluation is
             Do_Function (Expression, P, F, I64, S, T);
          end if;
 
-         --  MMBasic 1242
-         P       := P + 1;
-         Data_TP := To_Unbounded_String (Slice (Data, TP, Length (Data)));
-         T_Arg   := Type_Mask (Data_TP);
-         Temp    := T_Arg;
-         Op      := Token_Function (To_String (Data_TP));
-         Func    := Token_Table (Integer'Value (To_String (Op))).Function_Ptr;
-         Func.all;
-
          Assert ((Temp and T_Arg) /= 0, Routine_Name & "internal error.");
 
       elsif Op = "(" then
          --  MMBasic 1265
-         null;
+         Do_Open_Bracket (Expression, P, F, I64, S,  T);
+
       elsif Is_Name_Start (Element (Data, P)) then
          --  MMBasic 1275
          null;
