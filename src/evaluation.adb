@@ -205,11 +205,11 @@ package body Evaluation is
    function Get_Int (Expression : in out Unbounded_String; Lo, Hi : Integer)
                      return Integer is
       Routine_Name : constant String := "M_Basic.Get_Int ";
-      Value : constant Integer := Integer (Get_Integer (Expression));
+      Value        : constant Integer := Integer (Get_Integer (Expression));
    begin
       Assert (Value >= Lo and then Value <= Hi, Routine_Name &
                 Integer'Image (Value) & " is invalid, should be in the range " &
-             Integer'Image (Lo) & " -" & Integer'Image (Hi));
+                Integer'Image (Lo) & " -" & Integer'Image (Hi));
       return Value;
 
    end Get_Int;
@@ -237,18 +237,42 @@ package body Evaluation is
       Ia         :  in out Long_Long_Integer; Sa : in out Unbounded_String;
       OO         :  in out Natural; Ta : in out Function_Type)
       return Unbounded_String is
+      use Interfaces;
+      use M_Basic;
       --        Routine_Name : constant String := "M_Basic.Get_Value ";
       P            : Positive := 1;
+      TP           : Positive := P;
       Data         : Unbounded_String;
+      Data_TP      : Unbounded_String;
+      Op           : Unbounded_String;
+      Op_Val       : Unsigned_16;
+      Temp         : Function_Type;
+      Func         : Access_Procedure;
    begin
       --        Test_Stack_Overflow;
       M_Basic.Skip_Spaces (Expression, P);
       Data := To_Unbounded_String (Slice (Expression, P, Length (Expression)));
-      if M_Basic.Token_Function (To_String (Data)) = "Not" then
+      Op := Token_Function (To_String (Data));
+      Op_Val := Unsigned_16'Value (To_String (Op));
+
+      if Op = "Not" then
          Data := Do_Not (Data, P, Fa, Ia, Sa, OO, Ta);
 
-      elsif M_Basic.Token_Function (To_String (Data)) = "-" then
+      elsif Op = "-" then
          null;
+      elsif (Op_Val and (T_FUN or T_FNA)) = (T_FUN or T_FNA) then
+         if (Op_Val and T_FUN) = T_FUN then
+            --  Do_Close_Bracket ();
+            null;
+         end if;
+         P := P + 1;
+         Data_TP := To_Unbounded_String (Slice (Data, TP, Length (Data)));
+         T_Arg := Type_Mask (Data_TP);
+         Temp := T_Arg;
+         Op := Token_Function (To_String (Data_TP));
+         Func := Token_Table (Integer'Value (To_String (Op))).Function_Ptr;
+         Func.all;
+
       end if;
 
       return Data;

@@ -375,6 +375,13 @@ package body Command_And_Token_Tables is
 
    end Trim_Input_Buffer;
 
+   function Type_Mask (Val : Unbounded_String) return Function_Type is
+      Val_16 : constant Unsigned_16 := Unsigned_16'Value (To_String (Val));
+   begin
+      return Val_16 and (T_NBR or T_INT or T_STR);
+
+   end Type_Mask;
+
 begin
    for index in 1 .. Num_Functions loop   --  118
       Command_Table (index) := Function_Types (index);
