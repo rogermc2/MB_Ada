@@ -2,6 +2,7 @@ with Interfaces;
 with Ada.Assertions; use Ada.Assertions;
 with Ada.Characters.Handling;
 with Ada.Strings;
+with Ada.Strings.Fixed;
 
 with Command_And_Token_Functions; use Command_And_Token_Functions;
 with Global;
@@ -9,11 +10,14 @@ with M_Basic;
 
 package body Evaluation is
 
+   function Get_Close_Bracket
+     (Expression : Unbounded_String) return Positive;
+
    --  MMBasic 1101 doexpr
    function Do_Expression
      (Expression : in out Unbounded_String; Fa : in out Configuration.MMFLOAT;
       Ia         : in out Long_Long_Integer; Sa : in out Unbounded_String;
-      OO : in out Natural; Ta : in out Function_Type) return Unbounded_String
+      OO         : in out Natural; Ta : in out Function_Type) return Unbounded_String
    is
       use Interfaces;
       use Configuration;
@@ -107,6 +111,44 @@ package body Evaluation is
 
    end Do_Expression;
 
+   procedure Do_Function
+     (Expression : Unbounded_String; P : in out Positive;
+      F          : in out Configuration.MMFLOAT; I64 : in out Long_Long_Integer;
+      S          : in out Unbounded_String; T : in out Function_Type) is
+      use Interfaces;
+      use Ada.Strings.Fixed;
+      Routine_Name : constant String := "M_Basic.Do_Subtract ";
+      P1           : Positive := P + 1;
+      P2           : Unbounded_String;
+      TP           : Positive;
+      Tmp          : Function_Type;
+      Func         : Access_Procedure;
+   begin
+      --  MMBasic 1365
+      if (Token_Type (P) and T_FUN) = T_FUN then
+         P := Get_Close_Bracket (Expression);
+
+         TP := Index (To_String (Expression), """");
+         while P1 /= P loop
+            Append (P2, Element (Expression, P1));
+            P1 := P1 + 1;
+         end loop;
+      end if;
+
+      P := P + 1;
+      T_Arg := Token_Type (TP);
+      Tmp := T_Arg;
+      Func := Token_Table (TP).Function_Ptr;
+      Func.all;
+      Assert ((Tmp and T_Arg) /= 0, Routine_Name & "internal fault");
+
+      T := T_Arg;
+      F := F_Ret;
+      I64 := I_Ret;
+      S := S_Ret;
+
+   end Do_Function;
+
    function Do_Not
      (Prev_Token :        Unbounded_String; P : in out Positive;
       Fa         : in out Configuration.MMFLOAT; Ia : in out Long_Long_Integer;
@@ -152,9 +194,9 @@ package body Evaluation is
 
    function Do_Subtract
      (Prev_Token :        Unbounded_String; P : in out Positive;
-      F         : in out Configuration.MMFLOAT; I64 : in out Long_Long_Integer;
-      S         : in out Unbounded_String; RO : in out Natural;
-      T         : in out Function_Type) return Unbounded_String
+      F          : in out Configuration.MMFLOAT; I64 : in out Long_Long_Integer;
+      S          : in out Unbounded_String; RO : in out Natural;
+      T          : in out Function_Type) return Unbounded_String
    is
       use Interfaces;
       Routine_Name : constant String := "M_Basic.Do_Subtract ";
@@ -169,9 +211,9 @@ package body Evaluation is
          --  Recursion, get the next value
          Token := Get_Value (Token, F, I64, S, RO, T);
          if (T and T_NBR) = T_NBR then
-               F := -F;
+            F := -F;
          elsif (T and T_INT) = T_INT then
-               I64 := -I64;
+            I64 := -I64;
          else
             Assert (False, Routine_Name & "invalid type, expected a number.");
          end if;
@@ -215,7 +257,7 @@ package body Evaluation is
       Assert
         ((T and T_STR) /= T_STR
          or else not
-         (((Ta and T_NBR) = T_NBR) or else ((Ta and T_INT) = T_INT)),
+           (((Ta and T_NBR) = T_NBR) or else ((Ta and T_INT) = T_INT)),
          Routine_Name & "expected a nmber.");
       Assert
         ((T and T_STR) /= T_STR
@@ -243,6 +285,42 @@ package body Evaluation is
 
    end Evaluate;
 
+   --  Get_Close_Bracket scans text looking for a matching closing bracket.
+   --  Get_Close_Bracket will handle nested strings, brackets and functions.
+   --  Get_Close_Bracket expects to be called pointing at an opening bracket
+   --  or a function token.
+   function Get_Close_Bracket
+     (Expression : Unbounded_String) return Positive is
+      use Interfaces;
+      Routine_Name : constant String  := "M_Basic.Get_Close_Bracket ";
+      In_Quote     : Boolean := False;
+      Index        : Integer := 0;
+      P            : Positive := 1;
+      Done         : Boolean := False;
+   begin
+      while not Done loop
+         Assert (P <= Length (Expression), Routine_Name &
+                   " expected closing bracket.");
+         if Element (Expression, P) = '"' then
+            In_Quote := not In_Quote;
+         end if;
+
+         if not In_Quote then
+            if Element (Expression, P) = ')' then
+               Index := Index - 1;
+            elsif Element (Expression, P) = '('  or else
+              (Token_Type (P) and T_FUN) = T_FUN then
+               Index := Index + 1;
+            end if;
+         end if;
+         P := P + 1;
+         Done := Index = 0;
+      end loop;
+
+      return P - 1;
+
+   end Get_Close_Bracket;
+
    function Get_Int
      (Expression : in out Unbounded_String; Lo, Hi : Integer) return Integer
    is
@@ -252,8 +330,8 @@ package body Evaluation is
       Assert
         (Value >= Lo and then Value <= Hi,
          Routine_Name & Integer'Image (Value) &
-         " is invalid, should be in the range " & Integer'Image (Lo) & " -" &
-         Integer'Image (Hi));
+           " is invalid, should be in the range " & Integer'Image (Lo) & " -" &
+           Integer'Image (Hi));
       return Value;
 
    end Get_Int;
@@ -280,18 +358,18 @@ package body Evaluation is
    function Get_Value
      (Expression :        Unbounded_String; Fa : in out Configuration.MMFLOAT;
       Ia         : in out Long_Long_Integer; Sa : in out Unbounded_String;
-      OO : in out Natural; Ta : in out Function_Type) return Unbounded_String
+      OO         : in out Natural; Ta : in out Function_Type) return Unbounded_String
    is
       use Interfaces;
       use Ada.Characters.Handling;
       use M_Basic;
       Routine_Name : constant String       := "M_Basic.Get_Value ";
+      TP           : Constant Positive     := P;
       F            : Configuration.MMFLOAT := 0.0;
       I64          : Long_Long_Integer     := 0;
       S            : Unbounded_String;
       T            : Function_Type         := T_NA;
       P            : Positive              := 1;
-      TP           : Positive              := P;
       Data         : Unbounded_String;
       Data_TP      : Unbounded_String;
       Op           : Unbounded_String;
@@ -299,24 +377,25 @@ package body Evaluation is
       Temp         : Function_Type;
       Func         : Access_Procedure;
    begin
-      --  MMBasic 1190  Test_Stack_Overflow;
+      --  MMBasic 1308  Test_Stack_Overflow;
       M_Basic.Skip_Spaces (Expression, P);
       Data := To_Unbounded_String (Slice (Expression, P, Length (Expression)));
       Op     := Token_Function (To_String (Data));
       Op_Val := Unsigned_16'Value (To_String (Op));
 
       if Op = "Not" then
-         --  MMBasic 1198
+         --  MMBasic 1316
          Data := Do_Not (Data, P, Fa, Ia, Sa, OO, Ta);
 
       elsif Op = "-" then
-         --  MMBasic 1220
+         --  MMBasic 1339
          Data := Do_Subtract (Data, P, Fa, Ia, Sa, OO, Ta);
+
       elsif (Op_Val and (T_FUN or T_FNA)) = (T_FUN or T_FNA) then
-         --  MMBasic 1242
+         --  MMBasic 1361
          if (Op_Val and T_FUN) = T_FUN then
-            --  Do_Close_Bracket ();
-            null;
+            --  1367
+            Do_Function (Expression, P, F, I64, S, T);
          end if;
 
          --  MMBasic 1242
