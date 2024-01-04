@@ -239,7 +239,7 @@ package body Evaluation is
       return Unbounded_String is
       use Interfaces;
       use M_Basic;
-      --        Routine_Name : constant String := "M_Basic.Get_Value ";
+      Routine_Name : constant String := "M_Basic.Get_Value ";
       P            : Positive := 1;
       TP           : Positive := P;
       Data         : Unbounded_String;
@@ -273,6 +273,9 @@ package body Evaluation is
          Func := Token_Table (Integer'Value (To_String (Op))).Function_Ptr;
          Func.all;
 
+         Assert (Temp and T_Arg /= 0, Routine_Name & "internal error.");
+      elsif Op = "(" then
+         null;
       end if;
 
       return Data;
