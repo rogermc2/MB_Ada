@@ -265,8 +265,12 @@ package body Evaluation is
       use Ada.Characters.Handling;
       use M_Basic;
       Routine_Name : constant String := "M_Basic.Get_Value ";
-      P            : Positive        := 1;
-      TP           : Positive        := P;
+      F	          : Configuration.MMFloat  := 0.0;
+      I64          : Long_Long_Integer := 0;
+      S            : Unbounded_String;
+      T            : Function_Type := T_NA;
+      P            : Positive := 1;
+      TP           : Positive  := P;
       Data         : Unbounded_String;
       Data_TP      : Unbounded_String;
       Op           : Unbounded_String;
@@ -325,9 +329,17 @@ package body Evaluation is
         or else Token_Function (To_String (Data)) = "-" or else Op = "-"
         or else Token_Function (To_String (Data)) = "+" or else Op = "+"
         or else Op = "." then
-         --  MMBasic 1275
+         --  MMBasic 1338
          null;
+      else
+         Assert (False, Routine_Name & "syntax error");
       end if;
+
+      M_Basic.Skip_Spaces (Data, P);
+      Fa := F;
+      Ia := I64;
+      Sa := S;
+      Ta	:= T;
 
       return Data;
 
