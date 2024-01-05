@@ -37,6 +37,7 @@ package body Support is
       return Element (Buffer, Pos);
 
    end Buffer_Item;
+
    function Buffer_Length (Buffer : String_Buffer) return Natural is
    begin
       return Natural (Buffer.Length);

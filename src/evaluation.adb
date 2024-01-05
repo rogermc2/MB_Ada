@@ -153,6 +153,41 @@ package body Evaluation is
 
    end Do_Function;
 
+   procedure Do_Name_Start
+     (Expression : in out Unbounded_String; P : in out Positive;
+      F          : in out Configuration.MMFLOAT; I64 : in out Long_Long_Integer;
+      S          : in out Unbounded_String;  T  : in out Function_Type) is
+      Routine_Name : constant String := "M_Basic.Do_Subtract ";
+      Save_Current_Line_Ptr : Positive;
+      TP                    : Positive := P + 1;
+      Index                 : Integer := -1;
+   begin
+      --  MMBasic 1397 check if terminated with bracket.
+      while M_Basic.Is_Name_Character (Element (Expression, TP)) loop
+         TP := TP + 1;
+      end loop;
+
+      if Element (Expression, TP) = '$' or else Element (Expression, TP) = '%'
+      or else Element (Expression, TP) = '!' then
+         TP := TP + 1;
+      end if;
+
+      if Element (Expression, TP) = '(' then
+         Index := M_Basic.Find_Subfunction (To_String (Expression), T_NBR);
+      end if;
+
+      if Index >= 0 then
+         Save_Current_Line_Ptr := M_Basic.Current_Line_Ptr;
+         M_Basic.Defined_Subfunction ();
+      end if;
+
+      Evaluate (Expression, F, I64, S, T, 1);
+      Assert (Element (Expression, P) = ')', Routine_Name &
+                "no closing bracket");
+      P := P + 1;
+
+   end Do_Name_Start;
+
    function Do_Not
      (Prev_Token :        Unbounded_String; P : in out Positive;
       Fa         : in out Configuration.MMFLOAT; Ia : in out Long_Long_Integer;
@@ -417,11 +452,11 @@ package body Evaluation is
          Assert ((Temp and T_Arg) /= 0, Routine_Name & "internal error.");
 
       elsif Op = "(" then
-         --  MMBasic 1265
+         --  MMBasic 1385
          Do_Open_Bracket (Expression, P, F, I64, S,  T);
 
       elsif Is_Name_Start (Element (Data, P)) then
-         --  MMBasic 1275
+         --  MMBasic 1394
          null;
       elsif Op = """" then
          --  MMBasic 1305
