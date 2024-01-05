@@ -9,8 +9,7 @@ with Ada.Text_IO; use Ada.Text_IO;
 --  with Command_And_Token_Functions; use Command_And_Token_Functions;
 --  with Configuration;
 with Global;
-with M_Basic;
---  with M_Misc;
+with M_Basic_Utilities;
 with Parse_Functions; use Parse_Functions;
 with Support;
 
@@ -146,7 +145,7 @@ package body Tokenizer is
 
             --  MMBasic  976
          elsif Label_Valid and then
-           M_Basic.Is_Name_Start (Get_Input_Character (Ptr)) then
+           M_Basic_Utilities.Is_Name_Start (Get_Input_Character (Ptr)) then
             Put_Line (Routine_Name & "Label_Valid and Name_Start: " &
                         Get_Input_Character (Ptr));
             Try_Label (Buffer, Ptr, Label_Valid);
@@ -156,7 +155,7 @@ package body Tokenizer is
                      Buffer.Last_Element);
             null;
             --  MMBasic  1035
-         elsif M_Basic.Is_Name_Start (aChar) then
+         elsif M_Basic_Utilities.Is_Name_Start (aChar) then
             Process_Name_Start (Buffer, Ptr, First_Nonwhite, Label_Valid);
 --              Put_Line (Routine_Name & "Name_Start processed, Buffer");
 --              Support.Print_Buffer (Buffer);

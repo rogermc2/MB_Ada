@@ -21,8 +21,6 @@ package M_Basic is
    Current_Interrupt_Name   : array (1 .. Configuration.MAXVARLEN + 1) of
      Unbounded_String;
 
-   Default_Type     : Function_Type := T_NBR;
-
    function Check_String (aString, Token : String) return Natural;
    procedure Clear_Program;
    procedure Defined_Subfunction
@@ -35,17 +33,10 @@ package M_Basic is
    function Find_Subfunction (Token : String; Fun_Type : Function_Type)
                               return Natural;
    procedure Init_Basic;
-   function Is_Name_Character (aChar : Character) return Boolean;
-   pragma Inline (Is_Name_Character);
-   function Is_Name_End (aChar : Character) return Boolean;
-   pragma Inline (Is_Name_End);
-   function Is_Name_Start (aChar : Character) return Boolean;
-   pragma Inline (Is_Name_Start);
    procedure Print_String (theString : String);
    procedure Prepare_Program (Error_Abort : Boolean);
    procedure Remove_Spaces (Buffer : in out Unbounded_String);
    procedure Save_Program_To_Flash (Buffer: String; Msg : Boolean);
-   procedure Skip_Spaces (Buffer : Unbounded_String; Pos : in out Positive);
    function Skip_Var (Pos : in out Positive) return Positive;
    function Token_Function (Token : String) return Unbounded_String;
 

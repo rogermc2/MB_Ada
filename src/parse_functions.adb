@@ -9,6 +9,7 @@ with Command_And_Token_Functions;
 with Configuration;
 with Global;
 with M_Basic; use M_Basic;
+with M_Basic_Utilities; use M_Basic_Utilities;
 with M_Misc;
 with Support;
 

@@ -4,7 +4,7 @@ with Ada.Characters.Handling;
 with Ada.Command_Line;
 with Ada.Strings;
 
-with M_Basic;
+with M_Basic_Utilities;
 with M_Misc;
 with Parse_Functions;
 with Support;
@@ -15,7 +15,6 @@ package body Commands is
      (Expression         : Unbounded_String; Pos : Positive;
       Fun_Type           : in out Interfaces.Unsigned_16;
       Allow_Default_Type : Boolean) is
-      use M_Basic;
       Routine_Name : constant String := "Commands.Check_Type_Specified ";
       Term         : constant String :=
                        Slice (Expression, Pos, Length (Expression));
@@ -28,7 +27,7 @@ package body Commands is
          Fun_Type := T_NBR or T_Implied;
       else
          Assert (Allow_Default_Type, Routine_Name & "variable type");
-         Fun_Type := Default_Type;
+         Fun_Type := M_Basic_Utilities.Default_Type;
       end if;
 
    end Check_Type_Specified;
