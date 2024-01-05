@@ -178,7 +178,12 @@ package body Evaluation is
 
       if Index >= 0 then
          Save_Current_Line_Ptr := M_Basic.Current_Line_Ptr;
-         M_Basic.Defined_Subfunction ();
+         M_Basic.Defined_Subfunction
+           (Expression, True, Slice (Expression, P, Length (Expression)),
+            Index, F, I64, S, T);
+         M_Basic.Current_Line_Ptr := Save_Current_Line_Ptr;
+      else
+         S := Find_Var (P,  Global.V_FIND);
       end if;
 
       Evaluate (Expression, F, I64, S, T, 1);

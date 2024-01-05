@@ -1,6 +1,8 @@
 
 with Interfaces; use Interfaces;
 
+with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
+
 with Command_And_Token_Tables; use Command_And_Token_Tables;
 
 package Commands is
@@ -9,7 +11,7 @@ package Commands is
    Option_Error_Skip : Integer := 0;
 
    procedure Check_Type_Specified
-     (Buffer : String_Buffer; Pos: Positive; Fun_Type : in out Unsigned_16;
+     (Expression : Unbounded_String; Pos: Positive; Fun_Type : in out Unsigned_16;
       Allow_Default_Type : Boolean);
    procedure Command_Input;
    procedure Execute_One_Line;

@@ -23,8 +23,9 @@ with Support;
 
 package body M_Basic is
 
-   --     Save_Local_Index   : Natural := 0;
+   Save_Local_Index : Natural := 0;
    --     Trace_On : Boolean := False;
+   Var_Count        : Natural := 0;
 
    procedure Clear_Runtime;
    procedure Skip_Element (aLine : String; Pos : in out Positive);
@@ -93,8 +94,8 @@ package body M_Basic is
      Ada.Unchecked_Conversion (Modular, Flash.UB_String_Access);
    pragma Warnings (On);
 
-   --  Defined_Subfunction function is responsible for executing a defined
-   --  subroutine or function.
+   --  MMVasic 441 Defined_Subfunction function is responsible for executing a
+   --  defined subroutine or function.
    --  isfun is true when executing a function.
    --  Command_Ptr is a pointer to the command name in program memory that is
    --              used by the caller.
@@ -103,7 +104,7 @@ package body M_Basic is
    --  fa, i64a, sa and typ are pointers to where the return value is to be
    --                       stored (used by functions only).
    procedure Defined_Subfunction
-     (Buffer        : String_Buffer; Is_Fun : Boolean; Command : String;
+     (Expression    : Unbounded_String; Is_Fun : Boolean; Command : String;
       Subfun_Index  : Positive; Fa     : in out Configuration.MMFLOAT;
       I64a          : in out Long_Long_Integer;
       Sa            : in out Unbounded_String;
@@ -130,10 +131,10 @@ package body M_Basic is
    begin
       Assert (Sub_Line_Ptr > 0, Routine_Name & "Sub_Line_Ptr = 0");
       Fun_Type := T_NOTYPE;
-      --  462
+      --  --  MMVasic 463
       Skip_Spaces (SL_Pos);
       SL_Pos2 := SL_Pos;
-      --  465 copy the sub/fun name from the definition into temp storage and
+      --  466 copy the sub/fun name from the definition into temp storage and
       --  terminate.
       --  SL_Pos is left pointing to the end of the sub/fun name
       --  (ie, the start of the argument list in the definition)
@@ -201,7 +202,7 @@ package body M_Basic is
          Skip_Spaces (SL_Pos2);
          if Prog_Memory (Subfunctions (SL_Pos2)) = Integer'Image (tokenAS) then
             SL_Pos2 := SL_Pos2 + 1;
-            Commands.Check_Type_Specified (Buffer, SL_Pos2, Fun_Type, True);
+            Commands.Check_Type_Specified (Expression, SL_Pos2, Fun_Type, True);
             Assert (Fun_Type = T_IMPLIED, Routine_Name & "invalid type");
          end if;
          Fun_Type := Fun_Type or V_FIND or V_DIM_VAR or V_LOCAL or V_EMPTY_OK;
@@ -231,7 +232,7 @@ package body M_Basic is
             Assert (Found, Routine_Name & "syntax error, ) or 0 expected.");
             SL_Pos3 := SL_Pos3 + 1;
             Skip_Spaces (SL_Pos3);
-            Commands.Check_Type_Specified (Buffer, SL_Pos3, Fun_Type, False);
+            Commands.Check_Type_Specified (Expression, SL_Pos3, Fun_Type, False);
             Fun_Type := Fun_Type and not T_IMPLIED;
          else
             Fun_Type := T_INT;
@@ -272,13 +273,6 @@ package body M_Basic is
       Next_Statement_Pos : Positive := 1;
       Command_Line_Pos   : Positive := 1;   --  p
       Token              : Integer;
---        Null_Function      : Function_Type := T_NOTYPE;
-      --        Command_Token      : Unbounded_String;
---        Fa                 : Configuration.MMFLOAT := 0.0;
---        I64a               : Long_Long_Integer := 0;
---        Sa                 : Unbounded_String := To_Unbounded_String ("");
---        Index              : Positive;
-      Save_Local_Index   : Natural := 0;
       Interupt_Check     : Integer := 0;
       T_Arg              : Function_Type := T_NOTYPE;
       Command_Ptr        : Command_And_Token_Functions.Access_Procedure;
@@ -496,6 +490,37 @@ package body M_Basic is
       return Index;
 
    end Find_Subfunction;
+
+   --  MMBasic 1693
+   procedure Find_Var (Expression : Unbounded_String; Pos : in out Positive;
+                       Action     : Interfaces.Integer_16) is
+      use Interfaces;
+      use Ada.Assertions;
+      use Ada.Characters.Handling;
+      type Dim_Array is array (1 .. Configuration.MAXDIM) of Integer;
+      Routine_Name : constant String := "M_Basic.Init_Basic ";
+      Dim          : Dim_Array := (others => 0);
+      Name         : Unbounded_String;
+      S            : Unbounded_String;
+      Name_Length  : Natural := 0;
+      V_Type       : Integer_16 := 0;
+      D_Num        : Natural := 0;
+      I_Free       : Natural := Var_Count;
+   begin
+      --  Test_Stack_Overflow of pic32 stack
+      Skip_Spaces (Expression, Pos);
+      Assert (Is_Name_Start (Element (Expression, Pos)), Routine_Name &
+                "invalid variable name.");
+
+      while Is_Name_Character (Element (Expression, Pos)) loop
+         Append (S, Element (Expression, Pos));
+         Pos := Pos + 1;
+         Name_Length := Name_Length + 1;
+         Assert (Name_Length <= Configuration.MAXVARLEN, Routine_Name &
+                "invalid variable name, too long.");
+      end loop;
+
+   end Find_Var;
 
    function Get_C_Fun_Ptr (Pos : Positive) return Flash.UB_String_Access is
       use Flash;

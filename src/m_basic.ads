@@ -25,6 +25,12 @@ package M_Basic is
 
    function Check_String (aString, Token : String) return Natural;
    procedure Clear_Program;
+   procedure Defined_Subfunction
+     (Expression   : Unbounded_String; Is_Fun : Boolean; Command : String;
+      Subfun_Index : Positive; Fa     : in out Configuration.MMFLOAT;
+      I64a          : in out Long_Long_Integer;
+      Sa            : in out Unbounded_String;
+      Fun_Type      : in out Function_Type);
    procedure Execute_Program (Buffer : String_Buffer);
    function Find_Subfunction (Token : String; Fun_Type : Function_Type)
                               return Natural;
