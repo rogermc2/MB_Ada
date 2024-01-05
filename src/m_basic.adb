@@ -493,7 +493,7 @@ package body M_Basic is
 
    --  MMBasic 1693
    procedure Find_Var (Expression : Unbounded_String; Pos : in out Positive;
-                       Action     : Interfaces.Integer_16) is
+                       Action     : Function_Type) is
       use Interfaces;
       use Ada.Assertions;
       use Ada.Characters.Handling;
@@ -503,7 +503,7 @@ package body M_Basic is
       Name         : Unbounded_String;
       S            : Unbounded_String;
       Name_Length  : Natural := 0;
-      V_Type       : Integer_16 := 0;
+      V_Type       : Function_Type := T_NA;
       D_Num        : Natural := 0;
       I_Free       : Natural := Var_Count;
    begin
@@ -519,6 +519,38 @@ package body M_Basic is
          Assert (Name_Length <= Configuration.MAXVARLEN, Routine_Name &
                 "invalid variable name, too long.");
       end loop;
+
+      --  MMBasic 1608 Make sure that there are a multiple of four bytes
+      --  with a valid name or set to 0.
+      while Name_Length mod 4 /= 0 loop
+         Append (S, '0');
+      end loop;
+
+      if Element (Expression, Pos) = '$' then
+         Assert ((Action and T_IMPLIED) /= T_IMPLIED or else
+                 (Action and T_STR) = T_STR, Routine_Name &
+                "conflicting variable type.");
+         V_Type := T_STR;
+         Pos := Pos + 1;
+       elsif Element (Expression, Pos) = '%' then
+         Assert ((Action and T_IMPLIED) /= T_IMPLIED or else
+                 (Action and T_INT) = T_INT, Routine_Name &
+                "conflicting variable type.");
+         V_Type := T_INT;
+         Pos := Pos + 1;
+       elsif Element (Expression, Pos) = '!' then
+         Assert ((Action and T_IMPLIED) /= T_IMPLIED or else
+                 (Action and T_NBR) = T_NBR, Routine_Name &
+                "conflicting variable type.");
+         V_Type := T_NBR;
+         Pos := Pos + 1;
+       else
+         Assert ((Action and Global.V_DIM_VAR) /= Global.V_DIM_VAR or else
+                 Default_Type /= T_NOTYPE or else
+                 (Action and T_IMPLIED) = T_IMPLIED, Routine_Name &
+                "variable type has not been specified.");
+         V_Type := T_NOTYPE;
+      end if;
 
    end Find_Var;
 
