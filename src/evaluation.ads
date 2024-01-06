@@ -1,3 +1,5 @@
+
+with Interfaces;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 
 with Command_And_Token_Tables; use Command_And_Token_Tables;
@@ -16,6 +18,10 @@ package Evaluation is
    S_Ret  : Unbounded_String;
    T_Arg  : Function_Type;
 
+   procedure Evaluate
+     (Expression : in out Unbounded_String; Fa : in out Configuration.MMFLOAT;
+      Ia         : in out Long_Long_Integer; Sa : in out Unbounded_String;
+      Ta         : in out Function_Type; Flags : Interfaces.Unsigned_16);
    function Get_Int
      (Expression : in out Unbounded_String; Lo, Hi : Integer) return Integer;
    function Get_Integer

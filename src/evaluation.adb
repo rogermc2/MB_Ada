@@ -1,4 +1,4 @@
-with Interfaces;
+
 with Ada.Assertions; use Ada.Assertions;
 with Ada.Characters.Handling;
 with Ada.Strings;
@@ -7,13 +7,10 @@ with Ada.Strings.Fixed;
 with Command_And_Token_Functions; use Command_And_Token_Functions;
 with Global;
 with M_Basic;
+with M_Basic_Utilities;
 
 package body Evaluation is
 
-   procedure Evaluate
-     (Expression : in out Unbounded_String; Fa : in out Configuration.MMFLOAT;
-      Ia         : in out Long_Long_Integer; Sa : in out Unbounded_String;
-      Ta         : in out Function_Type; Flags : Interfaces.Unsigned_16);
    function Get_Close_Bracket
      (Expression : Unbounded_String) return Positive;
 
@@ -157,13 +154,14 @@ package body Evaluation is
      (Expression : in out Unbounded_String; P : in out Positive;
       F          : in out Configuration.MMFLOAT; I64 : in out Long_Long_Integer;
       S          : in out Unbounded_String;  T  : in out Function_Type) is
-      Routine_Name : constant String := "M_Basic.Do_Subtract ";
+      use M_Basic_Utilities;
+      Routine_Name : constant String := "Evaluation.Do_Name_Start ";
       Save_Current_Line_Ptr : Positive;
       TP                    : Positive := P + 1;
       Index                 : Integer := -1;
    begin
       --  MMBasic 1397 check if terminated with bracket.
-      while M_Basic.Is_Name_Character (Element (Expression, TP)) loop
+      while M_Basic_Utilities.Is_Name_Character (Element (Expression, TP)) loop
          TP := TP + 1;
       end loop;
 
@@ -173,17 +171,21 @@ package body Evaluation is
       end if;
 
       if Element (Expression, TP) = '(' then
+         --  MMBasic 1403
          Index := M_Basic.Find_Subfunction (To_String (Expression), T_NBR);
       end if;
 
       if Index >= 0 then
+         --  MMBasic 1406
          Save_Current_Line_Ptr := M_Basic.Current_Line_Ptr;
          M_Basic.Defined_Subfunction
            (Expression, True, Slice (Expression, P, Length (Expression)),
             Index, F, I64, S, T);
          M_Basic.Current_Line_Ptr := Save_Current_Line_Ptr;
       else
-         S := Find_Var (P,  Global.V_FIND);
+         --  MMBasic 1412
+         Find_Var (Expression, P,  Global.V_FIND);
+         S := T_STR;
       end if;
 
       Evaluate (Expression, F, I64, S, T, 1);

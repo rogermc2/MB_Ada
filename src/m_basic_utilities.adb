@@ -6,19 +6,22 @@ with Ada.Characters.Handling;
 
 with Command_And_Token_Functions;
 with Configuration;
+with Evaluation;
 with Global;
 
 package body M_Basic_Utilities is
 
-   Var_Count        : Natural := 0;
+   Var_Count : Natural := 0;
+   Arg_Buff  : Unbounded_String;
+   Arg_V     : String_Buffer;
+   Arg_C     : Interfaces.Unsigned_16;
 
    procedure  Get_Args (Expression   : Unbounded_String; Pos : Positive;
                         Max_Num_Args : Natural; S : String);
-   procedure  Make_Args (Expression : Unbounded_String; Pos : Positive;
-                         Max_Args   : Positive;
-                         Arg_Buff   : in out Unbounded_String;
-                         Arg_V      : in out Unbounded_String;
-                         Arg_C      : out Natural; Delim : String);
+   procedure  Make_Args
+     (Expression : Unbounded_String; Pos : Positive; Max_Args : Positive;
+      Arg_Buff   : in out Unbounded_String; Arg_V : in out String_Buffer;
+      Arg_C      : out Interfaces.Unsigned_16; Delim : String);
 
    --  MMBasic 1693
    procedure Find_Var (Expression : Unbounded_String; Pos : in out Positive;
@@ -26,16 +29,22 @@ package body M_Basic_Utilities is
       use Interfaces;
       use Ada.Assertions;
       use Global;
+      use String_Buffer_Package;
       type Dim_Array is array (1 .. Configuration.MAXDIM) of Integer;
       Routine_Name : constant String := "M_Basic_Utilities.Find_Var ";
       PP           : Positive;
       Dim          : Dim_Array := (others => 0);
       Name         : Unbounded_String;
+      F            : Configuration.MMFLOAT := 0.0;
+      I64          : Long_Long_Integer := 0;
+      T_Arg        : Function_Type := T_NOTYPE;
+      Arg          : Unbounded_String;
       S            : Unbounded_String;
       Name_Length  : Natural := 0;
       V_Type       : Function_Type := T_NA;
       D_Num        : Integer := 0;
       I_Free       : Natural := Var_Count;
+      Index        : Positive := 1;
    begin
       --  Test_Stack_Overflow of pic32 stack
       Skip_Spaces (Expression, Pos);
@@ -83,6 +92,7 @@ package body M_Basic_Utilities is
          V_Type := T_NOTYPE;
       end if;
 
+      --  MMBasic 1756
       if Element (Expression, Pos) = '(' then
          PP := Pos + 1;
          Skip_Spaces (Expression, PP);
@@ -91,7 +101,19 @@ package body M_Basic_Utilities is
             D_Num := -1;
          else
             Get_Args (Expression, Pos, 2 * Configuration.MAXDIM, "(,");
+            Assert ((Arg_C and 1) /= 0, Routine_Name & "invalid dimensions.");
          end if;
+
+         --  MMBasic 1772
+         D_Num := Integer (Arg_C / 2) + 1;
+         Assert (D_Num <= Configuration.MAXDIM, Routine_Name &
+                   "invalid dimensions.");
+         Index := 1;
+         while Index < Integer (Arg_C / 2) loop
+            Arg := To_Unbounded_String (Arg_V (Index));
+            Evaluation.Evaluate (Arg, F, I64, S, T_Arg, 0);
+            Index := Index + 2;
+         end loop;
       end if;
 
    end Find_Var;
@@ -134,11 +156,8 @@ package body M_Basic_Utilities is
 
    procedure  Get_Args (Expression   : Unbounded_String; Pos : Positive;
                         Max_Num_Args : Natural; S : String) is
-      use Configuration;
-      Arg_Buff : Unbounded_String;
-      Arg_V    : Unbounded_String;
-      Arg_C    : Natural;
    begin
+      --  MMBasic.h 142
       Make_Args (Expression, Pos, Max_Num_Args, Arg_Buff, Arg_V, Arg_C, S);
 
    end Get_Args;
@@ -174,15 +193,15 @@ package body M_Basic_Utilities is
 
    end Is_Name_Start;
 
-   procedure  Make_Args (Expression : Unbounded_String; Pos : Positive;
-                         Max_Args   : Positive;
-                         Arg_Buff   : in out Unbounded_String;
-                         Arg_V      : in out Unbounded_String;
-                         Arg_C      : out Natural; Delim : String) is
+   procedure  Make_Args
+     (Expression : Unbounded_String; Pos : Positive; Max_Args : Positive;
+      Arg_Buff   : in out Unbounded_String; Arg_V  : in out String_Buffer;
+      Arg_C      : out Interfaces.Unsigned_16; Delim : String) is
       use Interfaces;
       use Ada.Assertions;
       use Ada.Strings;
       use Command_And_Token_Functions;
+      use String_Buffer_Package;
       Routine_Name   : constant String := "M_Basic.Make_Args ";
       Then_Token     : constant Natural := tokenTHEN;
       Else_Token     : constant Natural := tokenELSE;
@@ -236,8 +255,9 @@ package body M_Basic_Utilities is
                if In_Arg then
                   --  MMBasic 2143 moved to else
                   --  MMBasic 2150 Not a special char so start a new argument
-                  Assert (Arg_C < Max_Args, Routine_Name & "Too many arguments");
-                  Append (Arg_V, Arg_Buff);
+                  Assert (Integer (Arg_C) < Max_Args, Routine_Name &
+                            "Too many arguments");
+                  Append (Arg_V, To_String (Arg_Buff));
                   Arg_C := Arg_C + 1;
                   In_Arg := True;
 
@@ -292,14 +312,15 @@ package body M_Basic_Utilities is
                   elsif Arg_C /= 0 then
                      --  MMBasic 2123
                      Arg_C := Arg_C + 1;
-                     Append (Arg_V, Arg_Buff);
+                     Append (Arg_V, To_String (Arg_Buff));
                   end if;
 
                   In_Arg := False;
-                  Assert (Arg_C < Max_Args, Routine_Name & "Too many arguments");
+                  Assert (Integer (Arg_C) < Max_Args, Routine_Name & "Too many arguments");
                   Arg_C := Arg_C + 1;
-                  Append (Arg_V, Arg_Buff);
-                  Append (Arg_V, Element (Expression, TP));
+                  Append (Arg_V, To_String (Arg_Buff));
+                  String_1 (1) := Element (Expression, TP);
+                  Append (Arg_V, String_1);
                   TP := TP + 1;
                   Append (Arg_Buff, ASCII.NUL);
 
