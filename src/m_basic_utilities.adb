@@ -4,6 +4,8 @@ with Interfaces;
 with Ada.Assertions;
 with Ada.Characters.Handling;
 
+with Ada.Strings.Fixed;
+
 with Command_And_Token_Functions;
 with Configuration;
 with Global;
@@ -15,9 +17,9 @@ package body M_Basic_Utilities is
    procedure  Get_Args (Expression   : Unbounded_String; Pos : Positive;
                         Max_Num_Args : Natural; S : String);
    procedure  Make_Args (Expression : Unbounded_String; Pos : Positive;
-                         Max_Args   : Positive; Arg_Buff   : String;
-                         Arg_V      : String; Arg_C : out Natural;
-                         Delim      : String);
+                         Max_Args   : Positive; Arg_Buff : String;
+                         Arg_V      : in out Unbounded_String;
+                         Arg_C      : out Natural; Delim : String);
 
    --  MMBasic 1693
    procedure Find_Var (Expression : Unbounded_String; Pos : in out Positive;
@@ -99,7 +101,7 @@ package body M_Basic_Utilities is
                         Max_Num_Args : Natural; S : String) is
       use Configuration;
       Arg_Buff : String (1 .. STRINGSIZE + STRINGSIZE / 2);
-      Arg_V    : String (1 .. Max_Num_Args);
+      Arg_V    : Unbounded_String;
       Arg_C    : Natural;
    begin
       Make_Args (Expression, Pos, Max_Num_Args, Arg_Buff, Arg_V, Arg_C, S);
@@ -139,19 +141,23 @@ package body M_Basic_Utilities is
 
    procedure  Make_Args (Expression : Unbounded_String; Pos : Positive;
                          Max_Args   : Positive; Arg_Buff   : String;
-                         Arg_V      : String; Arg_C : out Natural;
-                         Delim      : String) is
+                         Arg_V      : in out Unbounded_String;
+                         Arg_C      : out Natural; Delim : String) is
       use Ada.Assertions;
+      use Ada.Strings;
       use Command_And_Token_Functions;
       Routine_Name   : constant String := "M_Basic.Make_Args ";
+      Then_Token     : constant Natural := tokenTHEN;
+      Else_Token     : constant Natural := tokenELSE;
+      String_1       : String (1 .. 1);
       TP             : Positive := Pos;
-      OP             : String := Arg_Buff;
+      OP             : Unbounded_String := To_Unbounded_String (Arg_Buff);
       In_Arg         : Boolean := False;
       Expect_Cmd     : Boolean := False;
       Expect_Bracket : Boolean := False;
-      Then_Token     : Natural := tokenTHEN;
-      Else_Token     : Natural := tokenELSE;
       Delim_Ptr      : Positive := 1;
+      Term           : Unbounded_String;
+      Match          : Boolean := False;
       Done           : Boolean := False;
    begin
       --  MMBasic 2069 Test_Tack_Overflow
@@ -165,11 +171,36 @@ package body M_Basic_Utilities is
          TP := TP + 1;
       end if;
 
+      --  MMBasic 2096  Main processing loop
       while not Done and then TP <= Length (Expression) loop
          Done := (Expect_Bracket and then Element (Expression, TP) = ')')
-           or else  Element (Expression, TP) = ''';
+           or else Element (Expression, TP) = ''';
          if not Done then
-            null;
+            Term := To_Unbounded_String
+              (Slice (Expression, TP, Length (Expression)));
+            --  MMBasic 2110 Delim is a string of special characters that split the
+            --  expression into separate terms;
+            Match := False;
+            for Delim_Index in Delim'Range loop
+               String_1 (1) := Delim (Delim_Index);
+               Match := Match or else Index (Term, String_1) > 0;
+            end loop;
+
+            if Match then
+               Expect_Cmd := Expect_Cmd and
+                 (Term = Integer'Image (Then_Token) or else
+                  Term = Integer'Image (Else_Token));
+
+               if In_Arg then
+                  Trim (OP, Right);
+                  Append (OP, ASCII.NUL);
+               end if;
+            end if;
+
+         elsif Arg_C /= 0 then
+            --  MMBasic 2123
+            Arg_C := Arg_C + 1;
+            Append (Arg_V, OP);
          end if;
 
       end loop;
