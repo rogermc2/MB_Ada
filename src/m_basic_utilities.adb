@@ -4,8 +4,6 @@ with Interfaces;
 with Ada.Assertions;
 with Ada.Characters.Handling;
 
-with Ada.Strings.Fixed;
-
 with Command_And_Token_Functions;
 with Configuration;
 with Global;
@@ -17,7 +15,8 @@ package body M_Basic_Utilities is
    procedure  Get_Args (Expression   : Unbounded_String; Pos : Positive;
                         Max_Num_Args : Natural; S : String);
    procedure  Make_Args (Expression : Unbounded_String; Pos : Positive;
-                         Max_Args   : Positive; Arg_Buff : String;
+                         Max_Args   : Positive;
+                         Arg_Buff   : in out Unbounded_String;
                          Arg_V      : in out Unbounded_String;
                          Arg_C      : out Natural; Delim : String);
 
@@ -28,7 +27,7 @@ package body M_Basic_Utilities is
       use Ada.Assertions;
       use Global;
       type Dim_Array is array (1 .. Configuration.MAXDIM) of Integer;
-      Routine_Name : constant String := "M_Basic.Init_Basic ";
+      Routine_Name : constant String := "M_Basic_Utilities.Find_Var ";
       PP           : Positive;
       Dim          : Dim_Array := (others => 0);
       Name         : Unbounded_String;
@@ -97,10 +96,46 @@ package body M_Basic_Utilities is
 
    end Find_Var;
 
+   function Get_Close_Bracket
+     (Expression : Unbounded_String; Pos : in out Positive) return Positive is
+      use Ada.Assertions;
+      use Interfaces;
+      Routine_Name : constant String := "M_Basic_Utilities.Get_Close_Bracket ";
+      Index        : Integer := 0;
+      aChar        : Character;
+      In_Quote     : Boolean := False;
+      Done         : Boolean := False;
+   begin
+      while not Done loop
+         Assert (Pos <= Length (Expression), Routine_Name &
+                   "closiing bracket expected");
+         aChar := Element (Expression, Pos);
+         if aChar = '"' then
+            In_Quote := not In_Quote;
+         end if;
+
+         if not In_Quote then
+            if aChar = ')' then
+               Index := Index - 1;
+            elsif aChar = '(' or else
+              ((Token_Type (Integer'Value (Character'Image (aChar))) and T_FUN)
+               = T_FUN) then
+               Index := Index + 1;
+            end if;
+         end if;
+
+         Pos := Pos + 1;
+         Done := Index = 0;
+      end loop;
+
+      return Pos - 1;
+
+   end Get_Close_Bracket;
+
    procedure  Get_Args (Expression   : Unbounded_String; Pos : Positive;
                         Max_Num_Args : Natural; S : String) is
       use Configuration;
-      Arg_Buff : String (1 .. STRINGSIZE + STRINGSIZE / 2);
+      Arg_Buff : Unbounded_String;
       Arg_V    : Unbounded_String;
       Arg_C    : Natural;
    begin
@@ -140,13 +175,13 @@ package body M_Basic_Utilities is
    end Is_Name_Start;
 
    procedure  Make_Args (Expression : Unbounded_String; Pos : Positive;
-                         Max_Args   : Positive; Arg_Buff   : String;
+                         Max_Args   : Positive;
+                         Arg_Buff   : in out Unbounded_String;
                          Arg_V      : in out Unbounded_String;
                          Arg_C      : out Natural; Delim : String) is
       use Interfaces;
       use Ada.Assertions;
       use Ada.Strings;
-      use Ada.Strings.Fixed;
       use Command_And_Token_Functions;
       Routine_Name   : constant String := "M_Basic.Make_Args ";
       Then_Token     : constant Natural := tokenTHEN;
@@ -154,7 +189,7 @@ package body M_Basic_Utilities is
       String_1       : String (1 .. 1);
       aChar          : Character;
       TP             : Positive := Pos;
-      OP             : Unbounded_String := To_Unbounded_String (Arg_Buff);
+      X              : Positive;
       In_Arg         : Boolean := False;
       Expect_Cmd     : Boolean := False;
       Expect_Bracket : Boolean := False;
@@ -195,52 +230,89 @@ package body M_Basic_Utilities is
                   Term = Integer'Image (Else_Token));
 
                if In_Arg then
-                  Trim (OP, Right);
-                  Append (OP, ASCII.NUL);
+                  Trim (Arg_Buff, Right);
+                  Append (Arg_Buff, ASCII.NUL);
                end if;
             end if;
 
          elsif Arg_C /= 0 then
             --  MMBasic 2123
             Arg_C := Arg_C + 1;
-            Append (Arg_V, OP);
+            Append (Arg_V, Arg_Buff);
          end if;
 
          In_Arg := False;
          Assert (Arg_C < Max_Args, Routine_Name & "Too many arguments");
          Arg_C := Arg_C + 1;
-         Append (Arg_V, OP);
+         Append (Arg_V, Arg_Buff);
          Append (Arg_V, Element (Expression, TP));
          TP := TP + 1;
-         Append (OP, ASCII.NUL);
+         Append (Arg_Buff, ASCII.NUL);
 
-      end loop;
+         --  MMBasic 2137
+         Term := To_Unbounded_String
+           (Slice (Expression, TP, Length (Expression)));
+         Expect_Cmd := Term = Integer'Image (Then_Token) or else
+           Term = Integer'Image (Else_Token);
 
-      --  MMBasic 2137
-      Term := To_Unbounded_String
-        (Slice (Expression, TP, Length (Expression)));
-      Expect_Cmd := Term = Integer'Image (Then_Token) or else
-        Term = Integer'Image (Else_Token);
+         --  MMBasic 2141
+         if not In_Arg then
+            if Element (Expression, TP) = ' ' then
+               TP := TP + 1;
+            end if;
 
-      --  MMBasic 2141
-      if not In_Arg then
-         if Element (Expression, TP) = ' ' then
+            --  MMBasic 2150 Not a special char so start a new argument
+            Assert (Arg_C < Max_Args, Routine_Name & "Too many arguments");
+            Append (Arg_V, Arg_Buff);
+            Arg_C := Arg_C + 1;
+            In_Arg := True;
+         end if;
+
+         --  If an opening bracket, copy everything until we hit the matching
+         --  closing bracket.
+         --  This includes special characters such as , and ; and keeps track of
+         --  any nested brackets.
+         --  MMBasic 2158
+         aChar := Element (Expression, TP);
+         if (aChar = '(') or else
+           (((Token_Type (Integer'Value (Character'Image (aChar))) and T_FUN) =
+                 T_FUN) and not Expect_Cmd) then
+            X := Get_Close_Bracket (Expression, TP);
+            X := X - TP + 1;
+            for index in TP .. X loop
+               Append (Arg_Buff, Element (Expression, index));
+            end loop;
+            TP := TP + X;
+         end if;
+
+         --  MMBasic 2170
+         aChar := Element (Expression, TP);
+         Done := False;
+         if (aChar = '"') then
+            while not Done loop
+               Append (Arg_Buff, aChar);
+               TP := TP + 1;
+               Assert (TP <= Length (Expression), Routine_Name &
+                         "syntax error");
+               aChar := Element (Expression, TP);
+               Done := aChar /= '"';
+            end loop;
+            --  MMBasic 2178
+            Append (Arg_Buff, aChar);
             TP := TP + 1;
          end if;
 
-         --  MMBasic 2141 Not a special char so start a new argument
-         Assert (Arg_C < Max_Args, Routine_Name & "Too many arguments");
-         Append (Arg_V, OP);
-         Arg_C := Arg_C + 1;
-         In_Arg := True;
-      end if;
+         Assert (TP <= Length (Expression), Routine_Name &
+                   "syntax error");
+         Append (Arg_Buff, aChar);
+         TP := TP + 1;
+         Expect_Cmd := False;
+      end loop;
 
-      Term := To_Unbounded_String (Slice (Expression, TP, Length (Expression)));
-      if (Element (Term, 1)  = '(') or else
-        (((Token_Type (Integer'Value (Term)) and T_FUN) = T_FUN) and
-           (not Expect_Cmd)) then
-         null;
-      end if;
+      Assert (Expect_Bracket and then Element (Expression, TP) /= ')',
+              Routine_Name & "syntax error");
+      Trim (Arg_Buff, Right);
+      Append (Arg_Buff, ASCII.NUL);
 
    end Make_Args;
 
