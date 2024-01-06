@@ -143,13 +143,16 @@ package body M_Basic_Utilities is
                          Max_Args   : Positive; Arg_Buff   : String;
                          Arg_V      : in out Unbounded_String;
                          Arg_C      : out Natural; Delim : String) is
+      use Interfaces;
       use Ada.Assertions;
       use Ada.Strings;
+      use Ada.Strings.Fixed;
       use Command_And_Token_Functions;
       Routine_Name   : constant String := "M_Basic.Make_Args ";
       Then_Token     : constant Natural := tokenTHEN;
       Else_Token     : constant Natural := tokenELSE;
       String_1       : String (1 .. 1);
+      aChar          : Character;
       TP             : Positive := Pos;
       OP             : Unbounded_String := To_Unbounded_String (Arg_Buff);
       In_Arg         : Boolean := False;
@@ -203,7 +206,41 @@ package body M_Basic_Utilities is
             Append (Arg_V, OP);
          end if;
 
+         In_Arg := False;
+         Assert (Arg_C < Max_Args, Routine_Name & "Too many arguments");
+         Arg_C := Arg_C + 1;
+         Append (Arg_V, OP);
+         Append (Arg_V, Element (Expression, TP));
+         TP := TP + 1;
+         Append (OP, ASCII.NUL);
+
       end loop;
+
+      --  MMBasic 2137
+      Term := To_Unbounded_String
+        (Slice (Expression, TP, Length (Expression)));
+      Expect_Cmd := Term = Integer'Image (Then_Token) or else
+        Term = Integer'Image (Else_Token);
+
+      --  MMBasic 2141
+      if not In_Arg then
+         if Element (Expression, TP) = ' ' then
+            TP := TP + 1;
+         end if;
+
+         --  MMBasic 2141 Not a special char so start a new argument
+         Assert (Arg_C < Max_Args, Routine_Name & "Too many arguments");
+         Append (Arg_V, OP);
+         Arg_C := Arg_C + 1;
+         In_Arg := True;
+      end if;
+
+      Term := To_Unbounded_String (Slice (Expression, TP, Length (Expression)));
+      if (Element (Term, 1)  = '(') or else
+        (((Token_Type (Integer'Value (Term)) and T_FUN) = T_FUN) and
+           (not Expect_Cmd)) then
+         null;
+      end if;
 
    end Make_Args;
 
