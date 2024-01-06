@@ -196,6 +196,7 @@ package body M_Basic_Utilities is
       Delim_Ptr      : Positive := 1;
       Term           : Unbounded_String;
       Match          : Boolean := False;
+      Continue       : Boolean := False;
       Done           : Boolean := False;
    begin
       --  MMBasic 2069 Test_Tack_Overflow
@@ -211,6 +212,7 @@ package body M_Basic_Utilities is
 
       --  MMBasic 2096  Main processing loop
       while not Done and then TP <= Length (Expression) loop
+         Continue := False;
          Done := (Expect_Bracket and then Element (Expression, TP) = ')')
            or else Element (Expression, TP) = ''';
          if not Done then
@@ -239,73 +241,82 @@ package body M_Basic_Utilities is
             --  MMBasic 2123
             Arg_C := Arg_C + 1;
             Append (Arg_V, Arg_Buff);
+
+            In_Arg := False;
+            Assert (Arg_C < Max_Args, Routine_Name & "Too many arguments");
+            Arg_C := Arg_C + 1;
+            Append (Arg_V, Arg_Buff);
+            Append (Arg_V, Element (Expression, TP));
+            TP := TP + 1;
+            Append (Arg_Buff, ASCII.NUL);
+            Continue := True;
          end if;
 
-         In_Arg := False;
-         Assert (Arg_C < Max_Args, Routine_Name & "Too many arguments");
-         Arg_C := Arg_C + 1;
-         Append (Arg_V, Arg_Buff);
-         Append (Arg_V, Element (Expression, TP));
-         TP := TP + 1;
-         Append (Arg_Buff, ASCII.NUL);
+         if not Continue then
+            --  MMBasic 2137
+            Term := To_Unbounded_String
+              (Slice (Expression, TP, Length (Expression)));
+            Expect_Cmd := Term = Integer'Image (Then_Token) or else
+              Term = Integer'Image (Else_Token);
 
-         --  MMBasic 2137
-         Term := To_Unbounded_String
-           (Slice (Expression, TP, Length (Expression)));
-         Expect_Cmd := Term = Integer'Image (Then_Token) or else
-           Term = Integer'Image (Else_Token);
+            --  MMBasic 2141
+            if not In_Arg then
+               if Element (Expression, TP) = ' ' then
+                  TP := TP + 1;
+                  Continue := True;
+               end if;
+            end if;
 
-         --  MMBasic 2141
-         if not In_Arg then
-            if Element (Expression, TP) = ' ' then
+            if not Continue then
+               --  MMBasic 2150 Not a special char so start a new argument
+               Assert (Arg_C < Max_Args, Routine_Name & "Too many arguments");
+               Append (Arg_V, Arg_Buff);
+               Arg_C := Arg_C + 1;
+               In_Arg := True;
+            end if;
+
+            --  If an opening bracket, copy everything until we hit the matching
+            --  closing bracket.
+            --  This includes special characters such as , and ; and keeps track of
+            --  any nested brackets.
+            --  MMBasic 2158
+            aChar := Element (Expression, TP);
+            if (aChar = '(') or else
+              (((Token_Type (Integer'Value (Character'Image (aChar))) and T_FUN) =
+                    T_FUN) and not Expect_Cmd) then
+               X := Get_Close_Bracket (Expression, TP);
+               X := X - TP + 1;
+               for index in TP .. X loop
+                  Append (Arg_Buff, Element (Expression, index));
+               end loop;
+               TP := TP + X;
+               Continue := True;
+            end if;
+         end if;
+
+         if not Continue then
+            --  MMBasic 2170
+            aChar := Element (Expression, TP);
+            Done := False;
+            if (aChar = '"') then
+               while not Done loop
+                  Append (Arg_Buff, aChar);
+                  TP := TP + 1;
+                  Assert (TP <= Length (Expression), Routine_Name &
+                            "syntax error");
+                  aChar := Element (Expression, TP);
+                  Done := aChar /= '"';
+               end loop;
+               --  MMBasic 2178
+               Append (Arg_Buff, aChar);
                TP := TP + 1;
             end if;
 
-            --  MMBasic 2150 Not a special char so start a new argument
-            Assert (Arg_C < Max_Args, Routine_Name & "Too many arguments");
-            Append (Arg_V, Arg_Buff);
-            Arg_C := Arg_C + 1;
-            In_Arg := True;
-         end if;
-
-         --  If an opening bracket, copy everything until we hit the matching
-         --  closing bracket.
-         --  This includes special characters such as , and ; and keeps track of
-         --  any nested brackets.
-         --  MMBasic 2158
-         aChar := Element (Expression, TP);
-         if (aChar = '(') or else
-           (((Token_Type (Integer'Value (Character'Image (aChar))) and T_FUN) =
-                 T_FUN) and not Expect_Cmd) then
-            X := Get_Close_Bracket (Expression, TP);
-            X := X - TP + 1;
-            for index in TP .. X loop
-               Append (Arg_Buff, Element (Expression, index));
-            end loop;
-            TP := TP + X;
-         end if;
-
-         --  MMBasic 2170
-         aChar := Element (Expression, TP);
-         Done := False;
-         if (aChar = '"') then
-            while not Done loop
-               Append (Arg_Buff, aChar);
-               TP := TP + 1;
-               Assert (TP <= Length (Expression), Routine_Name &
-                         "syntax error");
-               aChar := Element (Expression, TP);
-               Done := aChar /= '"';
-            end loop;
-            --  MMBasic 2178
+            Assert (TP <= Length (Expression), Routine_Name &
+                      "syntax error");
             Append (Arg_Buff, aChar);
             TP := TP + 1;
          end if;
-
-         Assert (TP <= Length (Expression), Routine_Name &
-                   "syntax error");
-         Append (Arg_Buff, aChar);
-         TP := TP + 1;
          Expect_Cmd := False;
       end loop;
 
