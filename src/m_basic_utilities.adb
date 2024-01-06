@@ -11,10 +11,11 @@ with Global;
 
 package body M_Basic_Utilities is
 
-   Var_Count : Natural := 0;
-   Arg_Buff  : Unbounded_String;
-   Arg_V     : String_Buffer;
-   Arg_C     : Interfaces.Unsigned_16;
+   Var_Count   : Natural := 0;
+   Arg_Buff    : Unbounded_String;
+   Arg_V       : String_Buffer;
+   Arg_C       : Interfaces.Unsigned_16;
+   Option_Base : Natural := 0;
 
    procedure  Get_Args (Expression   : Unbounded_String; Pos : Positive;
                         Max_Num_Args : Natural; S : String);
@@ -112,9 +113,21 @@ package body M_Basic_Utilities is
          while Index < Integer (Arg_C / 2) loop
             Arg := To_Unbounded_String (Arg_V (Index));
             Evaluation.Evaluate (Arg, F, I64, S, T_Arg, 0);
+            if T_Arg = T_STR then
+               --  Force later error
+               D_Num := Configuration.MAXDIM;
+            elsif  T_Arg = T_NBR then
+               I64 := Long_Long_Integer (F);
+            end if;
+            Dim (Index / 2) := Integer (I64);
+            Assert (Dim (Index / 2) < Option_Base, Routine_Name &
+                      "invalid dimension.");
             Index := Index + 2;
          end loop;
       end if;
+
+      --  MMBasic 1793
+      Append (S, ASCII.NUL);
 
    end Find_Var;
 
