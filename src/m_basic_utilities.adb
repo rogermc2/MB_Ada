@@ -258,7 +258,10 @@ package body M_Basic_Utilities is
                      --  MMBasic 2170
                      aChar := Element (Expression, TP);
                      Done := False;
-                     if (aChar = '"') then
+
+                     if aChar /= '"' then
+                        Append (Arg_Buff, Element (Expression, TP));
+                     else
                         while not Done loop
                            Append (Arg_Buff, aChar);
                            TP := TP + 1;
@@ -278,6 +281,7 @@ package body M_Basic_Utilities is
                      TP := TP + 1;
                   else
                      TP := TP + 1;
+                     Expect_Cmd := False;
                   end if;
 
                   --  MMBasic 2115
@@ -298,6 +302,7 @@ package body M_Basic_Utilities is
                   Append (Arg_V, Element (Expression, TP));
                   TP := TP + 1;
                   Append (Arg_Buff, ASCII.NUL);
+
                elsif Element (Expression, TP) = ' ' then
                   --  MMBasic 2143
                   TP := TP + 1;
@@ -310,7 +315,6 @@ package body M_Basic_Utilities is
             end if;  --  not Match
          end if;  --  First not Done
 
-         Expect_Cmd := False;
       end loop;
 
       Assert (Expect_Bracket and then Element (Expression, TP) /= ')',
