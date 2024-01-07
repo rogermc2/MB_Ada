@@ -206,6 +206,56 @@ package body M_Basic_Utilities is
 
    end Is_Name_Start;
 
+   procedure C1 (Expression   : Unbounded_String; Pos : Positive;
+                 Expect_Cmd   : in out Boolean; In_Arg : in out Boolean;
+                 Arg_C        : in out Interfaces.Unsigned_16;
+                 Max_Args     : Positive;
+                 Arg_Buff, Op : in out Unbounded_String;
+                 Op_Ptr, TP   : in out Integer) is
+      use Interfaces;
+      use Ada.Assertions;
+      use Command_And_Token_Functions;
+      use String_Buffer_Package;
+      Routine_Name   : constant String := "M_Basic_Utilities.C! ";
+      Then_Token     : constant Natural := tokenTHEN;
+      Else_Token     : constant Natural := tokenELSE;
+      Token          : constant Natural := Integer'Value(Character'Image
+                                                         (Element (Expression, Pos)));
+   begin
+      --  MMBasic 2165
+      if Token = Then_Token or else Token = Else_Token then
+         Expect_Cmd := True;
+      end if;
+
+      --  MMBasic 2167
+      if In_Arg then
+         while Op_Ptr > Length (Arg_Buff) and
+           Element (Op, Op_Ptr - 1) = ' ' loop
+            Op_Ptr := Op_Ptr - 1;
+         end loop;
+
+         --  MMBasic 2173
+      elsif Arg_C > 0 then
+         --  otherwise we have two delimiters in a row
+         --  (except for the first argument).
+         --  so, create a null argument to go between the two delimiters.
+         Append (Arg_V, Character'Image (Element (Op, Op_Ptr)));
+         Arg_C := Arg_C +1;
+         Append (Op, ASCII.NUL);
+         Op_Ptr := Length (Op);
+      end if;
+
+      --  MMBasic 2179
+      In_Arg := False;
+      Assert (Integer (Arg_C) <= Max_Args, Routine_Name & "Too many arguments");
+      Append (Arg_V, Integer'Image (Op_Ptr));
+      Arg_C := Arg_C +1;
+      Op_Ptr := Op_Ptr + 1;
+      TP := TP + 1;
+      Append (Op, ASCII.NUL);
+
+   end C1;
+
    procedure  Make_Args
      (Expression : Unbounded_String; Pos : Positive; Max_Args : Positive;
       Arg_Buff   : in out Unbounded_String; Arg_V  : in out String_Buffer;
@@ -215,9 +265,11 @@ package body M_Basic_Utilities is
       use Ada.Strings;
       use Command_And_Token_Functions;
       use String_Buffer_Package;
-      Routine_Name   : constant String := "M_Basic.Make_Args ";
+      Routine_Name   : constant String := "M_Basic_Utilities.Make_Args ";
       Then_Token     : constant Natural := tokenTHEN;
       Else_Token     : constant Natural := tokenELSE;
+      Op             : Unbounded_String := Arg_Buff;
+      Op_Ptr         : Integer := 1;
       String_1       : String (1 .. 1);
       aChar          : Character;
       TP             : Positive := Pos;
@@ -342,10 +394,12 @@ package body M_Basic_Utilities is
                   TP := TP + 1;
                end if;  --  if in_arg
 
-            else  --  Match
                Expect_Cmd := Expect_Cmd and
                  (Term = Integer'Image (Then_Token) or else
                   Term = Integer'Image (Else_Token));
+            else  --  Match
+               C1 (Expression, Pos, Expect_Cmd, In_Arg, Arg_C, Max_Args,
+                   Arg_Buff, Op, Op_Ptr, TP);
             end if;  --  not Match
          end if;  --  First not Done
 
