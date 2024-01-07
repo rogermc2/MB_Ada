@@ -13,6 +13,7 @@ package Global is
    I_Return    : Integer := 0;
    E_Integer   : Integer := 0;
    E_UB_String : Unbounded_String;
+   UB_Return   : Unbounded_String;
 
    --  Flags used in the program lines
    --  end of a command

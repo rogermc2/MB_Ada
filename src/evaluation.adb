@@ -185,7 +185,7 @@ package body Evaluation is
       else
          --  MMBasic 1412
          Find_Var (Expression, P,  Global.V_FIND);
-         S := T_STR;
+         S := Global.UB_Return;
       end if;
 
       Evaluate (Expression, F, I64, S, T, 1);
@@ -231,7 +231,7 @@ package body Evaluation is
             Assert (False, Routine_Name & "invalid type, expected a number.");
          end if;
 
-         M_Basic.Skip_Spaces (Token, P);
+         M_Basic_Utilities.Skip_Spaces (Token, P);
       end if;
 
       return Token;
@@ -279,7 +279,7 @@ package body Evaluation is
             Assert (False, Routine_Name & "invalid type, expected a number.");
          end if;
 
-         M_Basic.Skip_Spaces (Token, P);
+         M_Basic_Utilities.Skip_Spaces (Token, P);
       end if;
 
       return Token;
@@ -436,7 +436,7 @@ package body Evaluation is
       Func         : Access_Procedure;
    begin
       --  MMBasic 1308  Test_Stack_Overflow;
-      M_Basic.Skip_Spaces (Expression, P);
+      M_Basic_Utilities.Skip_Spaces (Expression, P);
       Data := To_Unbounded_String (Slice (Expression, P, Length (Expression)));
       Op     := Token_Function (To_String (Data));
       Op_Val := Unsigned_16'Value (To_String (Op));
@@ -462,7 +462,7 @@ package body Evaluation is
          --  MMBasic 1385
          Do_Open_Bracket (Expression, P, F, I64, S,  T);
 
-      elsif Is_Name_Start (Element (Data, P)) then
+      elsif M_Basic_Utilities.Is_Name_Start (Element (Data, P)) then
          --  MMBasic 1394
          null;
       elsif Op = """" then
@@ -482,7 +482,7 @@ package body Evaluation is
          Assert (False, Routine_Name & "syntax error");
       end if;
 
-      M_Basic.Skip_Spaces (Data, P);
+      M_Basic_Utilities.Skip_Spaces (Data, P);
       Fa := F;
       Ia := I64;
       Sa := S;
