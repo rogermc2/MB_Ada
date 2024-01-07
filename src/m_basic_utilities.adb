@@ -127,7 +127,8 @@ package body M_Basic_Utilities is
       end if;
 
       --  MMBasic 1793
-      Append (S, ASCII.NUL);
+      --  ASCII.NU is C string terminator
+--        Append (S, ASCII.NUL);
 
    end Find_Var;
 
@@ -240,8 +241,9 @@ package body M_Basic_Utilities is
          --  (except for the first argument).
          --  so, create a null argument to go between the two delimiters.
          Append (Arg_V, Character'Image (Element (Op, Op_Ptr)));
-         Arg_C := Arg_C +1;
-         Append (Op, ASCII.NUL);
+         Arg_C := Arg_C + 1;
+      --  ASCII.NU is C string terminator
+--           Append (Op, ASCII.NUL);
          Op_Ptr := Length (Op);
       end if;
 
@@ -252,7 +254,8 @@ package body M_Basic_Utilities is
       Arg_C := Arg_C +1;
       Op_Ptr := Op_Ptr + 1;
       TP := TP + 1;
-      Append (Op, ASCII.NUL);
+      --  ASCII.NU is C string terminator
+--        Append (Op, ASCII.NUL);
 
    end C1;
 
@@ -294,7 +297,7 @@ package body M_Basic_Utilities is
       end if;
 
       --  MMBasic 2096  Main processing loop
-      while not Done and then TP <= Length (Expression) loop
+      while not Done loop
          Done := (Expect_Bracket and then Element (Expression, TP) = ')')
            or else Element (Expression, TP) = ''';
          if not Done then
@@ -386,6 +389,7 @@ package body M_Basic_Utilities is
                   --                 --  MMBasic 2115
                   --                 if In_Arg then
                   --                    Trim (Arg_Buff, Right);
+      --  ASCII.NU is C string terminator
                   --                    Append (Arg_Buff, ASCII.NUL);
                   --
                   --                 elsif Arg_C /= 0 then
@@ -401,6 +405,7 @@ package body M_Basic_Utilities is
                   --                 String_1 (1) := Element (Expression, TP);
                   --                 Append (Arg_V, String_1);
                   --                 TP := TP + 1;
+      --  ASCII.NU is C string terminator
                   --                 Append (Arg_Buff, ASCII.NUL);
                   --
                   --              elsif Element (Expression, TP) = ' ' then
@@ -438,12 +443,15 @@ package body M_Basic_Utilities is
             end if;  --  not Match
          end if;  --  First not Done
 
+         Done := TP > Length (Expression);
+
       end loop;
 
       Assert (Expect_Bracket and then Element (Expression, TP) /= ')',
               Routine_Name & "syntax error");
       Trim (Arg_Buff, Right);
-      Append (Arg_Buff, ASCII.NUL);
+      --  ASCII.NU is C string terminator
+--        Append (Arg_Buff, ASCII.NUL);
 
    end Make_Args;
 
