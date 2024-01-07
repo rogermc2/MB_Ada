@@ -15,6 +15,7 @@ package body M_Basic_Utilities is
    Arg_Buff    : Unbounded_String;
    Arg_V       : String_Buffer;
    Arg_C       : Interfaces.Unsigned_16;
+   Arg_T       : Function_Type;
    Option_Base : Natural := 0;
 
    procedure  Get_Args (Expression   : Unbounded_String; Pos : Positive;
@@ -35,7 +36,6 @@ package body M_Basic_Utilities is
       Routine_Name : constant String := "M_Basic_Utilities.Find_Var ";
       PP           : Positive;
       Dim          : Dim_Array := (others => 0);
-      Name         : Unbounded_String;
       F            : Configuration.MMFLOAT := 0.0;
       I64          : Long_Long_Integer := 0;
       T_Arg        : Function_Type := T_NOTYPE;
@@ -44,7 +44,7 @@ package body M_Basic_Utilities is
       Name_Length  : Natural := 0;
       V_Type       : Function_Type := T_NA;
       D_Num        : Integer := 0;
-      I_Free       : Natural := Var_Count;
+--        I_Free       : Natural := Var_Count;
       Index        : Positive := 1;
    begin
       --  Test_Stack_Overflow of pic32 stack
@@ -70,8 +70,9 @@ package body M_Basic_Utilities is
          Assert ((Action and T_IMPLIED) /= T_IMPLIED or else
                    (Action and T_STR) = T_STR, Routine_Name &
                    "conflicting variable type.");
-         V_Type := T_STR;
+         V_Type := Arg_T;
          Pos := Pos + 1;
+
       elsif Element (Expression, Pos) = '%' then
          Assert ((Action and T_IMPLIED) /= T_IMPLIED or else
                    (Action and T_INT) = T_INT, Routine_Name &
@@ -128,7 +129,7 @@ package body M_Basic_Utilities is
 
       --  MMBasic 1793
       --  ASCII.NU is C string terminator
---        Append (S, ASCII.NUL);
+      --        Append (S, ASCII.NUL);
 
    end Find_Var;
 
@@ -242,8 +243,8 @@ package body M_Basic_Utilities is
          --  so, create a null argument to go between the two delimiters.
          Append (Arg_V, Character'Image (Element (Op, Op_Ptr)));
          Arg_C := Arg_C + 1;
-      --  ASCII.NU is C string terminator
---           Append (Op, ASCII.NUL);
+         --  ASCII.NU is C string terminator
+         --           Append (Op, ASCII.NUL);
          Op_Ptr := Length (Op);
       end if;
 
@@ -255,7 +256,7 @@ package body M_Basic_Utilities is
       Op_Ptr := Op_Ptr + 1;
       TP := TP + 1;
       --  ASCII.NU is C string terminator
---        Append (Op, ASCII.NUL);
+      --        Append (Op, ASCII.NUL);
 
    end C1;
 
@@ -281,6 +282,8 @@ package body M_Basic_Utilities is
       Expect_Cmd     : Boolean := False;
       Expect_Bracket : Boolean := False;
       Delim_Ptr      : Positive := 1;
+      Token          : Natural;
+      T_Token        : Function_Type;
       Term           : Unbounded_String;
       Match          : Boolean := False;
       Done           : Boolean := False;
@@ -314,129 +317,62 @@ package body M_Basic_Utilities is
             --  MMBasic 2112 block moved to else  Match
             if not Match then
                --  MMBasic 2189  C1 E
-               null;
+               Token :=
+                 Integer'Value (Character'Image (Element (Expression, Pos)));
+               Expect_Cmd := Token = Then_Token or else Token = Else_Token;
+
                --  MMBasic 2201
                if not In_Arg then
                   --  C2 E
-                  null;
+                  --  MMBasic 2194 moved to else
+                  --  MMBasic 22202 Not a special char so start a new argument
+                  Assert (Integer (Arg_C) <= Max_Args, Routine_Name &
+                            "Too many arguments");
+                  Append (Arg_V, To_String (Arg_Buff));
+                  Arg_C := Arg_C + 1;
+                  In_Arg := True;
 
-                  if aChar /= '(' and then
-                    not (((Token_Type (Integer'Value (Character'Image (Element (Expression, TP)))) and T_FUN) =
-                            T_FUN) and not Expect_Cmd) then
+                  aChar := Element (Expression, TP);
+                  T_Token :=
+                    Token_Type (Integer'Value (Character'Image (aChar)));
+                  if aChar = '(' or else ((T_Token and T_FUN) = T_FUN
+                                          and then (not Expect_Cmd)) then
                      --  MMBasic 2211 C3
-                     null;
+                     X := Get_Close_Bracket (Expression, TP);
+                     X := X - TP + 1;
+                     for index in TP .. X loop
+                        Append (Op, Element (Expression, index));
+                     end loop;
+                     Op_Ptr := Op_Ptr + X;
+                     TP := TP + X;
 
-                  elsif aChar /= '"' then
-                     --  MMBasic 2211 C4
-                     null;
+                  elsif aChar = '"' then
+                     --  MMBasic 2224 C4
+                     while Element (Expression, TP + 1) /=  '"' loop
+                        TP := TP + 1;
+                        Append (Op, Element (Expression, TP));
+                        Assert (TP < length (Expression), Routine_Name &
+                                  "syntax error, no closing "".");
+                        Op_Ptr := Op_Ptr + 1;
+                     end loop;
+
+                     --  MMBasic 2231
+                     TP := TP + 1;
+                     Append (Op, Element (Expression, TP));
+                     Op_Ptr := Op_Ptr + 1;
 
                   else  --  anythin else
                      --  MMBasic 2236
+                     Append (Op, Element (Expression, TP));
+                     Op_Ptr := Op_Ptr + 1;
                      TP := TP + 1;
                      Expect_Cmd := False;
                   end if;  --  if aChar /= '('
 
-                  --                 Term := To_Unbounded_String
-                  --                   (Slice (Expression, TP, Length (Expression)));
-                  --                 Expect_Cmd := Term = Integer'Image (Then_Token) or else
-                  --                   Term = Integer'Image (Else_Token);
-                  --
-                  --                 --  MMBasic 2201
-                  --                 if not In_Arg then
-                  --                    --  C2 E
-                  --                    --  MMBasic 2194 moved to else
-                  --                    --  MMBasic 22202 Not a special char so start a new argument
-                  --                    Assert (Integer (Arg_C) < Max_Args, Routine_Name &
-                  --                              "Too many arguments");
-                  --                    Append (Arg_V, To_String (Arg_Buff));
-                  --                    Arg_C := Arg_C + 1;
-                  --                    In_Arg := True;
-                  --
-                  --                    --  If an opening bracket, copy everything until we hit the matching
-                  --                    --  closing bracket.
-                  --                    --  This includes special characters such as , and ; and keeps track of
-                  --                    --  any nested brackets.
-                  --                 elsif (aChar /= '(') and then
-                  --                   not (((Token_Type (Integer'Value (Character'Image (Element (Expression, TP)))) and T_FUN) =
-                  --                           T_FUN) and not Expect_Cmd) then
-                  --                    --  MMBasic 2211 C3 E
-                  --
-                  --                    if aChar /= '"' then
-                  --                       Append (Arg_Buff, Element (Expression, TP));
-                  --                    else
-                  --                       while not Done loop
-                  --                          Append (Arg_Buff, aChar);
-                  --                          TP := TP + 1;
-                  --                          Assert (TP <= Length (Expression), Routine_Name &
-                  --                                    "syntax error");
-                  --                          aChar := Element (Expression, TP);
-                  --                          Done := aChar /= '"';
-                  --                       end loop;
-                  --                       --  MMBasic 2178
-                  --                       Append (Arg_Buff, aChar);
-                  --                       TP := TP + 1;
-                  --                    end if;
-                  --
-                  --                    Assert (TP <= Length (Expression), Routine_Name &
-                  --                              "syntax error");
-                  --                    Append (Arg_Buff, aChar);
-                  --                    TP := TP + 1;
-                  --                 else
-                  --                    TP := TP + 1;
-                  --                    Expect_Cmd := False;
-                  --                 end if;
-                  --
-                  --                 --  MMBasic 2115
-                  --                 if In_Arg then
-                  --                    Trim (Arg_Buff, Right);
-      --  ASCII.NU is C string terminator
-                  --                    Append (Arg_Buff, ASCII.NUL);
-                  --
-                  --                 elsif Arg_C /= 0 then
-                  --                    --  MMBasic 2123
-                  --                    Arg_C := Arg_C + 1;
-                  --                    Append (Arg_V, To_String (Arg_Buff));
-                  --                 end if;
-                  --
-                  --                 In_Arg := False;
-                  --                 Assert (Integer (Arg_C) < Max_Args, Routine_Name & "Too many arguments");
-                  --                 Arg_C := Arg_C + 1;
-                  --                 Append (Arg_V, To_String (Arg_Buff));
-                  --                 String_1 (1) := Element (Expression, TP);
-                  --                 Append (Arg_V, String_1);
-                  --                 TP := TP + 1;
-      --  ASCII.NU is C string terminator
-                  --                 Append (Arg_Buff, ASCII.NUL);
-                  --
-                  --              elsif Element (Expression, TP) = ' ' then
-                  --                 --  MMBasic 2143
-                  --                 TP := TP + 1;
-                  --              end if;  --  if in_arg
-                  --           else
-                  --
-                  --              Expect_Cmd := Expect_Cmd and
-                  --                (Term = Integer'Image (Then_Token) or else
-                  --                 Term = Integer'Image (Else_Token));
-                  --           end if;
-                  --        else
-                  --           --  C3
-                  --           X := Get_Close_Bracket (Expression, TP);
-                  --           X := X - TP + 1;
-                  --           for index in TP .. X loop
-                  --              Append (Arg_Buff, Element (Expression, index));
-                  --           end loop;
-                  --        end if;
-                  --     else -- C2
-                  --        if not In_Arg and then Element (Arg_Buff, TP) = ' ' then
-                  --           TP := TP + 1;
-                  --        end if;
-                  --     end if; --  C2 E
-                  --
-                  --  else  --  Match
-                  --
-               else
-                  null;  --  C2
+               else  --  C2
+                  TP := TP + 1;
                end if;  -- not In_Arg
+
             else
                C1 (Expression, Pos, Expect_Cmd, In_Arg, Arg_C, Max_Args,
                    Arg_Buff, Op, Op_Ptr, TP);
@@ -451,7 +387,7 @@ package body M_Basic_Utilities is
               Routine_Name & "syntax error");
       Trim (Arg_Buff, Right);
       --  ASCII.NU is C string terminator
---        Append (Arg_Buff, ASCII.NUL);
+      --        Append (Arg_Buff, ASCII.NUL);
 
    end Make_Args;
 
