@@ -5,7 +5,6 @@ with Ada.Assertions;
 with Ada.Characters.Handling;
 
 with Command_And_Token_Functions;
-with Configuration;
 with Evaluation;
 with Global;
 
@@ -30,8 +29,10 @@ package body M_Basic_Utilities is
                        Action     : Function_Type) is
       use Interfaces;
       use Ada.Assertions;
+      use Ada.Characters.Handling;
       use Global;
       use String_Buffer_Package;
+      use Var_Package;
       type Dim_Array is array (1 .. Configuration.MAXDIM) of Integer;
       Routine_Name : constant String := "M_Basic_Utilities.Find_Var ";
       PP           : Positive;
@@ -40,12 +41,17 @@ package body M_Basic_Utilities is
       I64          : Long_Long_Integer := 0;
       T_Arg        : Function_Type := T_NOTYPE;
       Arg          : Unbounded_String;
-      S            : Unbounded_String;
+      Name         : Unbounded_String;
+      S            : Unbounded_String;   --  New variable name
       Name_Length  : Natural := 0;
       V_Type       : Function_Type := T_NA;
       D_Num        : Integer := 0;
-      --        I_Free       : Natural := Var_Count;
+      I_Free       : Natural;
+      Item         : Var_Record;
+      Tmp          : Integer;
       Index        : Positive := 1;
+      IP           : Positive := 1;
+      TP           : Positive := 1;
    begin
       --  Test_Stack_Overflow of pic32 stack
       Skip_Spaces (Expression, Pos);
@@ -53,7 +59,7 @@ package body M_Basic_Utilities is
                 "invalid variable name.");
 
       while Is_Name_Character (Element (Expression, Pos)) loop
-         Append (S, Element (Expression, Pos));
+         Append (S, To_Upper (Element (Expression, Pos)));
          Pos := Pos + 1;
          Name_Length := Name_Length + 1;
          Assert (Name_Length <= Configuration.MAXVARLEN, Routine_Name &
@@ -120,6 +126,7 @@ package body M_Basic_Utilities is
             elsif  T_Arg = T_NBR then
                I64 := Long_Long_Integer (F);
             end if;
+
             Dim (Index / 2) := Integer (I64);
             Assert (Dim (Index / 2) < Option_Base, Routine_Name &
                       "invalid dimension.");
@@ -127,9 +134,21 @@ package body M_Basic_Utilities is
          end loop;
       end if;
 
-      --  MMBasic 1793
+      --  MMBasic 1796
       --  ASCII.NU is C string terminator
       --        Append (S, ASCII.NUL);
+
+      --  MMBasic 1812
+      Tmp := -1;
+      for var in 1 .. Var_Count loop
+         Item := Element (Var_Table, var);
+         if Item.Var_Type = T_NOTYPE then
+            I_Free := var;
+         else
+            null;
+         end if;
+
+      end loop;
 
    end Find_Var;
 

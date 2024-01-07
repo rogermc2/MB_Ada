@@ -23,8 +23,8 @@ package M_Basic is
    function Check_String (aString, Token : String) return Natural;
    procedure Clear_Program;
    procedure Defined_Subfunction
-     (Expression   : Unbounded_String; Is_Fun : Boolean; Command : String;
-      Subfun_Index : Positive; Fa     : in out Configuration.MMFLOAT;
+     (Expression    : Unbounded_String; Is_Fun : Boolean; Command : String;
+      Subfun_Index  : Positive; Fa     : in out Configuration.MMFLOAT;
       I64a          : in out Long_Long_Integer;
       Sa            : in out Unbounded_String;
       Fun_Type      : in out Function_Type);
