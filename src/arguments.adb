@@ -24,7 +24,82 @@ package body Arguments is
    procedure Get_Args (Expression   : Unbounded_String; Pos : Positive;
                        Max_Num_Args : Natural; S : String);
 
-   function Do_AA (Var_I, V_Index : in out Natural; D_Num : Integer;
+   procedure Do_AA (IP, TP      : in out Natural; Var_I : in out Natural;
+                   Name_Length : in out Natural; I_Free : in out Natural;
+                   Tmp         : in out Integer; Name  : Unbounded_String) is
+      use Interfaces;
+      use Var_Package;
+      --        Routine_Name : constant String := "M_Basic_Utilities.Do_AA ";
+      Item         : Var_Record;
+      TP_Name      : Unbounded_String;
+      IP_Name      : Unbounded_String;
+      J            : Natural;
+      Done         : Boolean := False;
+   begin
+      --  ASCII.NU is C string terminator
+      --        Append (S, ASCII.NUL);
+
+      --  The variable name is now known and, if it is an array, the parameters
+      --  search the table looking for a match.
+      --  The search is exitted with:
+      --     var_index  the index of the variable and
+      --     tmp        the index if we are in a sub/fun (otherwise -1).
+
+      --    var_index < varcnt  means a previously created variable was found.
+      --    var_index >= varcnt means no matching variable was found.
+      --    tmp                 is always  -1.
+
+      --  If we ARE in a sub/fun:
+      --    tmp   is the index of a matching global variable
+      --          (or -1 if no global found)
+      --    var_index < varcnt  means that a local variable was found
+      --    var_index >= varcnt a local variable was not found
+      --        (in that case check tmp which might have the index of a global)
+
+      --  In either case:
+      --    I_Free contains the index of a free slot that can be used if the
+      --    variable needs to be created.
+
+      --  MMBasic 1812
+      Var_I := 0;
+      while not Done and then Var_I < Var_Count loop
+         Var_I := Var_I + 1;
+         Item := Element (Var_Table, Var_I);
+         if Item.Var_Type = T_NOTYPE then
+            I_Free := Var_I;
+         else
+            TP_Name := Name;
+            IP_Name := Item.Name;
+            IP := 1;
+            TP := 1;
+            if IP_Name = TP_Name then
+               IP := IP + 1;
+               TP := TP + 1;
+               J := Name_Length - 4;
+               while J > 0 and then IP_Name = TP_Name loop
+                  J := J - 4;
+                  IP := IP + 1;
+                  TP := TP + 1;
+               end loop;
+
+               if J = 0 and then (TP >= Length (TP_Name) or else
+                                  Name_Length = Configuration.MAXVARLEN) then
+                  --  MMBasic 1835 A matching name has been found.
+                  Done := Item.Level = 0 and then Local_Index = 0;
+               else
+                  Tmp := Var_I;
+               end if;
+            else
+               --  MMBasic 1843 this is a subroutine or function.
+               Done := Item.Level = Local_Index;
+            end if;
+         end if;
+
+      end loop;
+
+   end Do_AA;
+
+   function Do_BA (Var_I, V_Index : in out Natural; D_Num : Integer;
                    V_Type         : Function_Type; Name : Unbounded_String;
                    Dim            : Dim_Array; Action  : Function_Type;
                    Result         : out Var_Record) return Boolean is
@@ -32,7 +107,7 @@ package body Arguments is
       use Ada.Assertions;
       use Global;
       use Var_Package;
-      Routine_Name : constant String := "M_Basic_Utilities.Do_AA ";
+      Routine_Name : constant String := "M_Basic_Utilities.Do_BA ";
       Item         : Var_Record;
       Item_2       : Var_Record;
       J            : Natural;
@@ -112,7 +187,7 @@ package body Arguments is
       end if;
       return Done;
 
-   end Do_AA;
+   end Do_BA;
 
    --  MMBasic 1693
    function Find_Var (Expression : Unbounded_String; Pos : in out Positive;
@@ -122,7 +197,6 @@ package body Arguments is
       use Ada.Characters.Handling;
       use Global;
       use String_Buffer_Package;
-      use Var_Package;
       Routine_Name : constant String := "M_Basic_Utilities.Find_Var ";
       PP           : Positive;
       Dim          : Dim_Array := (others => 0);
@@ -131,21 +205,17 @@ package body Arguments is
       T_Arg        : Function_Type := T_NOTYPE;
       Arg          : Unbounded_String;
       Name         : Unbounded_String;
-      TP_Name      : Unbounded_String;
-      IP_Name      : Unbounded_String;
       S            : Unbounded_String;   --  New variable name
       Name_Length  : Natural := 0;
       V_Type       : Function_Type := T_NA;
       D_Num        : Integer := 0;
       I_Free       : Natural;
-      Item         : Var_Record;
       Tmp          : Integer;
       Index        : Positive := 1;
       V_Index      : Natural := 0;
       Var_I        : Natural := 0;
       IP           : Positive := 1;
       TP           : Positive := 1;
-      J            : Natural;
       Done         : Boolean := False;
       Result       : Var_Record;
    begin
@@ -234,68 +304,8 @@ package body Arguments is
       end if;
 
       --  MMBasic 1796
-      --  ASCII.NU is C string terminator
-      --        Append (S, ASCII.NUL);
-
-      --  The variable name is now known and, if it is an array, the parameters
-      --  search the table looking for a match.
-      --  The search is exitted with:
-      --     var_index  the index of the variable and
-      --     tmp        the index if we are in a sub/fun (otherwise -1).
-
-      --    var_index < varcnt  means a previously created variable was found.
-      --    var_index >= varcnt means no matching variable was found.
-      --    tmp                 is always  -1.
-
-      --  If we ARE in a sub/fun:
-      --    tmp   is the index of a matching global variable
-      --          (or -1 if no global found)
-      --    var_index < varcnt  means that a local variable was found
-      --    var_index >= varcnt a local variable was not found
-      --        (in that case check tmp which might have the index of a global)
-
-      --  In either case:
-      --    I_Free contains the index of a free slot that can be used if the
-      --    variable needs to be created.
-
-      --  MMBasic 1812
       Tmp := -1;
-      Done := False;
-      Var_I := 0;
-      while not Done and then Var_I < Var_Count loop
-         Var_I := Var_I + 1;
-         Item := Element (Var_Table, Var_I);
-         if Item.Var_Type = T_NOTYPE then
-            I_Free := Var_I;
-         else
-            TP_Name := Name;
-            IP_Name := Item.Name;
-            IP := 1;
-            TP := 1;
-            if IP_Name = TP_Name then
-               IP := IP + 1;
-               TP := TP + 1;
-               J := Name_Length - 4;
-               while J > 0 and then IP_Name = TP_Name loop
-                  J := J - 4;
-                  IP := IP + 1;
-                  TP := TP + 1;
-               end loop;
-
-               if J = 0 and then (TP >= Length (TP_Name) or else
-                                  Name_Length = Configuration.MAXVARLEN) then
-                  --  MMBasic 1835 A matching name has been found.
-                  Done := Item.Level = 0 and then Local_Index = 0;
-               else
-                  Tmp := Var_I;
-               end if;
-            else
-               --  MMBasic 1843 this is a subroutine or function.
-               Done := Item.Level = Local_Index;
-            end if;
-         end if;
-
-      end loop;
+      Do_AA (IP, TP, Var_I, Name_Length, I_Free, Tmp, Name);
 
       --  MMBasic 1849
       if (Action and V_LOCAL) = V_LOCAL then
@@ -314,7 +324,7 @@ package body Arguments is
       end if;
 
       --  MMBasic 1870
-      Done := Do_AA (Var_I, V_Index, D_Num, V_Type, Name, Dim, Action, Result);
+      Done := Do_BA (Var_I, V_Index, D_Num, V_Type, Name, Dim, Action, Result);
 
       return Result;
 
