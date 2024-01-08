@@ -11,6 +11,7 @@ with Global;
 package body M_Basic_Utilities is
 
    Var_Count   : Natural := 0;
+   Var_Index   : Natural := 0;
    Local_Index : Natural := 0;
    Arg_Buff    : Unbounded_String;
    Arg_V       : String_Buffer;
@@ -53,7 +54,8 @@ package body M_Basic_Utilities is
       Item         : Var_Record;
       Tmp          : Integer;
       Index        : Positive := 1;
-      Var_Index    : Natural := 0;
+      V_Index      : Natural := 0;
+      Var_I        : Natural := 0;
       IP           : Positive := 1;
       TP           : Positive := 1;
       J            : Natural;
@@ -172,12 +174,12 @@ package body M_Basic_Utilities is
       --  MMBasic 1812
       Tmp := -1;
       Done := False;
-      Var_Index := 0;
-      while not Done and then Var_Index < Var_Count loop
-         Var_Index := Var_Index + 1;
-         Item := Element (Var_Table, Var_Index);
+      Var_I := 0;
+      while not Done and then Var_I < Var_Count loop
+         Var_I := Var_I + 1;
+         Item := Element (Var_Table, Var_I);
          if Item.Var_Type = T_NOTYPE then
-            I_Free := Var_Index;
+            I_Free := Var_I;
          else
             TP_Name := Name;
             IP_Name := Item.Name;
@@ -198,16 +200,41 @@ package body M_Basic_Utilities is
                   --  MMBasic 1835 A matching name has been found.
                   Done := Item.Level = 0 and then Local_Index = 0;
                else
-                  Tmp := Var_Index;
+                  Tmp := Var_I;
                end if;
             else
-               --  MMBasic 1835 this is a subroutine or function.
+               --  MMBasic 1843 this is a subroutine or function.
                Done := Item.Level = Local_Index;
-
             end if;
          end if;
 
       end loop;
+
+      --  MMBasic 1849
+      if (Action and V_LOCAL) = V_LOCAL then
+         Assert (Var_I >= Var_Count, Routine_Name & To_String (Name) &
+                   " has been declared already.");
+      elsif (Action and V_DIM_VAR) = V_DIM_VAR then
+         if Var_I <= Var_Count or else Tmp >= 0 then
+         Assert (Var_I >= Var_Count, Routine_Name & To_String (Name) &
+                   " has been declared already.");
+         end if;
+      elsif Var_I >= Var_Count and then Tmp >= 0 then
+         --  MMBasic 1862 we are not declaring the variable
+         --  If the variable was not found and there is a global,
+         --  this must be in a sub so use the global.
+         Var_I := Tmp;
+      end if;
+
+      --  MMBasic 1870
+        if Var_I >= Var_Count then
+         Item := Element (Var_Table, Var_I);
+         if Length (Item.Name) > 0 then
+            Var_Index := Var_I;
+            V_Index := Var_I;
+         end if;
+
+      end if;
 
    end Find_Var;
 
