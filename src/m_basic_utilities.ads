@@ -1,4 +1,6 @@
 
+with Interfaces;
+
 with Ada.Containers.Vectors;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 
@@ -12,10 +14,10 @@ package M_Basic_Utilities is
    type Var_Record is record
       Name     : Unbounded_String;
       Var_Type : Function_Type;
-      Level    : Natural := 0;
+      Level    : Natural               := 0;
       Dims     : Dims_Array;
       F        : Configuration.MMFLOAT := 0.0;
-      Ia       : Long_Long_Integer := 0;
+      Ia       : Long_Long_Integer     := 0;
       S        : Unbounded_String;
    end record;
 
@@ -26,8 +28,6 @@ package M_Basic_Utilities is
 
    Default_Type : Function_Type := T_NBR;
 
-   procedure Find_Var (Expression : Unbounded_String; Pos : in out Positive;
-                       Action     : Function_Type);
    function Is_Line_Num (aChar : Character) return Boolean;
    function Is_Name_Character (aChar : Character) return Boolean;
    pragma Inline (Is_Name_Character);
@@ -35,6 +35,11 @@ package M_Basic_Utilities is
    pragma Inline (Is_Name_End);
    function Is_Name_Start (aChar : Character) return Boolean;
    pragma Inline (Is_Name_Start);
+   procedure Make_Args
+     (Expression :    Unbounded_String; Pos : Positive; Max_Args : Positive;
+      Arg_Buff   : in out Unbounded_String; Arg_V : in out String_Buffer;
+      Arg_C      :    out Interfaces.Unsigned_16; Delim : String);
+
    procedure Skip_Spaces (aLine : String; Pos : in out Positive);
    procedure Skip_Spaces (Buffer : Unbounded_String; Pos : in out Positive);
 
