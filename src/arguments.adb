@@ -10,6 +10,8 @@ with M_Basic_Utilities; use M_Basic_Utilities;
 
 package body Arguments is
 
+   type Dim_Array is array (1 .. Configuration.MAXDIM) of Integer;
+
    Var_Count   : Natural := 0;
    Var_Index   : Natural := 0;
    Local_Index : Natural := 0;
@@ -22,6 +24,96 @@ package body Arguments is
    procedure Get_Args (Expression   : Unbounded_String; Pos : Positive;
                        Max_Num_Args : Natural; S : String);
 
+   function Do_AA (Var_I, V_Index : in out Natural; D_Num : Integer;
+                   V_Type         : Function_Type; Name : Unbounded_String;
+                   Dim            : Dim_Array; Action  : Function_Type;
+                   Result         : out Var_Record) return Boolean is
+      use Interfaces;
+      use Ada.Assertions;
+      use Global;
+      use Var_Package;
+      Routine_Name : constant String := "M_Basic_Utilities.Do_AA ";
+      Item         : Var_Record;
+      Item_2       : Var_Record;
+      J            : Natural;
+      Nbr          : Positive;
+      Done         : Boolean := False;
+   begin
+      --  MMBasic 1870
+      if Var_I >= Var_Count then
+         Item := Element (Var_Table, Var_I);
+         if Length (Item.Name) > 0 then
+            Var_Index := Var_I;
+            V_Index := Var_I;
+            Var_I := 0;
+            Done := False;
+            while Var_I < Configuration.MAXDIM and then not Done loop
+               Var_I := Var_I + 1;
+               Item := Element (Var_Table, V_Index);
+               Done := Item.Dims (Var_I) /= 0;
+               if not Done then
+                  if D_Num = -1 then
+                     Assert (Var_I /= 0 and then Var_I /= D_Num, Routine_Name &
+                               "invalid array dimensions.");
+                  end if;
+
+                  --  MMBasic 1888
+                  if V_Type = T_NA then
+                     Assert (Item.Var_Type /= T_NA and then
+                               (Default_Type /= T_NA or else T_IMPLIED /= T_NA),
+                             Routine_Name & To_String (Name) &
+                               "has been declared already.");
+                  else
+                     Assert (Item.Var_Type /= T_NA and then V_Type /= T_NA,
+                             Routine_Name & To_String (Name) &
+                               "has been declared already.");
+                  end if;
+
+                  if D_Num = -1 or else Item.Var_Type = T_PTR or else
+                    Item.Var_Type = T_STR then
+                     --  if it is a string or pointer just return the pointer
+                     --  to the data.
+                     Result.S := item.S;
+                     Done := True;
+                  elsif Item.Var_Type = T_INT then
+                     --  must be an integer so point to its value
+                     Result.Ia := item.Ia;
+                     Done := True;
+
+                  else
+                     --  must be a straight number (floa).
+                     Result.F := item.F;
+                     Done := True;
+                  end if;
+
+                  if not Done then
+                     Assert ((Action and V_DIM_VAR) /= V_DIM_VAR, Routine_Name &
+                               "cannot redimension an array.");
+                     Item_2 := Element (Var_Table, V_Index);
+                     for Var_I in 1 ..D_Num loop
+                        Item := Element (Var_Table, Var_I);
+                        Assert (Item.Dims (Var_I) <= Item_2.Dims (Var_I) and then
+                                Dim (Var_I) > Option_Base, Routine_Name &
+                                  "index is out of bounds.");
+                     end loop;
+
+                     --  MMBasic 1921
+                     Nbr := Dim (1) - Option_Base;
+                     J := 1;
+                     for Var_I in 2 ..D_Num loop
+                        Item := Element (Var_Table, V_Index);
+                        J := J * Item.Dims (Var_I - 1) + 1 - Option_Base;
+                        Nbr := Nbr + J * (Dim (Var_I) - Option_Base);
+                     end loop;
+                  end if;
+               end if;
+            end loop;
+         end if;
+      end if;
+      return Done;
+
+   end Do_AA;
+
    --  MMBasic 1693
    function Find_Var (Expression : Unbounded_String; Pos : in out Positive;
                       Action     : Function_Type) return Var_Record is
@@ -31,7 +123,6 @@ package body Arguments is
       use Global;
       use String_Buffer_Package;
       use Var_Package;
-      type Dim_Array is array (1 .. Configuration.MAXDIM) of Integer;
       Routine_Name : constant String := "M_Basic_Utilities.Find_Var ";
       PP           : Positive;
       Dim          : Dim_Array := (others => 0);
@@ -48,7 +139,6 @@ package body Arguments is
       D_Num        : Integer := 0;
       I_Free       : Natural;
       Item         : Var_Record;
-      Item_2       : Var_Record;
       Tmp          : Integer;
       Index        : Positive := 1;
       V_Index      : Natural := 0;
@@ -56,7 +146,6 @@ package body Arguments is
       IP           : Positive := 1;
       TP           : Positive := 1;
       J            : Natural;
-      Nbr          : Positive;
       Done         : Boolean := False;
       Result       : Var_Record;
    begin
@@ -225,74 +314,7 @@ package body Arguments is
       end if;
 
       --  MMBasic 1870
-      if Var_I >= Var_Count then
-         Item := Element (Var_Table, Var_I);
-         if Length (Item.Name) > 0 then
-            Var_Index := Var_I;
-            V_Index := Var_I;
-            Var_I := 0;
-            Done := False;
-            while Var_I < Configuration.MAXDIM and then not Done loop
-               Var_I := Var_I + 1;
-               Item := Element (Var_Table, V_Index);
-               Done := Item.Dims (Var_I) /= 0;
-               if not Done then
-                  if D_Num = -1 then
-                     Assert (Var_I /= 0 and then Var_I /= D_Num, Routine_Name &
-                               "invalid array dimensions.");
-                  end if;
-
-                  --  MMBasic 1888
-                  if V_Type = T_NA then
-                     Assert (Item.Var_Type /= T_NA and then
-                               (Default_Type /= T_NA or else T_IMPLIED /= T_NA),
-                             Routine_Name & To_String (Name) &
-                               "has been declared already.");
-                  else
-                     Assert (Item.Var_Type /= T_NA and then V_Type /= T_NA,
-                             Routine_Name & To_String (Name) &
-                               "has been declared already.");
-                  end if;
-
-                  if D_Num = -1 or else Item.Var_Type = T_PTR or else
-                    Item.Var_Type = T_STR then
-                     --  if it is a string or pointer just return the pointer
-                     --  to the data.
-                     Result.S := item.S;
-                     Done := True;
-                  elsif Item.Var_Type = T_INT then
-                     --  must be an integer so point to its value
-                     Result.Ia := item.Ia;
-                     Done := True;
-
-                  else
-                     --  must be a straight number (floa).
-                     Result.F := item.F;
-                     Done := True;
-                  end if;
-
-                  if not Done then
-                     Assert ((Action and V_DIM_VAR) /= V_DIM_VAR, Routine_Name &
-                               "cannot redimension an array.");
-                     Item_2 := Element (Var_Table, V_Index);
-                     for Var_I in 1 ..D_Num loop
-                        Item := Element (Var_Table, Var_I);
-                        Assert (Item.Dims (Var_I) <= Item_2.Dims (Var_I) and then
-                                Dim (Var_I) > Option_Base, Routine_Name &
-                                  "index is out of bounds.");
-                     end loop;
-
-                     Nbr := Dim (1) - Option_Base;
-                     J := 1;
-                     for Var_I in 2 ..D_Num loop
-                        Item := Element (Var_Table, V_Index);
-                        J := J * Item.Dims (Var_I - 1) + 1 - Option_Base;
-                     end loop;
-                  end if;
-               end if;
-            end loop;
-         end if;
-      end if;
+      Done := Do_AA (Var_I, V_Index, D_Num, V_Type, Name, Dim, Action, Result);
 
       return Result;
 
