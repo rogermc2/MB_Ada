@@ -3,9 +3,11 @@ with Interfaces;
 
 with Ada.Assertions;
 with Ada.Characters.Handling;
+with Ada.Text_IO; use Ada.Text_IO;
 
 with Evaluation;
 with Global;
+with M_Basic;
 with M_Basic_Utilities; use M_Basic_Utilities;
 
 package body Arguments is
@@ -24,8 +26,8 @@ package body Arguments is
    procedure Get_Args (Expression   : Unbounded_String; Pos : Positive;
                        Max_Num_Args : Natural; S : String);
 
-   procedure Do_AA (IP, TP      : in out Natural; Var_I : in out Natural;
-                   Name_Length : in out Natural; I_Free : in out Natural;
+   procedure Do_AA (IP, TP     : in out Natural; Var_I : in out Natural;
+                   Name_Length : Natural; I_Free : in out Natural;
                    Tmp         : in out Integer; Name  : Unbounded_String) is
       use Interfaces;
       use Var_Package;
@@ -115,7 +117,7 @@ package body Arguments is
       Done         : Boolean := False;
    begin
       --  MMBasic 1870
-      if Var_I >= Var_Count then
+      if Var_I <= Var_Count then
          Item := Element (Var_Table, Var_I);
          if Length (Item.Name) > 0 then
             Var_Index := Var_I;
@@ -175,16 +177,27 @@ package body Arguments is
                      --  MMBasic 1921
                      Nbr := Dim (1) - Option_Base;
                      J := 1;
+                     Item := Element (Var_Table, V_Index);
                      for Var_I in 2 ..D_Num loop
-                        Item := Element (Var_Table, V_Index);
                         J := J * Item.Dims (Var_I - 1) + 1 - Option_Base;
                         Nbr := Nbr + J * (Dim (Var_I) - Option_Base);
                      end loop;
+
+                     --  MMBasic 1930
+                     if (Item.Var_Type and T_INT) = T_INT then
+                        Result.Ia := Item.Ia;
+                        Done := True;
+                     else
+                         Result.S := Item.S;
+                        Done := True;
+                     end if;
+
                   end if;
                end if;
             end loop;
          end if;
       end if;
+
       return Done;
 
    end Do_BA;
@@ -216,6 +229,7 @@ package body Arguments is
       Var_I        : Natural := 0;
       IP           : Positive := 1;
       TP           : Positive := 1;
+      X            : Integer;
       Done         : Boolean := False;
       Result       : Var_Record;
    begin
@@ -325,6 +339,47 @@ package body Arguments is
 
       --  MMBasic 1870
       Done := Do_BA (Var_I, V_Index, D_Num, V_Type, Name, Dim, Action, Result);
+
+      if not Done then
+         --  MMBasic 1941  No existng variable has been found.
+         if (Action and V_NOFIND_ERR) = V_NOFIND_ERR then
+            Put_Line (Routine_Name & "Cannot find $" & To_String (Name));
+         end if;
+
+--           if (Action and V_NOFIND_NULL) = V_NOFIND_NULL then
+--              return null
+--           end if;
+
+         if (Option_Explicit or else D_Num /= 0) and then (Action and V_DIM_VAR) /= V_DIM_VAR then
+            Put_Line (Routine_Name & "$ is not declared" & To_String (Name));
+         end if;
+
+         if V_Type = T_NA then
+            if (Action and T_IMPLIED) = T_IMPLIED then
+               V_Type := Action and (T_NBR or T_INT or T_STR);
+            else
+               V_Type := Default_Type;
+            end if;
+         end if;
+
+         --  MMBasic 1955, now scan the sub/fun table to make sure that there
+         --  is not a sub/fun with the same name.
+         if (Action and V_FUNCT) /= V_FUNCT then
+            Var_I := 0;
+            Done := False;
+            while not Done  and then Var_I <= Configuration.MAXSUBFUN loop
+               Var_I := Var_I + 1;
+               Done := M_Basic.Subfunctions (Var_I) = 0;
+               if not Done then
+                  X := M_Basic.Subfunctions (Var_I);
+                  X := X + 1;
+                  Skip_Spaces (X);
+                  S := Name;
+               end if;
+            end loop;
+         end if;
+
+      end if;
 
       return Result;
 
