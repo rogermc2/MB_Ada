@@ -23,8 +23,8 @@ package body Arguments is
                        Max_Num_Args : Natural; S : String);
 
    --  MMBasic 1693
-   procedure Find_Var (Expression : Unbounded_String; Pos : in out Positive;
-                       Action     : Function_Type) is
+   function Find_Var (Expression : Unbounded_String; Pos : in out Positive;
+                      Action     : Function_Type) return Var_Record is
       use Interfaces;
       use Ada.Assertions;
       use Ada.Characters.Handling;
@@ -48,6 +48,7 @@ package body Arguments is
       D_Num        : Integer := 0;
       I_Free       : Natural;
       Item         : Var_Record;
+      Item_2       : Var_Record;
       Tmp          : Integer;
       Index        : Positive := 1;
       V_Index      : Natural := 0;
@@ -55,7 +56,9 @@ package body Arguments is
       IP           : Positive := 1;
       TP           : Positive := 1;
       J            : Natural;
+      Nbr          : Positive;
       Done         : Boolean := False;
+      Result       : Var_Record;
    begin
       --  Test_Stack_Overflow of pic32 stack
       Skip_Spaces (Expression, Pos);
@@ -191,7 +194,7 @@ package body Arguments is
                end loop;
 
                if J = 0 and then (TP >= Length (TP_Name) or else
-                                 Name_Length = Configuration.MAXVARLEN) then
+                                  Name_Length = Configuration.MAXVARLEN) then
                   --  MMBasic 1835 A matching name has been found.
                   Done := Item.Level = 0 and then Local_Index = 0;
                else
@@ -211,8 +214,8 @@ package body Arguments is
                    " has been declared already.");
       elsif (Action and V_DIM_VAR) = V_DIM_VAR then
          if Var_I <= Var_Count or else Tmp >= 0 then
-         Assert (Var_I >= Var_Count, Routine_Name & To_String (Name) &
-                   " has been declared already.");
+            Assert (Var_I >= Var_Count, Routine_Name & To_String (Name) &
+                      " has been declared already.");
          end if;
       elsif Var_I >= Var_Count and then Tmp >= 0 then
          --  MMBasic 1862 we are not declaring the variable
@@ -222,7 +225,7 @@ package body Arguments is
       end if;
 
       --  MMBasic 1870
-        if Var_I >= Var_Count then
+      if Var_I >= Var_Count then
          Item := Element (Var_Table, Var_I);
          if Length (Item.Name) > 0 then
             Var_Index := Var_I;
@@ -239,20 +242,59 @@ package body Arguments is
                                "invalid array dimensions.");
                   end if;
 
+                  --  MMBasic 1888
                   if V_Type = T_NA then
                      Assert (Item.Var_Type /= T_NA and then
                                (Default_Type /= T_NA or else T_IMPLIED /= T_NA),
-                            Routine_Name & To_String (Name) &
+                             Routine_Name & To_String (Name) &
                                "has been declared already.");
                   else
                      Assert (Item.Var_Type /= T_NA and then V_Type /= T_NA,
-                            Routine_Name & To_String (Name) &
+                             Routine_Name & To_String (Name) &
                                "has been declared already.");
+                  end if;
+
+                  if D_Num = -1 or else Item.Var_Type = T_PTR or else
+                    Item.Var_Type = T_STR then
+                     --  if it is a string or pointer just return the pointer
+                     --  to the data.
+                     Result.S := item.S;
+                     Done := True;
+                  elsif Item.Var_Type = T_INT then
+                     --  must be an integer so point to its value
+                     Result.Ia := item.Ia;
+                     Done := True;
+
+                  else
+                     --  must be a straight number (floa).
+                     Result.F := item.F;
+                     Done := True;
+                  end if;
+
+                  if not Done then
+                     Assert ((Action and V_DIM_VAR) /= V_DIM_VAR, Routine_Name &
+                               "cannot redimension an array.");
+                     Item_2 := Element (Var_Table, V_Index);
+                     for Var_I in 1 ..D_Num loop
+                        Item := Element (Var_Table, Var_I);
+                        Assert (Item.Dims (Var_I) <= Item_2.Dims (Var_I) and then
+                                Dim (Var_I) > Option_Base, Routine_Name &
+                                  "index is out of bounds.");
+                     end loop;
+
+                     Nbr := Dim (1) - Option_Base;
+                     J := 1;
+                     for Var_I in 2 ..D_Num loop
+                        Item := Element (Var_Table, V_Index);
+                        J := J * Item.Dims (Var_I - 1) + 1 - Option_Base;
+                     end loop;
                   end if;
                end if;
             end loop;
          end if;
       end if;
+
+      return Result;
 
    end Find_Var;
 

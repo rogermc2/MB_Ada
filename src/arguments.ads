@@ -26,7 +26,7 @@ package Arguments is
 
    Default_Type : Function_Type := T_NBR;
 
-   procedure Find_Var (Expression : Unbounded_String; Pos : in out Positive;
-                       Action     : Function_Type);
+   function Find_Var (Expression : Unbounded_String; Pos : in out Positive;
+                       Action     : Function_Type) return Var_Record;
 
 end Arguments;
