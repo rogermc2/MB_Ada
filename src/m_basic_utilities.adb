@@ -11,6 +11,7 @@ with Global;
 package body M_Basic_Utilities is
 
    Var_Count   : Natural := 0;
+   Local_Index : Natural := 0;
    Arg_Buff    : Unbounded_String;
    Arg_V       : String_Buffer;
    Arg_C       : Interfaces.Unsigned_16;
@@ -42,6 +43,8 @@ package body M_Basic_Utilities is
       T_Arg        : Function_Type := T_NOTYPE;
       Arg          : Unbounded_String;
       Name         : Unbounded_String;
+      TP_Name      : Unbounded_String;
+      IP_Name      : Unbounded_String;
       S            : Unbounded_String;   --  New variable name
       Name_Length  : Natural := 0;
       V_Type       : Function_Type := T_NA;
@@ -50,8 +53,11 @@ package body M_Basic_Utilities is
       Item         : Var_Record;
       Tmp          : Integer;
       Index        : Positive := 1;
+      Var_Index    : Natural := 0;
       IP           : Positive := 1;
       TP           : Positive := 1;
+      J            : Natural;
+      Done         : Boolean := False;
    begin
       --  Test_Stack_Overflow of pic32 stack
       Skip_Spaces (Expression, Pos);
@@ -85,12 +91,14 @@ package body M_Basic_Utilities is
                    "conflicting variable type.");
          V_Type := T_INT;
          Pos := Pos + 1;
+
       elsif Element (Expression, Pos) = '!' then
          Assert ((Action and T_IMPLIED) /= T_IMPLIED or else
                    (Action and T_NBR) = T_NBR, Routine_Name &
                    "conflicting variable type.");
          V_Type := T_NBR;
          Pos := Pos + 1;
+
       else
          --  MMBasic 1750
          Assert ((Action and Global.V_DIM_VAR) /= Global.V_DIM_VAR or else
@@ -107,6 +115,7 @@ package body M_Basic_Utilities is
          if (Action and V_EMPTY_OK) = V_EMPTY_OK and then
            Element (Expression, Pos) = ')' then
             D_Num := -1;
+
          else
             Get_Args (Expression, Pos, 2 * Configuration.MAXDIM, "(,");
             Assert ((Arg_C and 1) /= 0, Routine_Name & "invalid dimensions.");
@@ -138,14 +147,64 @@ package body M_Basic_Utilities is
       --  ASCII.NU is C string terminator
       --        Append (S, ASCII.NUL);
 
+      --  The variable name is now known and, if it is an array, the parameters
+      --  search the table looking for a match.
+      --  The search is exitted with:
+      --     var_index  the index of the variable and
+      --     tmp        the index if we are in a sub/fun (otherwise -1).
+
+      --  If NOT in a sub/fun:
+      --    var_index < varcnt  means a previously created variable was found.
+      --    var_index >= varcnt means no matching variable was found.
+      --    tmp                 is always  -1.
+
+      --  If we ARE in a sub/fun:
+      --    tmp   is the index of a matching global variable
+      --          (or -1 if no global found)
+      --    var_index < varcnt  means that a local variable was found
+      --    var_index >= varcnt a local variable was not found
+      --        (in that case check tmp which might have the index of a global)
+
+      --  In either case:
+      --    I_Free contains the index of a free slot that can be used if the
+      --    variable needs to be created.
+
       --  MMBasic 1812
       Tmp := -1;
-      for var in 1 .. Var_Count loop
-         Item := Element (Var_Table, var);
+      Done := False;
+      Var_Index := 0;
+      while not Done and then Var_Index < Var_Count loop
+         Var_Index := Var_Index + 1;
+         Item := Element (Var_Table, Var_Index);
          if Item.Var_Type = T_NOTYPE then
-            I_Free := var;
+            I_Free := Var_Index;
          else
-            null;
+            TP_Name := Name;
+            IP_Name := Item.Name;
+            IP := 1;
+            TP := 1;
+            if IP_Name = TP_Name then
+               IP := IP + 1;
+               TP := TP + 1;
+               J := Name_Length - 4;
+               while J > 0 and then IP_Name = TP_Name loop
+                  J := J - 4;
+                  IP := IP + 1;
+                  TP := TP + 1;
+               end loop;
+
+               if J = 0 and then (TP >= Length (TP_Name) or else
+                                 Name_Length = Configuration.MAXVARLEN) then
+                  --  MMBasic 1835 A matching name has been found.
+                  Done := Item.Level = 0 and then Local_Index = 0;
+               else
+                  Tmp := Var_Index;
+               end if;
+            else
+               --  MMBasic 1835 this is a subroutine or function.
+               Done := Item.Level = Local_Index;
+
+            end if;
          end if;
 
       end loop;
