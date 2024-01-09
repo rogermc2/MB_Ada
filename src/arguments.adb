@@ -204,15 +204,20 @@ package body Arguments is
 
    procedure Do_YA (Expression  : Unbounded_String; Pos : in out Positive;
                     V_Type      : in out Function_Type; Action : Function_Type;
-                    Name        : Unbounded_String) is
+                    Name        : Unbounded_String; I_Free : in out Natural;
+                    D_Num       : Integer) is
       use Interfaces;
       use Global;
+      use Var_Package;
       --        Routine_Name : constant String := "M_Basic_Utilities.Do_AA ";
       aChar        : Character;
       S            : Unbounded_String;   --  New variable name
       Var_I        : Natural;
+      Var_Name     : Unbounded_String;
       X            : Integer;
+      V_Index      : Positive;
       String_Size  : Natural := 0;
+      Var_Item     : Var_Record;
       Done         : Boolean := False;
    begin
       if V_Type = T_NA then
@@ -237,8 +242,8 @@ package body Arguments is
                --  Skip_Spaces (X);
                --  MMBasic 1955
                S := Name;
-               --                    Assert (To_Upper (X) /= To_Upper (X), Routine_Name &
-               --                              "a subroutine has the same name: " & Name);
+               --  Assert (To_Upper (X) /= To_Upper (X), Routine_Name &
+               --          "a subroutine has the same name: " & Name);
             end if;
          end loop;
       end if;
@@ -290,6 +295,53 @@ package body Arguments is
             end if;
          end if;
       end if;
+
+      --  At this point we need to create the variable.
+      --  As a result of the previous search ifree is the index to the entry
+      --  that we should use.
+      --  If adding to the top, increment the number of vars and inform the
+      --  memory manager.
+      --  MMBasic 2016
+      if I_Free = Var_Count then
+         Var_Count := Var_Count + 1;
+      end if;
+      Var_Index := I_Free;
+      V_Index := I_Free;
+      S := Name;
+      Var_Item := Element (Var_Table, I_Free);
+      Var_Item.Name := Var_Item.Name & S;
+
+      Var_Item.Var_Type := V_Type or (Action and (T_IMPLIED or T_CONST));
+      if (Action and V_LOCAL) = V_LOCAL then
+         Var_Item.Level := Local_Index;
+      else
+         Var_Item.Level := 0;
+      end if;
+
+      for j in 1 .. Configuration.MAXDIM loop
+         Var_Item.Dims (j) := 0;
+      end loop;
+
+      if D_Num = 0 then
+         if V_Type = T_NBR then
+            Var_Item.F := 0.0;
+            Done := True;
+         elsif V_Type = T_INT then
+            Var_Item.Ia := 0;
+            Done := True;
+         end if;
+
+      elsif D_Num = -1 then
+         Var_Item.Dims (1) := 0;
+         Done := True;
+      end if;
+
+      Replace_Element (Var_Table, I_Free, Var_Item);
+
+      if not Done then
+         null;
+      end if;
+
    end Do_YA;
 
    --  MMBasic 1693
@@ -446,7 +498,7 @@ package body Arguments is
                         " has not been declared");
          end if;
 
-         Do_YA (Expression, Pos, V_Type, Action, Name);
+         Do_YA (Expression, Pos, V_Type, Action, Name, I_Free, D_Num);
       end if;
 
       return Result;
