@@ -9,19 +9,16 @@ with Evaluation;
 with Global;
 with M_Basic;
 with M_Basic_Utilities; use M_Basic_Utilities;
+with M_Misc;
 
 package body Arguments is
 
    type Dim_Array is array (1 .. Configuration.MAXDIM) of Integer;
 
    Var_Count   : Natural := 0;
-   Var_Index   : Natural := 0;
-   Local_Index : Natural := 0;
    Arg_Buff    : Unbounded_String;
    Arg_V       : String_Buffer;
    Arg_C       : Interfaces.Unsigned_16;
-   Arg_T       : Function_Type;
-   Option_Base : Natural := 0;
 
    procedure Get_Args (Expression   : Unbounded_String; Pos : Positive;
                        Max_Num_Args : Natural; S : String);
@@ -87,13 +84,13 @@ package body Arguments is
                if J = 0 and then (TP >= Length (TP_Name) or else
                                   Name_Length = Configuration.MAXVARLEN) then
                   --  MMBasic 1835 A matching name has been found.
-                  Done := Item.Level = 0 and then Local_Index = 0;
+                  Done := Item.Level = 0 and then M_Basic.Local_Index = 0;
                else
                   Tmp := Var_I;
                end if;
             else
                --  MMBasic 1843 this is a subroutine or function.
-               Done := Item.Level = Local_Index;
+               Done := Item.Level = M_Basic.Local_Index;
             end if;
          end if;
 
@@ -108,6 +105,7 @@ package body Arguments is
       use Interfaces;
       use Ada.Assertions;
       use Global;
+      use M_Misc;   --  for Option_Base
       use Var_Package;
       Routine_Name : constant String := "M_Basic_Utilities.Do_BA ";
       Item         : Var_Record;
@@ -202,21 +200,21 @@ package body Arguments is
 
    end Do_BA;
 
-   procedure Do_YA (Expression  : Unbounded_String; Pos : in out Positive;
-                    V_Type      : in out Function_Type; Action : Function_Type;
-                    Name        : Unbounded_String; I_Free : in out Natural;
-                    D_Num       : Integer) is
+   procedure Do_YA (Expression : Unbounded_String; Pos : in out Positive;
+                    V_Type     : in out Function_Type; Action : Function_Type;
+                    Name       : Unbounded_String; I_Free : Natural;
+                    D_Num      : Integer; Dim : Dim_Array) is
       use Interfaces;
+      use Ada.Assertions;
       use Global;
       use Var_Package;
-      --        Routine_Name : constant String := "M_Basic_Utilities.Do_AA ";
-      aChar        : Character;
+      Routine_Name : constant String := "M_Basic_Utilities.Do_YA ";
+--        aChar        : Character;
       S            : Unbounded_String;   --  New variable name
       Var_I        : Natural;
-      Var_Name     : Unbounded_String;
       X            : Integer;
       V_Index      : Positive;
-      String_Size  : Natural := 0;
+      Number        : Positive;
       Var_Item     : Var_Record;
       Done         : Boolean := False;
    begin
@@ -248,7 +246,7 @@ package body Arguments is
          end loop;
       end if;
 
-      String_Size := Configuration.MAXSTRLEN;
+--        String_Size := Configuration.MAXSTRLEN;
       --  MMBasic 1984  If it is an array we must be dimensioning it.
       --  If it is a string array skip over the dimension values and look
       --  for the LENGTH keyword.
@@ -281,18 +279,18 @@ package body Arguments is
             Skip_Spaces (Expression, Pos);
             Pos := M_Basic.Check_String
               (Slice (Expression, Pos, Length (Expression)), "Length");
-            if Pos > 0 then
-               String_Size :=
-                 Evaluation.Get_Int (S, 1, Configuration.MAXSTRLEN);
-            else
-               aChar := Element (Expression, Pos);
+--              if Pos > 0 then
+--                 String_Size :=
+--                   Evaluation.Get_Int (S, 1, Configuration.MAXSTRLEN);
+--              else
+--                 aChar := Element (Expression, Pos);
                --  op_invalid is a pointer (Access_Procedure) to the
                --  op_invalid routine.
                --                    Assert (aChar = ',' or else Pos > Length (Expression) or else
                --                            M_Basic.Token_Function (Character'Image (aChar)) =
                --                              op_invalid, Routine_Name & "unexpected text: " &
                --                              Slice (Expression, Pos, Length (Expression)));
-            end if;
+--              end if;
          end if;
       end if;
 
@@ -305,6 +303,7 @@ package body Arguments is
       if I_Free = Var_Count then
          Var_Count := Var_Count + 1;
       end if;
+
       Var_Index := I_Free;
       V_Index := I_Free;
       S := Name;
@@ -313,7 +312,7 @@ package body Arguments is
 
       Var_Item.Var_Type := V_Type or (Action and (T_IMPLIED or T_CONST));
       if (Action and V_LOCAL) = V_LOCAL then
-         Var_Item.Level := Local_Index;
+         Var_Item.Level := M_Basic.Local_Index;
       else
          Var_Item.Level := 0;
       end if;
@@ -322,6 +321,8 @@ package body Arguments is
          Var_Item.Dims (j) := 0;
       end loop;
 
+      --  MMBasic 2042
+      Var_Item := Element (Var_Table, V_Index);
       if D_Num = 0 then
          if V_Type = T_NBR then
             Var_Item.F := 0.0;
@@ -330,17 +331,43 @@ package body Arguments is
             Var_Item.Ia := 0;
             Done := True;
          end if;
+         Replace_Element (Var_Table, V_Index, Var_Item);
 
       elsif D_Num = -1 then
+         Var_Item := Element (Var_Table, V_Index);
          Var_Item.Dims (1) := 0;
+         Replace_Element (Var_Table, V_Index, Var_Item);
          Done := True;
+      else
+         --  MMBasic 2065 D_Num > 0
+         Number := 1;
+         for index in 1 .. D_Num loop
+            Assert (Dim (index) > M_Misc.Option_Base, Routine_Name &
+                      "invalid dimension: " & Integer'Image (Dim (index)));
+            Var_Item.Dims (index) := Dim (index);
+            Number := Number * (Dim (index) + 1 - M_Misc.Option_Base);
+         end loop;
       end if;
-
-      Replace_Element (Var_Table, I_Free, Var_Item);
 
       if not Done then
-         null;
+         --  MMBasic 2079 Set Var_Table (I_Free) items to indicate that this
+         --  variable has not been allocated.
+         Var_Item := Element (Var_Table, I_Free);
+         Var_Item.S := Null_Unbounded_String;
+--           Var_Item.Var_Type := T_NOTYPE;
+--           Name := Var_Item.Name;
+--           Var_Item.Name := Null_Unbounded_String;
+--           Dim_J := Var_Item.Dims (1);
+--           Var_Item.Dims (1) := 0;
+
+         --  MMBasic 2087  C memory allocation.
+         --  MMBasic 2098
+         Var_Item.Var_Type := V_Type or (Action and (T_IMPLIED or T_CONST));
+         Replace_Element (Var_Table, I_Free, Var_Item);
       end if;
+
+      --  MMBasic 2098 Find_Var returns a pointer to the variable's memory
+      --  location.
 
    end Do_YA;
 
@@ -361,11 +388,10 @@ package body Arguments is
       Arg          : Unbounded_String;
       Name         : Unbounded_String;
       S            : Unbounded_String;   --  New variable name
-      aChar        : Character;
       Name_Length  : Natural := 0;
       V_Type       : Function_Type := T_NA;
       D_Num        : Integer := 0;
-      I_Free       : Natural;
+      I_Free       : Natural := Var_Count;
       Tmp          : Integer;
       Index        : Positive := 1;
       V_Index      : Natural := 0;
@@ -453,7 +479,7 @@ package body Arguments is
             end if;
 
             Dim (Index / 2) := Integer (I64);
-            Assert (Dim (Index / 2) < Option_Base, Routine_Name &
+            Assert (Dim (Index / 2) < M_Misc.Option_Base, Routine_Name &
                       "invalid dimension.");
             Index := Index + 2;
          end loop;
@@ -498,7 +524,7 @@ package body Arguments is
                         " has not been declared");
          end if;
 
-         Do_YA (Expression, Pos, V_Type, Action, Name, I_Free, D_Num);
+         Do_YA (Expression, Pos, V_Type, Action, Name, I_Free, D_Num, Dim);
       end if;
 
       return Result;

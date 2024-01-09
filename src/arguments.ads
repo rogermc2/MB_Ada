@@ -7,7 +7,7 @@ with Configuration;
 
 package Arguments is
 
-   type Dims_Array is array (1 .. Configuration.MAXDIM) of Positive;
+   type Dims_Array is array (1 .. Configuration.MAXDIM) of Natural;
 
    type Var_Record is record
       Name     : Unbounded_String;
@@ -25,6 +25,8 @@ package Arguments is
    Default_Type    : Function_Type := T_NBR;
    Option_Explicit : Boolean := False;
    Var_Table       : Var_Vector;
+   Var_Index       : Natural := 0;
+   Arg_T           : Function_Type;
 
    function Find_Var (Expression : Unbounded_String; Pos : in out Positive;
                        Action     : Function_Type) return Var_Record;

@@ -6,15 +6,6 @@ with Command_And_Token_Functions;
 
 package body M_Basic_Utilities is
 
-   Var_Count   : Natural := 0;
-   Var_Index   : Natural := 0;
-   Local_Index : Natural := 0;
-   Arg_Buff    : Unbounded_String;
-   Arg_V       : String_Buffer;
-   Arg_C       : Interfaces.Unsigned_16;
-   Arg_T       : Function_Type;
-   Option_Base : Natural := 0;
-
    function Get_Close_Bracket
      (Expression : Unbounded_String; Pos : in out Positive) return Positive is
       use Ada.Assertions;

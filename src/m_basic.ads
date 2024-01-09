@@ -11,6 +11,7 @@ package M_Basic is
    Current_Line_Ptr : Natural := 0;
    Continue_Point   : Natural := 0;
    Local_Index      : Natural := 0;
+   T_Arg            : Function_Type := T_NOTYPE;
 
    --  Subfunctions is an array of pointers to program memory elements
    Subfunctions             : array (1 .. Configuration.MAXSUBFUN) of Natural :=

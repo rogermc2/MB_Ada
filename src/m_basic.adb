@@ -24,7 +24,6 @@ with Support;
 
 package body M_Basic is
 
-   Save_Local_Index : Natural := 0;
    --     Trace_On : Boolean := False;
 
    procedure Clear_Runtime;
@@ -262,8 +261,9 @@ package body M_Basic is
 
    end Defined_Subfunction;
 
-   procedure Execute_Command (Buffer  : String_Buffer;
-                              Command : Unbounded_String) is
+   procedure Execute_Command
+     (Buffer           : String_Buffer; Command : Unbounded_String;
+      Save_Local_Index : in out Natural) is
       use Interfaces;
       use Ada.Assertions;
       use String_Buffer_Package;
@@ -273,7 +273,6 @@ package body M_Basic is
       Command_Line_Pos   : Positive := 1;   --  p
       Token              : Integer;
       Interupt_Check     : Integer := 0;
-      T_Arg              : Function_Type := T_NOTYPE;
       Command_Ptr        : Command_And_Token_Functions.Access_Procedure;
       No_Abort           : Boolean := True;
       Done               : Boolean := False;
@@ -366,9 +365,10 @@ package body M_Basic is
    procedure Execute_Program (Buffer : String_Buffer) is
       use Global;
       use String_Buffer_Package;
-      Routine_Name : constant String := "M_Basic.Execute_Program ";
-      Program_Ptr  : Positive := 1;
-      Done         : Boolean := False;
+      Routine_Name     : constant String := "M_Basic.Execute_Program ";
+      Save_Local_Index : Natural := 0;
+      Program_Ptr      : Positive := 1;
+      Done             : Boolean := False;
    begin
       if not Is_Empty (Buffer) then
          Put_Line (Routine_Name & "Buffer");
@@ -404,7 +404,8 @@ package body M_Basic is
             --  225
             if Program_Ptr <= Positive (Buffer.Length) then
                Execute_Command
-                 (Buffer, To_Unbounded_String (Element (Buffer, Program_Ptr)));
+                 (Buffer, To_Unbounded_String (Element (Buffer, Program_Ptr)),
+                  Save_Local_Index);
             end if;
 
             --  279
