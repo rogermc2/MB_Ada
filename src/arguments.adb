@@ -26,9 +26,9 @@ package body Arguments is
    procedure Get_Args (Expression   : Unbounded_String; Pos : Positive;
                        Max_Num_Args : Natural; S : String);
 
-   procedure Do_AA (IP, TP     : in out Natural; Var_I : in out Natural;
-                   Name_Length : Natural; I_Free : in out Natural;
-                   Tmp         : in out Integer; Name  : Unbounded_String) is
+   procedure Do_AA (IP, TP      : in out Natural; Var_I : in out Natural;
+                    Name_Length : Natural; I_Free : in out Natural;
+                    Tmp         : in out Integer; Name  : Unbounded_String) is
       use Interfaces;
       use Var_Package;
       --        Routine_Name : constant String := "M_Basic_Utilities.Do_AA ";
@@ -188,7 +188,7 @@ package body Arguments is
                         Result.Ia := Item.Ia;
                         Done := True;
                      else
-                         Result.S := Item.S;
+                        Result.S := Item.S;
                         Done := True;
                      end if;
 
@@ -219,7 +219,9 @@ package body Arguments is
       Arg          : Unbounded_String;
       Name         : Unbounded_String;
       S            : Unbounded_String;   --  New variable name
+      aChar        : Character;
       Name_Length  : Natural := 0;
+      String_Size  : Natural := 0;
       V_Type       : Function_Type := T_NA;
       D_Num        : Integer := 0;
       I_Free       : Natural;
@@ -343,15 +345,17 @@ package body Arguments is
       if not Done then
          --  MMBasic 1941  No existng variable has been found.
          if (Action and V_NOFIND_ERR) = V_NOFIND_ERR then
-            Put_Line (Routine_Name & "Cannot find $" & To_String (Name));
+            Put_Line (Routine_Name & "Cannot find " & To_String (Name));
          end if;
 
---           if (Action and V_NOFIND_NULL) = V_NOFIND_NULL then
---              return null
---           end if;
+         --           if (Action and V_NOFIND_NULL) = V_NOFIND_NULL then
+         --              return null
+         --           end if;
 
-         if (Option_Explicit or else D_Num /= 0) and then (Action and V_DIM_VAR) /= V_DIM_VAR then
-            Put_Line (Routine_Name & "$ is not declared" & To_String (Name));
+         if (Option_Explicit or else D_Num /= 0) and then
+           (Action and V_DIM_VAR) /= V_DIM_VAR then
+            Put_Line (Routine_Name & To_String (Name) &
+                        " has not been declared");
          end if;
 
          if V_Type = T_NA then
@@ -373,12 +377,62 @@ package body Arguments is
                if not Done then
                   X := M_Basic.Subfunctions (Var_I);
                   X := X + 1;
-                  Skip_Spaces (X);
+                  --  Skip_Spaces (X);
+                  --  MMBasic 1955
                   S := Name;
+                  --                    Assert (To_Upper (X) /= To_Upper (X), Routine_Name &
+                  --                              "a subroutine has the same name: " & Name);
                end if;
             end loop;
          end if;
 
+         String_Size := Configuration.MAXSTRLEN;
+         --  MMBasic 1984  If it is an array we must be dimensioning it.
+         --  If it is a string array skip over the dimension values and look
+         --  for the LENGTH keyword.
+         --  If found then find the string size and change the vartbl entry.
+         if (Action and V_DIM_VAR) = V_DIM_VAR then
+
+            if (V_Type and T_STR) = T_STR then
+               Var_I := 0;
+               Done := False;
+               if Element (Expression, Pos) = '(' then
+                  while not Done loop
+                     if Element (Expression, Pos) = '(' then
+                        Var_I := Var_I + 1;
+                     end if;
+
+                     if (Token_Type (Pos) and T_FUN) = T_FUN then
+                        Var_I := Var_I + 1;
+                     end if;
+
+                     if Element (Expression, Pos) = ')' then
+                        Var_I := Var_I - 1;
+                     end if;
+
+                     Pos := Pos + 1;
+                     Done := Var_I = 0;
+                  end loop;
+               end if;
+
+               --  MMBasic 2002
+               Skip_Spaces (Expression, Pos);
+               Pos := M_Basic.Check_String
+                 (Slice (Expression, Pos, Length (Expression)), "Length");
+               if Pos > 0 then
+                  String_Size :=
+                    Evaluation.Get_Int (S, 1, Configuration.MAXSTRLEN);
+               else
+                  aChar := Element (Expression, Pos);
+                  --  op_invalid is a pointer (Access_Procedure) to the
+                  --  op_invalid routine.
+                  Assert (aChar = ',' or else Pos > Length (Expression) or else
+                          M_Basic.Token_Function (Character'Image (aChar)) =
+                            op_invalid, Routine_Name & "unexpected text: " &
+                            Slice (Expression, Pos, Length (Expression));
+               end if;
+            end if;
+         end if;
       end if;
 
       return Result;
