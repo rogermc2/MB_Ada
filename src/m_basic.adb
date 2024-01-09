@@ -296,14 +296,14 @@ package body M_Basic is
             --  C_Base_Token is the base of the token numbers.
             Put_Line (Routine_Name & "239 Token > C_Base_Token: " &
                         Boolean'Image (Token > M_Misc.C_Base_Token ));
-            --              Put_Line
-            --                (Routine_Name & "Token - C_Base_Token < Command_Table_Size: "
-            --                 & Boolean'Image
-            --                   (Token - M_Misc.C_Base_Token < Command_Table_Size));
-            --              Put_Line
-            --                (Routine_Name & "Command_Table " &
-            --                "(Token - C_Base_Token).Command_Type = T_CMD: " &
-            --                   Boolean'Image (Token > M_Misc.C_Base_Token ));
+            Put_Line
+              (Routine_Name & "Token - C_Base_Token < Command_Table_Size: "
+               & Boolean'Image
+                 (Token - M_Misc.C_Base_Token < Command_Table_Size));
+            Put_Line
+              (Routine_Name & "Command_Table " &
+                 "(Token - C_Base_Token).Command_Type = T_CMD: " &
+                 Boolean'Image (Token > M_Misc.C_Base_Token ));
 
             if Token > M_Misc.C_Base_Token and then
               Token - M_Misc.C_Base_Token < Command_Table_Size
@@ -314,8 +314,8 @@ package body M_Basic is
                T_Arg := T_CMD;
                --  Execute the command
                Put_Line (Routine_Name &
-                           "247 Executing command, Token, Command_Table index: "
-                         & Integer'Image (Token) & ", " &
+                           "247 Executing command, Token: "
+                         & Integer'Image (Token) & ", Command_Table index: " &
                            Integer'Image (Token - M_Misc.C_Base_Token));
                Command_Ptr :=
                  Command_Table (Token - M_Misc.C_Base_Token).Function_Ptr;

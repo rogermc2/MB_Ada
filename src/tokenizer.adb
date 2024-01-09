@@ -85,7 +85,6 @@ package body Tokenizer is
       First_Nonwhite         : Boolean := True;
       Label_Valid            : Boolean := True;
       Match_I                : Integer := -1;
-      Match_L                : Integer := -1;
       Match_P                : Integer := -1;
       Last_Ptr               : Positive := Ptr;
       --        Done           : Boolean := False;
@@ -104,7 +103,7 @@ package body Tokenizer is
                      Integer'Image (Input_Buffer_Length));
          Put_Line (Routine_Name & "Token Buffer: ");
          Support.Print_Buffer (Buffer);
---           delay (1.0);
+         --           delay (1.0);
          if aChar = ' ' then
             Put_Line (Routine_Name & "aChar = ' '");
             Ptr := Ptr + 1;
@@ -131,9 +130,14 @@ package body Tokenizer is
             Put_Line (Routine_Name & "First_Nonwhite, Match_P: " &
                         Integer'Image (Match_P));
             Process_First_Nonwhite (Buffer, Ptr, Label_Valid, First_Nonwhite,
-                                    Match_I, Match_L, Match_P);
-            Put_Line (Routine_Name & "First_Nonwhite, Ptr: " &
-                        Get_Input_Character(Ptr));
+                                    Match_I, Match_P);
+            Put_Line (Routine_Name & "First_Nonwhite processed");
+            if Ptr <= Integer (Length (Buffer)) then
+               Put_Line (Routine_Name & "First_Nonwhite, Ptr: " &
+                           Get_Input_Character(Ptr));
+            else
+               Put_Line (Routine_Name & "no more input buffer characters." );
+            end if;
             --  MMBasic  958
             if Match_I > -1 then
                Put_Line (Routine_Name & "Process_Command");
@@ -152,13 +156,13 @@ package body Tokenizer is
             --  MMBasic  997
          elsif Check_Function_Or_Keyword (Buffer, Ptr, First_Nonwhite) then
             Put_Line (Routine_Name & "Function_Or_Keyword found: " &
-                     Buffer.Last_Element);
+                        Buffer.Last_Element);
             null;
             --  MMBasic  1035
          elsif M_Basic_Utilities.Is_Name_Start (aChar) then
             Process_Name_Start (Buffer, Ptr, First_Nonwhite, Label_Valid);
---              Put_Line (Routine_Name & "Name_Start processed, Buffer");
---              Support.Print_Buffer (Buffer);
+            --              Put_Line (Routine_Name & "Name_Start processed, Buffer");
+            --              Support.Print_Buffer (Buffer);
             --  MMBasic  1054
          elsif aChar = '(' then
             Put_Line (Routine_Name & "aChar = '(' not implemented: ");

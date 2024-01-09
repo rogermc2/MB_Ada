@@ -253,10 +253,10 @@ package body Parse_Functions is
    end Process_Name_Start;
 
    procedure Process_First_Nonwhite
-     (Buffer                    : out String_Buffer; I_Pos : in out Positive;
-      Label_Valid               : in out Boolean;
-      First_Nonwhite            : in out Boolean;
-      Match_I, Match_L, Match_P : in out Integer) is
+     (Buffer           : out String_Buffer; I_Pos : in out Positive;
+      Label_Valid      : in out Boolean;
+      First_Nonwhite   : in out Boolean;
+      Match_I, Match_P : in out Integer) is
       --        Routine_Name  : constant String :=
       --                          "Parse_Functions.Process_First_Nonwhite ";
       aChar         : constant Character := Get_Input_Character (I_Pos);
@@ -270,7 +270,7 @@ package body Parse_Functions is
             Match_P := I_Pos;
          end if;
 
-      else
+      else  --  not irst_Nonwhite
          --  MMBasic 925
          Try_Command (Buffer, I_Pos, Label_Valid, First_Nonwhite);
       end if;
@@ -279,8 +279,10 @@ package body Parse_Functions is
 
    procedure Process_Quote (Buffer : in out String_Buffer;
                             I_Pos  : in out Positive) is
+   Routine_Name  : constant String := "Parse_Functions.Process_Quote ";
    begin
       I_Pos := I_Pos + 1;
+      Put_Line (Routine_Name & "not implemented");
 
    end Process_Quote;
 
