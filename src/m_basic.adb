@@ -287,8 +287,10 @@ package body M_Basic is
       if Done then
          Put_Line (Routine_Name & "No more token buffer elements");
       else
-         if Command_Line (Command_Line_Pos) /= '0' and then
+         if Command_Line'Length > 0 and then
            Command_Line (Command_Line_Pos) /= ''' then
+            --  ignore comment line
+            Put_Line (Routine_Name & "Command_Line: " & Command_Line);
             --  239
             --              if setjmp (ErrNext) = 0 then
             Save_Local_Index := Local_Index;
