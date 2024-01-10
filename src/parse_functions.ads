@@ -3,7 +3,7 @@ with Command_And_Token_Tables; use Command_And_Token_Tables;
 
 package Parse_Functions is
 
-   function Check_Function_Or_Keyword
+   function Check_For_Function_Or_Keyword
      (Buffer         : in out String_Buffer; P : in out Positive;
       First_Nonwhite : in out Boolean) return Boolean;
    function Get_Command_Value (Command : String) return Integer;

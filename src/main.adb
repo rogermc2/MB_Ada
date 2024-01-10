@@ -65,7 +65,6 @@ begin
       if M_Basic.Find_Subfunction (Startup_Token, T_NOTYPE) /= 0 then
          Put_Line (Program_Name  & "Startup_Token found");
          Buffer_Append (Token_Buffer,Startup_Token);
-         Buffer_Append (Token_Buffer, "/0");
          M_Basic.Execute_Program (Token_Buffer);
       else
          Put_Line (Program_Name &

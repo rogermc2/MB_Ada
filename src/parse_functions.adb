@@ -19,14 +19,14 @@ package body Parse_Functions is
      (Buffer      : out String_Buffer; P : in out Positive;
       Label_Valid : in out Boolean; First_Nonwhite : in out Boolean);
 
-   function Check_Function_Or_Keyword
+   function Check_For_Function_Or_Keyword
      (Buffer         : in out String_Buffer; P : in out Positive;
       First_Nonwhite : in out Boolean) return Boolean is
       use Ada.Characters.Handling;
       use Command_And_Token_Functions;
       use String_Buffer_Package;
       --        Routine_Name : constant String :=
-      --                         "Parse_Functions.Check_Function_Or_Keyword ";
+      --                         "Parse_Functions.Check_For_Function_Or_Keyword ";
       TP2          : Positive := P;
       TP_Index     : Positive := 1;
       TP           : Unbounded_String;
@@ -77,7 +77,7 @@ package body Parse_Functions is
 
       return OK;
 
-   end Check_Function_Or_Keyword;
+   end Check_For_Function_Or_Keyword;
 
    function Get_Command_From_Input (I_Pos : in out Positive)
                                     return Unbounded_String is
@@ -270,7 +270,7 @@ package body Parse_Functions is
             Match_P := I_Pos;
          end if;
 
-      else  --  not irst_Nonwhite
+      else  --  not first_Nonwhite
          --  MMBasic 925
          Try_Command (Buffer, I_Pos, Label_Valid, First_Nonwhite);
       end if;

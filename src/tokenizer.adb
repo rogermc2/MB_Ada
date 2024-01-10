@@ -87,21 +87,19 @@ package body Tokenizer is
       Match_I                : Integer := -1;
       Match_P                : Integer := -1;
       Last_Ptr               : Positive := Ptr;
-      --        Done           : Boolean := False;
    begin
       Put_Line (Routine_Name & "Token Buffer start: ");
       Support.Print_Buffer (Buffer);
       while Ptr < Input_Buffer_Length loop
          Put_Line (Routine_Name & "Last_Ptr : " & Integer'Image (Last_Ptr));
          Last_Ptr := Ptr;
-         --           Done := False;
          aChar := Get_Input_Character (Ptr);
          Put_Line (Routine_Name & "Ptr, aChar, First_Nonwhite: " &
                      Integer'Image (Ptr) & ", " & aChar & ", " &
                      Boolean'Image (First_Nonwhite) );
          Put_Line (Routine_Name & "Input_Buffer_Length : " &
                      Integer'Image (Input_Buffer_Length));
-         Put_Line (Routine_Name & "Token Buffer: ");
+         Put_Line (Routine_Name & "Token Buffer:");
          Support.Print_Buffer (Buffer);
          --           delay (1.0);
          if aChar = ' ' then
@@ -154,10 +152,8 @@ package body Tokenizer is
                         Get_Input_Character (Ptr));
             Try_Label (Buffer, Ptr, Label_Valid);
             --  MMBasic  997
-         elsif Check_Function_Or_Keyword (Buffer, Ptr, First_Nonwhite) then
-            Put_Line (Routine_Name & "Function_Or_Keyword found: " &
-                        Buffer.Last_Element);
-            null;
+         elsif Check_For_Function_Or_Keyword (Buffer, Ptr, First_Nonwhite) then
+            Ptr := Ptr + 1;
             --  MMBasic  1035
          elsif M_Basic_Utilities.Is_Name_Start (aChar) then
             Process_Name_Start (Buffer, Ptr, First_Nonwhite, Label_Valid);
