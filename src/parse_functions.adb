@@ -20,57 +20,54 @@ package body Parse_Functions is
       Label_Valid : in out Boolean; First_Nonwhite : in out Boolean);
 
    function Check_For_Function_Or_Keyword
-     (Buffer         : in out String_Buffer; P : in out Positive;
+     (Token_Buffer   : in out String_Buffer; Ptr : in out Positive;
       First_Nonwhite : in out Boolean) return Boolean is
       use Ada.Characters.Handling;
       use Command_And_Token_Functions;
       use String_Buffer_Package;
       --        Routine_Name : constant String :=
       --                         "Parse_Functions.Check_For_Function_Or_Keyword ";
-      TP2          : Positive := P;
+      TP2          : Positive := Ptr;  --  pointer into Input_Buffer
       TP_Index     : Positive := 1;
-      TP           : Unbounded_String;
+      TP           : Unbounded_String;  --  Token name
       TT_Index     : Natural := 0;
-      Char1        : Character;
-      Char2        : Character;
+      In_Char      : Character;
+      Token_Char   : Character;
       Done         : Boolean := False;
       OK           : Boolean := False;
    begin
       --  MMBasic  997
       while not Done and then TT_Index < Token_Table'Last loop
          TT_Index := TT_Index + 1;
-         TP2 := P;
+         TP2 := Ptr;
          TP_Index := 1;
          TP := Token_Table (TT_Index).Name;
          if Length (TP) > 0 then
-            Char1 := To_Upper (Get_Input_Character (TP2));
-            Char2 := To_Upper (Element (TP, TP_Index));
+            --  Check if this token matches the input text
+            In_Char := To_Upper (Get_Input_Character (TP2));
+            Token_Char := To_Upper (Element (TP, TP_Index));
             while TP2 < Input_Buffer_Length and then
-              TP_Index < Token_Table'Last and then Char2 = Char1 loop
+               Token_Char = In_Char and then TP_Index < Token_Table'Last loop
                TP2 := TP2 + 1;
                TP_Index := TP_Index + 1;
-               Char2 := Element (TP, TP_Index);
-               if Char2 = '(' then
+               Token_Char := Element (TP, TP_Index);
+               if Token_Char = '(' then
                   Skip_In_Buffer_Spaces (TP2);
-               else
-                  Char2 := To_Upper (Char2);
                end if;
-               Char1 := To_Upper (Get_Input_Character (TP2));
             end loop;
 
             --  MMBasic  1011
-            Done := TP2 >= Input_Buffer_Length or else
-              (TP_Index > Length (TP) and then
+            Done := TP_Index > Length (TP) and then
                    (not Is_Name_End (Element (TP, TP_Index - 1)) or else
-                    Is_Name_Character (Get_Input_Character (TP2))));
+                    Is_Name_Character (Get_Input_Character (TP2)));
          end if;
       end loop;
 
       --  MMBasic  1015
       if TT_Index < Token_Table_Size then
          TT_Index := M_Misc.C_Base_Token + TT_Index;
-         Append (Buffer, Integer'Image (TT_Index));
-         P := TP2;
+         Append (Token_Buffer, Integer'Image (TT_Index));
+         Ptr := TP2;
          First_Nonwhite := TT_Index = tokenTHEN or else TT_Index = tokenELSE;
          OK := True;
       end if;

@@ -100,7 +100,7 @@ package body Tokenizer is
                      Integer'Image (Input_Buffer_Length));
 --           Put_Line (Routine_Name & "Token Buffer:");
 --           Support.Print_Buffer (Buffer);
-         delay (1.0);
+--           delay (1.0);
          if aChar = ' ' then
             Put_Line (Routine_Name & "aChar = ' '");
             Ptr := Ptr + 1;
@@ -153,9 +153,10 @@ package body Tokenizer is
             Try_Label (Buffer, Ptr, Label_Valid);
             --  MMBasic  997
          elsif Check_For_Function_Or_Keyword (Buffer, Ptr, First_Nonwhite) then
-            Put_Line (Routine_Name & "Function_Or_Keyword check,  Ptr: " &
-                     Integer'Image (Ptr));
-            null;
+--              Put_Line (Routine_Name & "Function_Or_Keyword check,  Ptr: " &
+--                       Integer'Image (Ptr));
+            Assert (Ptr > Last_Ptr, Routine_Name &
+                      "Check_For_Function_Or_Keywords did not increment Ptr");
             --  MMBasic  1035
          elsif M_Basic_Utilities.Is_Name_Start (aChar) then
             Process_Name_Start (Buffer, Ptr, First_Nonwhite, Label_Valid);
@@ -178,6 +179,7 @@ package body Tokenizer is
                      Integer'image (Ptr) & ", aChar: " &
                      Character'image (aChar));
          New_Line;
+         Assert (Ptr > Last_Ptr, Routine_Name & "Ptr was not incremented");
       end loop;
 
       Append (Buffer, "000");
