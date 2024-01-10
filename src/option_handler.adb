@@ -13,12 +13,12 @@ with Global;
 with M_Basic; use M_Basic;
 with M_Misc; use M_Misc;
 
-package body Command_Handler is
+package body Option_Handler is
 
    --  MM_Misc.c 268
    procedure Option_Cmd is
       use String_Buffer_Package;
-      Routine_Name : constant String := "M_Misc.Option_Cmd ";
+      Routine_Name : constant String := "Option_Handler.Option_Cmd ";
       E_String     : constant String := To_String (Global.E_UB_String);
       TP           : Natural;
       Done         : Boolean := False;
@@ -195,4 +195,4 @@ package body Command_Handler is
 
    end Option_Cmd;
 
-end Command_Handler;
+end Option_Handler;
