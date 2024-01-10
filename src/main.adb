@@ -63,8 +63,7 @@ begin
 
       --  311
       if M_Basic.Find_Subfunction (Startup_Token, T_NOTYPE) /= 0 then
-         Put_Line (Program_Name  & "Startup_Token found");
-         Buffer_Append (Token_Buffer,Startup_Token);
+            Buffer_Append (Token_Buffer,Startup_Token);
          M_Basic.Execute_Program (Token_Buffer);
       else
          Put_Line (Program_Name &
@@ -95,15 +94,9 @@ begin
       Global.Error_In_Prompt := False;
       Load_Input_Buffer (0);
       if Input_Buffer_Length > 0 then
-         Put_Line (Program_Name & "Tokenize buffer:");
-         Print_Buffer (Token_Buffer);
          Tokenizer.Tokenize (Token_Buffer, True);
-         Put_Line (Program_Name & "Execute_Program");
---           Put_Line (Program_Name & "Token_Buffer (1): " &
---                       Element (Token_Buffer, 1));
          M_Basic.Execute_Program (Token_Buffer);
       end if;
-
    end loop;
 
 exception

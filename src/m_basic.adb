@@ -269,8 +269,8 @@ package body M_Basic is
       use String_Buffer_Package;
       Routine_Name       : constant String := "M_Basic.Execute_Command ";
       Command_Line       : constant String := To_String (Command);
+      Command_Line_Pos   : Positive := 1;   --  p + 1
       Next_Statement_Pos : Positive := 1;
-      Command_Line_Pos   : Positive := 1;   --  p
       Token              : Integer;
       Interupt_Check     : Integer := 0;
       Command_Ptr        : Command_And_Token_Functions.Access_Procedure;
@@ -280,6 +280,7 @@ package body M_Basic is
       Put_Line (Routine_Name & "Command: " & To_String (Command));
       --  228
       Skip_Spaces (Command_Line, Command_Line_Pos);
+      --  Skip_Element
       Skip_Element (Command_Line, Next_Statement_Pos);
       Done := Command_Line_Pos >= Flash.Prog_Memory'Length or else
         Command_Line (Command_Line_Pos) = '\';  --  ignore comment line
@@ -298,10 +299,6 @@ package body M_Basic is
             --  C_Base_Token is the base of the token numbers.
             Put_Line (Routine_Name & "239 Token > C_Base_Token: " &
                         Boolean'Image (Token > M_Misc.C_Base_Token ));
-            Put_Line
-              (Routine_Name & "Token - C_Base_Token < Command_Table_Size: "
-               & Boolean'Image
-                 (Token - M_Misc.C_Base_Token < Command_Table_Size));
             Put_Line
               (Routine_Name & "Command_Table " &
                  "(Token - C_Base_Token).Command_Type = T_CMD: " &
@@ -379,8 +376,10 @@ package body M_Basic is
          Skip_Spaces (Buffer.First_Element, Program_Ptr);
          --           Put_Line (Routine_Name & "Buffer length: " &
          --                       Integer'Image (Positive (Buffer.Last_Index)));
-         while not Done and then Program_Ptr <= Positive (Buffer.Last_Index) loop
+         while not Done and then
+           Program_Ptr <= Positive (Buffer.Last_Index) loop
             if Buffer (Program_Ptr) = "0" then
+               --  Step over the 0 indicating the start of a new element'
                Program_Ptr := Program_Ptr + 1;
             end if;
 
@@ -405,6 +404,7 @@ package body M_Basic is
 
             --  225
             if Program_Ptr <= Positive (Buffer.Length) then
+               Put_Line (Routine_Name & "225 Execute_Command");
                Execute_Command
                  (Buffer, To_Unbounded_String (Element (Buffer, Program_Ptr)),
                   Save_Local_Index);

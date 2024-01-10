@@ -4,6 +4,7 @@ with Ada.Characters.Handling;
 with Ada.Strings;
 with Ada.Strings.Fixed;
 
+with Arguments;
 with Command_And_Token_Functions; use Command_And_Token_Functions;
 with Global;
 with M_Basic;
@@ -154,9 +155,9 @@ package body Evaluation is
      (Expression : in out Unbounded_String; P : in out Positive;
       F          : in out Configuration.MMFLOAT; I64 : in out Long_Long_Integer;
       S          : in out Unbounded_String;  T  : in out Function_Type) is
-      use M_Basic_Utilities;
       Routine_Name : constant String := "Evaluation.Do_Name_Start ";
       Save_Current_Line_Ptr : Positive;
+      Var                   : Arguments.Var_Record;
       TP                    : Positive := P + 1;
       Index                 : Integer := -1;
    begin
@@ -184,7 +185,7 @@ package body Evaluation is
          M_Basic.Current_Line_Ptr := Save_Current_Line_Ptr;
       else
          --  MMBasic 1412
-         Find_Var (Expression, P,  Global.V_FIND);
+         Var := Arguments.Find_Var (Expression, P,  Global.V_FIND);
          S := Global.UB_Return;
       end if;
 

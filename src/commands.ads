@@ -7,6 +7,7 @@ with Command_And_Token_Tables; use Command_And_Token_Tables;
 
 package Commands is
 
+   type Config_Cases is (CONFIG_TITLE, CONFIG_LOWER, CONFIG_UPPER);
    Dim_Used          : Boolean := False;
    Option_Error_Skip : Integer := 0;
 

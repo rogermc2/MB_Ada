@@ -1,6 +1,7 @@
 
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 
+with Commands;
 with Configuration; use Configuration;
 with Draw;
 
@@ -23,7 +24,7 @@ package Flash is
       Autorun              : Boolean := False;
       Tab                  : Natural := 2;
       Invert               : Boolean := False;
-      List_Case            : Boolean := False;
+      List_Case            : Commands.Config_Cases;
       Height               : Positive := SCREENHEIGHT;
       Width                : Positive := SCREENWIDTH;
       PIN                  : Integer := 0;
@@ -72,5 +73,6 @@ package Flash is
 
    procedure Clear_Saved_Variables;
    procedure Load_Options;
+   procedure Save_Options;
 
 end Flash;

@@ -13,4 +13,10 @@ package body Flash is
 
    end Load_Options;
 
+   procedure Save_Options is
+   begin
+      null;
+
+   end Save_Options;
+
 end Flash;

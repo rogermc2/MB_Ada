@@ -184,8 +184,6 @@ package body Tokenizer is
 
       Append (Buffer, "000");
 
-      Put_Line (Routine_Name & "done, Buffer:");
-      Support.Print_Buffer (Buffer);
       New_Line;
 
    end Parse_Line;
@@ -226,6 +224,8 @@ package body Tokenizer is
       --  834 Process the rest of the line
       if Input_Buffer_Length > In_Ptr then
          Parse_Line (Buffer, In_Ptr);
+         Put_Line (Routine_Name & "PARSED LINE:");
+         Print_Buffer (Buffer);
       end if;
 
    end Tokenize;

@@ -44,6 +44,11 @@ package body Console is
 
    end Get_Console;
 
+   procedure Init_Serial_Console is
+   begin
+      null;
+   end Init_Serial_Console;
+
    function MM_Get_Character return Character is
       aChar : Character := Character'Val (0);
       Done  : Boolean := False;

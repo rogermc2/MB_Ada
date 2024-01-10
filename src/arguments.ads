@@ -1,4 +1,6 @@
 
+with Interfaces;
+
 with Ada.Containers.Vectors;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 
@@ -26,9 +28,14 @@ package Arguments is
    Option_Explicit : Boolean := False;
    Var_Table       : Var_Vector;
    Var_Index       : Natural := 0;
+   Var_Count       : Natural := 0;
+   Arg_C       	   : Interfaces.Unsigned_16;
+   Arg_V           : String_Buffer;
    Arg_T           : Function_Type;
 
    function Find_Var (Expression : Unbounded_String; Pos : in out Positive;
                        Action     : Function_Type) return Var_Record;
+   procedure Get_Args (Expression   : Unbounded_String; Pos : Positive;
+                       Max_Num_Args : Natural; S : String);
 
 end Arguments;

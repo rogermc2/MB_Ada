@@ -1,6 +1,4 @@
 
-with Interfaces;
-
 with Ada.Assertions;
 with Ada.Characters.Handling;
 with Ada.Text_IO; use Ada.Text_IO;
@@ -15,13 +13,7 @@ package body Arguments is
 
    type Dim_Array is array (1 .. Configuration.MAXDIM) of Integer;
 
-   Var_Count   : Natural := 0;
    Arg_Buff    : Unbounded_String;
-   Arg_V       : String_Buffer;
-   Arg_C       : Interfaces.Unsigned_16;
-
-   procedure Get_Args (Expression   : Unbounded_String; Pos : Positive;
-                       Max_Num_Args : Natural; S : String);
 
    procedure Do_AA (IP, TP      : in out Natural; Var_I : in out Natural;
                     Name_Length : Natural; I_Free : in out Natural;

@@ -8,6 +8,7 @@ with Exceptions;
 
 package Global is
 
+   Bus_Speed   : Positive := 38400;
    F_Return    : Float := 0.0;
    E_Float     : Float := 0.0;
    I_Return    : Integer := 0;
