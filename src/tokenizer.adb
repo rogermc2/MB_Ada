@@ -80,7 +80,6 @@ package body Tokenizer is
       use Ada.Characters.Handling;
       use String_Buffer_Package;
       Routine_Name           : constant String := "Tokenizer.Parse_Line ";
-      String1                : String (1 .. 1);
       aChar                  : Character;
       First_Nonwhite         : Boolean := True;
       Label_Valid            : Boolean := True;
@@ -90,7 +89,7 @@ package body Tokenizer is
    begin
       Put_Line (Routine_Name & "Token Buffer start: ");
       Support.Print_Buffer (Buffer);
-      while Ptr < Input_Buffer_Length loop
+      while Ptr <= Input_Buffer_Length loop
          Put_Line (Routine_Name & "Last_Ptr : " & Integer'Image (Last_Ptr));
          Last_Ptr := Ptr;
          aChar := Get_Input_Character (Ptr);
@@ -99,9 +98,9 @@ package body Tokenizer is
                      Boolean'Image (First_Nonwhite) );
          Put_Line (Routine_Name & "Input_Buffer_Length : " &
                      Integer'Image (Input_Buffer_Length));
-         Put_Line (Routine_Name & "Token Buffer:");
-         Support.Print_Buffer (Buffer);
-         --           delay (1.0);
+--           Put_Line (Routine_Name & "Token Buffer:");
+--           Support.Print_Buffer (Buffer);
+         delay (1.0);
          if aChar = ' ' then
             Put_Line (Routine_Name & "aChar = ' '");
             Ptr := Ptr + 1;
@@ -136,6 +135,7 @@ package body Tokenizer is
             else
                Put_Line (Routine_Name & "no more input buffer characters." );
             end if;
+
             --  MMBasic  958
             if Match_I > -1 then
                Put_Line (Routine_Name & "Process_Command");
@@ -153,7 +153,9 @@ package body Tokenizer is
             Try_Label (Buffer, Ptr, Label_Valid);
             --  MMBasic  997
          elsif Check_For_Function_Or_Keyword (Buffer, Ptr, First_Nonwhite) then
-            Ptr := Ptr + 1;
+            Put_Line (Routine_Name & "Function_Or_Keyword check,  Ptr: " &
+                     Integer'Image (Ptr));
+            null;
             --  MMBasic  1035
          elsif M_Basic_Utilities.Is_Name_Start (aChar) then
             Process_Name_Start (Buffer, Ptr, First_Nonwhite, Label_Valid);
@@ -164,21 +166,25 @@ package body Tokenizer is
             Put_Line (Routine_Name & "aChar = '(' not implemented: ");
             Ptr := Ptr + 1;
          else  --  None of the above so just copy the one character
-            String1 (1) := aChar;
-            Put_Line (Routine_Name & "else aChar: " & String1);
-            Support.Buffer_Append (Buffer, String1);
+            Put_Line (Routine_Name & "else aChar: " & Character'image (aChar));
+            Support.Buffer_Append (Buffer, Character'image (aChar));
             Label_Valid := False;
             First_Nonwhite := False;
             Ptr := Ptr + 1;
          end if;
-         Put_Line (Routine_Name & "end loop First_Nonwhite: " &
-                     Boolean'Image (First_Nonwhite));
+
+         Put_Line (Routine_Name & "end loop, First_Nonwhite: " &
+                     Boolean'Image (First_Nonwhite) & ", Ptr: " &
+                     Integer'image (Ptr) & ", aChar: " &
+                     Character'image (aChar));
+         New_Line;
       end loop;
 
       Append (Buffer, "000");
 
-      Put_Line (Routine_Name & "Buffer");
+      Put_Line (Routine_Name & "done, Buffer:");
       Support.Print_Buffer (Buffer);
+      New_Line;
 
    end Parse_Line;
 

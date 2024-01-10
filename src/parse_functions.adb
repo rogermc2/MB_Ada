@@ -270,7 +270,7 @@ package body Parse_Functions is
             Match_P := I_Pos;
          end if;
 
-      else  --  not first_Nonwhite
+      else
          --  MMBasic 925
          Try_Command (Buffer, I_Pos, Label_Valid, First_Nonwhite);
       end if;
