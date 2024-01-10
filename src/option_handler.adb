@@ -15,15 +15,24 @@ with M_Misc; use M_Misc;
 
 package body Option_Handler is
 
+   function Get_Arg (E_String : String; TP : Positive) return Unbounded_String is
+   begin
+      return To_Unbounded_String (Slice (To_Unbounded_String (E_String),
+                                  TP, E_String'Length));
+   end Get_Arg;
+
    --  MM_Misc.c 268
    procedure Option_Cmd is
       use String_Buffer_Package;
-      Routine_Name : constant String := "Option_Handler.Option_Cmd ";
+      Routine_Name : constant String := ".Option_Cmd ";
       E_String     : constant String := To_String (Global.E_UB_String);
       TP           : Natural;
+      Arg          : Unbounded_String;
       Done         : Boolean := False;
    begin
       Put_Line (Routine_Name & "E_String: '" & E_String & "'");
+      --  Check_String checks if the next text in an element (a basic statement)
+      --  corresponds to an alphabetic string.
       TP := Check_String (E_String, "BASE");
       if TP > 0 then
          Assert (not Commands.Dim_Used, Routine_Name &
@@ -40,32 +49,23 @@ package body Option_Handler is
       else
          TP := Check_String (E_String, "DEFAULT");
          if TP > 0 then
-            declare
-               Arg : constant String := Slice
-                 (To_Unbounded_String (E_String), TP, E_String'Length);
-            begin
-               if Check_String (Arg, "INTEGER") > 0 then
-                  Arguments.Default_Type := T_INT;
-               elsif Check_String (Arg, "FLOAT") > 0 then
-                  Arguments.Default_Type := T_NBR;
-               elsif Check_String (Arg, "STRING") > 0 then
-                  Arguments.Default_Type := T_STR;
-               elsif Check_String (Arg, "NONE") > 0 then
-                  Arguments.Default_Type := T_NOTYPE;
-               end if;
-               Done := True;
-            end;
+            if Check_String (E_String, "INTEGER") > 0 then
+               Arguments.Default_Type := T_INT;
+            elsif Check_String (E_String, "FLOAT") > 0 then
+               Arguments.Default_Type := T_NBR;
+            elsif Check_String (E_String, "STRING") > 0 then
+               Arguments.Default_Type := T_STR;
+            elsif Check_String (E_String, "NONE") > 0 then
+               Arguments.Default_Type := T_NOTYPE;
+            end if;
+            Done := True;
 
          else
             TP := Check_String (E_String, "BREAK");
             if TP > 0 then
-               declare
-                  Arg : Unbounded_String := To_Unbounded_String (Slice
-                                                                 (To_Unbounded_String (E_String), TP, E_String'Length));
-               begin
-                  Global.Break_Key := Integer (Get_Integer (Arg));
-                  Done := True;
-               end;
+               Arg := Get_Arg (E_String, TP);
+               Global.Break_Key := Integer (Get_Integer (Arg));
+               Done := True;
             end if;
          end if;
       end if;
@@ -73,64 +73,46 @@ package body Option_Handler is
       if not Done then
          TP := Check_String (E_String, "AUTORUN");
          if TP > 0 then
-            declare
-               Arg : constant String :=
-                       Slice (To_Unbounded_String (E_String),
-                              TP, E_String'Length);
-            begin
-               if Check_String (Arg, "ON") > 0 then
-                  Flash.Option.Autorun := True;
-                  Flash.Save_Options;
-               elsif
-                 Check_String (Arg, "OFF") > 0 then
-                  Flash.Option.Autorun := False;
-                  Flash.Save_Options;
-               end if;
-            end;
+            if Check_String (E_String, "ON") > 0 then
+               Flash.Option.Autorun := True;
+               Flash.Save_Options;
+            elsif
+              Check_String (E_String, "OFF") > 0 then
+               Flash.Option.Autorun := False;
+               Flash.Save_Options;
+            end if;
             Done := True;
 
          else
             TP := Check_String (E_String, "CASE");
             if TP > 0 then
-               declare
-                  Arg : constant String :=
-                          Slice (To_Unbounded_String (E_String),
-                                 TP, E_String'Length);
-               begin
-                  if Check_String (Arg, "LOWER") > 0 then
-                     Flash.Option.List_Case := Commands.CONFIG_LOWER;
-                     Flash.Save_Options;
-                  elsif
-                    Check_String (Arg, "UPPER") > 0 then
-                     Flash.Option.List_Case := Commands.CONFIG_UPPER;
-                     Flash.Save_Options;
-                  elsif
-                    Check_String (Arg, "TITLE") > 0 then
-                     Flash.Option.List_Case := Commands.CONFIG_TITLE;
-                     Flash.Save_Options;
-                  end if;
-               end;
+               if Check_String (E_String, "LOWER") > 0 then
+                  Flash.Option.List_Case := Commands.CONFIG_LOWER;
+                  Flash.Save_Options;
+               elsif
+                 Check_String (E_String, "UPPER") > 0 then
+                  Flash.Option.List_Case := Commands.CONFIG_UPPER;
+                  Flash.Save_Options;
+               elsif
+                 Check_String (E_String, "TITLE") > 0 then
+                  Flash.Option.List_Case := Commands.CONFIG_TITLE;
+                  Flash.Save_Options;
+               end if;
                Done := True;
 
             else
                TP := Check_String (E_String, "TAB");
                if TP  > 0 then
-                  declare
-                     Arg : constant String :=
-                             Slice (To_Unbounded_String (E_String),
-                                    TP, E_String'Length);
-                  begin
-                     if Check_String (Arg, "2") > 0 then
-                        Flash.Option.Tab := 2;
-                        Flash.Save_Options;
-                     elsif Check_String (Arg, "4") > 0 then
-                        Flash.Option.Tab := 4;
-                        Flash.Save_Options;
-                     elsif Check_String (Arg, "8") > 0 then
-                        Flash.Option.Tab := 8;
-                        Flash.Save_Options;
-                     end if;
-                  end;
+                  if Check_String (E_String, "2") > 0 then
+                     Flash.Option.Tab := 2;
+                     Flash.Save_Options;
+                  elsif Check_String (E_String, "4") > 0 then
+                     Flash.Option.Tab := 4;
+                     Flash.Save_Options;
+                  elsif Check_String (E_String, "8") > 0 then
+                     Flash.Option.Tab := 8;
+                     Flash.Save_Options;
+                  end if;
                   Done := True;
                end if;
             end if;
@@ -140,30 +122,20 @@ package body Option_Handler is
       if not Done then
          TP := Check_String (E_String, "BAUDRATE");
          if TP > 0 then
-            declare
-               Arg : Unbounded_String := To_Unbounded_String
-                 (Slice (To_Unbounded_String (E_String),
-                  TP, E_String'Length));
-            begin
-               Flash.Option.Baud_Rate :=
-                 Get_Int (Arg, 100, Global.Bus_Speed / 130);
-               Flash.Save_Options;
-               Console.Init_Serial_Console;
-               Done := True;
-            end;
+            Arg := Get_Arg (E_String, TP);
+            Flash.Option.Baud_Rate :=
+              Get_Int (Arg, 100, Global.Bus_Speed / 130);
+            Flash.Save_Options;
+            Console.Init_Serial_Console;
+            Done := True;
          else
             TP := Check_String (E_String, "PIN");
             if TP > 0 then
-               declare
-                  Arg : Unbounded_String := To_Unbounded_String
-                    (Slice (To_Unbounded_String (E_String),
-                     TP, E_String'Length));
-               begin
-                  Flash.Option.PIN :=
-                    Get_Int (Arg, 0, 99999999);
-                  Flash.Save_Options;
-                  Done := True;
-               end;
+               Arg := Get_Arg (E_String, TP);
+               Flash.Option.PIN :=
+                 Get_Int (Arg, 0, 99999999);
+               Flash.Save_Options;
+               Done := True;
             end if;
          end if;
       end if;
@@ -174,22 +146,16 @@ package body Option_Handler is
             Arguments.Get_Args (To_Unbounded_String (E_String),TP, 3, ",");
             Assert (not Flash.Option.DISPLAY_CONSOLE, Routine_Name &
                       "DISPLAY, LCD console cannot be hanged ");
-            declare
-               Arg : Unbounded_String := To_Unbounded_String
-                 (Element (Arguments.Arg_V, 1));
-            begin
-               Flash.Option.Height := Get_Int (Arg, 5, 100);
-            end;
+
+            Arg := To_Unbounded_String (Element (Arguments.Arg_V, 1));
+            Flash.Option.Height := Get_Int (Arg, 5, 100);
+
             if Integer (Arguments.Arg_C) = 3 then
-               declare
-                  Arg : Unbounded_String := To_Unbounded_String
-                    (Element (Arguments.Arg_V, 2));
-               begin
-                  Flash.Option.Width := Get_Int (Arg, 37, 132);
-               end;
+               Arg := To_Unbounded_String  (Element (Arguments.Arg_V, 2));
+               Flash.Option.Width := Get_Int (Arg, 37, 132);
+               Flash.Save_Options;
+               Done := True;
             end if;
-            Flash.Save_Options;
-            Done := True;
          end if;
       end if;
 
