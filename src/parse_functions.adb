@@ -47,7 +47,7 @@ package body Parse_Functions is
             In_Char := To_Upper (Get_Input_Character (TP2));
             Token_Char := To_Upper (Element (TP, TP_Index));
             while TP2 < Input_Buffer_Length and then
-               Token_Char = In_Char and then TP_Index < Token_Table'Last loop
+              Token_Char = In_Char and then TP_Index < Token_Table'Last loop
                TP2 := TP2 + 1;
                TP_Index := TP_Index + 1;
                Token_Char := Element (TP, TP_Index);
@@ -58,8 +58,8 @@ package body Parse_Functions is
 
             --  MMBasic  1011
             Done := TP_Index > Length (TP) and then
-                   (not Is_Name_End (Element (TP, TP_Index - 1)) or else
-                    Is_Name_Character (Get_Input_Character (TP2)));
+              (not Is_Name_End (Element (TP, TP_Index - 1)) or else
+               Is_Name_Character (Get_Input_Character (TP2)));
          end if;
       end loop;
 
@@ -276,7 +276,7 @@ package body Parse_Functions is
 
    procedure Process_Quote (Buffer : in out String_Buffer;
                             I_Pos  : in out Positive) is
-   Routine_Name  : constant String := "Parse_Functions.Process_Quote ";
+      Routine_Name  : constant String := "Parse_Functions.Process_Quote ";
    begin
       I_Pos := I_Pos + 1;
       Put_Line (Routine_Name & "not implemented");
@@ -660,13 +660,15 @@ package body Parse_Functions is
    end Try_Label;
 
    procedure Try_Number
-     (Buffer : out String_Buffer; I_Pos : in out Positive) is
+     (Buffer         : out String_Buffer; I_Pos : in out Positive) is
       use Ada.Characters.Handling;
-      --        Routine_Name : constant String := "Parse_Functions.Try_Number ";
+      use String_Buffer_Package;
+--        Routine_Name : constant String := "Parse_Functions.Try_Number ";
       aChar        : Character := Get_Input_Character (I_Pos);
       Number       : Unbounded_String;
       Done         : Boolean := False;
    begin
+      --  MMBasic 887
       if Is_Digit (aChar) or else aChar = '.' then
          while not Done
            and then (Is_Digit (aChar) or else aChar = '.' or else aChar = 'E'
@@ -683,14 +685,18 @@ package body Parse_Functions is
                   aChar := Get_Next_Character (I_Pos);
                end if;
             else
+               --  MMBasic 897
+--                 Put_Line (Routine_Name & "Number: " & To_String (Number));
                Number := Number & aChar;
+--                 Put_Line (Routine_Name & "updated Number: " & To_String (Number));
                if I_Pos < Input_Buffer_Length then
                   aChar := Get_Next_Character (I_Pos);
                end if;
             end if;
          end loop;
 
-         Support.Buffer_Append (Buffer, To_String (Number));
+         Append (Buffer, To_String (Number));
+         I_Pos := I_Pos + 1;
       end if;
 
    end Try_Number;
