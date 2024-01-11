@@ -29,7 +29,7 @@ package Flash is
       Width                : Positive := SCREENWIDTH;
       PIN                  : Integer := 0;
       Baud_Rate            : Integer := CONSOLE_BAUDRATE;
-      Colour_Code          : Integer := 0;
+      Colour_Code          : Boolean := False;
       Display_Type         : Integer := 0;
       Display_Orientation  : Integer := 0;
       Touch_CS             : Natural := 0;

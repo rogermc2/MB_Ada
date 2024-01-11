@@ -1,5 +1,6 @@
 
 with Ada.Assertions; use Ada.Assertions;
+with Ada.Characters.Handling;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Ada.Text_IO; use Ada.Text_IO;
 
@@ -7,11 +8,13 @@ with Arguments;
 with Commands;
 with Command_And_Token_Tables; use Command_And_Token_Tables;
 with Console;
+with Draw;
 with Evaluation; use Evaluation;
 with Flash;
 with Global;
 with M_Basic; use M_Basic;
 with M_Misc; use M_Misc;
+with SPI_LCD;
 
 package body Option_Handler is
 
@@ -78,6 +81,25 @@ package body Option_Handler is
 
    end Do_Case;
 
+   function Do_Colour_Code (E_String : String) return Boolean is
+      TP    : constant Natural := Check_String (E_String, "COLOURCODE");
+      Found : constant Boolean := TP > 0;
+   begin
+      if Found then
+         if Check_String (E_String, "ON") > 0 then
+            Flash.Option.Colour_Code := True;
+            Flash.Save_Options;
+         elsif
+           Check_String (E_String, "OFF") > 0 then
+            Flash.Option.Colour_Code := False;
+            Flash.Save_Options;
+         end if;
+      end if;
+
+      return Found;
+
+   end Do_Colour_Code;
+
    function Do_Default (E_String : String) return Boolean is
       Found : constant Boolean := Check_String (E_String, "DEFAULT") > 0;
    begin
@@ -107,7 +129,7 @@ package body Option_Handler is
       if Found then
          Arguments.Get_Args (To_Unbounded_String (E_String),TP, 3, ",");
          Assert (not Flash.Option.DISPLAY_CONSOLE, Routine_Name &
-                   "DISPLAY, LCD console cannot be hanged ");
+                   "DISPLAY, LCD console cannot be Changed ");
 
          Arg := To_Unbounded_String (Element (Arguments.Arg_V, 1));
          Flash.Option.Height := Get_Int (Arg, 5, 100);
@@ -122,6 +144,41 @@ package body Option_Handler is
       return Found;
 
    end Do_Display;
+
+   function Do_LCD_Panel (E_String : String) return Boolean is
+      use Ada.Characters.Handling;
+      use Draw;
+      use String_Buffer_Package;
+      Routine_Name  : constant String := "OPtion_Handler.Do_LCD_Panel ";
+      TP            : constant Natural := Check_String (E_String, "LCDPANEL");
+      Found         : constant Boolean := TP > 0;
+      Arg           : Unbounded_String;
+   begin
+      if Found then
+         Arguments.Get_Args (To_Unbounded_String (E_String),TP, 13, ",");
+         Arg := To_Unbounded_String (Element (Arguments.Arg_V, 1));
+
+         if To_Upper (Element (Arguments.Arg_V, 1)) = "USER" then
+            Assert (Flash.Option.Display_Type > 0, Routine_Name &
+                      "display has been configured already.");
+            Assert (Integer (Arguments.Arg_C) = 5, Routine_Name &
+                      "invalid number of arguments.");
+            Arg := To_Unbounded_String (Element (Arguments.Arg_V, 2));
+            Display_H_Res := Get_Int (Arg, 1, 10000);
+            H_Res := Display_H_Res;
+            Arg := To_Unbounded_String (Element (Arguments.Arg_V, 4));
+            Display_V_Res := Get_Int (Arg, 1, 10000);
+            V_Res := Display_V_Res;
+            Flash.Option.Display_Type := SPI_LCD.DISP_USER;
+            --  Setup drawing primitives
+            Draw_Rectangle_Ptr := Draw_Rectangle_User_Ptr;
+            Draw_Bit_Map_Ptr := Draw_Bit_Map_User_Ptr;
+         end if;
+      end if;
+
+      return Found;
+
+   end Do_LCD_Panel;
 
    function Do_PIN (E_String : String) return Boolean is
       TP           : constant Natural := Check_String (E_String, "PIN");
@@ -188,20 +245,19 @@ package body Option_Handler is
             Arg := Get_Arg (E_String, TP);
             Global.Break_Key := Integer (Get_Integer (Arg));
             Done := True;
-         elsif Do_Autorun (E_String) then
-            Done := True;
-         elsif Do_Case (E_String) then
-            Done := True;
-         elsif Do_Tab (E_String) then
-            Done := True;
-         elsif Do_Baud_Rate (E_String) then
-            Done := True;
-         elsif Do_Display (E_String) then
-            Done := True;
-         elsif Do_PIN (E_String) then
-            Done := True;
          end if;
       end if;
+
+      Done := Done or else Do_Autorun (E_String) or else
+        Do_Case (E_String) or else
+        Do_Tab (E_String) or else
+        Do_Baud_Rate (E_String) or else
+        Do_Display (E_String) or else
+        Do_PIN (E_String) or else
+        Do_Colour_Code (E_String) or else
+        Do_LCD_Panel (E_String);
+
+      Assert (Done, Routine_Name & "unrecognized option " & E_String);
 
    end Option_Cmd;
 
