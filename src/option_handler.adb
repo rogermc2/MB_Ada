@@ -39,6 +39,23 @@ package body Option_Handler is
 
    end Do_Autorun;
 
+   function Do_Baud_Rate (E_String : String) return Boolean is
+      TP    : constant Natural := Check_String (E_String, "BAUDRATE");
+      Found : constant Boolean := TP > 0;
+      Arg   : Unbounded_String;
+   begin
+      if Found then
+         Arg := Get_Arg (E_String, TP);
+         Flash.Option.Baud_Rate :=
+           Get_Int (Arg, 100, Global.Bus_Speed / 130);
+         Flash.Save_Options;
+         Console.Init_Serial_Console;
+      end if;
+
+      return Found;
+
+   end Do_Baud_Rate;
+
    function Do_Case (E_String : String) return Boolean is
       Found : constant Boolean := Check_String (E_String, "CASE") > 0;
    begin
@@ -137,29 +154,10 @@ package body Option_Handler is
          elsif Do_Case (E_String) then
             Done := True;
 
-         else
-            Done := Do_Tab (E_String);
-         end if;
-      end if;
-
-      if not Done then
-         TP := Check_String (E_String, "BAUDRATE");
-         if TP > 0 then
-            Arg := Get_Arg (E_String, TP);
-            Flash.Option.Baud_Rate :=
-              Get_Int (Arg, 100, Global.Bus_Speed / 130);
-            Flash.Save_Options;
-            Console.Init_Serial_Console;
+         elsif Do_Tab (E_String) then
             Done := True;
-         else
-            TP := Check_String (E_String, "PIN");
-            if TP > 0 then
-               Arg := Get_Arg (E_String, TP);
-               Flash.Option.PIN :=
-                 Get_Int (Arg, 0, 99999999);
-               Flash.Save_Options;
-               Done := True;
-            end if;
+         elsif Do_Baud_Rate (E_String) then
+            Done := True;
          end if;
       end if;
 
