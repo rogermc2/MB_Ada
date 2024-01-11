@@ -1,6 +1,6 @@
 
 package MX470_Option_Handler is
 
-   procedure Other_Options;
+   function Other_Options return Boolean;
 
 end MX470_Option_Handler;

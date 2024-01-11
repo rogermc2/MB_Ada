@@ -14,11 +14,10 @@ with Flash;
 with Global;
 with M_Basic; use M_Basic;
 with M_Misc; use M_Misc;
+with MX470_Option_Handler;
 with SPI_LCD;
 
 package body Option_Handler is
-
-   function Other_Options return Boolean;
 
    function Get_Arg (E_String : String; TP : Positive) return Unbounded_String is
    begin
@@ -230,13 +229,15 @@ package body Option_Handler is
 
    --  MM_Misc.c 268
    procedure Option_Cmd is
-      Routine_Name : constant String := "OPtion_Handler.Option_Cmd ";
+      Routine_Name : constant String := "Option_Handler.Option_Cmd ";
       E_String     : constant String := To_String (Global.E_UB_String);
       TP           : Natural;
       Arg          : Unbounded_String;
       Done         : Boolean := False;
    begin
       Put_Line (Routine_Name & "E_String: '" & E_String & "'");
+      Assert (Length (Global.E_UB_String) > 0, Routine_Name &
+             "called with empty Global.E_UB_String");
       --  Check_String checks if the next text in an element (a basic statement)
       --  corresponds to an alphabetic string.
       TP := Check_String (E_String, "BASE");
@@ -272,18 +273,11 @@ package body Option_Handler is
         Do_Save (E_String);
 
       if not Done then
-         Done := Other_Options;
+         Done := MX470_Option_Handler.Other_Options;
       end if;
 
       Assert (Done, Routine_Name & "unrecognized option " & E_String);
 
    end Option_Cmd;
-
-   function Other_Options return Boolean is
-      Done : Boolean := False;
-   begin
-      return Done;
-
-   end Other_Options;
 
 end Option_Handler;

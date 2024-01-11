@@ -8,8 +8,10 @@ with Command_And_Token_Tables; use Command_And_Token_Tables;
 package Commands is
 
    type Config_Cases is (CONFIG_TITLE, CONFIG_LOWER, CONFIG_UPPER);
-   Dim_Used          : Boolean := False;
-   Option_Error_Skip : Integer := 0;
+   Dim_Used           : Boolean := False;
+
+   Option_Error_Check : Integer := 0;
+   Option_Error_Skip  : Integer := 0;
 
    procedure Check_Type_Specified
      (Expression : Unbounded_String; Pos: Positive; Fun_Type : in out Unsigned_16;
