@@ -4,14 +4,15 @@ with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Commands;
 with Configuration; use Configuration;
 with Draw;
+with Keyboard;
 
 package Flash is
 
    type UB_String_Access is access all Unbounded_String;
    type Pins_Array is array (1 .. 8) of Integer;
 
-   FLASH_PAGE_SIZE : constant Positive := 4096;
-   PROG_FLASH_SIZE : constant Positive := 16 * FLASH_PAGE_SIZE;
+   FLASH_PAGE_SIZE  : constant Positive := 4096;
+   PROG_FLASH_SIZE  : constant Positive := 16 * FLASH_PAGE_SIZE;
    EDIT_BUFFER_SIZE : constant Positive := 46 * FLASH_PAGE_SIZE;
 
    type Prog_Memory_Array is array (1 .. PROG_FLASH_SIZE) of
@@ -50,7 +51,8 @@ package Flash is
       DISPLAY_BL           : Natural := 0;
       DISPLAY_CONSOLE      : Boolean := False;
       Default_Font         : Natural := 1;
-      Keyboard_Config      : Natural := 0;
+      Keyboard_Config      : Keyboard.Keyboard_Configuration :=
+                               Keyboard.NO_KEYBOARD;
       Program_Flash_Size   : Positive := PROG_FLASH_SIZE;
       --  general use storage for CFunctions written by PeterM
       Pins                 : Pins_Array := (others => 0);
@@ -69,7 +71,7 @@ package Flash is
 
    C_Function_Flash   : UB_String_Access := Null;
    C_Function_Library : UB_String_Access := Null;
-   Option : Option_Record;
+   Option             : Option_Record;
 
    procedure Clear_Saved_Variables;
    procedure Load_Options;

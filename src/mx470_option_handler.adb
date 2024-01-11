@@ -7,22 +7,24 @@ with Ada.Text_IO; use Ada.Text_IO;
 --  with Arguments;
 with Commands;
 --  with Command_And_Token_Tables; use Command_And_Token_Tables;
-with Console;
 --  with Draw;
-with Evaluation; use Evaluation;
+--  with Evaluation; use Evaluation;
 with Flash;
 with Global;
+with Keyboard;
 with M_Basic; use M_Basic;
 --  with SPI_LCD;
 
 package body MX470_Option_Handler is
 
-   function Get_Arg (E_String : String; TP : Positive) return Unbounded_String is
-   begin
-      return To_Unbounded_String (Slice (To_Unbounded_String (E_String),
-                                  TP, E_String'Length));
-   end Get_Arg;
+   --     function Get_Arg (E_String : String; TP : Positive) return Unbounded_String is
+   --     begin
+   --        return To_Unbounded_String (Slice (To_Unbounded_String (E_String),
+   --                                    TP, E_String'Length));
+   --     end Get_Arg;
 
+   --  Check_String checks if the next text in an element (a basic statement)
+   --  corresponds to an alphabetic string.
    function Do_Autorun (E_String : String) return Boolean is
       Found : constant Boolean := Check_String (E_String, "AUTORUN") > 0;
    begin
@@ -41,22 +43,34 @@ package body MX470_Option_Handler is
 
    end Do_Autorun;
 
-   function Do_Baud_Rate (E_String : String) return Boolean is
-      TP    : constant Natural := Check_String (E_String, "BAUDRATE");
-      Found : constant Boolean := TP > 0;
-      Arg   : Unbounded_String;
+   function Do_Keyboard (E_String : String) return Boolean is
+      use Keyboard;
+      Found : constant Boolean := Check_String (E_String, "KEYBOARD") > 0;
    begin
       if Found then
-         Arg := Get_Arg (E_String, TP);
-         Flash.Option.Baud_Rate :=
-           Get_Int (Arg, 100, Global.Bus_Speed / 130);
+         if Check_String (E_String, "DISABLE") > 0 then
+            Flash.Option.Keyboard_Config := NO_KEYBOARD;
+         elsif Check_String (E_String, "US") > 0 then
+            Flash.Option.Keyboard_Config := CONFIG_US;
+         elsif Check_String (E_String, "FR") > 0 then
+            Flash.Option.Keyboard_Config := CONFIG_FR;
+         elsif Check_String (E_String, "GR") > 0 then
+            Flash.Option.Keyboard_Config := CONFIG_GR;
+         elsif Check_String (E_String, "IT") > 0 then
+            Flash.Option.Keyboard_Config := CONFIG_IT;
+         elsif Check_String (E_String, "BE") > 0 then
+            Flash.Option.Keyboard_Config := CONFIG_BE;
+         elsif Check_String (E_String, "UK") > 0 then
+            Flash.Option.Keyboard_Config := CONFIG_UK;
+         elsif Check_String (E_String, "ES") > 0 then
+            Flash.Option.Keyboard_Config := CONFIG_ES;
+         end if;
          Flash.Save_Options;
-         Console.Init_Serial_Console;
       end if;
 
       return Found;
 
-   end Do_Baud_Rate;
+   end Do_Keyboard;
 
    function Do_Case (E_String : String) return Boolean is
       Found : constant Boolean := Check_String (E_String, "CASE") > 0;
@@ -149,15 +163,12 @@ package body MX470_Option_Handler is
       Done         : Boolean := False;
    begin
       Put_Line (Routine_Name & "E_String: '" & E_String & "'");
-      --  Check_String checks if the next text in an element (a basic statement)
-      --  corresponds to an alphabetic string.
-
       Done :=
         Do_Reset(E_String) or else
+        Do_Keyboard (E_String) or else
         Do_Autorun (E_String) or else
         Do_Case (E_String) or else
         Do_Tab (E_String) or else
-        Do_Baud_Rate (E_String) or else
         Do_Colour_Code (E_String) or else
         Do_Save (E_String);
 
