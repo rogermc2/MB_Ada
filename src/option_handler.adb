@@ -21,6 +21,24 @@ package body Option_Handler is
                                   TP, E_String'Length));
    end Get_Arg;
 
+   function Do_Autorun (E_String : String) return Boolean is
+      Found : constant Boolean := Check_String (E_String, "AUTORUN") > 0;
+   begin
+      if Found then
+         if Check_String (E_String, "ON") > 0 then
+            Flash.Option.Autorun := True;
+            Flash.Save_Options;
+         elsif
+           Check_String (E_String, "OFF") > 0 then
+            Flash.Option.Autorun := False;
+            Flash.Save_Options;
+         end if;
+      end if;
+
+      return Found;
+
+   end Do_Autorun;
+
    function Do_Default (E_String : String) return Boolean is
       Found : constant Boolean := Check_String (E_String, "DEFAULT") > 0;
    begin
@@ -91,39 +109,28 @@ package body Option_Handler is
             Arg := Get_Arg (E_String, TP);
             Global.Break_Key := Integer (Get_Integer (Arg));
             Done := True;
+         elsif Do_Autorun (E_String) then
+            Done := True;
+
          else
-            TP := Check_String (E_String, "AUTORUN");
+            TP := Check_String (E_String, "CASE");
             if TP > 0 then
-               if Check_String (E_String, "ON") > 0 then
-                  Flash.Option.Autorun := True;
+               if Check_String (E_String, "LOWER") > 0 then
+                  Flash.Option.List_Case := Commands.CONFIG_LOWER;
                   Flash.Save_Options;
                elsif
-                 Check_String (E_String, "OFF") > 0 then
-                  Flash.Option.Autorun := False;
+                 Check_String (E_String, "UPPER") > 0 then
+                  Flash.Option.List_Case := Commands.CONFIG_UPPER;
+                  Flash.Save_Options;
+               elsif
+                 Check_String (E_String, "TITLE") > 0 then
+                  Flash.Option.List_Case := Commands.CONFIG_TITLE;
                   Flash.Save_Options;
                end if;
                Done := True;
 
             else
-               TP := Check_String (E_String, "CASE");
-               if TP > 0 then
-                  if Check_String (E_String, "LOWER") > 0 then
-                     Flash.Option.List_Case := Commands.CONFIG_LOWER;
-                     Flash.Save_Options;
-                  elsif
-                    Check_String (E_String, "UPPER") > 0 then
-                     Flash.Option.List_Case := Commands.CONFIG_UPPER;
-                     Flash.Save_Options;
-                  elsif
-                    Check_String (E_String, "TITLE") > 0 then
-                     Flash.Option.List_Case := Commands.CONFIG_TITLE;
-                     Flash.Save_Options;
-                  end if;
-                  Done := True;
-
-               else
-                  Done := Do_Tab (E_String);
-               end if;
+               Done := Do_Tab (E_String);
             end if;
          end if;
       end if;
