@@ -97,6 +97,32 @@ package body Option_Handler is
 
    end Do_Default;
 
+   function Do_Display (E_String : String) return Boolean is
+      use String_Buffer_Package;
+      Routine_Name : constant String := "OPtion_Handler.Do_Display ";
+      TP    : constant Natural := Check_String (E_String, "BAUDRATE");
+      Found : constant Boolean := TP > 0;
+      Arg   : Unbounded_String;
+   begin
+      if Found then
+         Arguments.Get_Args (To_Unbounded_String (E_String),TP, 3, ",");
+         Assert (not Flash.Option.DISPLAY_CONSOLE, Routine_Name &
+                   "DISPLAY, LCD console cannot be hanged ");
+
+         Arg := To_Unbounded_String (Element (Arguments.Arg_V, 1));
+         Flash.Option.Height := Get_Int (Arg, 5, 100);
+
+         if Integer (Arguments.Arg_C) = 3 then
+            Arg := To_Unbounded_String  (Element (Arguments.Arg_V, 2));
+            Flash.Option.Width := Get_Int (Arg, 37, 132);
+            Flash.Save_Options;
+         end if;
+      end if;
+
+      return Found;
+
+   end Do_Display;
+
    function Do_Tab (E_String : String) return Boolean is
       Found : constant Boolean := Check_String (E_String, "TAB") > 0;
    begin
@@ -119,8 +145,7 @@ package body Option_Handler is
 
    --  MM_Misc.c 268
    procedure Option_Cmd is
-      use String_Buffer_Package;
-      Routine_Name : constant String := ".Option_Cmd ";
+      Routine_Name : constant String := "OPtion_Handler.Option_Cmd ";
       E_String     : constant String := To_String (Global.E_UB_String);
       TP           : Natural;
       Arg          : Unbounded_String;
@@ -158,25 +183,8 @@ package body Option_Handler is
             Done := True;
          elsif Do_Baud_Rate (E_String) then
             Done := True;
-         end if;
-      end if;
-
-      if not Done then
-         TP := Check_String (E_String, "DISPLAY");
-         if TP > 0 then
-            Arguments.Get_Args (To_Unbounded_String (E_String),TP, 3, ",");
-            Assert (not Flash.Option.DISPLAY_CONSOLE, Routine_Name &
-                      "DISPLAY, LCD console cannot be hanged ");
-
-            Arg := To_Unbounded_String (Element (Arguments.Arg_V, 1));
-            Flash.Option.Height := Get_Int (Arg, 5, 100);
-
-            if Integer (Arguments.Arg_C) = 3 then
-               Arg := To_Unbounded_String  (Element (Arguments.Arg_V, 2));
-               Flash.Option.Width := Get_Int (Arg, 37, 132);
-               Flash.Save_Options;
-               Done := True;
-            end if;
+         elsif Do_Display (E_String) then
+            Done := True;
          end if;
       end if;
 
