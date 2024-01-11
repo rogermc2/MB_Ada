@@ -100,9 +100,9 @@ package body Option_Handler is
    function Do_Display (E_String : String) return Boolean is
       use String_Buffer_Package;
       Routine_Name : constant String := "OPtion_Handler.Do_Display ";
-      TP    : constant Natural := Check_String (E_String, "BAUDRATE");
-      Found : constant Boolean := TP > 0;
-      Arg   : Unbounded_String;
+      TP           : constant Natural := Check_String (E_String, "BAUDRATE");
+      Found        : constant Boolean := TP > 0;
+      Arg          : Unbounded_String;
    begin
       if Found then
          Arguments.Get_Args (To_Unbounded_String (E_String),TP, 3, ",");
@@ -122,6 +122,21 @@ package body Option_Handler is
       return Found;
 
    end Do_Display;
+
+   function Do_PIN (E_String : String) return Boolean is
+      TP           : constant Natural := Check_String (E_String, "PIN");
+      Found        : constant Boolean := TP > 0;
+      Arg          : Unbounded_String;
+   begin
+      if Found then
+         Arg := Get_Arg (E_String, TP);
+         Flash.Option.PIN := Get_Int (Arg, 0, 99999999);
+         Flash.Save_Options;
+      end if;
+
+      return Found;
+
+   end Do_PIN;
 
    function Do_Tab (E_String : String) return Boolean is
       Found : constant Boolean := Check_String (E_String, "TAB") > 0;
@@ -175,15 +190,15 @@ package body Option_Handler is
             Done := True;
          elsif Do_Autorun (E_String) then
             Done := True;
-
          elsif Do_Case (E_String) then
             Done := True;
-
          elsif Do_Tab (E_String) then
             Done := True;
          elsif Do_Baud_Rate (E_String) then
             Done := True;
          elsif Do_Display (E_String) then
+            Done := True;
+         elsif Do_PIN (E_String) then
             Done := True;
          end if;
       end if;
