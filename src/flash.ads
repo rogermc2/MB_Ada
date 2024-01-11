@@ -73,6 +73,7 @@ package Flash is
 
    procedure Clear_Saved_Variables;
    procedure Load_Options;
+   procedure Reset_All_Options;
    procedure Save_Options;
 
 end Flash;

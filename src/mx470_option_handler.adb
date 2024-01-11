@@ -99,20 +99,17 @@ package body MX470_Option_Handler is
 
    end Do_Colour_Code;
 
-   function Do_PIN (E_String : String) return Boolean is
-      TP           : constant Natural := Check_String (E_String, "PIN");
-      Found        : constant Boolean := TP > 0;
-      Arg          : Unbounded_String;
+   function Do_Reset (E_String : String) return Boolean is
+      Found        : constant Boolean := Check_String (E_String, "RESET") > 0;
    begin
       if Found then
-         Arg := Get_Arg (E_String, TP);
-         Flash.Option.PIN := Get_Int (Arg, 0, 99999999);
-         Flash.Save_Options;
+         Flash.Reset_All_Options;
+         --  gotot saveandreset
       end if;
 
       return Found;
 
-   end Do_PIN;
+   end Do_Reset;
 
    function Do_Save (E_String : String) return Boolean is
       Found : constant Boolean := Check_String (E_String, "SAVE") > 0;
@@ -155,11 +152,12 @@ package body MX470_Option_Handler is
       --  Check_String checks if the next text in an element (a basic statement)
       --  corresponds to an alphabetic string.
 
-      Done := Do_Autorun (E_String) or else
+      Done :=
+        Do_Reset(E_String) or else
+        Do_Autorun (E_String) or else
         Do_Case (E_String) or else
         Do_Tab (E_String) or else
         Do_Baud_Rate (E_String) or else
-        Do_PIN (E_String) or else
         Do_Colour_Code (E_String) or else
         Do_Save (E_String);
 
