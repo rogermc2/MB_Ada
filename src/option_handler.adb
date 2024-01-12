@@ -1,4 +1,6 @@
 
+with Interfaces;
+
 with Ada.Assertions; use Ada.Assertions;
 with Ada.Characters.Handling;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
@@ -10,6 +12,7 @@ with Command_And_Token_Tables; use Command_And_Token_Tables;
 with Console;
 with Draw;
 with Evaluation; use Evaluation;
+with External;
 with Flash;
 with Global;
 with M_Basic; use M_Basic;
@@ -229,6 +232,7 @@ package body Option_Handler is
 
    --  MM_Misc.c 268
    procedure Option_Cmd is
+      use Interfaces;
       Routine_Name : constant String := "Option_Handler.Option_Cmd ";
       E_String     : constant String := To_String (Global.E_UB_String);
       TP           : Natural;
@@ -237,7 +241,13 @@ package body Option_Handler is
    begin
       Put_Line (Routine_Name & "E_String: '" & E_String & "'");
       Assert (Length (Global.E_UB_String) > 0, Routine_Name &
-             "called with empty Global.E_UB_String");
+                "called with empty Global.E_UB_String");
+      Commands.Option_Error_Check := External.CP_IGNORE_INUSE;
+      if Current_Line_Ptr /= 0 then
+         Commands.Option_Error_Check :=
+           Commands.Option_Error_Check or External.CP_NOABORT;
+      end if;
+
       --  Check_String checks if the next text in an element (a basic statement)
       --  corresponds to an alphabetic string.
       TP := Check_String (E_String, "BASE");

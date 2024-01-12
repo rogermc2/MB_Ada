@@ -18,8 +18,6 @@ package body File_IO is
    procedure Config_SD_Card (Arg_String : Unbounded_String) is
       use Arguments;
       use Evaluation;
-      --        use String_Buffer_Package;
-      --        use Var_Package;
       Routine_Name : constant String := "File_IO.Config_SD_Card ";
       Arg          : Unbounded_String := To_Unbounded_String (Arg_V (1));
       Arg_Val      : Integer := Integer (Get_Integer (Arg));
