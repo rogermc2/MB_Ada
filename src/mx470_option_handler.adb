@@ -2,6 +2,9 @@
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Ada.Text_IO; use Ada.Text_IO;
 
+with Arguments;
+with Commands;
+with Command_And_Token_Tables;
 with Console;
 with Evaluation;
 with External;
@@ -199,6 +202,41 @@ package body MX470_Option_Handler is
 
    end Do_Reset;
 
+   function Do_RTC (E_String : String) return Boolean is
+      use Arguments;
+      use Evaluation;
+      use Command_And_Token_Tables.String_Buffer_Package;
+      TP    : constant Natural := Check_String (E_String, "RTC");
+      Arg   : Unbounded_String;
+      Found : constant Boolean := TP > 0;
+   begin
+      if Found then
+         if Check_String (E_String, "DISABLE") > 0 then
+            Flash.Option.RTC_Clock := 0;
+            Flash.Option.RTC_Data := 0;
+         else
+            Get_Args (To_Unbounded_String (E_String), TP, 3 , ",");
+            if Integer (Arg_C) = 3 then
+               Arg := To_Unbounded_String (Element (Arg_V, 1));
+               Flash.Option.RTC_Data := Integer (Get_Integer (Arg));
+               External.Check_Pin
+                 (Flash.Option.RTC_Data, Commands.Option_Error_Check);
+               Arg := To_Unbounded_String (Element (Arg_V, 3));
+               Flash.Option.RTC_Clock := Integer (Get_Integer (Arg));
+               External.Check_Pin
+                 (Flash.Option.RTC_Data, Commands.Option_Error_Check);
+               Save_And_Reset;
+            else
+               Put_Line
+                 ("invalid syntax, exactly three arguments are required.");
+            end if;
+         end if;
+      end if;
+
+      return Found;
+
+   end Do_RTC;
+
    function Do_SD_Card (E_String : String) return Boolean is
       TP    : constant Natural := Check_String (E_String, "SDCARD");
       Found : constant Boolean := TP > 0;
@@ -232,7 +270,8 @@ package body MX470_Option_Handler is
         Do_Controls (E_String) or else
         Do_SD_Card (E_String) or else
         Do_Error (E_String) or else
-        Do_Console (E_String);
+        Do_Console (E_String) or else
+        Do_RTC (E_String);
 
       return Result;
 

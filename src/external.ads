@@ -22,6 +22,7 @@ package External is
 
    Ext_Current_Config : array (1 .. IO_Ports.Max_Nbr_Ports) of Integer;
 
+   procedure Check_Pin (Pin, Action : Integer);
    function Check_Pin (Pin, Action : Integer) return Integer;
 
 end External;
