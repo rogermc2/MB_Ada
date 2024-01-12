@@ -933,6 +933,10 @@ package body M_Basic is
          --  610
          Index_C := 0;
          while Index_C < Arg_C2 loop
+            if Index_C < Arg_C1 and then
+              Arg_V1 (Integer (Index_C + 1)) /= Integer'Image (0) then
+               null;
+            end if;
 
             Index_C := Index_C + 2;
          end loop;
