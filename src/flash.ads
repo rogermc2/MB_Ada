@@ -24,7 +24,7 @@ package Flash is
    type Option_Record is record
       Autorun              : Boolean := False;
       Tab                  : Natural := 2;
-      Invert               : Boolean := False;
+      Invert               : Natural := 0;
       List_Case            : Commands.Config_Cases;
       Height               : Positive := SCREENHEIGHT;
       Width                : Positive := SCREENWIDTH;
@@ -77,5 +77,6 @@ package Flash is
    procedure Load_Options;
    procedure Reset_All_Options;
    procedure Save_Options;
+   function Save_Options return Boolean;
 
 end Flash;

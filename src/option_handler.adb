@@ -122,7 +122,7 @@ package body Option_Handler is
 
    function Do_Display (E_String : String) return Boolean is
       use String_Buffer_Package;
-      Routine_Name : constant String := "OPtion_Handler.Do_Display ";
+      Routine_Name : constant String := "Option_Handler.Do_Display ";
       TP           : constant Natural := Check_String (E_String, "BAUDRATE");
       Found        : constant Boolean := TP > 0;
       Arg          : Unbounded_String;
@@ -150,7 +150,7 @@ package body Option_Handler is
       use Ada.Characters.Handling;
       use Draw;
       use String_Buffer_Package;
-      Routine_Name  : constant String := "OPtion_Handler.Do_LCD_Panel ";
+      Routine_Name  : constant String := "Option_Handler.Do_LCD_Panel ";
       TP            : constant Natural := Check_String (E_String, "LCDPANEL");
       Found         : constant Boolean := TP > 0;
       Arg           : Unbounded_String;

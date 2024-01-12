@@ -25,4 +25,10 @@ package body Flash is
 
    end Save_Options;
 
+   function Save_Options return Boolean is
+   begin
+      return True;
+
+   end Save_Options;
+
 end Flash;
