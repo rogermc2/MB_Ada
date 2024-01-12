@@ -16,17 +16,20 @@ with Editor;
 with File_IO;
 with Flash;
 with Global;
-with M_Basic_Utilities;           use M_Basic_Utilities;
+with M_Basic_Utilities; use M_Basic_Utilities;
 with M_Misc;
 with Memory;
 with Support;
 
 package body M_Basic is
 
+   Callers_Line_Ptr :  Natural;
    --     Trace_On : Boolean := False;
 
    procedure Clear_Runtime;
    procedure Skip_Element (aLine : String; Pos : in out Positive);
+   procedure User_Defined_Subfunction (Expression       : Unbounded_String;
+                                       TP, Sub_Line_Ptr : Natural);
 
    --  Check_String checks if the next text in an element (a basic statement)
    --  corresponds to an alphabetic string.
@@ -92,7 +95,7 @@ package body M_Basic is
      (Modular, Flash.UB_String_Access);
    pragma Warnings (On);
 
-   --  MMVasic 441 Defined_Subfunction function is responsible for executing a
+   --  MMBasic 441 Defined_Subfunction function is responsible for executing a
    --  defined subroutine or function.
    --  isfun is true when executing a function.
    --  Command_Ptr is a pointer to the command name in program memory that is
@@ -114,7 +117,6 @@ package body M_Basic is
       use Flash;
       use Global;
       Routine_Name     : constant String  := "M_Basic.Defined_Subfunction ";
-      Callers_Line_Ptr : constant Natural := Current_Line_Ptr;
       --  Sub_Line_Ptr is pointer to a program memory elenment
       Sub_Line_Ptr     : constant Natural := Subfunctions (Subfun_Index);
       SL_Pos           : Positive := 1;      --  p points to Subfunctions
@@ -128,6 +130,7 @@ package body M_Basic is
       Found            : Boolean          := False;
    begin
       Assert (Sub_Line_Ptr > 0, Routine_Name & "Sub_Line_Ptr = 0");
+      Callers_Line_Ptr := Current_Line_Ptr;
       Fun_Type := T_NOTYPE;
       --  --  MMVasic 463
       Skip_Spaces (SL_Pos);
@@ -175,10 +178,10 @@ package body M_Basic is
 
       Put_Line
         (Routine_Name & "check Type specification for Fun_Name_Pos: " &
-         Integer'Image (Fun_Name_Pos));
+           Integer'Image (Fun_Name_Pos));
       Put_Line
         (Routine_Name & "Fun_Name length: " &
-         Integer'Image (Integer (Length (Fun_Name))));
+           Integer'Image (Integer (Length (Fun_Name))));
       --  477
       if Element (Fun_Name, Fun_Name_Pos) = '$'
         or else Element (Fun_Name, Fun_Name_Pos) = '%'
@@ -194,7 +197,7 @@ package body M_Basic is
       --  499
       Assert
         (To_Upper (To_String (Prog_Memory (SL_Pos - 1)) (1)) =
-         To_Upper (Element (Fun_Name, Fun_Name_Pos - 1)),
+           To_Upper (Element (Fun_Name, Fun_Name_Pos - 1)),
          Routine_Name & "Inconsistent type suffix");
 
       --  503 If this is a function we check to find if the function's type
@@ -239,6 +242,7 @@ package body M_Basic is
             Assert (Found, Routine_Name & "syntax error, ) or 0 expected.");
             SL_Pos3 := SL_Pos3 + 1;
             Skip_Spaces (SL_Pos3);
+            --  539
             Commands.Check_Type_Specified
               (Expression, SL_Pos3, Fun_Type, False);
             Fun_Type := Fun_Type and not T_IMPLIED;
@@ -246,7 +250,7 @@ package body M_Basic is
             Fun_Type := T_INT;
          end if;
 
-         --  537
+         --  548
          case Fun_Type is
             when T_INT =>
                I64a :=
@@ -266,12 +270,21 @@ package body M_Basic is
                Assert
                  (False,
                   Routine_Name & "function name: " &
-                  Element (Fun_Name, Fun_Name_Pos));
+                    Element (Fun_Name, Fun_Name_Pos));
          end case;
+         Memory.Temp_Memory_Is_Changed := True;
+
+         --  562
+      elsif Prog_Memory (Sub_Line_Ptr) = cmdCSUB then
+         Put_Line (Routine_Name & "564");
+         Call_CFunction (Sub_Line_Ptr, Fun_Name_Pos, SL_Pos, Callers_Line_Ptr);
+         Memory.Temp_Memory_Is_Changed := True;
+      else
+         --  588
+         User_Defined_Subfunction (Expression, Fun_Name_Pos, Sub_Line_Ptr);
+
       end if;
 
-      --  553
-      Memory.Temp_Memory_Is_Changed := True;
       Put_Line (Routine_Name & "done");
 
    end Defined_Subfunction;
@@ -323,7 +336,7 @@ package body M_Basic is
       Done :=
         Command_Line_Pos >= Flash.Prog_Memory'Length
         or else Command_Line (Command_Line_Pos) =
-          '\';  --  ignore comment line
+      '\';  --  ignore comment line
 
       if Done then
          Put_Line (Routine_Name & "No more token buffer elements");
@@ -341,11 +354,11 @@ package body M_Basic is
             --  C_Base_Token is the base of the token numbers.
             Put_Line
               (Routine_Name & "239 Token > C_Base_Token: " &
-               Boolean'Image (Command_Token > M_Misc.C_Base_Token));
+                 Boolean'Image (Command_Token > M_Misc.C_Base_Token));
             Put_Line
               (Routine_Name & "Command_Table " &
-               "(Command_Token - C_Base_Token).Command_Type = T_CMD: " &
-               Boolean'Image (Command_Token > M_Misc.C_Base_Token));
+                 "(Command_Token - C_Base_Token).Command_Type = T_CMD: " &
+                 Boolean'Image (Command_Token > M_Misc.C_Base_Token));
             if Command_Token > M_Misc.C_Base_Token
               and then Command_Token - M_Misc.C_Base_Token < Command_Table_Size
               and then
@@ -357,8 +370,8 @@ package body M_Basic is
                --  Execute the command
                Put_Line
                  (Routine_Name & "247 Executing command, Token: " &
-                  Integer'Image (Command_Token) & ", Command_Table index: " &
-                  Integer'Image (Command_Token - M_Misc.C_Base_Token));
+                    Integer'Image (Command_Token) & ", Command_Table index: " &
+                    Integer'Image (Command_Token - M_Misc.C_Base_Token));
                Command_Ptr :=
                  Command_Table (Command_Token - M_Misc.C_Base_Token).Function_Ptr;
                Assert
@@ -401,8 +414,8 @@ package body M_Basic is
            (Command_Line (Command_Line_Pos) = '0'
             and then Command_Line (Command_Line_Pos + 1) = '0')
            or else
-           (Command_Line (Command_Line_Pos) = 'f'
-            and then Command_Line (Command_Line_Pos + 1) = 'f');
+             (Command_Line (Command_Line_Pos) = 'f'
+              and then Command_Line (Command_Line_Pos + 1) = 'f');
       end if;
 
    end Execute_Command;
@@ -502,7 +515,7 @@ package body M_Basic is
             Index := Index + 1;
             if Fun_Type = T_NOTYPE
               and then
-              (Prog_Memory (Pos2) = cmdSUB or Prog_Memory (Pos2) = cmdCSUB)
+                (Prog_Memory (Pos2) = cmdSUB or Prog_Memory (Pos2) = cmdCSUB)
             then
                null;
             elsif (Prog_Memory (Pos2) = cmdFUN or Prog_Memory (Pos2) = cmdCFUN)
@@ -529,13 +542,13 @@ package body M_Basic is
                   Done :=
                     (Prog_Memory (Pos1) = "$" and Prog_Memory (Pos2) = "$")
                     or else
-                    (Prog_Memory (Pos1) = "%" and Prog_Memory (Pos2) = "%")
-                    or else
-                    (Prog_Memory (Pos1) = "!" and Prog_Memory (Pos2) = "!")
-                    or else
-                    (not Is_Name_Character
-                       (Element (Prog_Memory (Pos1), 1)) and
-                     not Is_Name_Character (Element (Prog_Memory (Pos2), 1)));
+                      (Prog_Memory (Pos1) = "%" and Prog_Memory (Pos2) = "%")
+                      or else
+                        (Prog_Memory (Pos1) = "!" and Prog_Memory (Pos2) = "!")
+                        or else
+                          (not Is_Name_Character
+                             (Element (Prog_Memory (Pos1), 1)) and
+                             not Is_Name_Character (Element (Prog_Memory (Pos2), 1)));
                end if;
             end if;
          end if;
@@ -552,7 +565,7 @@ package body M_Basic is
    function Get_C_Fun_Ptr (Pos : Positive) return Flash.UB_String_Access is
       use Flash;
       Ptr     : constant UB_String_Access :=
-        new Unbounded_String'(Prog_Memory (Pos));
+                  new Unbounded_String'(Prog_Memory (Pos));
       Mod_Ptr : Modular                   := Copy_To_Mod (Ptr);
    begin
       Mod_Ptr := (Mod_Ptr + 2#11#) and not 2#11#;
@@ -714,7 +727,7 @@ package body M_Basic is
                      Routine_Name & "error duplicate name.");
                   Done :=
                     To_Upper (Get_Input_Character (Pos1)) /=
-                    To_Upper (Get_Input_Character (Pos2));
+                      To_Upper (Get_Input_Character (Pos2));
                   if not Done then
                      Pos1 := Pos1 + 1;
                      Pos2 := Pos2 + 1;
@@ -789,7 +802,7 @@ package body M_Basic is
          Assert
            (Pos2 - Pos < Configuration.MAXVARLEN,
             Routine_Name & "Variable name " & Get_Input_Slice (Pos, Pos2) &
-            " is too long");
+              " is too long");
 
          Pos3 := Pos;
          if Get_Input_Character (Pos3) = ' ' then
@@ -806,7 +819,7 @@ package body M_Basic is
             Assert
               (Pos2 - Pos < Configuration.MAXVARLEN,
                Routine_Name & "Variable name " & Get_Input_Slice (Pos, Pos2) &
-               " is too long");
+                 " is too long");
 
             --  2456 Step over the array parameters keeping track of
             --  nested brackets.
@@ -829,8 +842,8 @@ package body M_Basic is
 
                   if not Done
                     and then
-                    (Get_Input_Character (Pos) = '('
-                     or else Token_Type (Pos) = T_FUN)
+                      (Get_Input_Character (Pos) = '('
+                       or else Token_Type (Pos) = T_FUN)
                   then
                      Index := Index + 1;
                   end if;
@@ -863,5 +876,68 @@ package body M_Basic is
       return Result;
 
    end Token_Function;
+
+   procedure User_Defined_Subfunction (Expression       : Unbounded_String;
+                                       TP, Sub_Line_Ptr : Natural) is
+      use Interfaces;
+      use Ada.Assertions;
+      Routine_Name : constant String := "M_Basic.User_Defined_Subfunction ";
+      Arg_C1    : unsigned_16 := 0;
+      Arg_C2    : unsigned_16 := 0;
+      Arg_Buff1 : Unbounded_String;
+      Arg_Buff2 : Unbounded_String;
+      Arg_V1    : String_Buffer;
+      Arg_V2    : String_Buffer;
+      Delim     : Unbounded_String;
+      Index_C   : unsigned_16 := 0;
+   begin
+      --  588
+      Assert (Commands.Go_Sub_Index <= Configuration.MAXGOSUB, Routine_Name &
+                "too many nested subroutines and functions.");
+      Current_Line_Ptr := Callers_Line_Ptr;
+      if TP > 0 then
+         if Element (Expression, TP) = '(' then
+            Delim := To_Unbounded_String ("(,");
+         else
+            Delim := To_Unbounded_String (",");
+         end if;
+         Make_Args (Expression, TP, Configuration.MAX_ARG_COUNT, Arg_Buff1,
+                    Arg_V1, Arg_C1, To_String (Delim));
+      end if;
+
+      Current_Line_Ptr := Sub_Line_Ptr;
+      --  595
+      if TP > 0 then
+         if Element (Expression, TP) = '(' then
+            Delim := To_Unbounded_String ("(,");
+         else
+            Delim := To_Unbounded_String (",");
+         end if;
+         Make_Args (Expression, TP, Configuration.MAX_ARG_COUNT, Arg_Buff2,
+                    Arg_V2, Arg_C2, To_String (Delim));
+         Assert (Arg_C2 = 0 or else (Arg_C2 and 1) /= 0, Routine_Name &
+                "invalid argument list, Arg_C2: " & unsigned_16'Image (Arg_C2));
+         Current_Line_Ptr := Callers_Line_Ptr;
+         Assert (Arg_C2 <= Arg_C1 and then (Arg_C1 and (Arg_C1 and 1)) /= 0,
+                 Routine_Name & "invalid argument list, Arg_C1: " &
+                   unsigned_16'Image (Arg_C1) & ", Arg_C2: " &
+                   unsigned_16'Image (Arg_C2));
+
+         --  Step through the arguments supplied by the caller and get the
+         --  value supplied which can be:
+         --   missing (ie, caller did not supply that parameter)
+         --   a variable, in which case a pointer is needed to that variable's
+         --   data and save its index so later we can get its type.
+         --   an expression, in which case evaluate the expression and get its
+         --   value and type.
+         --  610
+         Index_C := 0;
+         while Index_C < Arg_C2 loop
+
+            Index_C := Index_C + 2;
+         end loop;
+      end if;
+
+   end User_Defined_Subfunction;
 
 end M_Basic;

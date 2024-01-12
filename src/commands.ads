@@ -12,6 +12,7 @@ package Commands is
 
    Option_Error_Check : unsigned_16 := 0;
    Option_Error_Skip  : unsigned_16 := 0;
+   Go_Sub_Index       : Natural := 0;
 
    procedure Check_Type_Specified
      (Expression : Unbounded_String; Pos: Positive; Fun_Type : in out Unsigned_16;
