@@ -16,8 +16,8 @@ with Support;
 package body Parse_Functions is
 
    procedure Try_Command
-     (Buffer      : out String_Buffer; P : in out Positive;
-      Label_Valid : in out Boolean; First_Nonwhite : in out Boolean);
+     (Token_Buffer : out String_Buffer; P : in out Positive;
+      Label_Valid  : in out Boolean; First_Nonwhite : in out Boolean);
 
    function Check_For_Function_Or_Keyword
      (Token_Buffer   : in out String_Buffer; Ptr : in out Positive;
@@ -170,7 +170,7 @@ package body Parse_Functions is
    end Process_Colon;
 
    procedure Process_Command
-     (Buffer                      : out String_Buffer; I_Pos : in out Positive;
+     (Token_Buffer                : out String_Buffer; I_Pos : in out Positive;
       Match_I_Pos                 : Positive; Match_Index : Integer;
       First_Nonwhite, Label_Valid : in out Boolean) is
       Routine_Name  : constant String := "Parse_Functions.Process_Command ";
@@ -178,7 +178,7 @@ package body Parse_Functions is
       use Support;
    begin
       --  MMBasic 957
-      Buffer_Append (Buffer, Integer'Image
+      Buffer_Append (Token_Buffer, Integer'Image
                      (M_Misc.C_Base_Token + Match_Index));
       --  Step over the input buffer command.
       I_Pos := Match_I_Pos;
@@ -188,11 +188,11 @@ package body Parse_Functions is
       Put_Line (Routine_Name & "C_Base_Token + Match_Index: " &
                   Integer'Image (M_Misc.C_Base_Token + Match_Index));
       Put_Line (Routine_Name & "Buffer:");
-      Support.Print_Buffer (Buffer);
+      Support.Print_Buffer (Token_Buffer);
       if Match_Index + M_Misc.C_Base_Token =
         Get_Command_Value ("Rem") then
          --  MMBasic 962 copy everything
-         Copy_Slice (Buffer, I_Pos, Input_Buffer_Length);
+         Copy_Slice (Token_Buffer, I_Pos, Input_Buffer_Length);
 
       elsif Is_Alphanumeric (Get_Input_Character (I_Pos - 1)) and then
         Get_Input_Character (I_Pos) = ' ' then
@@ -204,7 +204,7 @@ package body Parse_Functions is
    end Process_Command;
 
    procedure Process_Double_Quote
-     (Buffer : in out String_Buffer; I_Pos : in out Positive) is
+     (Token_Buffer : in out String_Buffer; I_Pos : in out Positive) is
       use Support;
       aChar  : constant Character := ' ';
    begin
@@ -212,7 +212,7 @@ package body Parse_Functions is
          I_Pos := I_Pos + 1;
       end loop;
 
-      Buffer_Append (Buffer, """");
+      Buffer_Append (Token_Buffer, """");
       I_Pos := I_Pos + 1;
       if Get_Input_Character (I_Pos) = '"' then
          I_Pos := I_Pos + 1;
@@ -221,7 +221,7 @@ package body Parse_Functions is
    end Process_Double_Quote;
 
    procedure Process_Name_Start
-     (Buffer         : in out String_Buffer; I_Pos : in out Positive;
+     (Token_Buffer   : in out String_Buffer; I_Pos : in out Positive;
       First_Nonwhite : in out Boolean; Label_Valid : in out Boolean) is
       use String_Buffer_Package;
       Routine_Name  : constant String := "Parse_Functions.Process_Name_Start ";
@@ -232,7 +232,7 @@ package body Parse_Functions is
          TP := Skip_Var (I_Pos);
          Skip_In_Buffer_Spaces (TP);
          if Get_Input_Character (TP) = '=' then
-            Append (Buffer, Integer'Image (Get_Command_Value ("Let")));
+            Append (Token_Buffer, Integer'Image (Get_Command_Value ("Let")));
          end if;
       end if;
 
@@ -242,7 +242,9 @@ package body Parse_Functions is
          I_Pos := I_Pos + 1;
       end loop;
       Put_Line (Routine_Name & "Command: " & To_String (Command));
-      Append (Buffer, To_String (Command));
+      Append (Token_Buffer, To_String (Command));
+      Put_Line (Routine_Name & "Token Buffer:");
+      Support.Print_Buffer (Token_Buffer);
 
       First_Nonwhite := False;
       Label_Valid := False;
@@ -250,12 +252,12 @@ package body Parse_Functions is
    end Process_Name_Start;
 
    procedure Process_First_Nonwhite
-     (Buffer           : out String_Buffer; I_Pos : in out Positive;
+     (Token_Buffer     : out String_Buffer; I_Pos : in out Positive;
       Label_Valid      : in out Boolean;
       First_Nonwhite   : in out Boolean;
       Match_I, Match_P : in out Integer) is
-      --        Routine_Name  : constant String :=
-      --                          "Parse_Functions.Process_First_Nonwhite ";
+      Routine_Name  : constant String :=
+                         "Parse_Functions.Process_First_Nonwhite ";
       aChar         : constant Character := Get_Input_Character (I_Pos);
    begin
       if aChar = '?' then
@@ -269,13 +271,15 @@ package body Parse_Functions is
 
       else
          --  MMBasic 925
-         Try_Command (Buffer, I_Pos, Label_Valid, First_Nonwhite);
+         Try_Command (Token_Buffer, I_Pos, Label_Valid, First_Nonwhite);
+         Put_Line (Routine_Name & "Token Buffer:");
+         Support.Print_Buffer (Token_Buffer);
       end if;
 
    end Process_First_Nonwhite;
 
-   procedure Process_Quote (Buffer : in out String_Buffer;
-                            I_Pos  : in out Positive) is
+   procedure Process_Quote (Token_Buffer : in out String_Buffer;
+                            I_Pos        : in out Positive) is
       Routine_Name  : constant String := "Parse_Functions.Process_Quote ";
    begin
       I_Pos := I_Pos + 1;
@@ -284,7 +288,7 @@ package body Parse_Functions is
    end Process_Quote;
 
    procedure Process_Variable_Name
-     (Buffer         : in out String_Buffer; Pos : in out Positive;
+     (Token_Buffer   : in out String_Buffer; Pos : in out Positive;
       First_Nonwhite : in out Boolean; Label_Valid : in out Boolean) is
       use Support;
       Pos2  : Positive;
@@ -296,7 +300,8 @@ package body Parse_Functions is
          Pos2 := Skip_Var (Pos);
          if Get_Input_Character (Pos2) = '=' then
             --  an implied let
-            Buffer_Append (Buffer, Integer'Image (Get_Command_Value ("Let")));
+            Buffer_Append (Token_Buffer,
+                           Integer'Image (Get_Command_Value ("Let")));
          end if;
       else
          --  942 copy the variable name
@@ -304,7 +309,7 @@ package body Parse_Functions is
             Name := Name & Get_Input_Character (Pos);
             Pos := Pos + 1;
          end loop;
-         Buffer_Append (Buffer, To_String (Name));
+         Buffer_Append (Token_Buffer, To_String (Name));
 
          First_Nonwhite := False;
          Label_Valid:= False;
@@ -313,8 +318,8 @@ package body Parse_Functions is
    end Process_Variable_Name;
 
    procedure Try_Command
-     (Buffer      : out String_Buffer; P : in out Positive;
-      Label_Valid : in out Boolean; First_Nonwhite : in out Boolean) is
+     (Token_Buffer : out String_Buffer; P : in out Positive;
+      Label_Valid  : in out Boolean; First_Nonwhite : in out Boolean) is
       use Interfaces;
       use Ada.Characters.Handling;
       use Support;
@@ -442,7 +447,7 @@ package body Parse_Functions is
                --  Match found
                Put_Line (Routine_Name & "Process_Command");
                --  process rest of command line
-               Process_Command (Buffer, P, Match_I_Pos, Match_Index,
+               Process_Command (Token_Buffer, P, Match_I_Pos, Match_Index,
                                 First_Nonwhite, Label_Valid);
 
                --  MMBasic 976
@@ -465,9 +470,9 @@ package body Parse_Functions is
                --  MMBasic 982
                if OK and then Element (Command.Name, TP) = ':' then
                   Label_Valid := False;
-                  Buffer_Append (Buffer, Integer'Image (Global.T_LABEL));
-                  Buffer_Append (Buffer, Integer'Image (TP - P));
-                  Buffer_Append (Buffer, Get_Input_Slice (1, TP - P));
+                  Buffer_Append (Token_Buffer, Integer'Image (Global.T_LABEL));
+                  Buffer_Append (Token_Buffer, Integer'Image (TP - P));
+                  Buffer_Append (Token_Buffer, Get_Input_Slice (1, TP - P));
                end if;
 
                P := P + 1;
@@ -573,7 +578,7 @@ package body Parse_Functions is
 
    --  893
    function Try_Function_Or_Keyword
-     (Buffer         : out String_Buffer; I_Pos : in out Positive;
+     (Token_Buffer   : out String_Buffer; I_Pos : in out Positive;
       First_Nonwhite : in out Boolean)
       return Boolean is
       use Ada.Characters.Handling;
@@ -619,7 +624,8 @@ package body Parse_Functions is
          Found := Index /= Token_Table'Last;
          if Found then
             --              Index := Index + M_Misc.C_Base_Token;
-            Buffer_Append (Buffer, To_String (Token_Table (Index).Name));
+            Buffer_Append (Token_Buffer,
+                           To_String (Token_Table (Index).Name));
             I_Pos := I_Pos2;
          end if;
 
@@ -634,8 +640,8 @@ package body Parse_Functions is
    end Try_Function_Or_Keyword;
 
    procedure Try_Label
-     (Buffer      : out String_Buffer; I_Pos : in out Positive;
-      Label_Valid : in out Boolean) is
+     (Token_Buffer : out String_Buffer; I_Pos : in out Positive;
+      Label_Valid  : in out Boolean) is
       use String_Buffer_Package;
       TP    : Positive := I_Pos;
       Index : Natural := 0;
@@ -651,16 +657,16 @@ package body Parse_Functions is
       if Found and then Get_Input_Character (TP) = ':' then
          --  Label found
          Label_Valid := False;
-         Append (Buffer, Integer'Image (Global.T_LABEL));
-         Append (Buffer, Integer'Image (TP - I_Pos));
-         Append (Buffer, Get_Input_Slice (I_Pos, TP));
+         Append (Token_Buffer, Integer'Image (Global.T_LABEL));
+         Append (Token_Buffer, Integer'Image (TP - I_Pos));
+         Append (Token_Buffer, Get_Input_Slice (I_Pos, TP));
          I_Pos := TP + 1;  --  Step over label and terminating :
       end if;
 
    end Try_Label;
 
    procedure Try_Number
-     (Buffer         : out String_Buffer; I_Pos : in out Positive) is
+     (Token_Buffer : out String_Buffer; I_Pos : in out Positive) is
       use Ada.Characters.Handling;
       use String_Buffer_Package;
 --        Routine_Name : constant String := "Parse_Functions.Try_Number ";
@@ -695,7 +701,7 @@ package body Parse_Functions is
             end if;
          end loop;
 
-         Append (Buffer, To_String (Number));
+         Append (Token_Buffer, To_String (Number));
          I_Pos := I_Pos + 1;
       end if;
 
