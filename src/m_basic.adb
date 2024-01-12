@@ -280,7 +280,6 @@ package body M_Basic is
       Put_Line (Routine_Name & "Command: " & To_String (Command));
       --  228
       Skip_Spaces (Command_Line, Command_Line_Pos);
-      --  Skip_Element
       Skip_Element (Command_Line, Next_Statement_Pos);
       Done := Command_Line_Pos >= Flash.Prog_Memory'Length or else
         Command_Line (Command_Line_Pos) = '\';  --  ignore comment line
@@ -303,14 +302,13 @@ package body M_Basic is
               (Routine_Name & "Command_Table " &
                  "(Token - C_Base_Token).Command_Type = T_CMD: " &
                  Boolean'Image (Token > M_Misc.C_Base_Token ));
-
             if Token > M_Misc.C_Base_Token and then
               Token - M_Misc.C_Base_Token < Command_Table_Size
               and then Command_Table
                 (Token - M_Misc.C_Base_Token).Command_Type = T_CMD
             then
                --  246
-               T_Arg := T_CMD;
+               T_Arg := T_CMD;   -- type of returned value
                --  Execute the command
                Put_Line (Routine_Name &
                            "247 Executing command, Token: "
