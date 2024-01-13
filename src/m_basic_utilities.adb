@@ -47,16 +47,17 @@ package body M_Basic_Utilities is
       aChar : Character;
       C_Pos : Positive;
       Pos2  : Positive := Pos;
-      Done  : Boolean := False;
+      OK    : Boolean := True;
       Word  : Unbounded_String;
    begin
-      while not Done and then Pos2 <= Length (Expression) loop
+      while OK and then Pos2 <= Length (Expression) loop
          aChar := Element (Expression, Pos2);
          C_Pos := Character'Pos (aChar);
-         Done := (C_Pos >= 65 and then C_Pos <= 90) or else
+         OK := (C_Pos >= 65 and then C_Pos <= 90) or else
            (C_Pos >= 97 and then C_Pos <= 122) or else
-           (C_Pos >= 48 and then C_Pos <= 57);
-         if not Done then
+           (C_Pos >= 48 and then C_Pos <= 57) or else
+           aChar ='_';
+         if OK then
             Word := Word & aChar;
          end if;
          Pos2 := Pos2 + 1;
