@@ -382,6 +382,12 @@ package body Command_And_Token_Tables is
 
    end Type_Mask;
 
+   function Type_Mask (Val : Function_Type) return Function_Type is
+   begin
+      return Val and (T_NBR or T_INT or T_STR);
+
+   end Type_Mask;
+
 begin
    for index in 1 .. Num_Functions loop   --  118
       Command_Table (index) := Function_Types (index);

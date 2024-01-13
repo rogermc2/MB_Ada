@@ -179,6 +179,7 @@ package Command_And_Token_Tables is
    procedure Skip_In_Buffer_Spaces (Pos : in out Positive);
    function Token_Type (Index : Integer) return Function_Type;
    procedure Trim_Input_Buffer (Side : Ada.Strings.Trim_End);
+   function Type_Mask (Val : Function_Type) return Function_Type;
    function Type_Mask (Val : Unbounded_String) return Function_Type;
 
 end Command_And_Token_Tables;

@@ -19,16 +19,16 @@ package Evaluation is
    T_Arg  : Function_Type;
 
    procedure Evaluate
-     (Expression : in out Unbounded_String; Fa : in out Configuration.MMFLOAT;
-      Ia         : out Long_Long_Integer; Sa : in out Unbounded_String;
+     (Expression : in out Unbounded_String; Fa : out Configuration.MMFLOAT;
+      Ia         : out Long_Long_Integer; Sa : out Unbounded_String;
       Ta         : in out Function_Type; Flags : Interfaces.Unsigned_16);
    function Get_Int
      (Expression : in out Unbounded_String; Lo, Hi : Integer) return Integer;
    function Get_Integer
      (Expression : in out Unbounded_String) return Long_Long_Integer;
    function Get_Value
-     (Expression : in out Unbounded_String; Fa : in out Configuration.MMFLOAT;
-      Ia         : out Long_Long_Integer; Sa : in out Unbounded_String;
+     (Expression : in out Unbounded_String; Fa : out Configuration.MMFLOAT;
+      Ia         : out Long_Long_Integer; Sa : out Unbounded_String;
       OO : in out Natural; Ta : in out Function_Type) return Unbounded_String;
 
 end Evaluation;
