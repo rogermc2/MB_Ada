@@ -772,77 +772,80 @@ package body M_Basic is
    end Skip_Element;
 
    --  2413 Skip_Var skips to the end of a variable
-   function Skip_Var (Pos : in out Positive) return Positive is
+   function Skip_Var (Var : String; Pos : in out Positive) return Positive is
       use Interfaces;
       use Ada.Assertions;
       Routine_Name : constant String   := "M_Basic.Skip_Var ";
+      UB_Var       : constant Unbounded_String := To_Unbounded_String (Var);
       Pos2         : constant Positive := Pos;
       Pos3         : Positive;
       Index        : Positive;
       In_Quote     : Boolean           := False;
+      aChar        : Character := Element (UB_Var, Pos);
       Done         : Boolean;
    begin
-      if Get_Input_Character (Pos) = ' ' then
+      if aChar = ' ' then
          Pos := Pos + 1;
       end if;
 
-      if Is_Name_Start (Get_Input_Character (Pos)) then
-         while Is_Name_Character (Get_Input_Character (Pos)) loop
+      if Is_Name_Start (aChar) then
+         while Is_Name_Character (aChar) loop
             Pos := Pos + 1;
+            aChar := Element (UB_Var, Pos);
          end loop;
 
          --  2429 check the terminating char.
-         if not (Get_Input_Character (Pos) = '$')
-           and then not (Get_Input_Character (Pos) = '%')
-           and then not (Get_Input_Character (Pos) = '|')
+         if not (aChar = '$')
+           and then not (aChar = '%')
+           and then not (aChar = '|')
          then
             Pos := Pos - 1;
          end if;
 
          Assert
            (Pos2 - Pos < Configuration.MAXVARLEN,
-            Routine_Name & "Variable name " & Get_Input_Slice (Pos, Pos2) &
+            Routine_Name & "Variable name " & Slice (UB_Var, Pos, Pos2) &
               " is too long");
 
          Pos3 := Pos;
-         if Get_Input_Character (Pos3) = ' ' then
+         aChar := Element (UB_Var, Pos3);
+         if aChar = ' ' then
             Pos3 := Pos3 + 1;
          end if;
 
-         if Get_Input_Character (Pos3) = '(' then
+         if aChar = '(' then
             Pos := Pos3;
          end if;
 
-         if Get_Input_Character (Pos) = '(' then
+         if aChar = '(' then
             --  2445 this is an array
             Pos := Pos + 1;
             Assert
               (Pos2 - Pos < Configuration.MAXVARLEN,
-               Routine_Name & "Variable name " & Get_Input_Slice (Pos, Pos2) &
+               Routine_Name & "Variable name " & Slice (UB_Var, Pos, Pos2) &
                  " is too long");
 
             --  2456 Step over the array parameters keeping track of
             --  nested brackets.
             Index := 1;
+            aChar := Element (UB_Var, Pos);
             Done  := False;
             while not Done loop
-               if Get_Input_Character (Pos) = '"' then
+               if aChar = '"' then
                   In_Quote := not In_Quote;
                end if;
 
-               if Pos = Input_Buffer_Length then
+               if Pos = Length (UB_Var) then
 
                   Assert
                     (Pos >= Input_Buffer_Length,
                      Routine_Name & "Expected closing bracket.");
 
                   Done :=
-                    not In_Quote and then Get_Input_Character (Pos) = ')'
+                    not In_Quote and then aChar = ')'
                     and then Index = 1;
 
-                  if not Done
-                    and then
-                      (Get_Input_Character (Pos) = '('
+                  if not Done and then (aChar = '('
                        or else Token_Type (Pos) = T_FUN)
                   then
                      Index := Index + 1;
@@ -857,6 +860,12 @@ package body M_Basic is
       end if;
 
       return Pos2;
+
+   end Skip_Var;
+
+   function Skip_Var (Pos : in out Positive) return Positive is
+   begin
+      return Skip_Var (Get_Input_Buffer, Pos);
 
    end Skip_Var;
 
@@ -881,15 +890,17 @@ package body M_Basic is
                                        TP, Sub_Line_Ptr : Natural) is
       use Interfaces;
       use Ada.Assertions;
+--        use Ada.Characters.Handling;
       Routine_Name : constant String := "M_Basic.User_Defined_Subfunction ";
-      Arg_C1    : unsigned_16 := 0;
-      Arg_C2    : unsigned_16 := 0;
-      Arg_Buff1 : Unbounded_String;
-      Arg_Buff2 : Unbounded_String;
-      Arg_V1    : String_Buffer;
-      Arg_V2    : String_Buffer;
-      Delim     : Unbounded_String;
-      Index_C   : unsigned_16 := 0;
+      Arg_C1       : unsigned_16 := 0;
+      Arg_C2       : unsigned_16 := 0;
+      Arg_Buff1    : Unbounded_String;
+      Arg_Buff2    : Unbounded_String;
+      Arg_V1       : String_Buffer;
+      Arg_V2       : String_Buffer;
+      C1           : Positive;
+      Delim        : Unbounded_String;
+      Index_C      : unsigned_16 := 0;
    begin
       --  588
       Assert (Commands.Go_Sub_Index <= Configuration.MAXGOSUB, Routine_Name &
@@ -916,7 +927,7 @@ package body M_Basic is
          Make_Args (Expression, TP, Configuration.MAX_ARG_COUNT, Arg_Buff2,
                     Arg_V2, Arg_C2, To_String (Delim));
          Assert (Arg_C2 = 0 or else (Arg_C2 and 1) /= 0, Routine_Name &
-                "invalid argument list, Arg_C2: " & unsigned_16'Image (Arg_C2));
+                   "invalid argument list, Arg_C2: " & unsigned_16'Image (Arg_C2));
          Current_Line_Ptr := Callers_Line_Ptr;
          Assert (Arg_C2 <= Arg_C1 and then (Arg_C1 and (Arg_C1 and 1)) /= 0,
                  Routine_Name & "invalid argument list, Arg_C1: " &
@@ -933,9 +944,14 @@ package body M_Basic is
          --  610
          Index_C := 0;
          while Index_C < Arg_C2 loop
+            C1 := Integer (Index_C + 1);
             if Index_C < Arg_C1 and then
-              Arg_V1 (Integer (Index_C + 1)) /= Integer'Image (0) then
-               null;
+              Arg_V1 (C1) /= Integer'Image (0) then
+--                 if (C1 < Integer (Arg_C1) and then
+--                     Is_Name_Start  (Arg_V1 (C1)(1))) and then
+--                 (Skip_Var (Arg_V1 (C1))) then
+                  null;
+--                 end if;
             end if;
 
             Index_C := Index_C + 2;
