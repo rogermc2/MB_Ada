@@ -15,6 +15,7 @@ with Commands;
 with Console;
 with Draw;
 with Editor;
+with Evaluation;
 with File_IO;
 with Flash;
 with Global;
@@ -25,12 +26,14 @@ with Support;
 
 package body M_Basic is
 
-   type Multi_Value (Kind : Function_Type) is record
+   type Value_Type is (F_Val, I_Val, S_Val);
+   type Multi_Value (Kind : Value_Type) is record
+      Arg_Type           : Function_Type;
+      Var_Index          : Natural := 0;
       case Kind is
-         when T_NBR => F : Configuration.MMFLOAT := 0.0;
-         when T_INT => I : Long_Long_Integer := 0;
-         when T_STR => S : Unbounded_String;
-         when others => null;
+         when F_Val => F : Configuration.MMFLOAT := 0.0;
+         when I_Val => I : Long_Long_Integer := 0;
+         when S_Val => S : Unbounded_String;
       end case;
    end record;
 
@@ -914,10 +917,13 @@ package body M_Basic is
       Arg_Buff2    : Unbounded_String;
       Arg_V1       : String_Buffer;
       Arg_V2       : String_Buffer;
-      Arg_Val      : Multi_Value (T_STR);
-      Arg_Val_Vec  : Multi_Value_Vector;
+      Arg          : Multi_Value (S_Val);
+      Arg_Val      : Multi_Value_Vector;
+      Var          : Var_Record;
       C1           : Positive;
       Delim        : Unbounded_String;
+      Ia           : Integer;
+      S            : Unbounded_String;
       Index_C      : unsigned_16 := 0;
    begin
       --  588
@@ -952,7 +958,7 @@ package body M_Basic is
                    unsigned_16'Image (Arg_C1) & ", Arg_C2: " &
                    unsigned_16'Image (Arg_C2));
 
-         --  Step through the arguments supplied by the caller and get the
+         --  605 Step through the arguments supplied by the caller and get the
          --  value supplied which can be:
          --   missing (ie, caller did not supply that parameter)
          --   a variable, in which case a pointer is needed to that variable's
@@ -971,12 +977,28 @@ package body M_Basic is
                   --  Expression is a variable or user defined function
                   if Find_Subfunction (Arg_V1 (C1), 1) < 0 or else
                     Index (To_Unbounded_String (Arg_V1 (C1)), "(") > 0 then
-                     Arg_Val.S :=
-                       Arguments.Find_Var (Arg_V1 (C1), V_FIND or V_EMPTY_OK);
-                     Arg_Val_Vec (C1) := Arg_Val;
-                  end if;
+                     --  618
+                     Arguments.Var_Index := 1;
+                     Arg.S :=
+                       Arguments.Find_Var
+                         (To_Unbounded_String (Arg_V1 (C1)),
+                          Arguments.Var_Index, V_FIND or V_EMPTY_OK).S;
+                     Var := Var_Table (Arguments.Var_Index);
+                     Arg.Var_Index := Arguments.Var_Index;
+                     if (Var.Var_Type and T_CONST) = T_CONST then
+                        Arg.Arg_Type := T_NOTYPE;
+                     else
+                        Arg.Arg_Type := Var.Var_Type or T_PTR;
+                     end if;
+                     Arg_Val (C1) := Arg;
+                  end if;  --  end if Find_Subfunction ...
+               end if;     --  end if (C1 < Integer (Arg_C1) ...
+
+               if Arg.Arg_Type = T_NOTYPE or else Arg.Arg_Type = T_NA then
+                  Evaluation.Evaluate (To_Unbounded_String (Arg_V1 (C1)),
+                                       Arg.F, Ia, S, Arg.Arg_Type, 0);
                end if;
-            end if;
+            end if;        --  end if Index_C < Arg_C1 ...
 
             Index_C := Index_C + 2;
          end loop;
