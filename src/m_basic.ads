@@ -37,8 +37,8 @@ package M_Basic is
    procedure Prepare_Program (Error_Abort : Boolean);
    procedure Remove_Spaces (Buffer : in out Unbounded_String);
    procedure Save_Program_To_Flash (Buffer: String; Msg : Boolean);
-   function Skip_Var (Pos : in out Positive) return Positive;
-   function Skip_Var (Var : String; Pos : in out Positive) return Positive;
+   function Skip_Var (Pos : Positive) return Positive;
+   function Skip_Var (Var : String; Pos : Positive) return Positive;
    function Token_Function (Token : String) return Unbounded_String;
 
 end M_Basic;

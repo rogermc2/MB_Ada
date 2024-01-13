@@ -779,26 +779,27 @@ package body M_Basic is
    end Skip_Element;
 
    --  2413 Skip_Var skips to the end of a variable
-   function Skip_Var (Var : String; Pos : in out Positive) return Positive is
+   function Skip_Var (Var : String; Pos : Positive) return Positive is
       use Interfaces;
       use Ada.Assertions;
       Routine_Name : constant String   := "M_Basic.Skip_Var ";
       UB_Var       : constant Unbounded_String := To_Unbounded_String (Var);
       Pos2         : constant Positive := Pos;
+      Pos1         : Positive := Pos;
       Pos3         : Positive;
       Index        : Positive;
       In_Quote     : Boolean           := False;
-      aChar        : Character := Element (UB_Var, Pos);
+      aChar        : Character := Element (UB_Var, Pos1);
       Done         : Boolean;
    begin
-      if aChar = ' ' and then Pos < Length (UB_Var) then
-         Pos := Pos + 1;
+      if aChar = ' ' and then Pos1 < Length (UB_Var) then
+         Pos1 := Pos1 + 1;
       end if;
 
-      if Is_Name_Start (aChar)  and then Pos < Length (UB_Var) then
+      if Is_Name_Start (aChar)  and then Pos1 < Length (UB_Var) then
          while Is_Name_Character (aChar) loop
-            Pos := Pos + 1;
-            aChar := Element (UB_Var, Pos);
+            Pos1 := Pos1 + 1;
+            aChar := Element (UB_Var, Pos1);
          end loop;
 
          --  2429 check the terminating char.
@@ -806,46 +807,46 @@ package body M_Basic is
            and then not (aChar = '%')
            and then not (aChar = '|')
          then
-            Pos := Pos - 1;
+            Pos1 := Pos1 - 1;
          end if;
 
          Assert
-           (Pos2 - Pos < Configuration.MAXVARLEN,
-            Routine_Name & "Variable name " & Slice (UB_Var, Pos, Pos2) &
+           (Pos2 - Pos1 < Configuration.MAXVARLEN,
+            Routine_Name & "Variable name " & Slice (UB_Var, Pos1, Pos2) &
               " is too long");
 
-         Pos3 := Pos;
+         Pos3 := Pos1;
          aChar := Element (UB_Var, Pos3);
          if aChar = ' ' then
             Pos3 := Pos3 + 1;
          end if;
 
          if aChar = '(' then
-            Pos := Pos3;
+            Pos1 := Pos3;
          end if;
 
          if aChar = '(' then
             --  2445 this is an array
-            Pos := Pos + 1;
+            Pos1 := Pos1 + 1;
             Assert
-              (Pos2 - Pos < Configuration.MAXVARLEN,
-               Routine_Name & "Variable name " & Slice (UB_Var, Pos, Pos2) &
+              (Pos2 - Pos1 < Configuration.MAXVARLEN,
+               Routine_Name & "Variable name " & Slice (UB_Var, Pos1, Pos2) &
                  " is too long");
 
             --  2456 Step over the array parameters keeping track of
             --  nested brackets.
             Index := 1;
-            aChar := Element (UB_Var, Pos);
+            aChar := Element (UB_Var, Pos1);
             Done  := False;
             while not Done loop
                if aChar = '"' then
                   In_Quote := not In_Quote;
                end if;
 
-               if Pos = Length (UB_Var) then
+               if Pos1 = Length (UB_Var) then
 
                   Assert
-                    (Pos >= Input_Buffer_Length,
+                    (Pos1 >= Input_Buffer_Length,
                      Routine_Name & "Expected closing bracket.");
 
                   Done :=
@@ -853,14 +854,14 @@ package body M_Basic is
                     and then Index = 1;
 
                   if not Done and then (aChar = '('
-                                        or else Token_Type (Pos) = T_FUN)
+                                        or else Token_Type (Pos1) = T_FUN)
                   then
                      Index := Index + 1;
                   end if;
 
-                  Pos := Pos + 1;
+                  Pos1 := Pos1 + 1;
                end if;
-               Pos := Pos + 1;
+               Pos1 := Pos1 + 1;
             end loop;
 
          end if;
@@ -870,7 +871,7 @@ package body M_Basic is
 
    end Skip_Var;
 
-   function Skip_Var (Pos : in out Positive) return Positive is
+   function Skip_Var (Pos : Positive) return Positive is
    begin
       return Skip_Var (Get_Input_Buffer, Pos);
 
@@ -907,6 +908,7 @@ package body M_Basic is
       Arg_V1       : String_Buffer;
       Arg_V2       : String_Buffer;
       Arg_Val      : Var_Vector;
+      Arg_Type     : Function_Type := T_NOTYPE;
       Var          : Var_Record;
       C1           : Positive;
       Arg          : Unbounded_String;
@@ -914,6 +916,7 @@ package body M_Basic is
       Ia           : Long_Long_Integer;
       S            : Unbounded_String;
       Index_C      : unsigned_16 := 0;
+      Pos          : Positive := TP;
    begin
       --  588
       Assert (Commands.Go_Sub_Index <= Configuration.MAXGOSUB, Routine_Name &
@@ -980,16 +983,47 @@ package body M_Basic is
                      end if;
                      Arg_Val (C1) := Var;
                   end if;  --  end if Find_Subfunction ...
-               end if;     --  end if (C1 < Integer (Arg_C1) ...
+               end if;     --  end if C1 < Integer (Arg_C1) and Is_Name_Start ...
 
+               --  633 If argument is present and is not a pointer to a
+               --      variable then evaluate it as an expression
+               Var := Arg_Val (C1);
                if Var.Var_Type = T_NOTYPE or else Var.Var_Type = T_NA then
                   Arg := To_Unbounded_String (Arg_V1 (C1));
                   Evaluation.Evaluate (Arg, Var.F, Ia, S, Var.Var_Type, 0);
+
+                  if (Var.Var_Type and T_INT) = T_INT then
+                     Var.Ia := Ia;
+                  elsif (Var.Var_Type and T_STR) = T_STR then
+                     Var.S := S;
+                  end if;
+                  Arg_Val (C1) := Var;
                end if;
             end if;        --  end if Index_C < Arg_C1 ...
 
             Index_C := Index_C + 2;
          end loop;
+
+         --  648 N Now step through the parameters in the definition of the
+         --  sub/fun and for each one create a local variable and compare its
+         --  type to the one supplied in the callers list.
+         Current_Line_Ptr := Sub_Line_Ptr;
+         Local_Index := Local_Index + 1;
+
+         Index_C := 0;
+         while Index_C < Arg_C2 loop
+            C1 := Integer (Index_C + 1);
+            Arg_Type := T_NOTYPE;
+            Pos := Skip_Var (Arg_V2 (C1), Pos);
+            Skip_Spaces (Expression, Pos);
+            Index_C := Index_C + 2;
+
+            if Integer'Value (M_Basic_Utilities.Get_Word (Expression, Pos)) =
+              tokenAS then
+               Pos := Pos + 1;
+            end if;
+         end loop;
+
       end if;
 
    end User_Defined_Subfunction;

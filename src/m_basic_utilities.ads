@@ -28,6 +28,8 @@ package M_Basic_Utilities is
 
    Default_Type : Function_Type := T_NBR;
 
+   function Get_Word (Expression : Unbounded_String; Pos : Positive)
+                      return String;
    function Is_Line_Num (aChar : Character) return Boolean;
    function Is_Name_Character (aChar : Character) return Boolean;
    pragma Inline (Is_Name_Character);
