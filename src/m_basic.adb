@@ -2,10 +2,12 @@ with Interfaces;
 
 with Ada.Assertions;
 with Ada.Characters.Handling;
+with Ada.Containers.Indefinite_Vectors;
 with Ada.Strings;
 with Ada.Text_IO; use Ada.Text_IO;
 with Ada.Unchecked_Conversion;
 
+with Arguments;
 with Audio;
 with C_Functions;
 with Command_And_Token_Functions; use Command_And_Token_Functions;
@@ -22,6 +24,19 @@ with Memory;
 with Support;
 
 package body M_Basic is
+
+   type Multi_Value (Kind : Function_Type) is record
+      case Kind is
+         when T_NBR => F : Configuration.MMFLOAT := 0.0;
+         when T_INT => I : Long_Long_Integer := 0;
+         when T_STR => S : Unbounded_String;
+         when others => null;
+      end case;
+   end record;
+
+   package Multi_Value_Package is new
+     Ada.Containers.Indefinite_Vectors (Positive, Multi_Value);
+   subtype Multi_Value_Vector is Multi_Value_Package.Vector;
 
    Callers_Line_Ptr :  Natural;
    --     Trace_On : Boolean := False;
@@ -784,11 +799,11 @@ package body M_Basic is
       aChar        : Character := Element (UB_Var, Pos);
       Done         : Boolean;
    begin
-      if aChar = ' ' then
+      if aChar = ' ' and then Pos < Length (UB_Var) then
          Pos := Pos + 1;
       end if;
 
-      if Is_Name_Start (aChar) then
+      if Is_Name_Start (aChar)  and then Pos < Length (UB_Var) then
          while Is_Name_Character (aChar) loop
             Pos := Pos + 1;
             aChar := Element (UB_Var, Pos);
@@ -846,7 +861,7 @@ package body M_Basic is
                     and then Index = 1;
 
                   if not Done and then (aChar = '('
-                       or else Token_Type (Pos) = T_FUN)
+                                        or else Token_Type (Pos) = T_FUN)
                   then
                      Index := Index + 1;
                   end if;
@@ -890,7 +905,8 @@ package body M_Basic is
                                        TP, Sub_Line_Ptr : Natural) is
       use Interfaces;
       use Ada.Assertions;
---        use Ada.Characters.Handling;
+      --        use Ada.Characters.Handling;
+      use Global;
       Routine_Name : constant String := "M_Basic.User_Defined_Subfunction ";
       Arg_C1       : unsigned_16 := 0;
       Arg_C2       : unsigned_16 := 0;
@@ -898,6 +914,8 @@ package body M_Basic is
       Arg_Buff2    : Unbounded_String;
       Arg_V1       : String_Buffer;
       Arg_V2       : String_Buffer;
+      Arg_Val      : Multi_Value (T_STR);
+      Arg_Val_Vec  : Multi_Value_Vector;
       C1           : Positive;
       Delim        : Unbounded_String;
       Index_C      : unsigned_16 := 0;
@@ -947,11 +965,17 @@ package body M_Basic is
             C1 := Integer (Index_C + 1);
             if Index_C < Arg_C1 and then
               Arg_V1 (C1) /= Integer'Image (0) then
---                 if (C1 < Integer (Arg_C1) and then
---                     Is_Name_Start  (Arg_V1 (C1)(1))) and then
---                 (Skip_Var (Arg_V1 (C1))) then
-                  null;
---                 end if;
+               if (C1 < Integer (Arg_C1) and then
+                   Is_Name_Start  (Arg_V1 (C1)(1))) and then
+                 (Skip_Var (Arg_V1 (C1), Integer (Index_C)) = 1) then
+                  --  Expression is a variable or user defined function
+                  if Find_Subfunction (Arg_V1 (C1), 1) < 0 or else
+                    Index (To_Unbounded_String (Arg_V1 (C1)), "(") > 0 then
+                     Arg_Val.S :=
+                       Arguments.Find_Var (Arg_V1 (C1), V_FIND or V_EMPTY_OK);
+                     Arg_Val_Vec (C1) := Arg_Val;
+                  end if;
+               end if;
             end if;
 
             Index_C := Index_C + 2;

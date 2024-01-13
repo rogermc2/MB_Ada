@@ -200,15 +200,15 @@ package body Arguments is
       use Ada.Assertions;
       use Global;
       use Var_Package;
-      Routine_Name : constant String := "M_Basic_Utilities.Do_YA ";
---        aChar        : Character;
-      S            : Unbounded_String;   --  New variable name
-      Var_I        : Natural;
-      X            : Integer;
-      V_Index      : Positive;
+      Routine_Name  : constant String := "M_Basic_Utilities.Do_YA ";
+      --        aChar        : Character;
+      S             : Unbounded_String;   --  New variable name
+      Var_I         : Natural;
+      X             : Integer;
+      V_Index       : Positive;
       Number        : Positive;
-      Var_Item     : Var_Record;
-      Done         : Boolean := False;
+      Var_Item      : Var_Record;
+      Done          : Boolean := False;
    begin
       if V_Type = T_NA then
          if (Action and T_IMPLIED) = T_IMPLIED then
@@ -238,7 +238,7 @@ package body Arguments is
          end loop;
       end if;
 
---        String_Size := Configuration.MAXSTRLEN;
+      --        String_Size := Configuration.MAXSTRLEN;
       --  MMBasic 1984  If it is an array we must be dimensioning it.
       --  If it is a string array skip over the dimension values and look
       --  for the LENGTH keyword.
@@ -271,18 +271,18 @@ package body Arguments is
             Skip_Spaces (Expression, Pos);
             Pos := M_Basic.Check_String
               (Slice (Expression, Pos, Length (Expression)), "Length");
---              if Pos > 0 then
---                 String_Size :=
---                   Evaluation.Get_Int (S, 1, Configuration.MAXSTRLEN);
---              else
---                 aChar := Element (Expression, Pos);
-               --  op_invalid is a pointer (Access_Procedure) to the
-               --  op_invalid routine.
-               --                    Assert (aChar = ',' or else Pos > Length (Expression) or else
-               --                            M_Basic.Token_Function (Character'Image (aChar)) =
-               --                              op_invalid, Routine_Name & "unexpected text: " &
-               --                              Slice (Expression, Pos, Length (Expression)));
---              end if;
+            --              if Pos > 0 then
+            --                 String_Size :=
+            --                   Evaluation.Get_Int (S, 1, Configuration.MAXSTRLEN);
+            --              else
+            --                 aChar := Element (Expression, Pos);
+            --  op_invalid is a pointer (Access_Procedure) to the
+            --  op_invalid routine.
+            --                    Assert (aChar = ',' or else Pos > Length (Expression) or else
+            --                            M_Basic.Token_Function (Character'Image (aChar)) =
+            --                              op_invalid, Routine_Name & "unexpected text: " &
+            --                              Slice (Expression, Pos, Length (Expression)));
+            --              end if;
          end if;
       end if;
 
@@ -346,11 +346,11 @@ package body Arguments is
          --  variable has not been allocated.
          Var_Item := Element (Var_Table, I_Free);
          Var_Item.S := Null_Unbounded_String;
---           Var_Item.Var_Type := T_NOTYPE;
---           Name := Var_Item.Name;
---           Var_Item.Name := Null_Unbounded_String;
---           Dim_J := Var_Item.Dims (1);
---           Var_Item.Dims (1) := 0;
+         --           Var_Item.Var_Type := T_NOTYPE;
+         --           Name := Var_Item.Name;
+         --           Var_Item.Name := Null_Unbounded_String;
+         --           Dim_J := Var_Item.Dims (1);
+         --           Var_Item.Dims (1) := 0;
 
          --  MMBasic 2087  C memory allocation.
          --  MMBasic 2098
@@ -358,12 +358,20 @@ package body Arguments is
          Replace_Element (Var_Table, I_Free, Var_Item);
       end if;
 
-      --  MMBasic 2098 Find_Var returns a pointer to the variable's memory
-      --  location.
-
    end Do_YA;
 
-   --  MMBasic 1693
+   --  MMBasic 1721 Find_Var finds or creates a variable.
+   --  the action parameter can be the following (these can be ORed together)
+   --  V_FIND    a straight forward find, if the variable is not found it is created and set to zero
+   --  V_NOFIND_ERR    throw an error if not found
+   --  V_NOFIND_NULL   return a null pointer if not found
+   --  V_DIM_VAR    dimension an array
+   --  V_LOCAL   create a local variable
+   --  there are four types of variable:
+   --   T_NOTYPE a free slot that was used but is now free for reuse
+   --   T_STR string variable
+   --   T_NBR holds a float
+   --   T_INT integer variable
    function Find_Var (Expression : Unbounded_String; Pos : in out Positive;
                       Action     : Function_Type) return Var_Record is
       use Interfaces;
