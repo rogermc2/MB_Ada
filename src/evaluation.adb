@@ -4,7 +4,7 @@ with Ada.Characters.Handling;
 with Ada.Strings;
 with Ada.Strings.Fixed;
 
-with Arguments;
+--  with Arguments;
 with Command_And_Token_Functions; use Command_And_Token_Functions;
 with Global;
 with M_Basic;
@@ -151,54 +151,54 @@ package body Evaluation is
 
    end Do_Function;
 
-   procedure Do_Name_Start
-     (Expression : in out Unbounded_String; P : in out Positive;
-      F          : in out Configuration.MMFLOAT; I64 : in out Long_Long_Integer;
-      S          : in out Unbounded_String;  T  : in out Function_Type) is
-      Routine_Name : constant String := "Evaluation.Do_Name_Start ";
-      Save_Current_Line_Ptr : Positive;
-      Var                   : Arguments.Var_Record;
-      TP                    : Positive := P + 1;
-      Index                 : Integer := -1;
-   begin
-      --  MMBasic 1397 check if terminated with bracket.
-      while M_Basic_Utilities.Is_Name_Character (Element (Expression, TP)) loop
-         TP := TP + 1;
-      end loop;
-
-      if Element (Expression, TP) = '$' or else Element (Expression, TP) = '%'
-      or else Element (Expression, TP) = '!' then
-         TP := TP + 1;
-      end if;
-
-      if Element (Expression, TP) = '(' then
-         --  MMBasic 1403
-         Index := M_Basic.Find_Subfunction (To_String (Expression), T_NBR);
-      end if;
-
-      if Index >= 0 then
-         --  MMBasic 1406
-         Save_Current_Line_Ptr := M_Basic.Current_Line_Ptr;
-         M_Basic.Defined_Subfunction
-           (Expression, True, Slice (Expression, P, Length (Expression)),
-            Index, F, I64, S, T);
-         M_Basic.Current_Line_Ptr := Save_Current_Line_Ptr;
-      else
-         --  MMBasic 1412
-         Var := Arguments.Find_Var (Expression, P,  Global.V_FIND);
-         S := Global.UB_Return;
-      end if;
-
-      Evaluate (Expression, F, I64, S, T, 1);
-      Assert (Element (Expression, P) = ')', Routine_Name &
-                "no closing bracket");
-      P := P + 1;
-
-   end Do_Name_Start;
+--     procedure Do_Name_Start
+--       (Expression : in out Unbounded_String; P : in out Positive;
+--        F          : in out Configuration.MMFLOAT; I64 : in out Long_Long_Integer;
+--        S          : in out Unbounded_String;  T  : in out Function_Type) is
+--        Routine_Name : constant String := "Evaluation.Do_Name_Start ";
+--        Save_Current_Line_Ptr : Positive;
+--        Var                   : Arguments.Var_Record;
+--        TP                    : Positive := P + 1;
+--        Index                 : Integer := -1;
+--     begin
+--        --  MMBasic 1397 check if terminated with bracket.
+--        while M_Basic_Utilities.Is_Name_Character (Element (Expression, TP)) loop
+--           TP := TP + 1;
+--        end loop;
+--
+--        if Element (Expression, TP) = '$' or else Element (Expression, TP) = '%'
+--        or else Element (Expression, TP) = '!' then
+--           TP := TP + 1;
+--        end if;
+--
+--        if Element (Expression, TP) = '(' then
+--           --  MMBasic 1403
+--           Index := M_Basic.Find_Subfunction (To_String (Expression), T_NBR);
+--        end if;
+--
+--        if Index >= 0 then
+--           --  MMBasic 1406
+--           Save_Current_Line_Ptr := M_Basic.Current_Line_Ptr;
+--           M_Basic.Defined_Subfunction
+--             (Expression, True, Slice (Expression, P, Length (Expression)),
+--              Index, F, I64, S, T);
+--           M_Basic.Current_Line_Ptr := Save_Current_Line_Ptr;
+--        else
+--           --  MMBasic 1412
+--           Var := Arguments.Find_Var (Expression, P,  Global.V_FIND);
+--           S := Global.UB_Return;
+--        end if;
+--
+--        Evaluate (Expression, F, I64, S, T, 1);
+--        Assert (Element (Expression, P) = ')', Routine_Name &
+--                  "no closing bracket");
+--        P := P + 1;
+--
+--     end Do_Name_Start;
 
    function Do_Not
-     (Prev_Token :        Unbounded_String; P : in out Positive;
-      Fa         : in out Configuration.MMFLOAT; Ia : in out Long_Long_Integer;
+     (Prev_Token : Unbounded_String; P : in out Positive;
+      Fa         : in out Configuration.MMFLOAT; Ia : out Long_Long_Integer;
       Sa         : in out Unbounded_String; RO : in out Natural;
       Ta         : in out Function_Type) return Unbounded_String
    is
@@ -299,7 +299,7 @@ package body Evaluation is
    --  flags & E_NOERROR will suppress that check.
    procedure Evaluate
      (Expression : in out Unbounded_String; Fa : in out Configuration.MMFLOAT;
-      Ia         : in out Long_Long_Integer; Sa : in out Unbounded_String;
+      Ia         : out Long_Long_Integer; Sa : in out Unbounded_String;
       Ta         : in out Function_Type; Flags : Interfaces.Unsigned_16) is
       use Interfaces;
       use Ada.Strings;
@@ -418,7 +418,7 @@ package body Evaluation is
 
    function Get_Value
      (Expression : in out Unbounded_String; Fa : in out Configuration.MMFLOAT;
-      Ia         : in out Long_Long_Integer; Sa : in out Unbounded_String;
+      Ia         : out Long_Long_Integer; Sa : in out Unbounded_String;
       OO         : in out Natural; Ta : in out Function_Type) return Unbounded_String
    is
       use Interfaces;
@@ -433,8 +433,7 @@ package body Evaluation is
       Data         : Unbounded_String;
       Op           : Unbounded_String;
       Op_Val       : Unsigned_16;
-      Temp         : Function_Type;
-      Func         : Access_Procedure;
+--        Temp         : Function_Type;
    begin
       --  MMBasic 1308  Test_Stack_Overflow;
       M_Basic_Utilities.Skip_Spaces (Expression, P);
@@ -457,7 +456,7 @@ package body Evaluation is
             Do_Function (Expression, P, F, I64, S, T);
          end if;
 
-         Assert ((Temp and T_Arg) /= 0, Routine_Name & "internal error.");
+--           Assert ((Temp and T_Arg) /= 0, Routine_Name & "internal error.");
 
       elsif Op = "(" then
          --  MMBasic 1385
