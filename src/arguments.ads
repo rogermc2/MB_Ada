@@ -23,6 +23,7 @@ package Arguments is
 
    package Var_Package is new Ada.Containers.Vectors (Positive, Var_Record);
    subtype Var_Vector is Var_Package.Vector;
+   use Var_Package;
 
    Default_Type    : Function_Type := T_NBR;
    Option_Explicit : Boolean := False;
@@ -32,6 +33,8 @@ package Arguments is
    Arg_C       	   : Interfaces.Unsigned_16;
    Arg_V           : String_Buffer;
    Arg_T           : Function_Type;
+
+   Arg_Var_Index   : array (1 .. Positive (Length (Var_Table))) of Integer;
 
    function Find_Var (Expression : Unbounded_String; Pos : in out Positive;
                        Action     : Function_Type) return Var_Record;

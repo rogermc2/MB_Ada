@@ -30,7 +30,8 @@ package body M_Basic is
    --       Ada.Containers.Indefinite_Vectors (Positive, Multi_Value);
    --     subtype Multi_Value_Vector is Multi_Value_Package.Vector;
 
-   Callers_Line_Ptr :  Natural;
+   Callers_Line_Ptr : Natural;
+
    --     Trace_On : Boolean := False;
 
    procedure Clear_Runtime;
@@ -917,6 +918,7 @@ package body M_Basic is
       Ia           : Long_Long_Integer;
       S            : Unbounded_String;
       Index_C      : unsigned_16 := 0;
+      Index_J      : Positive;
       Pos          : Positive := TP;
    begin
       --  588
@@ -1023,6 +1025,9 @@ package body M_Basic is
                Pos := Pos + 1;
                Commands.Check_Type_Specified
                  (Expression, Pos, Arg_Type, True);
+               Assert ((Arg_Type and T_IMPLIED) = T_IMPLIED, Routine_Name &
+                         "Invalid variable type: " &
+                         Function_Type'Image (Arg_Type));
             end if;
 
             --  664
@@ -1030,7 +1035,18 @@ package body M_Basic is
               Arg_Type or V_FIND or V_DIM_VAR or V_LOCAL or V_EMPTY_OK;
             Var := Arguments.Find_Var (To_Unbounded_String (Arg_V2 (C1)),
                                        Pos, Arg_Type);
+            Assert (Var_Table (Var_Index).Dims (1) > 0, Routine_Name &
+                      "Invalid argument list.");
+            Current_Line_Ptr := Callers_Line_Ptr;
 
+            --  671
+            --  If the definition called for an array, special processing and
+            --  checking is needed.
+            if Var_Table (Var_Index).Dims (1) = -1 then
+               if Var_Table (Arg_Var_Index (C1)).Dims (1) = 0 then
+                  null;
+               end if;
+            end if;
          end loop;
 
       end if;
