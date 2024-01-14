@@ -31,13 +31,14 @@ package body M_Basic is
    --     subtype Multi_Value_Vector is Multi_Value_Package.Vector;
 
    Callers_Line_Ptr : Natural;
+   Next_Statement   : Positive;
 
    --     Trace_On : Boolean := False;
 
    procedure Clear_Runtime;
    procedure Skip_Element (aLine : String; Pos : in out Positive);
-   procedure User_Defined_Subfunction
-     (Expression, Fun_Name : Unbounded_String; TP, Sub_Line_Ptr : Natural);
+   procedure User_Defined_Subfunction (Command      : Unbounded_String; TP,
+                                       Sub_Line_Ptr : Natural);
 
    --  Check_String checks if the next text in an element (a basic statement)
    --  corresponds to an alphabetic string.
@@ -103,6 +104,16 @@ package body M_Basic is
      (Modular, Flash.UB_String_Access);
    pragma Warnings (On);
 
+   procedure Defined_Function
+     (Expression : Unbounded_String; Is_Fun : Boolean;
+      Command    : in out Unbounded_String; Subfun_Index : Positive;
+      Fa         : in out Configuration.MMFLOAT;
+      I64a       : in out Long_Long_Integer; Sa : in out Unbounded_String;
+      Fun_Type   : in out Function_Type) is
+   begin
+      null;
+   end Defined_Function;
+
    --  MMBasic 441 Defined_Subfunction function is responsible for executing a
    --  defined subroutine or function.
    --  isfun is true when executing a function.
@@ -117,8 +128,7 @@ package body M_Basic is
       Command    : in out Unbounded_String; Subfun_Index : Positive;
       Fa         : in out Configuration.MMFLOAT;
       I64a       : in out Long_Long_Integer; Sa : in out Unbounded_String;
-      Fun_Type   : in out Function_Type)
-   is
+      Fun_Type   : in out Function_Type) is
       use Interfaces;
       use Ada.Characters.Handling;
       use Ada.Assertions;
@@ -304,8 +314,18 @@ package body M_Basic is
          Memory.Temp_Memory_Is_Changed := True;
       else
          --  573
-         User_Defined_Subfunction (Expression, Fun_Name, TP, Sub_Line_Ptr);
+         User_Defined_Subfunction (Expression, TP, Sub_Line_Ptr);
 
+      end if;
+
+      Current_Subfunction_Name := Fun_Name;
+      --  746 If it is a defined command point to the first statement in the
+      --  command and allow ExecuteProgram() to carry on as before.
+      --  Exit from the subfunction is via cmd_return which will decrement
+      --  LocalIndex.
+      if not Is_Fun then
+         Skip_Element (To_String (Expression), SL_Pos);
+         Next_Statement := SL_Pos;
       end if;
 
       Put_Line (Routine_Name & "done");
@@ -911,7 +931,7 @@ package body M_Basic is
    end Token_Function;
 
    procedure User_Defined_Subfunction
-     (Expression, Fun_Name : Unbounded_String; TP, Sub_Line_Ptr : Natural) is
+     (Command : Unbounded_String; TP, Sub_Line_Ptr : Natural) is
       use Interfaces;
       use Ada.Assertions;
       use Arguments;
@@ -939,24 +959,24 @@ package body M_Basic is
                 "too many nested subroutines and functions.");
       Current_Line_Ptr := Callers_Line_Ptr;
       if TP > 0 then
-         if Element (Expression, TP) = '(' then
+         if Element (Command, TP) = '(' then
             Delim := To_Unbounded_String ("(,");
          else
             Delim := To_Unbounded_String (",");
          end if;
-         Make_Args (Expression, TP, Configuration.MAX_ARG_COUNT, Arg_Buff1,
+         Make_Args (Command, TP, Configuration.MAX_ARG_COUNT, Arg_Buff1,
                     Arg_V1, Arg_C1, To_String (Delim));
       end if;
 
       Current_Line_Ptr := Sub_Line_Ptr;
       --  595
       if TP > 0 then
-         if Element (Expression, TP) = '(' then
+         if Element (Command, TP) = '(' then
             Delim := To_Unbounded_String ("(,");
          else
             Delim := To_Unbounded_String (",");
          end if;
-         Make_Args (Expression, TP, Configuration.MAX_ARG_COUNT, Arg_Buff2,
+         Make_Args (Command, TP, Configuration.MAX_ARG_COUNT, Arg_Buff2,
                     Arg_V2, Arg_C2, To_String (Delim));
          Assert (Arg_C2 = 0 or else (Arg_C2 and 1) /= 0, Routine_Name &
                    "invalid argument list, Arg_C2: " & unsigned_16'Image (Arg_C2));
@@ -1029,15 +1049,15 @@ package body M_Basic is
             C1 := Integer (Index_C + 1);
             Arg_Type := T_NOTYPE;
             Pos := Skip_Var (Arg_V2 (C1), Pos);
-            Skip_Spaces (Expression, Pos);
+            Skip_Spaces (Command, Pos);
             Index_C := Index_C + 2;
 
             --  657
-            if Integer'Value (M_Basic_Utilities.Get_Word (Expression, Pos)) =
+            if Integer'Value (M_Basic_Utilities.Get_Word (Command, Pos)) =
               tokenAS then
                Pos := Pos + 1;
                Commands.Check_Type_Specified
-                 (Expression, Pos, Arg_Type, True);
+                 (Command, Pos, Arg_Type, True);
                Assert ((Arg_Type and T_IMPLIED) = T_IMPLIED, Routine_Name &
                          "Invalid variable type: " &
                          Function_Type'Image (Arg_Type));
@@ -1098,33 +1118,36 @@ package body M_Basic is
                  Var_Table (Var_Index).Var_Type or T_PTR;
                Var_Table (Var_Index).Size :=
                  Var_Table (Arg_Var_Index (C1)).Size;
+
             elsif Arg_Val (C1).Var_Type /= T_NOTYPE and then
               Arg_Val (C1).Var_Type /= T_NA then
                if (Var_Table (Var_Index).Var_Type and T_STR) = T_STR and then
                  (Arg_Val (C1).Var_Type and T_STR) = T_STR then
                   Var_Table (Var_Index).S := Arg_Val (C1).S;
                   Arg_Val (C1).S := Null_Unbounded_String;
+
                elsif  (Var_Table (Var_Index).Var_Type and T_NBR) =
                  T_NBR and then
                  (Arg_Val (C1).Var_Type and T_NBR) = T_NBR then
                   Var_Table (Var_Index).F := Arg_Val (C1).F;
+
                elsif  (Var_Table (Var_Index).Var_Type and T_NBR) =
                  T_NBR and then
                  (Arg_Val (C1).Var_Type and T_INT) = T_INT then
                   Var_Table (Var_Index).F :=
                     Configuration.MMFLOAT (Arg_Val (C1).Ia);
+
                elsif  (Var_Table (Var_Index).Var_Type and T_INT) =
                  T_INT and then
                  (Arg_Val (C1).Var_Type and T_INT) = T_INT then
                   Var_Table (Var_Index).Ia := Arg_Val (C1).Ia;
+
                else
                   Assert (False, Routine_Name & "incompatible type: " &
                             Function_Type'Image (Arg_Val (C1).Var_Type));
                end if;
             end if;
          end loop;
-
-         Current_Subfunction_Name := Fun_Name;
       end if;
 
    end User_Defined_Subfunction;
