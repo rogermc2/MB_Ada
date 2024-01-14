@@ -4,7 +4,7 @@ with Ada.Characters.Handling;
 with Ada.Command_Line;
 with Ada.Strings;
 
-with M_Basic_Utilities;
+with Arguments;
 with M_Misc;
 with Parse_Functions;
 with Support;
@@ -27,7 +27,7 @@ package body Commands is
          Fun_Type := T_NBR or T_Implied;
       else
          Assert (Allow_Default_Type, Routine_Name & "variable type");
-         Fun_Type := M_Basic_Utilities.Default_Type;
+         Fun_Type := Arguments.Default_Type;
       end if;
 
    end Check_Type_Specified;

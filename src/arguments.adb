@@ -3,6 +3,7 @@ with Ada.Assertions;
 with Ada.Characters.Handling;
 with Ada.Text_IO; use Ada.Text_IO;
 
+with Command_And_Token_Functions;
 with Evaluation;
 with Global;
 with M_Basic;
@@ -538,5 +539,180 @@ package body Arguments is
       Make_Args (Expression, Pos, Max_Num_Args, Arg_Buff, Arg_V, Arg_C, S);
 
    end Get_Args;
+
+   procedure  Make_Args
+     (Expression : Unbounded_String; Pos : Positive; Max_Args : Positive;
+      Arg_Buff   : in out Unbounded_String; Arg_V  : in out String_Buffer;
+      Arg_C      : out Interfaces.Unsigned_16; Delim : String) is
+      use Interfaces;
+      use Ada.Assertions;
+      use Ada.Strings;
+      use Command_And_Token_Functions;
+      use String_Buffer_Package;
+      Routine_Name   : constant String := "M_Basic_Utilities.Make_Args ";
+      Then_Token     : constant Natural := tokenTHEN;
+      Else_Token     : constant Natural := tokenELSE;
+      Op             : Unbounded_String := Arg_Buff;
+      Op_Ptr         : Integer := 1;
+      String_1       : String (1 .. 1);
+      aChar          : Character;
+      TP             : Positive := Pos;
+      X              : Positive;
+      In_Arg         : Boolean := False;
+      Expect_Cmd     : Boolean := False;
+      Expect_Bracket : Boolean := False;
+      Delim_Ptr      : Positive := 1;
+      Token          : Natural;
+      T_Token        : Function_Type;
+      Term           : Unbounded_String;
+      Match          : Boolean := False;
+      Done           : Boolean := False;
+
+      procedure C1 is
+         Routine_Name : constant String := "M_Basic_Utilities.Make_Args.C! ";
+         Then_Token   : constant Natural := tokenTHEN;
+         Else_Token   : constant Natural := tokenELSE;
+         Token        : constant Natural
+           := Integer'Value (Character'Image (Element (Expression, Pos)));
+      begin
+         --  MMBasic 2165
+         if Token = Then_Token or else Token = Else_Token then
+            Expect_Cmd := True;
+         end if;
+
+         --  MMBasic 2167
+         if In_Arg then
+            while Op_Ptr > Length (Arg_Buff) and
+              Element (Op, Op_Ptr - 1) = ' ' loop
+               Op_Ptr := Op_Ptr - 1;
+            end loop;
+
+            --  MMBasic 2173
+         elsif Arg_C > 0 then
+            --  otherwise we have two delimiters in a row
+            --  (except for the first argument).
+            --  so, create a null argument to go between the two delimiters.
+            Append (Arg_V, Character'Image (Element (Op, Op_Ptr)));
+            Arg_C := Arg_C + 1;
+            --  ASCII.NU is C string terminator
+            --           Append (Op, ASCII.NUL);
+            Op_Ptr := Length (Op);
+         end if;
+
+         --  MMBasic 2179
+         In_Arg := False;
+         Assert (Integer (Arg_C) <= Max_Args, Routine_Name & "Too many arguments");
+         Append (Arg_V, Integer'Image (Op_Ptr));
+         Arg_C := Arg_C +1;
+         Op_Ptr := Op_Ptr + 1;
+         TP := TP + 1;
+         --  ASCII.NU is C string terminator
+         --        Append (Op, ASCII.NUL);
+
+      end C1;
+
+   begin
+      --  MMBasic 2069 Test_Tack_Overflow
+      Arg_C := 0;
+      Skip_Spaces (Expression, TP);
+      if Delim = "(" then
+         Assert (Element (Expression, TP) = '(', Routine_Name &
+                   "syntax error.");
+         Expect_Bracket := True;
+         Delim_Ptr := Delim_Ptr + 1;
+         TP := TP + 1;
+      end if;
+
+      --  MMBasic 2096  Main processing loop
+      while not Done loop
+         Done := (Expect_Bracket and then Element (Expression, TP) = ')')
+           or else Element (Expression, TP) = ''';
+         if not Done then
+            Term := To_Unbounded_String
+              (Slice (Expression, TP, Length (Expression)));
+            --  MMBasic 2110 Delim is a string of special characters that split the
+            --  expression into separate terms;
+            Match := False;
+            for Delim_Index in Delim'Range loop
+               String_1 (1) := Delim (Delim_Index);
+               Match := Match or else Index (Term, String_1) > 0;
+            end loop;
+
+            --  MMBasic 2112 block moved to else  Match
+            if not Match then
+               --  MMBasic 2189  C1 E
+               Token :=
+                 Integer'Value (Character'Image (Element (Expression, Pos)));
+               Expect_Cmd := Token = Then_Token or else Token = Else_Token;
+
+               --  MMBasic 2201
+               if not In_Arg then
+                  --  C2 E
+                  --  MMBasic 2194 moved to else
+                  --  MMBasic 22202 Not a special char so start a new argument
+                  Assert (Integer (Arg_C) <= Max_Args, Routine_Name &
+                            "Too many arguments");
+                  Append (Arg_V, To_String (Arg_Buff));
+                  Arg_C := Arg_C + 1;
+                  In_Arg := True;
+
+                  aChar := Element (Expression, TP);
+                  T_Token :=
+                    Token_Type (Integer'Value (Character'Image (aChar)));
+                  if aChar = '(' or else ((T_Token and T_FUN) = T_FUN
+                                          and then (not Expect_Cmd)) then
+                     --  MMBasic 2211 C3
+                     X := M_Basic_Utilities.Get_Close_Bracket (Expression, TP);
+                     X := X - TP + 1;
+                     for index in TP .. X loop
+                        Append (Op, Element (Expression, index));
+                     end loop;
+                     Op_Ptr := Op_Ptr + X;
+                     TP := TP + X;
+
+                  elsif aChar = '"' then
+                     --  MMBasic 2224 C4
+                     while Element (Expression, TP + 1) /=  '"' loop
+                        TP := TP + 1;
+                        Append (Op, Element (Expression, TP));
+                        Assert (TP < length (Expression), Routine_Name &
+                                  "syntax error, no closing "".");
+                        Op_Ptr := Op_Ptr + 1;
+                     end loop;
+
+                     --  MMBasic 2231
+                     TP := TP + 1;
+                     Append (Op, Element (Expression, TP));
+                     Op_Ptr := Op_Ptr + 1;
+
+                  else  --  anythin else
+                     --  MMBasic 2236
+                     Append (Op, Element (Expression, TP));
+                     Op_Ptr := Op_Ptr + 1;
+                     TP := TP + 1;
+                     Expect_Cmd := False;
+                  end if;  --  if aChar /= '('
+
+               else  --  C2
+                  TP := TP + 1;
+               end if;  -- not In_Arg
+
+            else
+               C1;
+
+            end if;  --  not Match
+         end if;  --  First not Done
+
+         Done := TP > Length (Expression);
+
+      end loop;
+
+      Assert (Expect_Bracket and then Element (Expression, TP) /= ')',
+              Routine_Name & "syntax error");
+      Trim (Arg_Buff, Right);
+      --  ASCII.NU is C string terminator
+      --        Append (Arg_Buff, ASCII.NUL);
+
+   end Make_Args;
 
 end Arguments;

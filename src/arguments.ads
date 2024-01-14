@@ -37,5 +37,9 @@ package Arguments is
                        Action     : Function_Type) return Var_Record;
    procedure Get_Args (Expression   : Unbounded_String; Pos : Positive;
                        Max_Num_Args : Natural; S : String);
+   procedure Make_Args
+     (Expression :    Unbounded_String; Pos : Positive; Max_Args : Positive;
+      Arg_Buff   : in out Unbounded_String; Arg_V : in out String_Buffer;
+      Arg_C      :    out Interfaces.Unsigned_16; Delim : String);
 
 end Arguments;

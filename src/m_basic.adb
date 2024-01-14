@@ -26,9 +26,9 @@ with Support;
 
 package body M_Basic is
 
---     package Multi_Value_Package is new
---       Ada.Containers.Indefinite_Vectors (Positive, Multi_Value);
---     subtype Multi_Value_Vector is Multi_Value_Package.Vector;
+   --     package Multi_Value_Package is new
+   --       Ada.Containers.Indefinite_Vectors (Positive, Multi_Value);
+   --     subtype Multi_Value_Vector is Multi_Value_Package.Vector;
 
    Callers_Line_Ptr :  Natural;
    --     Trace_On : Boolean := False;
@@ -584,7 +584,7 @@ package body M_Basic is
    procedure Init_Basic is
       Routine_Name : constant String := "M_Basic.Init_Basic ";
    begin
-      Default_Type := T_NBR;
+      Arguments.Default_Type := T_NBR;
       Clear_Program;
       Put_Line (Routine_Name);
       Command_And_Token_Functions.Init_Operator_Functions;
@@ -899,6 +899,7 @@ package body M_Basic is
       use Interfaces;
       use Ada.Assertions;
       --        use Ada.Characters.Handling;
+      use Arguments;
       use Global;
       Routine_Name : constant String := "M_Basic.User_Defined_Subfunction ";
       Arg_C1       : unsigned_16 := 0;
@@ -970,12 +971,10 @@ package body M_Basic is
                   if Find_Subfunction (Arg_V1 (C1), 1) < 0 or else
                     Index (To_Unbounded_String (Arg_V1 (C1)), "(") > 0 then
                      --  618
-                     Arguments.Var_Index := 1;
-                     Var.S :=
-                       Arguments.Find_Var
-                         (To_Unbounded_String (Arg_V1 (C1)),
-                          Arguments.Var_Index, V_FIND or V_EMPTY_OK).S;
-                     Var := Var_Table (Arguments.Var_Index);
+                     Var_Index := 1;
+                     Var.S := Find_Var (To_Unbounded_String (Arg_V1 (C1)),
+                                        Var_Index, V_FIND or V_EMPTY_OK).S;
+                     Var := Var_Table (Var_Index);
                      if (Var.Var_Type and T_CONST) = T_CONST then
                         Var.Var_Type := T_NOTYPE;
                      else
@@ -1018,10 +1017,20 @@ package body M_Basic is
             Skip_Spaces (Expression, Pos);
             Index_C := Index_C + 2;
 
+            --  657
             if Integer'Value (M_Basic_Utilities.Get_Word (Expression, Pos)) =
               tokenAS then
                Pos := Pos + 1;
+               Commands.Check_Type_Specified
+                 (Expression, Pos, Arg_Type, True);
             end if;
+
+            --  664
+            Arg_Type :=
+              Arg_Type or V_FIND or V_DIM_VAR or V_LOCAL or V_EMPTY_OK;
+            Var := Arguments.Find_Var (To_Unbounded_String (Arg_V2 (C1)),
+                                       Pos, Arg_Type);
+
          end loop;
 
       end if;
