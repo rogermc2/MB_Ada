@@ -104,12 +104,32 @@ package body M_Basic is
      (Modular, Flash.UB_String_Access);
    pragma Warnings (On);
 
+   --  755 For a defined function:
+   --   - Create a local variable for the function's name
+   --   - Save the globals being used by the current command that caused the function to be called
+   --   - Invoke another instance of ExecuteProgram() to execute the body of the function
+   --   - When that returns we need to restore the global variables
+   --   - Get the variable's value and save that in the return value globals (fret or sret)
+   --   - Return to the expression parser
+
    procedure Defined_Function
-     (Expression : Unbounded_String; Is_Fun : Boolean;
-      Command    : in out Unbounded_String; Subfun_Index : Positive;
-      Fa         : in out Configuration.MMFLOAT;
-      I64a       : in out Long_Long_Integer; Sa : in out Unbounded_String;
-      Fun_Type   : in out Function_Type) is
+     (Expression   : Unbounded_String; Fun_Name : Unbounded_String;
+      Is_Fun       : Boolean; Command : in out Unbounded_String;
+      Subfun_Index : Positive;
+      Fa           : in out Configuration.MMFLOAT;
+      I64a         : in out Long_Long_Integer; Sa : in out Unbounded_String;
+      Fun_Type     : in out Function_Type) is
+      use Interfaces;
+      Routine_Name     : constant String  := "M_Basic.Defined_Function ";
+      Pos              : Positive := 1;
+      aVar             : Arguments.Var_Record := Arguments.Find_Var
+        (Fun_Name, Pos, Fun_Type or Global.V_FUNCT);
+      SL_Pos           : Positive := 1;      --  p points to Subfunctions
+      --  character
+      SL_Pos2          : Positive;           --  ttp
+      SL_Pos3          : Positive;           --  pp
+      TP               : Positive;
+      Found            : Boolean          := False;
    begin
       null;
    end Defined_Function;
@@ -143,7 +163,7 @@ package body M_Basic is
       SL_Pos2          : Positive;           --  ttp
       SL_Pos3          : Positive;           --  pp
       Fun_Name         : Unbounded_String;
-      TP               : Positive         := 1;      --  tp
+      TP               : Positive := 1;
       I_Tmp            : Long_Long_Integer;
       Found            : Boolean          := False;
    begin
