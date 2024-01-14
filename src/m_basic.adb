@@ -918,7 +918,6 @@ package body M_Basic is
       Ia           : Long_Long_Integer;
       S            : Unbounded_String;
       Index_C      : unsigned_16 := 0;
-      Index_J      : Positive;
       Pos          : Positive := TP;
    begin
       --  588
@@ -1039,13 +1038,42 @@ package body M_Basic is
                       "Invalid argument list.");
             Current_Line_Ptr := Callers_Line_Ptr;
 
-            --  671
-            --  If the definition called for an array, special processing and
-            --  checking is needed.
+            --  671 If the definition called for an array, special processing
+            --      and checking is needed.
             if Var_Table (Var_Index).Dims (1) = -1 then
-               if Var_Table (Arg_Var_Index (C1)).Dims (1) = 0 then
-                  null;
+               Assert (Var_Table (Arg_Var_Index (C1)).Dims (1) /= 0,
+                       Routine_Name & "array expected");
+               Assert (Type_Mask
+                       (Var_Table (Arg_Var_Index (Var_Index)).Var_Type) =
+                         Type_Mask (Var_Table (C1).Var_Type),
+                       Routine_Name & "incompatible type: " &
+                         Function_Type'Image (Var_Table (C1).Var_Type));
+               Var_Table (Var_Index).S := To_Unbounded_String ("");
+
+               --  680
+               Var_Table (Var_Index).Dims :=
+                 Var_Table (Arg_Var_Index (Var_Index)).Dims;
+            end if;
+
+            --  684 if this is a pointer check and the type is NOT the same as
+            --  that requested in the sub/fun definition.
+            if (Var_Table (C1).Var_Type and T_PTR) = T_PTR and then
+              Type_Mask (Var_Table (Arg_Var_Index (Var_Index)).Var_Type) /=
+              Type_Mask (Var_Table (C1).Var_Type) then
+               Assert (Type_Mask (Var_Table (Var_Index).Var_Type and T_STR) /=
+                         T_STR and then
+                           (Type_Mask (Var_Table (C1).Var_Type and T_STR) /= T_STR),
+                       Routine_Name & "incompatible type: " &
+                         Function_Type'Image (Var_Table (C1).Var_Type));
+               if (Var_Table (Arg_Var_Index (C1)).Var_Type and T_PTR) =
+                 T_PTR then
+                  Arg_Val (C1).Ia := Var_Table (Arg_Var_Index (C1)).Ia;
+               else
+                  Arg_Val (C1).Ia :=
+                    Long_Long_Integer'Value
+                      (To_String (Var_Table (Arg_Var_Index (C1)).S));
                end if;
+               Arg_Val (C1).Var_Type := Arg_Val (C1).Var_Type and not T_PTR;
             end if;
          end loop;
 
