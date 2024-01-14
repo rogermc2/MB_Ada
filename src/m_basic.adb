@@ -36,8 +36,8 @@ package body M_Basic is
 
    procedure Clear_Runtime;
    procedure Skip_Element (aLine : String; Pos : in out Positive);
-   procedure User_Defined_Subfunction (Expression       : Unbounded_String;
-                                       TP, Sub_Line_Ptr : Natural);
+   procedure User_Defined_Subfunction
+     (Expression, Fun_Name : Unbounded_String; TP, Sub_Line_Ptr : Natural);
 
    --  Check_String checks if the next text in an element (a basic statement)
    --  corresponds to an alphabetic string.
@@ -113,10 +113,11 @@ package body M_Basic is
    --  fa, i64a, sa and typ are pointers to where the return value is to be
    --                       stored (used by functions only).
    procedure Defined_Subfunction
-     (Expression   :    Unbounded_String; Is_Fun : Boolean; Command : String;
-      Subfun_Index :        Positive; Fa : in out Configuration.MMFLOAT;
-      I64a         : in out Long_Long_Integer; Sa : in out Unbounded_String;
-      Fun_Type     : in out Function_Type)
+     (Expression : Unbounded_String; Is_Fun : Boolean;
+      Command    : in out Unbounded_String; Subfun_Index : Positive;
+      Fa         : in out Configuration.MMFLOAT;
+      I64a       : in out Long_Long_Integer; Sa : in out Unbounded_String;
+      Fun_Type   : in out Function_Type)
    is
       use Interfaces;
       use Ada.Characters.Handling;
@@ -132,9 +133,8 @@ package body M_Basic is
       SL_Pos2          : Positive;           --  ttp
       SL_Pos3          : Positive;           --  pp
       Fun_Name         : Unbounded_String;
-      Fun_Name_Pos     : Positive         := 1;      --  tp
+      TP               : Positive         := 1;      --  tp
       I_Tmp            : Long_Long_Integer;
-      --        Sub_Name : constant Unbounded_String := To_Unbounded_String (Name);
       Found            : Boolean          := False;
    begin
       Assert (Sub_Line_Ptr > 0, Routine_Name & "Sub_Line_Ptr = 0");
@@ -149,69 +149,82 @@ package body M_Basic is
       --  (ie, the start of the argument list in the definition)
       Current_Line_Ptr := Sub_Line_Ptr;
       Append (Fun_Name, To_String (Prog_Memory (SL_Pos)));
-      SL_Pos       := SL_Pos + 1;
-      Fun_Name_Pos := Fun_Name_Pos + 1;
-      Put_Line
-        (Routine_Name & "465 Subfun_Index; " & Integer'Image (Subfun_Index));
-      Put_Line
-        (Routine_Name & "465 Sub_Line_Ptr; " & Integer'Image (Sub_Line_Ptr));
+      SL_Pos := SL_Pos + 1;
+      TP := TP + 1;   --  TP points to next Fun_Name position
+      while Is_Name_Character (Element (Expression, SL_Pos)) loop
+         Append (Fun_Name, To_String (Prog_Memory (SL_Pos)));
+         SL_Pos := SL_Pos + 1;
+         TP := TP + 1;
+      end loop;
 
-      --  473
-      if Command (Command'First) = '$' or else Command (Command'First) = '%'
-        or else Command (Command'First) = '!'
+      --  471
+      if Prog_Memory (SL_Pos) = "$" or else Prog_Memory (SL_Pos) = "%"
+        or else Prog_Memory (SL_Pos) = "!"
       then
          Assert (Is_Fun, Routine_Name & "Type specification is invalid:");
 
-         Fun_Name := Fun_Name & Command (Command'First);
+         Fun_Name := Fun_Name & Prog_Memory (SL_Pos);
          SL_Pos   := SL_Pos + 1;
+         TP := TP + 1;
       end if;
-      Fun_Name_Pos := Command'First + 1;
+      Fun_Name := Fun_Name & ASCII.NUL;
 
       --  484 Subfunctions contains pointers to program memory elenments
       Assert
-        (not Is_Fun or else Command (Fun_Name_Pos) = '('
+        (not Is_Fun or else Prog_Memory (SL_Pos) = "("
          or else Prog_Memory (Subfunctions (Sub_Line_Ptr)) = cmdCFUN,
          Routine_Name & "Function definition");
 
-      --  488 Find the end of the caller's identifier, Fun_Name_Pos is left pointing to
+      --  485 Find the end of the caller's identifier, TP is left pointing to
       --  the start of the caller's argument list
       Current_Line_Ptr := Callers_Line_Ptr;
-
-      Fun_Name_Pos := 2;
-      while Fun_Name_Pos < Integer (Length (Fun_Name))
-        and then Is_Name_Character (Element (Fun_Name, Fun_Name_Pos))
-      loop
-         Fun_Name_Pos := Fun_Name_Pos + 1;
+      TP := 1;
+      while TP <= Length (Command) and then
+        Is_Name_Character (Element (Command, TP)) loop
+         TP := TP + 1;
       end loop;
 
-      Put_Line
-        (Routine_Name & "check Type specification for Fun_Name_Pos: " &
-           Integer'Image (Fun_Name_Pos));
-      Put_Line
-        (Routine_Name & "Fun_Name length: " &
-           Integer'Image (Integer (Length (Fun_Name))));
-      --  477
-      if Element (Fun_Name, Fun_Name_Pos) = '$'
-        or else Element (Fun_Name, Fun_Name_Pos) = '%'
-        or else Element (Fun_Name, Fun_Name_Pos) = '!'
-      then
+      --  471
+      if Prog_Memory (SL_Pos) = "$" or else Prog_Memory (SL_Pos) = "%"
+        or else Prog_Memory (SL_Pos) = "!" then
          Assert (Is_Fun, Routine_Name & "Type specification is invalid");
-      else
-         Append (Fun_Name, Command (SL_Pos));
-         SL_Pos       := SL_Pos + 1;
-         Fun_Name_Pos := Fun_Name_Pos + 1;
+         Replace_Element (Command, TP, Element (Prog_Memory (SL_Pos), 1));
+         SL_Pos := SL_Pos + 1;
+         TP := TP + 1;
+      end if;
+      Replace_Element (Command, TP, ASCII.NUL);
+
+      --  481
+      Assert (not Is_Fun or else Prog_Memory (SL_Pos) = "(" or else
+              Prog_Memory (Sub_Line_Ptr) = cmdCFUN, Routine_Name &
+                "invalid function definition");
+
+      --  485 Find the end of the caller's identifier, tp is left pointing to
+      --  the start of the caller's argument list.
+      Current_Line_Ptr := Callers_Line_Ptr;
+      TP := 1;
+      while TP <= Length (Command) and then
+        Is_Name_Character (Element (Command, TP)) loop
+         TP := TP + 1;
+      end loop;
+
+      if Element (Command, TP) = '$' or else Element (Command, TP) = '%'
+        or else Element (Command, TP) = '!' then
+         Assert (Is_Fun, Routine_Name & "Type specification is invalid");
+         Replace_Element (Command, TP, Element (Prog_Memory (SL_Pos), 1));
+         TP := TP + 1;
       end if;
 
-      --  499
+      --  496
       Assert
         (To_Upper (To_String (Prog_Memory (SL_Pos - 1)) (1)) =
-           To_Upper (Element (Fun_Name, Fun_Name_Pos - 1)),
+           To_Upper (Element (Command, TP - 1)),
          Routine_Name & "Inconsistent type suffix");
 
-      --  503 If this is a function we check to find if the function's type
+      --  499 If this is a function we check to find if the function's type
       --  has been specified with AS <type> and save it.
       Current_Line_Ptr := Sub_Line_Ptr;
-      Fun_Type         := T_NOTYPE;
+      Fun_Type := T_NOTYPE;
       if Is_Fun then
          SL_Pos2 := Skip_Var (SL_Pos2);
          Skip_Spaces (SL_Pos2);
@@ -224,72 +237,74 @@ package body M_Basic is
          Fun_Type := Fun_Type or V_FIND or V_DIM_VAR or V_LOCAL or V_EMPTY_OK;
       end if;
 
-      --  511 from now on Fun_Name_Pos (tp) points to the caller's argument list
-      --      SL_Pos   (p) points to the Prog_Memory argument list
-      --                  for the definition.
-      Skip_Spaces (SL_Pos);
-      Skip_Spaces (Fun_Name, Fun_Name_Pos);
-      Put_Line
-        (Routine_Name & "511 Sub_Line_Ptr: " & Integer'Image (Sub_Line_Ptr));
+      --  516 from now on TP points to the caller's argument list.
+      --      SL_Pos (p) points to the Prog_Memory argument list for the
+      --      definition.
+      Skip_Spaces (Expression, SL_Pos);
+      Skip_Spaces (Command, TP);
+      Put_Line (Routine_Name & "516 Sub_Line_Ptr: " &
+                  Integer'Image (Sub_Line_Ptr));
 
       if Prog_Memory (Sub_Line_Ptr) = cmdCFUN then
-         Put_Line (Routine_Name & "521");
-         --  521
-         if Command (Fun_Name_Pos) = ')' then
+         Put_Line (Routine_Name & "526");
+         --  526
+         Skip_Spaces (Expression, SL_Pos);
+         if Prog_Memory (SL_Pos) /= "(" then
+            Fun_Type := T_INT;
+         else  --  find the type
             SL_Pos3 := SL_Pos;
             Found   :=
               Prog_Memory (SL_Pos3) /= ")"
-              and then Prog_Memory (SL_Pos3) /= "0";
+              and then Prog_Memory (SL_Pos3) /= "ASCII.NUL";
             while not Found loop
                SL_Pos3 := SL_Pos3 + 1;
                Found   :=
                  Prog_Memory (SL_Pos3) /= ")"
-                 and then Prog_Memory (SL_Pos3) /= "0";
+                 and then Prog_Memory (SL_Pos3) /= "ASCII.NUL";
             end loop;
 
-            Assert (Found, Routine_Name & "syntax error, ) or 0 expected.");
+            Assert (Found, Routine_Name &
+                      "syntax error, ) or ASCII.NUL expected.");
             SL_Pos3 := SL_Pos3 + 1;
             Skip_Spaces (SL_Pos3);
             --  539
             Commands.Check_Type_Specified
               (Expression, SL_Pos3, Fun_Type, False);
             Fun_Type := Fun_Type and not T_IMPLIED;
-         else
-            Fun_Type := T_INT;
          end if;
 
-         --  548
+         --  542
          case Fun_Type is
             when T_INT =>
                I64a :=
                  Call_CFunction
-                   (Sub_Line_Ptr, Fun_Name_Pos, SL_Pos, Callers_Line_Ptr);
+                   (Sub_Line_Ptr, TP, SL_Pos, Callers_Line_Ptr);
             when T_NBR =>
                I_Tmp :=
                  Call_CFunction
-                   (Sub_Line_Ptr, Fun_Name_Pos, SL_Pos, Callers_Line_Ptr);
+                   (Sub_Line_Ptr, TP, SL_Pos, Callers_Line_Ptr);
                Fa    := Configuration.MMFLOAT (I_Tmp);
             when T_STR =>
                Sa :=
                  Call_CFunction
-                   (Sub_Line_Ptr, Fun_Name_Pos, SL_Pos, Callers_Line_Ptr);
+                   (Sub_Line_Ptr, TP, SL_Pos, Callers_Line_Ptr);
                Fa := Configuration.MMFLOAT (I_Tmp);
             when others =>
                Assert
                  (False,
                   Routine_Name & "function name: " &
-                    Element (Fun_Name, Fun_Name_Pos));
+                    Element (Command, TP));
          end case;
          Memory.Temp_Memory_Is_Changed := True;
 
          --  562
       elsif Prog_Memory (Sub_Line_Ptr) = cmdCSUB then
          Put_Line (Routine_Name & "564");
-         Call_CFunction (Sub_Line_Ptr, Fun_Name_Pos, SL_Pos, Callers_Line_Ptr);
+         Call_CFunction (Sub_Line_Ptr, TP, SL_Pos, Callers_Line_Ptr);
          Memory.Temp_Memory_Is_Changed := True;
       else
-         --  588
-         User_Defined_Subfunction (Expression, Fun_Name_Pos, Sub_Line_Ptr);
+         --  573
+         User_Defined_Subfunction (Expression, Fun_Name, TP, Sub_Line_Ptr);
 
       end if;
 
@@ -895,11 +910,10 @@ package body M_Basic is
 
    end Token_Function;
 
-   procedure User_Defined_Subfunction (Expression       : Unbounded_String;
-                                       TP, Sub_Line_Ptr : Natural) is
+   procedure User_Defined_Subfunction
+     (Expression, Fun_Name : Unbounded_String; TP, Sub_Line_Ptr : Natural) is
       use Interfaces;
       use Ada.Assertions;
-      --        use Ada.Characters.Handling;
       use Arguments;
       use Global;
       Routine_Name : constant String := "M_Basic.User_Defined_Subfunction ";
@@ -1075,8 +1089,42 @@ package body M_Basic is
                end if;
                Arg_Val (C1).Var_Type := Arg_Val (C1).Var_Type and not T_PTR;
             end if;
+
+            --  702  The argument supplied was a variable we must setup the
+            --      local variable as a pointer.
+            if (Arg_Val (C1).Var_Type and T_PTR) = T_PTR then
+               Var_Table (Var_Index).S := Arg_Val (C1).S;
+               Var_Table (Var_Index).Var_Type :=
+                 Var_Table (Var_Index).Var_Type or T_PTR;
+               Var_Table (Var_Index).Size :=
+                 Var_Table (Arg_Var_Index (C1)).Size;
+            elsif Arg_Val (C1).Var_Type /= T_NOTYPE and then
+              Arg_Val (C1).Var_Type /= T_NA then
+               if (Var_Table (Var_Index).Var_Type and T_STR) = T_STR and then
+                 (Arg_Val (C1).Var_Type and T_STR) = T_STR then
+                  Var_Table (Var_Index).S := Arg_Val (C1).S;
+                  Arg_Val (C1).S := Null_Unbounded_String;
+               elsif  (Var_Table (Var_Index).Var_Type and T_NBR) =
+                 T_NBR and then
+                 (Arg_Val (C1).Var_Type and T_NBR) = T_NBR then
+                  Var_Table (Var_Index).F := Arg_Val (C1).F;
+               elsif  (Var_Table (Var_Index).Var_Type and T_NBR) =
+                 T_NBR and then
+                 (Arg_Val (C1).Var_Type and T_INT) = T_INT then
+                  Var_Table (Var_Index).F :=
+                    Configuration.MMFLOAT (Arg_Val (C1).Ia);
+               elsif  (Var_Table (Var_Index).Var_Type and T_INT) =
+                 T_INT and then
+                 (Arg_Val (C1).Var_Type and T_INT) = T_INT then
+                  Var_Table (Var_Index).Ia := Arg_Val (C1).Ia;
+               else
+                  Assert (False, Routine_Name & "incompatible type: " &
+                            Function_Type'Image (Arg_Val (C1).Var_Type));
+               end if;
+            end if;
          end loop;
 
+         Current_Subfunction_Name := Fun_Name;
       end if;
 
    end User_Defined_Subfunction;

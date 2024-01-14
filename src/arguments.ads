@@ -19,6 +19,7 @@ package Arguments is
       F        : Configuration.MMFLOAT := 0.0;
       Ia       : Long_Long_Integer := 0;
       S        : Unbounded_String;
+      Size     : Natural := 0;
    end record;
 
    package Var_Package is new Ada.Containers.Vectors (Positive, Var_Record);
