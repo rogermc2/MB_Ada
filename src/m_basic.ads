@@ -1,4 +1,8 @@
 
+with System.Address_To_Access_Conversions;
+
+with Interfaces.C.Pointers;
+
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 
 with Command_And_Token_Tables; use Command_And_Token_Tables;
@@ -6,18 +10,32 @@ with Configuration;
 
 package M_Basic is
 
-   type Subfunction_Ptr is access Unbounded_String;
+--     type Subfunction_Ptr is access Unbounded_String;
+   package Conversion is new
+     System.Address_To_Access_Conversions (Unbounded_String);
+   subtype Subfunction_Ptr is Conversion.Object_Pointer;
+
+   package Char_Ptrs is new Interfaces.C.Pointers
+     (Index              => Interfaces.C.size_t,
+      Element            => Interfaces.C.char,
+      Element_Array      => Interfaces.C.char_array,
+      Default_Terminator => Interfaces.C.nul);
+
+   use type Char_Ptrs.Pointer;
+   subtype Char_Ptr is Char_Ptrs.Pointer;
 
    MAXLINENBR       : constant integer := 65001;
 
-   Current_Line_Ptr : Subfunction_Ptr := null;
+   Current_Line_Ptr : Conversion.Object_Pointer := null;
+--     Current_Line_Ptr : Subfunction_Ptr := null;
    Continue_Point   : Natural := 0;
    Local_Index      : Natural := 0;
    T_Arg            : Function_Type := T_NOTYPE;
 
    --  Subfunctions is an array of pointers to program memory elements
    Subfunctions             : array (1 .. Configuration.MAXSUBFUN) of
-     Subfunction_Ptr :=  (others => Null);
+--       Conversion.Object_Pointer := (others => Null);
+     Subfunction_Ptr := (others => Null);
    Current_Subfunction_Name : Unbounded_String;
    Current_Interrupt_Name   : array (1 .. Configuration.MAXVARLEN + 1) of
      Unbounded_String;

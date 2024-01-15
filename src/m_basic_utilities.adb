@@ -1,4 +1,7 @@
 
+with System;
+with System.Storage_Elements;
+
 with Interfaces;
 
 with Ada.Assertions;
@@ -112,6 +115,19 @@ package body M_Basic_Utilities is
    begin
       while Element (Buffer, Pos) = ' ' loop
          Pos := Pos + 1;
+      end loop;
+
+   end Skip_Spaces;
+
+   procedure Skip_Spaces (Pos : in out M_Basic.Subfunction_Ptr) is
+      use System.Storage_Elements;
+      use M_Basic;
+      Pos_SA : System.Address;
+   begin
+      while Element (Pos.all, 1) = ' ' loop
+         Pos_SA := Conversion.To_Address (Pos);
+         Pos_SA := Pos_SA + 1;
+         Pos := Conversion.To_Pointer (Pos_SA);
       end loop;
 
    end Skip_Spaces;

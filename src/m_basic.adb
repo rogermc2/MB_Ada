@@ -1,3 +1,7 @@
+
+with System;
+with System.Storage_Elements;
+
 with Interfaces;
 
 with Ada.Assertions;
@@ -30,7 +34,8 @@ package body M_Basic is
    --       Ada.Containers.Indefinite_Vectors (Positive, Multi_Value);
    --     subtype Multi_Value_Vector is Multi_Value_Package.Vector;
 
-   Callers_Line_Ptr : Subfunction_Ptr;
+   Callers_Line_Ptr : Conversion.Object_Pointer;
+   --     Callers_Line_Ptr : Subfunction_Ptr;
    Next_Statement   : Positive;
    Command_Line     : Unbounded_String;
    Command_Line_Pos : Positive := 1;
@@ -39,9 +44,11 @@ package body M_Basic is
    --     Trace_On : Boolean := False;
 
    procedure Clear_Runtime;
-   procedure Skip_Element (aLine : String; Pos : in out Positive);
-   procedure User_Defined_Subfunction (Command      : Unbounded_String; TP,
-                                       Sub_Line_Ptr : Natural);
+   procedure Inc_Ptr (Pos : in out Subfunction_Ptr);
+   procedure Skip_Element (aLine : Unbounded_String; Pos : in out Positive);
+   procedure User_Defined_Subfunction
+     (Command      : Unbounded_String; TP : Positive;
+      Sub_Line_Ptr : Subfunction_Ptr);
 
    --  Check_String checks if the next text in an element (a basic statement)
    --  corresponds to an alphabetic string.
@@ -116,24 +123,24 @@ package body M_Basic is
    --   - Return to the expression parser
 
    procedure Defined_Function
-     (Expression   : Unbounded_String; Fun_Name : Unbounded_String;
-      Is_Fun       : Boolean; Command : in out Unbounded_String;
-      SL_Pos       : in out Positive; Subfun_Index : Positive;
-      Fa           : in out Configuration.MMFLOAT;
-      I64a         : in out Long_Long_Integer; Sa : in out Unbounded_String;
-      Fun_Type     : in out Function_Type) is
+     (Expression : Unbounded_String; Fun_Name : Unbounded_String;
+      Is_Fun     : Boolean; Command : in out Unbounded_String;
+      SL_Pos     : in out Positive; Subfun_Index : Positive;
+      Fa         : in out Configuration.MMFLOAT;
+      I64a       : in out Long_Long_Integer; Sa : in out Unbounded_String;
+      Fun_Type   : in out Function_Type) is
       use Interfaces;
       use Arguments;
-      Routine_Name     : constant String  := "M_Basic.Defined_Function ";
-      Pos              : Positive := 1;
-      aVar             : Arguments.Var_Record := Arguments.Find_Var
-        (Fun_Name, Pos, Fun_Type or Global.V_FUNCT);
-      TTP              : Positive;
-      SL_Pos3          : Positive;           --  pp
-      TP               : Positive;
-      T_Cmd_Token      : Positive := Cmd_Token;
-      S                : Unbounded_String := Command_Line;
-      Found            : Boolean := False;
+      --        Routine_Name     : constant String  := "M_Basic.Defined_Function ";
+      --        Pos              : Positive := 1;
+      --        aVar             : Arguments.Var_Record := Arguments.Find_Var
+      --          (Fun_Name, Pos, Fun_Type or Global.V_FUNCT);
+      --        TTP              : Positive;
+      --        SL_Pos3          : Positive;           --  pp
+      --        TP               : Positive;
+      --        T_Cmd_Token      : Positive := Cmd_Token;
+      --        S                : Unbounded_String := Command_Line;
+      --        Found            : Boolean := False;
    begin
       --  763
       Fun_Type := Var_Table (Var_Index).Var_Type;
@@ -142,10 +149,10 @@ package body M_Basic is
       end if;
 
       Var_Table (Var_Index).Var_Type := Var_Table (Var_Index).Var_Type or T_PTR;
-     --  Point to the function's body
-      Skip_Element (To_String (Expression), SL_Pos);
-      TTP := Next_Statement;
---        Execute_Program (Slice (Expression, SL_Pos, Length (SL_Pos)));
+      --  Point to the function's body
+      Skip_Element (Expression, SL_Pos);
+      --        TTP := Next_Statement;
+      --        Execute_Program (Slice (Expression, SL_Pos, Length (SL_Pos)));
 
    end Defined_Function;
 
@@ -159,34 +166,37 @@ package body M_Basic is
    --  fa, i64a, sa and typ are pointers to where the return value is to be
    --                       stored (used by functions only).
    procedure Defined_Subfunction
-     (Is_Fun     : Boolean; Command : in out Unbounded_String; Subfun_Index : Positive;
-      Fa         : in out Configuration.MMFLOAT;
-      I64a       : in out Long_Long_Integer; Sa : in out Unbounded_String;
-      Fun_Type   : in out Function_Type) is
+     (Is_Fun   : Boolean; Command : in out Unbounded_String; Subfun_Index : Positive;
+      Fa       : in out Configuration.MMFLOAT;
+      I64a     : in out Long_Long_Integer; Sa : in out Unbounded_String;
+      Fun_Type : in out Function_Type) is
       use Interfaces;
       use Ada.Characters.Handling;
       use Ada.Assertions;
       use C_Functions;
+      use Conversion;
       use Flash;
       use Global;
-      Routine_Name     : constant String  := "M_Basic.Defined_Subfunction ";
+      Routine_Name  : constant String  := "M_Basic.Defined_Subfunction ";
       --  Sub_Line_Ptr is pointer to a program memory elenment
-      Sub_Line_Ptr     : constant Subfunction_Ptr :=
-                           Subfunctions (Subfun_Index);
-      SL_Pos           : Positive := 1;      --  p
-      SL_Pos2          : Positive;           --  ttp
-      SL_Pos3          : Positive;           --  pp
-      Fun_Name         : Unbounded_String;
-      TP               : Positive := 1;
-      I_Tmp            : Long_Long_Integer;
-      Found            : Boolean          := False;
+      --        Sub_Line_Ptr  : constant Subfunction_Ptr :=
+      Sub_Line_Ptr  : constant Conversion.Object_Pointer :=
+        Subfunctions (Subfun_Index);
+      SL_Pos        : Positive := 1;      --  p
+      SL_Pos2       : Positive;           --  ttp
+      SL_Pos3       : Positive;           --  pp
+      Fun_Name      : Unbounded_String;
+      TP            : Positive := 1;
+      I_Tmp         : Long_Long_Integer;
+      Found         : Boolean          := False;
+      Done          : Boolean          := False;
    begin
       Assert (Sub_Line_Ptr /= null, Routine_Name & "Sub_Line_Ptr is null");
       Callers_Line_Ptr := Current_Line_Ptr;
       Fun_Type := T_NOTYPE;
       --  --  MMVasic 463
       Skip_Spaces (Sub_Line_Ptr.all, SL_Pos);
-      SL_Pos2          := SL_Pos;
+      SL_Pos2 := SL_Pos;
       --  466 copy the sub/fun name from the definition into temp storage and
       --  terminate.
       --  SL_Pos is left pointing to the end of the sub/fun name
@@ -208,7 +218,7 @@ package body M_Basic is
          Assert (Is_Fun, Routine_Name & "Type specification is invalid:");
 
          Fun_Name := Fun_Name & Prog_Memory (SL_Pos);
-         SL_Pos   := SL_Pos + 1;
+         SL_Pos := SL_Pos + 1;
          TP := TP + 1;
       end if;
       Fun_Name := Fun_Name & ASCII.NUL;
@@ -320,46 +330,45 @@ package body M_Basic is
          --  542
          case Fun_Type is
             when T_INT =>
-               I64a :=
-                 C_Functions.Call_CFunction
-                   (Sub_Line_Ptr, TP, SL_Pos, Callers_Line_Ptr);
+               I64a := C_Functions.Call_CFunction (Sub_Line_Ptr, TP, SL_Pos,
+                                                   Callers_Line_Ptr);
             when T_NBR =>
-               I_Tmp :=
-                 Call_CFunction
-                   (Sub_Line_Ptr, TP, SL_Pos, Callers_Line_Ptr);
+               I_Tmp := Call_CFunction (Sub_Line_Ptr, TP, SL_Pos,
+                                        Callers_Line_Ptr);
                Fa    := Configuration.MMFLOAT (I_Tmp);
             when T_STR =>
-               Sa :=
-                 Call_CFunction
-                   (Sub_Line_Ptr, TP, SL_Pos, Callers_Line_Ptr);
+               Sa := Call_CFunction (Sub_Line_Ptr, TP, SL_Pos,
+                                     Callers_Line_Ptr);
                Fa := Configuration.MMFLOAT (I_Tmp);
             when others =>
-               Assert
-                 (False,
-                  Routine_Name & "function name: " &
-                    Element (Command, TP));
+               Assert (False, Routine_Name & "function name: " &
+                         Element (Command, TP));
          end case;
          Memory.Temp_Memory_Is_Changed := True;
+         Done := True;
 
          --  562
-      elsif Prog_Memory (Sub_Line_Ptr) = cmdCSUB then
+      elsif Sub_Line_Ptr.all = cmdCSUB then
          Put_Line (Routine_Name & "564");
          Call_CFunction (Sub_Line_Ptr, TP, SL_Pos, Callers_Line_Ptr);
          Memory.Temp_Memory_Is_Changed := True;
+         Done := True;
       else
          --  573
-         User_Defined_Subfunction (Expression, TP, Sub_Line_Ptr);
+         User_Defined_Subfunction (Command, TP, Sub_Line_Ptr);
 
       end if;
 
-      Current_Subfunction_Name := Fun_Name;
-      --  746 If it is a defined command point to the first statement in the
-      --  command and allow ExecuteProgram() to carry on as before.
-      --  Exit from the subfunction is via cmd_return which will decrement
-      --  LocalIndex.
-      if not Is_Fun then
-         Skip_Element (To_String (Expression), SL_Pos);
-         Next_Statement := SL_Pos;
+      if not Done then
+         Current_Subfunction_Name := Fun_Name;
+         --  746 If it is a defined command point to the first statement in the
+         --  command and allow ExecuteProgram() to carry on as before.
+         --  Exit from the subfunction is via cmd_return which will decrement
+         --  LocalIndex.
+         if not Is_Fun then
+            Skip_Element (Sub_Line_Ptr.all, SL_Pos);
+            Next_Statement := SL_Pos;
+         end if;
       end if;
 
       Put_Line (Routine_Name & "done");
@@ -408,7 +417,7 @@ package body M_Basic is
       Command_Line_Pos := 1;
       Next_Statement := Command_Line_Pos + 1;
       Skip_Spaces (Command_Line, Command_Line_Pos);
-      Skip_Element (To_String (Command_Line), Next_Statement);
+      Skip_Element (Command_Line, Next_Statement);
       Done :=
         Command_Line_Pos >= Flash.Prog_Memory'Length
         or else Element (Command_Line, Command_Line_Pos) =
@@ -522,7 +531,7 @@ package body M_Basic is
 
             --  199
             if Token_Buffer (Program_Ptr) = Integer'Image (T_NEWLINE) then
-               Current_Line_Ptr := Program_Ptr;
+               --                 Current_Line_Ptr := Program_Ptr;
                Program_Ptr      := Program_Ptr + 1;
             end if;
 
@@ -571,49 +580,47 @@ package body M_Basic is
    --  returns with the index of the sub/function in the table or -1 if not found
    --  if type = 0 then look for a sub otherwise a function
    function Find_Subfunction
-     (Token : String; Fun_Type : Function_Type) return Natural
-   is
+     (Token : String; Fun_Type : Function_Type) return Natural is
+      use System.Storage_Elements;
       use Interfaces;
       use Ada.Characters.Handling;
+      use Conversion;
       use Flash;
       Routine_Name : constant String := "M_Basic.Find_Subfunctionm ";
       Index        : Natural         := 0;
       Pos1         : Natural;
-      Pos2         : Natural;
-      Done         : Boolean         := False;
+      Pos2         : Subfunction_Ptr;
+      Sys_A        : System.Address;
+      Done         : Boolean := False;
    begin
       --  394
       Put_Line (Routine_Name & "Token: " & Token);
       while not Done and then Index < Configuration.MAXSUBFUN loop
-         Pos2 := Subfunctions (Index + 1).all;
-         Done := Pos2 = 0;
+         Pos2 := Subfunctions (Index + 1);
+         Done := Pos2 = null;
 
          if not Done then
             Index := Index + 1;
-            if Fun_Type = T_NOTYPE
-              and then
-                (Prog_Memory (Pos2) = cmdSUB or Prog_Memory (Pos2) = cmdCSUB)
-            then
+            if Fun_Type = T_NOTYPE and then
+              (Pos2.all = cmdSUB or Pos2.all = cmdCSUB) then
                null;
-            elsif (Prog_Memory (Pos2) = cmdFUN or Prog_Memory (Pos2) = cmdCFUN)
-            then
+            elsif (Pos2.all = cmdFUN or Pos2.all = cmdCFUN) then
                null;
             else
-               --  412
-               Pos2 := Pos2 + 1;
+               --  411
+               Inc_Ptr (Pos2);
                Skip_Spaces (Pos2);
-               --  418
+               --  413
                if To_Upper (Token) =
-                 To_Upper (Integer'Image (Subfunctions (index)))
-               then
+                 To_Upper (To_String (Subfunctions (index).all)) then
                   Pos1 := 2;
-                  Pos2 := Pos2 + 1;
-                  --  422
+                  Inc_Ptr (Pos2);
+                  --  417
                   while Is_Name_Character (Token (Pos1))
-                    and then To_Upper (Token (Pos1)) = To_Upper (Token (Pos2))
-                  loop
-                     Pos1 := Pos2 + 1;
-                     Pos2 := Pos2 + 1;
+                    and then To_Upper (Token (Pos1)) =
+                      To_Upper (Element (Pos2.all, 1)) loop
+                     Pos1 := Pos1 + 1;
+                     Inc_Ptr (Pos2);
                   end loop;
 
                   Done :=
@@ -642,7 +649,7 @@ package body M_Basic is
    function Get_C_Fun_Ptr (Pos : Positive) return Flash.UB_String_Access is
       use Flash;
       Ptr     : constant UB_String_Access :=
-                  new Unbounded_String'(Prog_Memory (Pos));
+        new Unbounded_String'(Prog_Memory (Pos));
       Mod_Ptr : Modular                   := Copy_To_Mod (Ptr);
    begin
       Mod_Ptr := (Mod_Ptr + 2#11#) and not 2#11#;
@@ -660,6 +667,15 @@ package body M_Basic is
       Command_And_Token_Functions.Init_Operator_Functions;
 
    end Init_Basic;
+
+   procedure Inc_Ptr (Pos : in out Subfunction_Ptr) is
+      use System.Storage_Elements;
+      use Conversion;
+      Sys_A : System.Address := To_Address (Pos);
+   begin
+      Sys_A := Sys_A + 1;
+      Pos := To_Pointer (Sys_A);
+   end Inc_Ptr;
 
    procedure Print_String (theString : String) is
    begin
@@ -840,9 +856,9 @@ package body M_Basic is
    end Save_Program_To_Flash;
 
    --  Skip_Element skips to the the zero char that preceeds an element
-   procedure Skip_Element (aLine : String; Pos : in out Positive) is
+   procedure Skip_Element (aLine : Unbounded_String; Pos : in out Positive) is
    begin
-      while Pos < aLine'Length and then aLine (Pos) /= '0' loop
+      while Pos < Length (aLine) and then Element (aLine, Pos) /= '0' loop
          Pos := Pos + 1;
       end loop;
 
@@ -965,7 +981,8 @@ package body M_Basic is
    end Token_Function;
 
    procedure User_Defined_Subfunction
-     (Command : Unbounded_String; TP, Sub_Line_Ptr : Natural) is
+     (Command      : Unbounded_String; TP : Positive;
+      Sub_Line_Ptr : Subfunction_Ptr) is
       use Interfaces;
       use Ada.Assertions;
       use Arguments;

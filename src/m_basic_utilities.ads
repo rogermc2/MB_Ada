@@ -1,6 +1,8 @@
 
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 
+with M_Basic;
+
 package M_Basic_Utilities is
 
    function Get_Close_Bracket
@@ -17,5 +19,6 @@ package M_Basic_Utilities is
 
    procedure Skip_Spaces (aLine : String; Pos : in out Positive);
    procedure Skip_Spaces (Buffer : Unbounded_String; Pos : in out Positive);
+   procedure Skip_Spaces (Pos : in out M_Basic.Subfunction_Ptr);
 
 end M_Basic_Utilities;
