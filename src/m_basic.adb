@@ -32,6 +32,7 @@ package body M_Basic is
 
    Callers_Line_Ptr : Natural;
    Next_Statement   : Positive;
+   Cmd_Token        : Positive;
 
    --     Trace_On : Boolean := False;
 
@@ -115,23 +116,30 @@ package body M_Basic is
    procedure Defined_Function
      (Expression   : Unbounded_String; Fun_Name : Unbounded_String;
       Is_Fun       : Boolean; Command : in out Unbounded_String;
-      Subfun_Index : Positive;
+      SL_Pos       : in out Positive; Subfun_Index : Positive;
       Fa           : in out Configuration.MMFLOAT;
       I64a         : in out Long_Long_Integer; Sa : in out Unbounded_String;
       Fun_Type     : in out Function_Type) is
       use Interfaces;
+      use Arguments;
       Routine_Name     : constant String  := "M_Basic.Defined_Function ";
       Pos              : Positive := 1;
       aVar             : Arguments.Var_Record := Arguments.Find_Var
         (Fun_Name, Pos, Fun_Type or Global.V_FUNCT);
-      SL_Pos           : Positive := 1;      --  p points to Subfunctions
-      --  character
-      SL_Pos2          : Positive;           --  ttp
+      TTP              : Positive;
       SL_Pos3          : Positive;           --  pp
       TP               : Positive;
+      T_Cmd_Token      : Positive := Cmd_Token;
       Found            : Boolean          := False;
    begin
-      null;
+      Fun_Type := Var_Table (Var_Index).Var_Type;
+      if (Fun_Type and T_STR) = T_STR then
+         Var_Table (Var_Index).S := Null_Unbounded_String;
+      end if;
+      Var_Table (Var_Index).Var_Type := Var_Table (Var_Index).Var_Type or T_PTR;
+      Skip_Element (To_String (Expression), SL_Pos);
+      TTP := Next_Statement;
+
    end Defined_Function;
 
    --  MMBasic 441 Defined_Subfunction function is responsible for executing a
@@ -145,7 +153,7 @@ package body M_Basic is
    --                       stored (used by functions only).
    procedure Defined_Subfunction
      (Expression : Unbounded_String; Is_Fun : Boolean;
-      Command    : in out Unbounded_String; Subfun_Index : Positive;
+      Command      : in out Unbounded_String; Subfun_Index : Positive;
       Fa         : in out Configuration.MMFLOAT;
       I64a       : in out Long_Long_Integer; Sa : in out Unbounded_String;
       Fun_Type   : in out Function_Type) is
@@ -158,8 +166,8 @@ package body M_Basic is
       Routine_Name     : constant String  := "M_Basic.Defined_Subfunction ";
       --  Sub_Line_Ptr is pointer to a program memory elenment
       Sub_Line_Ptr     : constant Natural := Subfunctions (Subfun_Index);
-      SL_Pos           : Positive := 1;      --  p points to Subfunctions
       --  character
+      SL_Pos           : Positive := 1;      --  p
       SL_Pos2          : Positive;           --  ttp
       SL_Pos3          : Positive;           --  pp
       Fun_Name         : Unbounded_String;
@@ -171,7 +179,7 @@ package body M_Basic is
       Callers_Line_Ptr := Current_Line_Ptr;
       Fun_Type := T_NOTYPE;
       --  --  MMVasic 463
-      Skip_Spaces (SL_Pos);
+      Skip_Spaces (Expression, SL_Pos);
       SL_Pos2          := SL_Pos;
       --  466 copy the sub/fun name from the definition into temp storage and
       --  terminate.
@@ -384,7 +392,6 @@ package body M_Basic is
       Routine_Name       : constant String := "M_Basic.Execute_Command ";
       Command_Line       : constant String := To_String (Command);
       Command_Line_Pos   : Positive        := 1;   --  p + 1
-      Next_Statement_Pos : Positive        := 1;
       Command_Token      : Integer;
       Interupt_Check     : Integer         := 0;
       Command_Ptr        : Command_And_Token_Functions.Access_Procedure;
@@ -393,9 +400,9 @@ package body M_Basic is
    begin
       Put_Line (Routine_Name & "Command: " & To_String (Command));
       --  228
-      Next_Statement_Pos := Command_Line_Pos + 1;
+      Next_Statement := Command_Line_Pos + 1;
       Skip_Spaces (Command_Line, Command_Line_Pos);
-      Skip_Element (Command_Line, Next_Statement_Pos);
+      Skip_Element (Command_Line, Next_Statement);
       Done :=
         Command_Line_Pos >= Flash.Prog_Memory'Length
         or else Command_Line (Command_Line_Pos) =
@@ -471,7 +478,7 @@ package body M_Basic is
          end if;
 
          --  276
-         Command_Line_Pos := Next_Statement_Pos;
+         Command_Line_Pos := Next_Statement;
 
          Done :=
            (Command_Line (Command_Line_Pos) = '0'
