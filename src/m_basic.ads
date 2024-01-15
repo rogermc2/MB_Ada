@@ -10,9 +10,9 @@ with Configuration;
 
 package M_Basic is
 
---     type Subfunction_Ptr is access Unbounded_String;
    package Conversion is new
      System.Address_To_Access_Conversions (Unbounded_String);
+   subtype Program_Ptr is Conversion.Object_Pointer;
    subtype Subfunction_Ptr is Conversion.Object_Pointer;
 
    package Char_Ptrs is new Interfaces.C.Pointers
@@ -26,15 +26,14 @@ package M_Basic is
 
    MAXLINENBR       : constant integer := 65001;
 
-   Current_Line_Ptr : Conversion.Object_Pointer := null;
---     Current_Line_Ptr : Subfunction_Ptr := null;
+   Current_Line_Ptr : Subfunction_Ptr := null;
+--     Current_Line_Ptr : Natural := 0;
    Continue_Point   : Natural := 0;
    Local_Index      : Natural := 0;
    T_Arg            : Function_Type := T_NOTYPE;
 
    --  Subfunctions is an array of pointers to program memory elements
    Subfunctions             : array (1 .. Configuration.MAXSUBFUN) of
---       Conversion.Object_Pointer := (others => Null);
      Subfunction_Ptr := (others => Null);
    Current_Subfunction_Name : Unbounded_String;
    Current_Interrupt_Name   : array (1 .. Configuration.MAXVARLEN + 1) of

@@ -3,6 +3,7 @@ with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 
 with Commands;
 with Configuration; use Configuration;
+with M_Basic;
 with Draw;
 with Keyboard;
 
@@ -19,7 +20,8 @@ package Flash is
      Unbounded_String;
 
    Prog_Memory     : Prog_Memory_Array :=
-                       (others => To_Unbounded_String ("ff"));
+     (others => To_Unbounded_String ("ff"));
+   Prog_Memory_Ptr : M_Basic.Program_Ptr;
 
    type Option_Record is record
       Autorun              : Boolean := False;
