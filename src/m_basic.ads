@@ -6,16 +6,18 @@ with Configuration;
 
 package M_Basic is
 
+   type Subfunction_Ptr is access Unbounded_String;
+
    MAXLINENBR       : constant integer := 65001;
 
-   Current_Line_Ptr : Natural := 0;
+   Current_Line_Ptr : Subfunction_Ptr := null;
    Continue_Point   : Natural := 0;
    Local_Index      : Natural := 0;
    T_Arg            : Function_Type := T_NOTYPE;
 
    --  Subfunctions is an array of pointers to program memory elements
-   Subfunctions             : array (1 .. Configuration.MAXSUBFUN) of Natural :=
-                                (others => 0);
+   Subfunctions             : array (1 .. Configuration.MAXSUBFUN) of
+     Subfunction_Ptr :=  (others => Null);
    Current_Subfunction_Name : Unbounded_String;
    Current_Interrupt_Name   : array (1 .. Configuration.MAXVARLEN + 1) of
      Unbounded_String;
@@ -23,11 +25,11 @@ package M_Basic is
    function Check_String (aString, Token : String) return Natural;
    procedure Clear_Program;
    procedure Defined_Subfunction
-     (Expression : Unbounded_String; Is_Fun : Boolean;
-      Command    : in out Unbounded_String; Subfun_Index : Positive;
-      Fa         : in out Configuration.MMFLOAT;
-      I64a       : in out Long_Long_Integer;
-      Sa         : in out Unbounded_String; Fun_Type : in out Function_Type);
+     (Is_Fun       : Boolean; Command : in out Unbounded_String;
+      Subfun_Index : Positive;
+      Fa           : in out Configuration.MMFLOAT;
+      I64a         : in out Long_Long_Integer;
+      Sa           : in out Unbounded_String; Fun_Type : in out Function_Type);
    procedure Execute_Program (Token_Buffer : String_Buffer);
    function Find_Subfunction (Token : String; Fun_Type : Function_Type)
                               return Natural;

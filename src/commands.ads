@@ -15,8 +15,8 @@ package Commands is
    Go_Sub_Index       : Natural := 0;
 
    procedure Check_Type_Specified
-     (Expression : Unbounded_String; Pos: Positive; Fun_Type : in out Unsigned_16;
-      Allow_Default_Type : Boolean);
+     (Expression : Unbounded_String; Pos : Positive;
+      Fun_Type   : in out Unsigned_16; Allow_Default_Type : Boolean);
    procedure Command_Input;
    procedure Execute_One_Line;
    procedure Process_Command
