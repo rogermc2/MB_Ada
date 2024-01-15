@@ -32,6 +32,8 @@ package body M_Basic is
 
    Callers_Line_Ptr : Natural;
    Next_Statement   : Positive;
+   Command_Line     : Unbounded_String;
+   Command_Line_Pos : Positive := 1;
    Cmd_Token        : Positive;
 
    --     Trace_On : Boolean := False;
@@ -130,13 +132,16 @@ package body M_Basic is
       SL_Pos3          : Positive;           --  pp
       TP               : Positive;
       T_Cmd_Token      : Positive := Cmd_Token;
-      Found            : Boolean          := False;
+      S                : Unbounded_String := Command_Line;
+      Found            : Boolean := False;
    begin
+      --  763
       Fun_Type := Var_Table (Var_Index).Var_Type;
       if (Fun_Type and T_STR) = T_STR then
          Var_Table (Var_Index).S := Null_Unbounded_String;
       end if;
       Var_Table (Var_Index).Var_Type := Var_Table (Var_Index).Var_Type or T_PTR;
+     --  Point to the function's body
       Skip_Element (To_String (Expression), SL_Pos);
       TTP := Next_Statement;
 
@@ -390,8 +395,6 @@ package body M_Basic is
       use Ada.Assertions;
       use String_Buffer_Package;
       Routine_Name       : constant String := "M_Basic.Execute_Command ";
-      Command_Line       : constant String := To_String (Command);
-      Command_Line_Pos   : Positive        := 1;   --  p + 1
       Command_Token      : Integer;
       Interupt_Check     : Integer         := 0;
       Command_Ptr        : Command_And_Token_Functions.Access_Procedure;
@@ -400,22 +403,25 @@ package body M_Basic is
    begin
       Put_Line (Routine_Name & "Command: " & To_String (Command));
       --  228
+      Command_Line := Command;
+      Command_Line_Pos := 1;
       Next_Statement := Command_Line_Pos + 1;
       Skip_Spaces (Command_Line, Command_Line_Pos);
-      Skip_Element (Command_Line, Next_Statement);
+      Skip_Element (To_String (Command_Line), Next_Statement);
       Done :=
         Command_Line_Pos >= Flash.Prog_Memory'Length
-        or else Command_Line (Command_Line_Pos) =
+        or else Element (Command_Line, Command_Line_Pos) =
       '\';  --  ignore comment line
 
       if Done then
          Put_Line (Routine_Name & "No more token buffer elements");
       else
-         if Command_Line'Length > 0
-           and then Command_Line (Command_Line_Pos) /= '''
+         if Length (Command_Line) > 0
+           and then Element (Command_Line, Command_Line_Pos) /= '''
          then
             --  ignore comment line
-            Put_Line (Routine_Name & "239 Command_Line: " & Command_Line);
+            Put_Line (Routine_Name & "239 Command_Line: " &
+                        To_String (Command_Line));
             --  239
             --              if setjmp (ErrNext) = 0 then
             Save_Local_Index := Local_Index;
@@ -481,11 +487,11 @@ package body M_Basic is
          Command_Line_Pos := Next_Statement;
 
          Done :=
-           (Command_Line (Command_Line_Pos) = '0'
-            and then Command_Line (Command_Line_Pos + 1) = '0')
+           (Element (Command_Line, Command_Line_Pos) = '0'
+            and then Element (Command_Line, Command_Line_Pos + 1) = '0')
            or else
-             (Command_Line (Command_Line_Pos) = 'f'
-              and then Command_Line (Command_Line_Pos + 1) = 'f');
+             (Element (Command_Line, Command_Line_Pos) = 'f'
+              and then Element (Command_Line, Command_Line_Pos + 1) = 'f');
       end if;
 
    end Execute_Command;
