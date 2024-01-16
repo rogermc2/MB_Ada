@@ -38,7 +38,7 @@ package body M_Basic is
    Next_Statement   : Positive;
    Command_Line     : Unbounded_String;
    Command_Line_Pos : Positive := 1;
---     Cmd_Token        : Positive;
+   Cmd_Token        : Positive;
    Current_Comand   : aliased Unbounded_String := Null_Unbounded_String;
 
    --     Trace_On : Boolean := False;
@@ -135,11 +135,11 @@ package body M_Basic is
       --        Pos              : Positive := 1;
       --        aVar             : Arguments.Var_Record := Arguments.Find_Var
       --          (Fun_Name, Pos, Fun_Type or Global.V_FUNCT);
-      --        TTP              : Positive;
+      TTP              : Positive;
       --        SL_Pos3          : Positive;           --  pp
       --        TP               : Positive;
-      --        T_Cmd_Token      : Positive := Cmd_Token;
-      --        S                : Unbounded_String := Command_Line;
+      T_Cmd_Token      : Positive := Cmd_Token;
+      S                : Unbounded_String := Command_Line;
       --        Found            : Boolean := False;
    begin
       --  763
@@ -151,8 +151,8 @@ package body M_Basic is
       Var_Table (Var_Index).Var_Type := Var_Table (Var_Index).Var_Type or T_PTR;
       --  Point to the function's body
       Skip_Element (Expression, SL_Pos);
-      --        TTP := Next_Statement;
-      --        Execute_Program (Slice (Expression, SL_Pos, Length (SL_Pos)));
+      TTP := Next_Statement;
+      Execute_Program (To_String_Buffer (Expression, SL_Pos));
 
    end Defined_Function;
 

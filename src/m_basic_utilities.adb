@@ -7,8 +7,6 @@ with Interfaces;
 with Ada.Assertions;
 with Ada.Characters.Handling;
 
-with Command_And_Token_Tables; use Command_And_Token_Tables;
-
 package body M_Basic_Utilities is
 
    function Get_Close_Bracket
@@ -131,5 +129,17 @@ package body M_Basic_Utilities is
       end loop;
 
    end Skip_Spaces;
+
+   function To_String_Buffer (Buffer : Unbounded_String; Pos : Positive)
+                              return String_Buffer is
+      Result : String_Buffer;
+   begin
+      for index in Pos .. Length (Buffer) loop
+         Result.Append (Character'Image (Element (Buffer, index)));
+      end loop;
+
+      return Result;
+
+   end To_String_Buffer;
 
 end M_Basic_Utilities;

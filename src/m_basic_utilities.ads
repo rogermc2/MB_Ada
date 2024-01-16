@@ -1,6 +1,7 @@
 
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 
+with Command_And_Token_Tables; use Command_And_Token_Tables;
 with M_Basic;
 
 package M_Basic_Utilities is
@@ -20,5 +21,7 @@ package M_Basic_Utilities is
    procedure Skip_Spaces (aLine : String; Pos : in out Positive);
    procedure Skip_Spaces (Buffer : Unbounded_String; Pos : in out Positive);
    procedure Skip_Spaces (Pos : in out M_Basic.Subfunction_Ptr);
+   function To_String_Buffer (Buffer : Unbounded_String; Pos : Positive)
+                              return String_Buffer;
 
 end M_Basic_Utilities;
