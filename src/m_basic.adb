@@ -593,16 +593,20 @@ package body M_Basic is
       --        Pos2         : Subfunction_Ptr;
       --        Sys_A        : System.Address;
       Done         : Boolean := False;
+      Not_Null     : Boolean := False;
    begin
       --  394
       Put_Line (Routine_Name & "Token: " & Token);
       while not Done and then Index < Configuration.MAXSUBFUN loop
          --           Pos2 := Subfunctions (Index + 1);
-         Subfun := Subfunctions (Index + 1).all;
+         Not_Null := Subfunctions (Index + 1) /= null;
+         if Not_Null then
+            Subfun := Subfunctions (Index + 1).all;
+         end if;
          Done := Pos2 = Length (Subfun);
          --           Done := Pos2 = null;
 
-         if not Done then
+         if Not_Null and then not Done then
             Index := Index + 1;
             if Fun_Type = T_NOTYPE and then
               (To_String (Subfun) = cmdSUB or To_String (Subfun) = cmdCSUB) then

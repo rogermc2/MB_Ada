@@ -35,7 +35,7 @@ package Arguments is
    Arg_V           : String_Buffer;
    Arg_T           : Function_Type;
 
-   Arg_Var_Index   : array (1 .. Positive (Length (Var_Table))) of Integer;
+   Arg_Var_Index   : array (1 .. Natural (Length (Var_Table))) of Integer;
 
    function Find_Var (Expression : Unbounded_String; Pos : in out Positive;
                        Action     : Function_Type) return Var_Record;
