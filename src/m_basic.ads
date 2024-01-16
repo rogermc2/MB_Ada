@@ -47,7 +47,7 @@ package M_Basic is
       Fa           : in out Configuration.MMFLOAT;
       I64a         : in out Long_Long_Integer;
       Sa           : in out Unbounded_String; Fun_Type : in out Function_Type);
-   procedure Execute_Program (Token_Buffer : String_Buffer);
+   procedure Execute_Program (Token_Buffer : Unbounded_String);
    function Find_Subfunction (Token : String; Fun_Type : Function_Type)
                               return Natural;
    procedure Init_Basic;

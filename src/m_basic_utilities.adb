@@ -142,4 +142,14 @@ package body M_Basic_Utilities is
 
    end To_String_Buffer;
 
+   procedure To_UB_String (Buffer    : String_Buffer;
+                           UB_String : out Unbounded_String) is
+      use String_Buffer_Package;
+   begin
+      for index in 1 .. Positive (Length (Buffer)) loop
+         UB_String :=  UB_String & Element (Buffer, index);
+      end loop;
+
+   end To_UB_String;
+
 end M_Basic_Utilities;
