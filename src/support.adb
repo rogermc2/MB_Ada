@@ -102,6 +102,7 @@ package body Support is
    end Print_Buffer;
 
    procedure Process_Commands is
+      use M_Basic.Conversion;
 --        Routine_Name : constant String := "Support.Process_Commands";
    begin
       if Flash.Option.DISPLAY_CONSOLE then
@@ -117,7 +118,7 @@ package body Support is
 --        Put_Line (Routine_Name & "Current_Line_Ptr: " &
 --                    Integer'Image (M_Basic.Current_Line_Ptr));
 
-      if M_Basic.Current_Line_Ptr > 0 then
+      if M_Basic.Current_Line_Ptr /= null then
          Audio.Close_Audio;
          Audio.Vol_Left := 100;
          Audio.Vol_Right := 100;
@@ -128,7 +129,7 @@ package body Support is
       M_Misc.Echo_Option := True;
       M_Basic.Local_Index := 0;  --  Should not be needed but ensures that all
       Memory.Clear_Temp_Memory;  --  space will be cleared.
-      M_Basic.Current_Line_Ptr := 0;
+      M_Basic.Current_Line_Ptr := null;
 
       if Global.MM_Char_Pos > 1 then
          --  Prompt should be on a new line.

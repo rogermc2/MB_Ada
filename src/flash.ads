@@ -17,7 +17,7 @@ package Flash is
    EDIT_BUFFER_SIZE : constant Positive := 46 * FLASH_PAGE_SIZE;
 
    type Prog_Memory_Array is array (1 .. PROG_FLASH_SIZE) of
-     Unbounded_String;
+     aliased Unbounded_String;
 
    Prog_Memory     : Prog_Memory_Array :=
      (others => To_Unbounded_String ("ff"));

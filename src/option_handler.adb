@@ -200,9 +200,10 @@ package body Option_Handler is
    end Do_PIN;
 
    function Do_Save (E_String : String) return Boolean is
+      use M_Basic.Conversion;
       Found : constant Boolean := Check_String (E_String, "SAVE") > 0;
    begin
-      if Found and then Current_Line_Ptr /= 0 then
+      if Found and then Current_Line_Ptr /= null then
          Flash.Save_Options;
       end if;
 
@@ -233,6 +234,7 @@ package body Option_Handler is
    --  MM_Misc.c 268
    procedure Option_Cmd is
       use Interfaces;
+      use M_Basic.Conversion;
       Routine_Name : constant String := "Option_Handler.Option_Cmd ";
       E_String     : constant String := To_String (Global.E_UB_String);
       TP           : Natural;
@@ -243,7 +245,7 @@ package body Option_Handler is
       Assert (Length (Global.E_UB_String) > 0, Routine_Name &
                 "called with empty Global.E_UB_String");
       Commands.Option_Error_Check := External.CP_IGNORE_INUSE;
-      if Current_Line_Ptr /= 0 then
+      if Current_Line_Ptr /= null then
          Commands.Option_Error_Check :=
            Commands.Option_Error_Check or External.CP_NOABORT;
       end if;

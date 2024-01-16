@@ -21,7 +21,7 @@ package M_Basic is
       Element_Array      => Interfaces.C.char_array,
       Default_Terminator => Interfaces.C.nul);
 
-   use type Char_Ptrs.Pointer;
+--     use type Char_Ptrs.Pointer;
    subtype Char_Ptr is Char_Ptrs.Pointer;
 
    MAXLINENBR       : constant integer := 65001;

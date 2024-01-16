@@ -20,7 +20,6 @@ package body Arguments is
                     Name_Length : Natural; I_Free : in out Natural;
                     Tmp         : in out Integer; Name  : Unbounded_String) is
       use Interfaces;
-      use Var_Package;
       --        Routine_Name : constant String := "M_Basic_Utilities.Do_AA ";
       Item         : Var_Record;
       TP_Name      : Unbounded_String;
@@ -99,7 +98,6 @@ package body Arguments is
       use Ada.Assertions;
       use Global;
       use M_Misc;   --  for Option_Base
-      use Var_Package;
       Routine_Name : constant String := "M_Basic_Utilities.Do_BA ";
       Item         : Var_Record;
       Item_2       : Var_Record;
@@ -200,7 +198,7 @@ package body Arguments is
       use Interfaces;
       use Ada.Assertions;
       use Global;
-      use Var_Package;
+      use M_Basic.Conversion;
       Routine_Name  : constant String := "M_Basic_Utilities.Do_YA ";
       --        aChar        : Character;
       S             : Unbounded_String;   --  New variable name
@@ -226,9 +224,10 @@ package body Arguments is
          Done := False;
          while not Done  and then Var_I <= Configuration.MAXSUBFUN loop
             Var_I := Var_I + 1;
-            Done := M_Basic.Subfunctions (Var_I) = 0;
+            Done := M_Basic.Subfunctions (Var_I) = null;
             if not Done then
-               X := M_Basic.Subfunctions (Var_I);
+               X :=
+                 Integer'Value (To_String (M_Basic.Subfunctions (Var_I).all));
                X := X + 1;
                --  Skip_Spaces (X);
                --  MMBasic 1955

@@ -32,6 +32,7 @@ package body MX470_Option_Handler is
    function Do_Console (E_String : String) return Boolean is
       use External;
       use IO_Ports;
+      use M_Basic.Conversion;
       Routine_Name : constant String := "MX470_Option_Handler.Do_Console ";
       TP           : constant Natural := Check_String (E_String, "CONSOLE");
       Found        : constant Boolean := TP > 0;
@@ -44,14 +45,14 @@ package body MX470_Option_Handler is
             Flash.Save_Options;
 
          elsif Check_String (E_String, "OFF") > 0 then
-            if Current_Line_Ptr > 0 then
+            if Current_Line_Ptr /= null then
                Put_Line (Routine_Name & "invalid option in a program.");
                Flash.Option.Serial_Con_Disabled := True;
                Save_And_Reset;
             end if;
 
          elsif Check_String (E_String, "ON") > 0 then
-            if Current_Line_Ptr > 0 then
+            if Current_Line_Ptr /= null then
                Put_Line (Routine_Name & "invalid option in a program.");
             end if;
 
@@ -291,9 +292,10 @@ package body MX470_Option_Handler is
    end Other_Options;
 
    procedure Save_And_Reset is
+      use M_Basic.Conversion;
       Routine_Name : constant String := "MX470_Option_Handler.Save_And_Reset ";
    begin
-      if Current_Line_Ptr = 0 and then Flash.Save_Options then
+      if Current_Line_Ptr = null and then Flash.Save_Options then
          delay (0.2);
          Put_Line (Routine_Name & "Restart the Micromite");
       end if;
