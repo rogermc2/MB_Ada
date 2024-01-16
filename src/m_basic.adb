@@ -38,7 +38,7 @@ package body M_Basic is
    Next_Statement   : Positive;
    Command_Line     : Unbounded_String;
    Command_Line_Pos : Positive := 1;
-   Cmd_Token        : Positive;
+--     Cmd_Token        : Positive;
    Current_Comand   : aliased Unbounded_String := Null_Unbounded_String;
 
    --     Trace_On : Boolean := False;
@@ -513,6 +513,7 @@ package body M_Basic is
       Program_Ptr      : Positive        := 1;
       Done             : Boolean         := False;
    begin
+      Put_Line (Routine_Name);
       if not Is_Empty (Token_Buffer) then
          Put_Line (Routine_Name & "Token_Buffer");
          Support.Print_Buffer (Token_Buffer);
@@ -531,7 +532,7 @@ package body M_Basic is
             --  199
             if Token_Buffer (Program_Ptr) = Integer'Image (T_NEWLINE) then
                --                 Current_Line_Ptr := Program_Ptr;
-               Program_Ptr      := Program_Ptr + 1;
+               Program_Ptr := Program_Ptr + 1;
             end if;
 
             --  217
@@ -586,7 +587,7 @@ package body M_Basic is
       use Conversion;
       use Flash;
       Routine_Name : constant String := "M_Basic.Find_Subfunctionm ";
-      Index        : Natural         := 0;
+      Index        : Natural := 0;
       Subfun       : Unbounded_String;
       Pos1         : Natural;
       Pos2         : Positive := 1;
@@ -606,8 +607,8 @@ package body M_Basic is
          Done := Pos2 = Length (Subfun);
          --           Done := Pos2 = null;
 
+         Index := Index + 1;
          if Not_Null and then not Done then
-            Index := Index + 1;
             if Fun_Type = T_NOTYPE and then
               (To_String (Subfun) = cmdSUB or To_String (Subfun) = cmdCSUB) then
                --                (Pos2.all = cmdSUB or Pos2.all = cmdCSUB) then
@@ -645,7 +646,8 @@ package body M_Basic is
                         or else
                           (not Is_Name_Character
                              (Element (Prog_Memory (Pos1), 1)) and
-                             not Is_Name_Character (Element (Prog_Memory (Pos2), 1)));
+                             not Is_Name_Character
+                               (Element (Prog_Memory (Pos2), 1)));
                end if;
             end if;
          end if;
