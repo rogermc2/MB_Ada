@@ -46,7 +46,7 @@ package body M_Basic is
 
    procedure Clear_Runtime;
    procedure Inc_Ptr (Pos : in out Subfunction_Ptr);
-   function Is_Command_End (Command : Unbounded_String; Pos : Positive)
+   function Is_Command_End (Command : Unbounded_String; Pos : in out Positive)
                             return Boolean;
    procedure Skip_Element (aLine : Unbounded_String; Pos : in out Positive);
    procedure User_Defined_Subfunction
@@ -441,9 +441,9 @@ package body M_Basic is
          Command :=
            Unbounded_Slice (Token_Buffer, Program_Ptr, Length (Token_Buffer));
          Put_Line (Routine_Name & "Command: " & To_String (Command));
---           Put_Line (Routine_Name & "checking for Command_End");
---           Put_Line (Routine_Name & "Command_End: " &
---                       Boolean'Image (Is_Command_End (Command, Command_Pos)));
+         --           Put_Line (Routine_Name & "checking for Command_End");
+         --           Put_Line (Routine_Name & "Command_End: " &
+         --                       Boolean'Image (Is_Command_End (Command, Command_Pos)));
          Done := Is_Command_End (Command, Program_Ptr) or else
            Program_Ptr >= Flash.Prog_Memory'Length;
       end if;
@@ -453,7 +453,7 @@ package body M_Basic is
       else
          --  ignore comment line if character is '.
          Skip_Spaces (Command, Command_Pos);
---           Put_Line (Routine_Name & "spaces skipped.");
+         --           Put_Line (Routine_Name & "spaces skipped.");
          if Element (Command, Command_Pos) /= ''' then
             Skip_Element (Command, Next_Statement);
             Put_Line (Routine_Name & "23 Command: " & To_String (Command));
@@ -575,8 +575,10 @@ package body M_Basic is
             end if;
 
             --  279
-            Done := Is_Command_End (Token_Buffer, 1);
-            Program_Ptr := Program_Ptr + 1;
+            Done := Is_Command_End (Token_Buffer, Program_Ptr);
+            if not Done then
+               Program_Ptr := Program_Ptr + 1;
+            end if;
          end loop;
       else
          Put_Line (Routine_Name & "Buffer is empty");
@@ -774,16 +776,21 @@ package body M_Basic is
       Pos := To_Pointer (Sys_A);
    end Inc_Ptr;
 
-   function Is_Command_End (Command : Unbounded_String; Pos : Positive)
+   function Is_Command_End (Command : Unbounded_String; Pos : in out Positive)
                             return Boolean is
---        Routine_Name : constant String := "M_Basic.Is_Command_End ";
-   begin
-      return Pos + 1 > Integer (Length (Command)) or else
+      --        Routine_Name : constant String := "M_Basic.Is_Command_End ";
+      Done : constant Boolean := Pos + 1 > Integer (Length (Command)) or else
         (Element (Command, Pos) = '0'
          and then Element (Command, Pos + 1) = '0')
         or else
           (Element (Command, Pos) = 'f'
            and then Element (Command, Pos + 1) = 'f');
+   begin
+      if Done then
+         Pos := Pos + 2;
+      end if;
+      return Done;
+
    end Is_Command_End;
 
    procedure Print_String (theString : String) is
