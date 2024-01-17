@@ -65,7 +65,7 @@ package body Parse_Functions is
 
       --  MMBasic  1015
       if TT_Index < Token_Table_Size then
-         TT_Index := M_Misc.C_Base_Token + TT_Index;
+         TT_Index := Integer (M_Misc.C_Base_Token) + TT_Index;
          Append (Token_Buffer, Integer'Image (TT_Index));
          Ptr := TP2;
          First_Nonwhite := TT_Index = tokenTHEN or else TT_Index = tokenELSE;
@@ -112,7 +112,7 @@ package body Parse_Functions is
       end loop;
 
       if Found then
-         Command_Value := index + M_Misc.C_Base_Token - 1;
+         Command_Value := index +Integer (M_Misc.C_Base_Token) - 1;
       else
          Put_Line (Routine_Name & "unknown command " & Command);
       end if;
@@ -179,17 +179,17 @@ package body Parse_Functions is
    begin
       --  MMBasic 957
       Buffer_Append (Token_Buffer, Integer'Image
-                     (M_Misc.C_Base_Token + Match_Index));
+                     (Integer (M_Misc.C_Base_Token) + Match_Index));
       --  Step over the input buffer command.
       I_Pos := Match_I_Pos;
       Put_Line (Routine_Name & "C_Base_Token, Match_Index: " &
-                  Integer'Image (M_Misc.C_Base_Token) & ", " &
+                  Interfaces.Unsigned_16'Image (M_Misc.C_Base_Token) & ", " &
                   Integer'Image (Match_Index));
       Put_Line (Routine_Name & "C_Base_Token + Match_Index: " &
-                  Integer'Image (M_Misc.C_Base_Token + Match_Index));
+                  Integer'Image (Integer (M_Misc.C_Base_Token) + Match_Index));
       Put_Line (Routine_Name & "Buffer:");
       Support.Print_Buffer (Token_Buffer);
-      if Match_Index + M_Misc.C_Base_Token =
+      if Match_Index + Integer (M_Misc.C_Base_Token) =
         Get_Command_Value ("Rem") then
          --  MMBasic 962 copy everything
          Copy_Slice (Token_Buffer, I_Pos, Input_Buffer_Length);
@@ -262,7 +262,7 @@ package body Parse_Functions is
    begin
       if aChar = '?' then
          --  MMBasic 914
-         Match_I := Get_Command_Value ("Print") - M_Misc.C_Base_Token;
+         Match_I := Get_Command_Value ("Print") - Integer (M_Misc.C_Base_Token);
          if Get_Input_Character (I_Pos + 1) = ' ' then
             --  eat a trailing space
             I_Pos := I_Pos + 1;

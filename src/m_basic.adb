@@ -33,13 +33,13 @@ package body M_Basic is
    --       Ada.Containers.Indefinite_Vectors (Positive, Multi_Value);
    --     subtype Multi_Value_Vector is Multi_Value_Package.Vector;
 
-   Callers_Line_Ptr : Subfunction_Ptr;
+   Callers_Line_Ptr       : Subfunction_Ptr;
    --     Callers_Line_Ptr : Natural := 0;
-   Next_Statement   : Positive;
-   Command_Line     : Unbounded_String;
-   Command_Line_Pos : Positive := 1;
-   Cmd_Token        : Positive;
-   Current_Comand   : aliased Unbounded_String := Null_Unbounded_String;
+   Next_Statement         : Positive;
+   Command_Line           : Unbounded_String;
+   Saved_Command_Line_Pos : Positive := 1;
+   Cmd_Token              : Positive;
+   Current_Comand         : aliased Unbounded_String := Null_Unbounded_String;
 
    --     Trace_On : Boolean := False;
 
@@ -131,7 +131,7 @@ package body M_Basic is
       Fun_Type   : in out Function_Type) is
       use Interfaces;
       use Arguments;
-      --        Routine_Name     : constant String  := "M_Basic.Defined_Function ";
+      Routine_Name     : constant String  := "M_Basic.Defined_Function ";
       --        Pos              : Positive := 1;
       --        aVar             : Arguments.Var_Record := Arguments.Find_Var
       --          (Fun_Name, Pos, Fun_Type or Global.V_FUNCT);
@@ -154,6 +154,11 @@ package body M_Basic is
       TTP := Next_Statement;
       Execute_Program
         (Unbounded_Slice (Expression, SL_Pos, Length (Expression)));
+
+   exception
+      when others =>
+         Put_Line (Routine_Name & "exception");
+         raise;
 
    end Defined_Function;
 
@@ -399,12 +404,10 @@ package body M_Basic is
 
    procedure Execute_Command (Command          : Unbounded_String;
                               Save_Local_Index : in out Natural) is
-      --       (Buffer           : String_Buffer; Command : Unbounded_String;
-      --        Save_Local_Index : in out Natural) is
       use Interfaces;
       use Ada.Assertions;
-      --        use String_Buffer_Package;
       Routine_Name       : constant String := "M_Basic.Execute_Command ";
+      Command_Line_Pos   : Positive := 1;
       Command_Token      : Unsigned_16;
       Command_Token_Test : Unsigned_16;
       Interupt_Check     : Integer := 0;
@@ -414,13 +417,19 @@ package body M_Basic is
    begin
       Put_Line (Routine_Name & "Command: " & To_String (Command));
       Command_Line := Command;
-      Command_Line_Pos := 1;
       --  225
       Next_Statement := Command_Line_Pos + 1;
       Skip_Spaces (Command_Line, Command_Line_Pos);
       Skip_Element (Command_Line, Next_Statement);
+
       Done :=
         Command_Line_Pos >= Flash.Prog_Memory'Length;
+      Done := Done or else
+        (Element (Command_Line, Command_Line_Pos) = '0'
+         and then Element (Command_Line, Command_Line_Pos + 1) = '0')
+        or else
+          (Element (Command_Line, Command_Line_Pos) = 'f'
+           and then Element (Command_Line, Command_Line_Pos + 1) = 'f');
 
       if Done then
          Put_Line (Routine_Name & "No more token buffer elements");
@@ -436,13 +445,13 @@ package body M_Basic is
             Command_Token :=
               Character'Pos (Element (Command, Command_Line_Pos));
             --  C_Base_Token is the base of the token numbers.
-            Put_Line
-              (Routine_Name & "236 Token > C_Base_Token: " &
-                 Boolean'Image (Command_Token > M_Misc.C_Base_Token));
-            Put_Line
-              (Routine_Name & "Command_Table " &
-                 "(Command_Token - C_Base_Token).Command_Type = T_CMD: " &
-                 Boolean'Image (Command_Token > M_Misc.C_Base_Token));
+            --              Put_Line
+            --                (Routine_Name & "236 Token > C_Base_Token: " &
+            --                   Boolean'Image (Command_Token > M_Misc.C_Base_Token));
+            --              Put_Line
+            --                (Routine_Name & "Command_Table " &
+            --                   "(Command_Token - C_Base_Token).Command_Type = T_CMD: " &
+            --                   Boolean'Image (Command_Token > M_Misc.C_Base_Token));
             Command_Token_Test :=
               (M_Misc.C_Base_Token and Command_Token) - M_Misc.C_Base_Token;
 
@@ -456,10 +465,11 @@ package body M_Basic is
                --  Execute the command
                Put_Line
                  (Routine_Name & "247 Executing command, Token: " &
-                    Integer'Image (Command_Token) & ", Command_Table index: " &
-                    Integer'Image (Command_Token - M_Misc.C_Base_Token));
-               Command_Ptr :=
-                 Command_Table (Command_Token - M_Misc.C_Base_Token).Function_Ptr;
+                    Unsigned_16'Image (Command_Token) &
+                    ", Command_Table index: " &
+                    Unsigned_16'Image (Command_Token - M_Misc.C_Base_Token));
+               Command_Ptr := Command_Table
+                 (Integer (Command_Token - M_Misc.C_Base_Token)).Function_Ptr;
                Assert
                  (Command_Ptr /= null,
                   Routine_Name & "247 Command_Ptr is null");
@@ -496,13 +506,21 @@ package body M_Basic is
          --  276
          Command_Line_Pos := Next_Statement;
 
+         Put_Line
+           (Routine_Name & "Command_Line: " & To_String (Command_Line));
+         Put_Line
+           (Routine_Name & "Command_Line length: " &
+              Integer'Image (Integer (Length (Command_Line))) &
+              ", Command_Line_Pos: " & Integer'Image (Command_Line_Pos));
          Done :=
            (Element (Command_Line, Command_Line_Pos) = '0'
             and then Element (Command_Line, Command_Line_Pos + 1) = '0')
            or else
              (Element (Command_Line, Command_Line_Pos) = 'f'
               and then Element (Command_Line, Command_Line_Pos + 1) = 'f');
+         Put_Line (Routine_Name & "final done set");
       end if;
+      Put_Line (Routine_Name & "done");
 
    end Execute_Command;
 
@@ -561,7 +579,7 @@ package body M_Basic is
                --  skip over the label
                Program_Ptr :=
                  Program_Ptr +
-                   Integer'Value (Element (Token_Buffer, Program_Ptr)) + 2;
+                   Character'Pos (Element (Token_Buffer, Program_Ptr)) + 2;
                Skip_Spaces (Token_Buffer, Program_Ptr);
                --                 Skip_Spaces (Token_Buffer (Program_Ptr), Program_Ptr);
             end if;
@@ -574,8 +592,8 @@ package body M_Basic is
                --                   (Token_Buffer,
                --                    To_Unbounded_String (Element (Token_Buffer, Program_Ptr)),
                Execute_Command
-                 (Slice (Token_Buffer, Program_Ptr, Length (Token_Buffer)),
-                  Save_Local_Index);
+                 (Unbounded_Slice (Token_Buffer, Program_Ptr,
+                  Length (Token_Buffer)), Save_Local_Index);
             end if;
 
             --  279
@@ -715,7 +733,7 @@ package body M_Basic is
       use M_Misc;
       OK : Boolean := True;
    begin
-      while OK and then Pos <= C_Base_Token loop
+      while OK and then Pos <= Integer (C_Base_Token) loop
          --  look for the zero marking the start of an element
          if Prog_Memory (Pos) /= Integer'Image (T_NEWLINE) then
             while Prog_Memory (Pos) /= "0" loop
@@ -1103,13 +1121,13 @@ package body M_Basic is
 
    function Token_Function (Token : String) return Unbounded_String is
       use M_Misc;
-      Token_Value : constant Positive := Integer'Value (Token);
+      Token_Value : constant Integer := Integer'Value (Token);
       Result      : Unbounded_String;
    begin
-      if Token_Value >= C_Base_Token
-        and then Token_Value < Token_Table_Size + C_Base_Token
+      if Token_Value >= Integer (C_Base_Token)
+        and then Token_Value < Token_Table_Size + Integer (C_Base_Token)
       then
-         Result := Token_Table (Token_Value - C_Base_Token).Name;
+         Result := Token_Table (Token_Value - Integer (C_Base_Token)).Name;
       else
          Result := Token_Table (1).Name;
       end if;

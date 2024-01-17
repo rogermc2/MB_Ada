@@ -360,7 +360,7 @@ package body Command_And_Token_Functions is
          Index := Index + 1;
          Found := Token = To_String (Command_Table (Index).Name);
          if Found then
-            Value := M_Misc.C_Base_Token + Index - 1;
+            Value :=Integer ( M_Misc.C_Base_Token) + Index - 1;
          end if;
       end loop;
 
@@ -385,7 +385,7 @@ package body Command_And_Token_Functions is
          if Found then
             --              Put_Line (Routine_Name & "token found, index: " &
             --                          Integer'Image (Index));
-            Value := M_Misc.C_Base_Token + Index - 1;
+            Value := Integer (M_Misc.C_Base_Token) + Index - 1;
          end if;
       end loop;
 

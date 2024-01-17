@@ -63,16 +63,18 @@ package body Commands is
    end Execute_One_Line;
 
    procedure Process_Command
-     (Buffer                      : in out String_Buffer; Match_Index  : Positive; Pos : in out Positive;
+     (Buffer                      : in out String_Buffer;
+      Match_Index                 : Positive; Pos : in out Positive;
       First_Nonwhite, Label_Valid : in out Boolean) is
       use Ada.Characters.Handling;
       use M_Misc;
       use Parse_Functions;
       use Support;
    begin
-      Buffer_Append (Buffer, Integer'Image (C_Base_Token + Match_Index));
+      Buffer_Append
+        (Buffer, Integer'Image (Integer (C_Base_Token) + Match_Index));
 
-      if C_Base_Token + Match_Index = Get_Command_Value ("Rem") then
+      if Integer (C_Base_Token) + Match_Index = Get_Command_Value ("Rem") then
          Buffer_Append (Buffer, Get_Input_Slice (Pos, Input_Buffer_Length));
 
       elsif Is_Alphanumeric (Get_Input_Character (Pos - 1)) and then

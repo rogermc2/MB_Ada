@@ -18,6 +18,7 @@ with Global;
 with I2C;
 with Keyboard;
 with M_Basic;
+with M_Basic_Utilities;
 with M_Misc;
 with Misc_MX470;
 with P32mx470f512h;
@@ -31,6 +32,7 @@ with Watchdog_Timer;
 procedure Main is
    use System;
    use String_Buffer_Package;
+   use M_Basic_Utilities;
    Program_Name    : constant String := "Main ";
    Startup_Token   : constant String := "MM.Startup";
    Token_Buffer    : String_Buffer;
@@ -63,8 +65,8 @@ begin
 
       --  311
       if M_Basic.Find_Subfunction (Startup_Token, T_NOTYPE) /= 0 then
-            Buffer_Append (Token_Buffer,Startup_Token);
-         M_Basic.Execute_Program (Token_Buffer);
+            Buffer_Append (Token_Buffer, Startup_Token);
+         M_Basic.Execute_Program (To_UB_String (Token_Buffer));
       else
          Put_Line (Program_Name &
                      "Startup_Token not found,Token_Buffer_Length: " &
@@ -85,7 +87,7 @@ begin
          Global.Error_In_Prompt := True;
          Clear_Buffer (Token_Buffer);
          Buffer_Append (Token_Buffer, "MM.PROMPT");
-         M_Basic.Execute_Program (Token_Buffer);
+         M_Basic.Execute_Program (To_UB_String (Token_Buffer));
       else
          --  Print prompt
          M_Basic.Print_String ("> ");
@@ -95,12 +97,11 @@ begin
       Load_Input_Buffer (0);
       if Input_Buffer_Length > 0 then
          Tokenizer.Tokenize (Token_Buffer, True);
-         M_Basic.Execute_Program (Token_Buffer);
+         M_Basic.Execute_Program (To_UB_String (Token_Buffer));
       end if;
    end loop;
 
 exception
-   when others =>
-      Put_Line (Program_Name);
+   when others => Put_Line (Program_Name);
 
 end Main;

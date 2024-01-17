@@ -23,7 +23,6 @@ package M_Basic_Utilities is
    procedure Skip_Spaces (Pos : in out M_Basic.Subfunction_Ptr);
    function To_String_Buffer (Buffer : Unbounded_String; Pos : Positive)
                               return String_Buffer;
-   procedure To_UB_String (Buffer    : String_Buffer;
-                           UB_String : out Unbounded_String);
+   function To_UB_String (Buffer : String_Buffer) return Unbounded_String;
 
 end M_Basic_Utilities;
