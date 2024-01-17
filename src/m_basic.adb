@@ -126,37 +126,46 @@ package body M_Basic is
    --   - Return to the expression parser
 
    procedure Defined_Function
-     (Expression : Unbounded_String; Fun_Name : Unbounded_String;
-      Is_Fun     : Boolean; Command : in out Unbounded_String;
-      SL_Pos     : in out Positive; Subfun_Index : Positive;
-      Fa         : in out Configuration.MMFLOAT;
-      I64a       : in out Long_Long_Integer; Sa : in out Unbounded_String;
-      Fun_Type   : in out Function_Type) is
+     (Command : in out Unbounded_String; Fun_Name : Unbounded_String;
+      Pos     : in out Positive; Fa  : in out Configuration.MMFLOAT;
+      I64a    : in out Long_Long_Integer; Sa : in out Unbounded_String;
+      F_Type  : in out Function_Type) is
       use Interfaces;
       use Arguments;
       Routine_Name     : constant String  := "M_Basic.Defined_Function ";
-      --        Pos              : Positive := 1;
-      --        aVar             : Arguments.Var_Record := Arguments.Find_Var
-      --          (Fun_Name, Pos, Fun_Type or Global.V_FUNCT);
+      S                : constant Unbounded_String := Command_Line;
+      Fun_Type         : constant Function_Type := Var_Table (Var_Index).Var_Type;
+      TP               : constant Arguments.Var_Record := Arguments.Find_Var
+        (Fun_Name, Pos, Fun_Type or Global.V_FUNCT);
       TTP              : Positive;
-      --        SL_Pos3          : Positive;           --  pp
-      --        TP               : Positive;
-      T_Cmd_Token      : Positive := Cmd_Token;
-      S                : Unbounded_String := Command_Line;
-      --        Found            : Boolean := False;
    begin
-      --  763
-      Fun_Type := Var_Table (Var_Index).Var_Type;
+      --  766
       if (Fun_Type and T_STR) = T_STR then
          Var_Table (Var_Index).S := Null_Unbounded_String;
       end if;
 
       Var_Table (Var_Index).Var_Type := Var_Table (Var_Index).Var_Type or T_PTR;
       --  Point to the function's body
-      Skip_Element (Expression, SL_Pos);
+      Skip_Element (Command, Pos);
       TTP := Next_Statement;
+      --  780
       Execute_Program
-        (Unbounded_Slice (Expression, SL_Pos, Length (Expression)));
+        (Unbounded_Slice (Command, Pos, Length (Command)));
+      Current_Line_Ptr := Callers_Line_Ptr;
+      Command_Line := S;
+      Next_Statement := TTP;
+
+      --  787
+      if (Fun_Type and T_NBR) = T_NBR then
+         Fa := TP.F;
+      elsif (Fun_Type and T_INT) = T_INT then
+         I64a := TP.Ia;
+      else
+         Sa := TP.S;
+      end if;
+      F_Type := Fun_Type;
+      Memory.Temp_Memory_Is_Changed := True;
+      Commands.Go_Sub_Index :=  Commands.Go_Sub_Index - 1;
 
    exception
       when others =>
@@ -376,6 +385,9 @@ package body M_Basic is
          if not Is_Fun then
             Skip_Element (Sub_Line_Ptr.all, SL_Pos);
             Next_Statement := SL_Pos;
+         else
+            Defined_Function (Command, Fun_Name, SL_Pos, Fa, I64a, Sa,
+                              Fun_Type);
          end if;
       end if;
 
