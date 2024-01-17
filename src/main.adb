@@ -97,6 +97,8 @@ begin
       Load_Input_Buffer (0);
       if Input_Buffer_Length > 0 then
          Tokenizer.Tokenize (Token_Buffer, True);
+--           Put_Line (Program_Name & "Token_Buffer: " &
+--                       To_String (To_UB_String (Token_Buffer)));
          M_Basic.Execute_Program (To_UB_String (Token_Buffer));
       end if;
    end loop;

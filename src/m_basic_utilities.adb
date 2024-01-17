@@ -148,6 +148,9 @@ package body M_Basic_Utilities is
    begin
       for index in 1 .. Positive (Length (Buffer)) loop
          UB_String :=  UB_String & Element (Buffer, index);
+         if index < Positive (Length (Buffer)) then
+            UB_String :=  UB_String & ' ';
+         end if;
       end loop;
 
       return UB_String;

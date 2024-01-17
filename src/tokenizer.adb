@@ -3,11 +3,8 @@ with Interfaces;
 with Ada.Assertions; use Ada.Assertions;
 with Ada.Characters.Handling;
 with Ada.Strings;
---  with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Ada.Text_IO; use Ada.Text_IO;
 
---  with Command_And_Token_Functions; use Command_And_Token_Functions;
---  with Configuration;
 with Global;
 with M_Basic_Utilities;
 with Parse_Functions; use Parse_Functions;
@@ -125,7 +122,6 @@ package body Tokenizer is
             --                          Integer'Image (Match_P));
             Process_First_Nonwhite (Token_Buffer, Ptr, Label_Valid,
                                     First_Nonwhite, Match_I, Match_P);
-            --              Put_Line (Routine_Name & "First_Nonwhite processed");
 --                 Put_Line (Routine_Name & "First_Nonwhite, Ptr: " &
 --                             Get_Input_Character(Ptr));
             if Ptr > Integer (Length (Token_Buffer)) then
