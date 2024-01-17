@@ -6,6 +6,7 @@ with Interfaces;
 
 with Ada.Assertions;
 with Ada.Characters.Handling;
+with Ada.Exceptions; use Ada.Exceptions;
 with Ada.Strings;
 with Ada.Text_IO; use Ada.Text_IO;
 with Ada.Unchecked_Conversion;
@@ -45,6 +46,8 @@ package body M_Basic is
 
    procedure Clear_Runtime;
    procedure Inc_Ptr (Pos : in out Subfunction_Ptr);
+   function Is_Command_End (Command_Line     : Unbounded_String;
+                            Command_Line_Pos : Positive) return Boolean;
    procedure Skip_Element (aLine : Unbounded_String; Pos : in out Positive);
    procedure User_Defined_Subfunction
      (Command      : Unbounded_String; TP : Positive;
@@ -424,12 +427,7 @@ package body M_Basic is
 
       Done :=
         Command_Line_Pos >= Flash.Prog_Memory'Length;
-      Done := Done or else
-        (Element (Command_Line, Command_Line_Pos) = '0'
-         and then Element (Command_Line, Command_Line_Pos + 1) = '0')
-        or else
-          (Element (Command_Line, Command_Line_Pos) = 'f'
-           and then Element (Command_Line, Command_Line_Pos + 1) = 'f');
+      Done := Done or else Is_Command_End (Command_Line, Command_Line_Pos);
 
       if Done then
          Put_Line (Routine_Name & "No more token buffer elements");
@@ -438,20 +436,13 @@ package body M_Basic is
          --  ignore comment line if character is '.
            and then Element (Command_Line, Command_Line_Pos) /= '''
          then
-            Put_Line (Routine_Name & "239 Command_Line: " &
-                        To_String (Command_Line));
+            --              Put_Line (Routine_Name & "239 Command_Line: " &
+            --                          To_String (Command_Line));
             --  236 if setjmp (ErrNext) = 0 then
             Save_Local_Index := Local_Index;
             Command_Token :=
               Character'Pos (Element (Command, Command_Line_Pos));
             --  C_Base_Token is the base of the token numbers.
-            --              Put_Line
-            --                (Routine_Name & "236 Token > C_Base_Token: " &
-            --                   Boolean'Image (Command_Token > M_Misc.C_Base_Token));
-            --              Put_Line
-            --                (Routine_Name & "Command_Table " &
-            --                   "(Command_Token - C_Base_Token).Command_Type = T_CMD: " &
-            --                   Boolean'Image (Command_Token > M_Misc.C_Base_Token));
             Command_Token_Test :=
               (M_Misc.C_Base_Token and Command_Token) - M_Misc.C_Base_Token;
 
@@ -498,9 +489,9 @@ package body M_Basic is
                Memory.Clear_Temp_Memory;
             end if;
 
-            No_Abort       := Console.Check_Abort;
+            No_Abort := Console.Check_Abort;
             Interupt_Check := M_Misc.Check_Interrupt;
-            Done           := not No_Abort and Interupt_Check /= 0;
+            Done := not No_Abort and Interupt_Check /= 0;
          end if;
 
          --  276
@@ -513,66 +504,51 @@ package body M_Basic is
               Integer'Image (Integer (Length (Command_Line))) &
               ", Command_Line_Pos: " & Integer'Image (Command_Line_Pos));
          Done :=
-           (Element (Command_Line, Command_Line_Pos) = '0'
-            and then Element (Command_Line, Command_Line_Pos + 1) = '0')
-           or else
-             (Element (Command_Line, Command_Line_Pos) = 'f'
-              and then Element (Command_Line, Command_Line_Pos + 1) = 'f');
+           Done or else Is_Command_End (Command_Line, Command_Line_Pos);
          Put_Line (Routine_Name & "final done set");
       end if;
       Put_Line (Routine_Name & "done");
 
    end Execute_Command;
 
-   --     procedure Execute_Program (Token_Buffer : String_Buffer)
    procedure Execute_Program (Token_Buffer : Unbounded_String)  is
       use Ada.Strings;
       use Global;
-      use String_Buffer_Package;
       Routine_Name     : constant String := "M_Basic.Execute_Program ";
       Save_Local_Index : Natural         := 0;
       Program_Ptr      : Positive        := 1;
-      Done             : Boolean         := False;
+      Done             : Boolean         := Length (Token_Buffer) > 0;
    begin
-      Put_Line (Routine_Name);
-      --        if not Is_Empty (Token_Buffer) then
-      if Length (Token_Buffer) > 0 then
+      if not Done then
          Put_Line (Routine_Name & "Token_Buffer: " & To_String (Token_Buffer));
-         --           Support.Print_Buffer (Token_Buffer);
          --  194
-         --           Skip_Spaces (Token_Buffer.First_Element, Program_Ptr);
          Skip_Spaces (Token_Buffer, Program_Ptr);
-         --           Put_Line (Routine_Name & "Buffer length: " &
-         --                       Integer'Image (Positive (Buffer.Last_Index)));
+
          while not Done and then
            Program_Ptr <= Integer (Length (Token_Buffer)) loop
-            --             Program_Ptr <= Positive (Token_Buffer.Last_Index) loop
-            --              if Token_Buffer (Program_Ptr) = "0" then
             if Element (Token_Buffer, Program_Ptr) = '0' then
                --  Step over the 0 indicating the start of a new element'
                Program_Ptr := Program_Ptr + 1;
             end if;
 
+            Put_Line (Routine_Name & "195");
             --  195
-            --              if Token_Buffer (Program_Ptr) = Integer'Image (T_NEWLINE) then
             if Element (Token_Buffer, Program_Ptr) =
-              Element (Trim (To_Unbounded_String
-                       (Integer'Image (T_NEWLINE)), Left), 1) then
+              Element (To_Unbounded_String
+                       (Integer'Image (T_NEWLINE)), 1) then
                --                 Current_Line_Ptr := Program_Ptr;
                Program_Ptr := Program_Ptr + 1;
             end if;
 
+            Put_Line (Routine_Name & "217");
             --  217
-            --              if Token_Buffer (Program_Ptr) = Integer'Image (T_LINENBR) then
             if Element (Token_Buffer, Program_Ptr) =
               Element (Trim (To_Unbounded_String
                        (Integer'Image (T_LINENBR)), Left), 1) then
                Program_Ptr := Program_Ptr + 3;
             end if;
             Skip_Spaces (Token_Buffer, Program_Ptr);
-            --              Skip_Spaces (Token_Buffer (Program_Ptr), Program_Ptr);
 
-            --              if Token_Buffer (1) = Integer'Image (T_LABEL) then
             if Element (Token_Buffer, 1) =
               Element (Trim (To_Unbounded_String
                        (Integer'Image (T_LABEL)), Left), 1) then
@@ -581,39 +557,42 @@ package body M_Basic is
                  Program_Ptr +
                    Character'Pos (Element (Token_Buffer, Program_Ptr)) + 2;
                Skip_Spaces (Token_Buffer, Program_Ptr);
-               --                 Skip_Spaces (Token_Buffer (Program_Ptr), Program_Ptr);
             end if;
 
+            Put_Line (Routine_Name & "225");
             --  225
-            --              if Program_Ptr <= Positive (Token_Buffer.Length) then
             if Program_Ptr <= Positive (Length (Token_Buffer)) then
                Put_Line (Routine_Name & "225 Execute_Command");
-               --                 Execute_Command
-               --                   (Token_Buffer,
-               --                    To_Unbounded_String (Element (Token_Buffer, Program_Ptr)),
                Execute_Command
                  (Unbounded_Slice (Token_Buffer, Program_Ptr,
                   Length (Token_Buffer)), Save_Local_Index);
             end if;
 
             --  279
-            Done :=
-            --                Token_Buffer.First_Element = "00" or else
-            --                Token_Buffer.First_Element = "ff";
-              (Element (Token_Buffer, 1) = '0' and then
-               Element (Token_Buffer, 2) = '0') or else
-              (Element (Token_Buffer, 1) = 'f' and then
-               Element (Token_Buffer, 2) = 'f');
+            Done := Is_Command_End (Token_Buffer, 1);
+            --                (Element (Token_Buffer, 1) = '0' and then
+            --                 Element (Token_Buffer, 2) = '0') or else
+            --                (Element (Token_Buffer, 1) = 'f' and then
+            --                 Element (Token_Buffer, 2) = 'f');
             Program_Ptr := Program_Ptr + 1;
          end loop;
       else
          Put_Line (Routine_Name & "Buffer is empty");
       end if;
-      Put_Line (Routine_Name & "done");
 
    exception
+      when Constraint_Error =>
+         Put_Line (Routine_Name & "constraint exception");
+         New_Line;
+         raise;
+      when Error : Index_Error =>
+         Put (Routine_Name & "index exception: ");
+         Put (Exception_Message (Error));
+         New_Line;
+         raise;
       when others =>
          Put_Line (Routine_Name & "exception");
+         New_Line;
          raise;
 
    end Execute_Program;
@@ -792,6 +771,16 @@ package body M_Basic is
       Sys_A := Sys_A + 1;
       Pos := To_Pointer (Sys_A);
    end Inc_Ptr;
+
+   function Is_Command_End (Command_Line     : Unbounded_String;
+                            Command_Line_Pos : Positive) return Boolean is
+   begin
+      return (Element (Command_Line, Command_Line_Pos) = '0'
+              and then Element (Command_Line, Command_Line_Pos + 1) = '0')
+        or else
+          (Element (Command_Line, Command_Line_Pos) = 'f'
+           and then Element (Command_Line, Command_Line_Pos + 1) = 'f');
+   end Is_Command_End;
 
    procedure Print_String (theString : String) is
    begin

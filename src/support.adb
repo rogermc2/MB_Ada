@@ -103,9 +103,8 @@ package body Support is
 
    procedure Process_Commands is
       use M_Basic.Conversion;
-      Routine_Name : constant String := "Support.Process_Commands";
+--        Routine_Name : constant String := "Support.Process_Commands";
    begin
-      Put_Line (Routine_Name);
       if Flash.Option.DISPLAY_CONSOLE then
          Draw.Set_Font (Global.Prompt_Font);
          Draw.GUI_Fcolour := Global.Prompt_Fcolour;
@@ -144,7 +143,6 @@ package body Support is
       --  300
       Global.Except_Code := Exceptions.EXCEP_IRQ;
       M_Basic.Prepare_Program (False);
-      Put_Line (Routine_Name & "done");
 
    end Process_Commands;
 
