@@ -132,10 +132,10 @@ package body M_Basic is
       F_Type  : in out Function_Type) is
       use Interfaces;
       use Arguments;
-      Routine_Name     : constant String  := "M_Basic.Defined_Function ";
-      S                : constant Unbounded_String := Command_Line;
-      Fun_Type         : constant Function_Type := Var_Table (Var_Index).Var_Type;
-      TP               : constant Arguments.Var_Record := Arguments.Find_Var
+      Routine_Name : constant String  := "M_Basic.Defined_Function ";
+      S            : constant Unbounded_String := Command_Line;
+      Fun_Type     : constant Function_Type := Var_Table (Var_Index).Var_Type;
+      TP           : constant Arguments.Var_Record := Arguments.Find_Var
         (Fun_Name, Pos, Fun_Type or Global.V_FUNCT);
       TTP              : Positive;
    begin
@@ -424,8 +424,6 @@ package body M_Basic is
       use Interfaces;
       use Ada.Assertions;
       Routine_Name       : constant String := "M_Basic.Execute_Command ";
-      Command            : Unbounded_String;
-      Command_Pos        : Positive := 1;
       Command_Token      : Unsigned_16;
       Command_Token_Test : Unsigned_16;
       Interupt_Check     : Integer := 0;
@@ -438,13 +436,7 @@ package body M_Basic is
       Next_Statement := Program_Ptr;
 
       if not Done then
-         Command :=
-           Unbounded_Slice (Token_Buffer, Program_Ptr, Length (Token_Buffer));
-         Put_Line (Routine_Name & "Command: " & To_String (Command));
-         --           Put_Line (Routine_Name & "checking for Command_End");
-         --           Put_Line (Routine_Name & "Command_End: " &
-         --                       Boolean'Image (Is_Command_End (Command, Command_Pos)));
-         Done := Is_Command_End (Command, Program_Ptr) or else
+         Done := Is_Command_End (Token_Buffer, Program_Ptr) or else
            Program_Ptr >= Flash.Prog_Memory'Length;
       end if;
 
@@ -452,15 +444,13 @@ package body M_Basic is
          Put_Line (Routine_Name & "No more token buffer elements");
       else
          --  ignore comment line if character is '.
-         Skip_Spaces (Command, Command_Pos);
-         --           Put_Line (Routine_Name & "spaces skipped.");
-         if Element (Command, Command_Pos) /= ''' then
-            Skip_Element (Command, Next_Statement);
-            Put_Line (Routine_Name & "23 Command: " & To_String (Command));
+         Skip_Spaces (Token_Buffer, Program_Ptr);
+         if Element (Token_Buffer, Program_Ptr) /= ''' then
+            Skip_Element (Token_Buffer, Program_Ptr);
             --  236 if setjmp (ErrNext) = 0 then
             Save_Local_Index := Local_Index;
             Command_Token :=
-              Character'Pos (Element (Command, Command_Pos));
+              Character'Pos (Element (Token_Buffer, Program_Ptr));
             --  C_Base_Token is the base of the token numbers.
             Command_Token_Test :=
               (M_Misc.C_Base_Token and Command_Token) - M_Misc.C_Base_Token;
@@ -514,7 +504,6 @@ package body M_Basic is
          end if;
       end if;
       --  276
-      Program_Ptr := Next_Statement;
 
    end Execute_Command;
 
