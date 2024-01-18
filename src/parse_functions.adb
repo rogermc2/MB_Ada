@@ -379,26 +379,19 @@ package body Parse_Functions is
             end if;
 
             Found := (TP_Pos = TP'Length) and then In_Command = TP;
-            --  975
-            --              Found := (TP_Pos = TP'Length) and then
-            --                (not Is_Name_Character (In_Command (TP2 - 1)) or else
-            --                   (Command_Table (Index).Command_Type and T_FUN) = T_FUN);
-            if Found then
-               Command.Name := To_Unbounded_String (TP);
-               --              MMBasic 975
-               --                 if TP'Length < Length (Command.Name) and then
-               --                   Element (Command.Name, TP_Pos) = '(' then
-               --                    --  972 skip space between a keyword and bracket
-               --                    if TP2 < Input_Buffer_Length then
-               --                       Skip_In_Buffer_Spaces (TP2);
-               --                    end if;
-               --                 end if;
-               Put_Line (Routine_Name & "Command found: '" &
-                           To_String (Command.Name) & "'");
-
-               Match_P := TP2;
-               Match_I := Index;
-               Match_L := Length (Command.Name);
+            --  MMBasic 975
+            if (TP_Pos = TP'Length) and then
+              (not Is_Name_Character (In_Command (TP2)) or else
+                 (Command_Table (Index).Command_Type and T_FUN) =
+                   T_FUN) then
+               if TP (TP_Pos - 1) = '(' or else
+                 Is_Name_Character (In_Command (TP2 - 1)) then
+                  if length (Command_Table (Index).Name) > Match_L then
+                     Match_P := TP2;
+                     Match_I := Index;
+                     Match_L := Length (Command.Name);
+                  end if;
+               end if;
             end if;
          end; -- declare block
          TP_Pos := TP_Pos + 1;
@@ -621,7 +614,7 @@ package body Parse_Functions is
    function Try_Function_Or_Keyword
      (Token_Buffer   : out String_Buffer; I_Pos : in out Positive;
       First_Nonwhite : in out Boolean)
-      return Boolean is
+   return Boolean is
       use Ada.Characters.Handling;
       use Command_And_Token_Functions;
       use Support;
