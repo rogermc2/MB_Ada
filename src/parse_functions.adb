@@ -374,13 +374,20 @@ package body Parse_Functions is
             end loop;
 
             TP_Pos := TP_Pos - 1;
-            if TP_Pos = TP'Length then
-               Put_Line (Routine_Name & "975 TP: '" & TP & "'");
-            end if;
 
             Found := (TP_Pos = TP'Length) and then In_Command = TP;
+            if Found then
+               TP2 := TP2 - 1;
+               Command := Command_Table (Index);
+               Put_Line (Routine_Name & "975 TP, TP2: '" & TP & "' " &
+                        Integer'Image (TP2));
+               Put_Line (Routine_Name & "975 In_Command: '" &
+                           In_Command & "' " );
+               Put_Line (Routine_Name & "975 Command name: '" &
+                           To_String (Command.Name) & "' " );
+            end if;
             --  MMBasic 975
-            if (TP_Pos = TP'Length) and then
+            if Found and then
               (not Is_Name_Character (In_Command (TP2)) or else
                  (Command_Table (Index).Command_Type and T_FUN) =
                    T_FUN) then
@@ -422,7 +429,7 @@ package body Parse_Functions is
                               In_Command & "'");
                   Command := Command_Table (TP_Pos);
                   --  MMBasic 937
-                  if TP_Pos <  Length (Command.Name) and then
+                  if TP_Pos < Length (Command.Name) and then
                     Element (Command.Name, TP_Pos) = '(' then
                      --  skip space between a keyword and bracket
                      if TP2 < Input_Buffer_Length then
@@ -469,7 +476,8 @@ package body Parse_Functions is
             end if;
          end if;
 
-         --           Put_Line (Routine_Name & "956");
+         Put_Line (Routine_Name & "956 Command.Name: " &
+                     To_String (Command.Name));
          --           Put_Line (Routine_Name & "P, Match_Index:" & Integer'Image (P) &
          --                       ", " & Integer'Image (Match_Index));
          --  956
