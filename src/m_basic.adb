@@ -436,8 +436,8 @@ package body M_Basic is
       Next_Statement := Program_Ptr;
 
       if not Done then
-         Done := Is_Command_End (Token_Buffer, Program_Ptr) or else
-           Program_Ptr >= Flash.Prog_Memory'Length;
+--           Done := Is_Command_End (Token_Buffer, Program_Ptr) or else
+         Done := Program_Ptr >= Flash.Prog_Memory'Length;
       end if;
 
       if Done then

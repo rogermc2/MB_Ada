@@ -191,7 +191,7 @@ package body MX470_Option_Handler is
    --     end Do_LCD_Panel;
 
    function Do_List (E_String : String) return Boolean is
-      Found        : constant Boolean := Check_String (E_String, "LIST") > 0;
+      Found  : constant Boolean := Check_String (E_String, "LIST") > 0;
    begin
       if Found then
         Put_Line ("MX470_Option_Handler.Do_List not implemnted.");

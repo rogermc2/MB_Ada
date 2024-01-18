@@ -32,14 +32,15 @@ package body Tokenizer is
       use Interfaces;
       use Ada.Characters.Handling;
       use Support;
-      String1       : String (1 .. 1);
+      Routine_Name : constant String := "Tokenizer.Less_Than_8_Digits ";
       Index         : Natural := 0;
       Line_Num      : Unsigned_64 := 0;
-      OK            : Boolean := True;
+      OK            : Boolean := False;
    begin
       --  MMBasic 806 if it is a digit and not an 8 digit hex number
       --  (ie, it is CFUNCTION data) then try for a line number
       if Input_Buffer_Length >= 8 then
+         OK := True;
          while OK and then Index < 8 loop
             Index := Index + 1;
             OK := OK and then
@@ -49,6 +50,7 @@ package body Tokenizer is
 
       --  MMBasic 809
       if Is_Digit (Get_Input_Character (In_Ptr)) and Index < 8 then
+         Put_Line (Routine_Name & "809 Is_Digit");
          while In_Ptr < Input_Buffer_Length and then
            Is_Digit (Get_Input_Character (In_Ptr)) loop
             In_Ptr := In_Ptr + 1;
@@ -57,8 +59,9 @@ package body Tokenizer is
          --  In_Ptr points to the character after the number unless
          --  Input_Buffer_Length = 1
          if In_Ptr = 1 then
-            String1(1) := Get_Input_Character (1);
-            Line_Num := Unsigned_64'Value (String1);
+--              String1(1) := Get_Input_Character (1);
+            Line_Num :=
+              Unsigned_64'Value (Character'Image (Get_Input_Character (1)));
          else
             Line_Num := Unsigned_64'Value (Get_Input_Slice (1, In_Ptr - 1));
          end if;
@@ -207,6 +210,7 @@ package body Tokenizer is
       end if;
       Trim_Input_Buffer (Left);
 
+      --  835 Get line number if given
       Less_Than_8_Digits (Token_Buffer, In_Ptr, From_Console);
 
       Put_Line (Routine_Name & "834 In_Buffer: " & Get_Input_Buffer);
