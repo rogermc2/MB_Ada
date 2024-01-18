@@ -343,7 +343,7 @@ package body Parse_Functions is
       Done          : Boolean := False;
       OK            : Boolean := True;
    begin
-      Put_Line (Routine_Name & "In_Command: '" & In_Command & "'");
+      Put_Line (Routine_Name & "958 In_Command: '" & In_Command & "'");
       --  MMBasic 958
       while Index < Command_Table'Last - 1 and then not Found loop
          Index := Index + 1;
@@ -351,43 +351,55 @@ package body Parse_Functions is
             TP : constant String :=
               To_Upper (To_String (Command_Table (Index).Name));
          begin
-            TP2 := P;
+            --              Put_Line (Routine_Name & "963 TP: '" & TP & "'");
+            TP2 := 1;   -- first character of In_Command
             TP_Pos := 1;
             --  MMBasic 963
             --           Found := To_Upper (To_String (TP)) = In_Command;
-            while TP_Pos < TP'Length and then
-              TP (TP_Pos) = In_Command (TP_Pos) loop
+            while TP_Pos <= TP'Length and then
+              In_Command (TP2) = TP (TP_Pos) loop
                Put_Line (Routine_Name & "Matching character: '" &
-                        Character'Image (TP (TP_Pos)) & "'");
+                           Character'Image (TP (TP_Pos)) & "'");
                if TP (TP_Pos) = ' ' then
-                  Skip_In_Buffer_Spaces (TP2);
+                  Skip_Spaces (In_Command, TP2);
                else
                   TP2 := TP2 + 1;
                end if;
+
+               --  971
+               if TP2 < In_Command'Length and then TP (TP_Pos) = '(' then
+                  Skip_Spaces (In_Command, TP2);
+               end if;
                TP_Pos := TP_Pos + 1;
-
-               if TP (TP_Pos) = '(' then
-                  Skip_In_Buffer_Spaces (TP2);
-               end if;
             end loop;
-            --           if Found then
-            --              Command.Name := TP;
-            --              MMBasic 975
-            if TP'Length < Length (Command.Name) and then
-              Element (Command.Name, TP_Pos) = '(' then
-               --  972 skip space between a keyword and bracket
-               if TP2 < Input_Buffer_Length then
-                  Skip_In_Buffer_Spaces (TP2);
-               end if;
-               --              end loop;
-            end if;
-            Put_Line (Routine_Name & "Command found: '" &
-                        To_String (Command.Name) & "'");
 
-            Match_P := TP2;
-            Match_I := Index;
-            Match_L := Length (Command.Name);
-            --           end if;
+            TP_Pos := TP_Pos - 1;
+            if TP_Pos = TP'Length then
+               Put_Line (Routine_Name & "975 TP: '" & TP & "'");
+            end if;
+
+            Found := (TP_Pos = TP'Length) and then In_Command = TP;
+            --  975
+            --              Found := (TP_Pos = TP'Length) and then
+            --                (not Is_Name_Character (In_Command (TP2 - 1)) or else
+            --                   (Command_Table (Index).Command_Type and T_FUN) = T_FUN);
+            if Found then
+               Command.Name := To_Unbounded_String (TP);
+               --              MMBasic 975
+               --                 if TP'Length < Length (Command.Name) and then
+               --                   Element (Command.Name, TP_Pos) = '(' then
+               --                    --  972 skip space between a keyword and bracket
+               --                    if TP2 < Input_Buffer_Length then
+               --                       Skip_In_Buffer_Spaces (TP2);
+               --                    end if;
+               --                 end if;
+               Put_Line (Routine_Name & "Command found: '" &
+                           To_String (Command.Name) & "'");
+
+               Match_P := TP2;
+               Match_I := Index;
+               Match_L := Length (Command.Name);
+            end if;
          end; -- declare block
          TP_Pos := TP_Pos + 1;
       end loop;
