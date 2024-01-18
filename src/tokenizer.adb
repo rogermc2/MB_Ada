@@ -27,12 +27,12 @@ package body Tokenizer is
    --     end Get_Token_Function;
 
    procedure Less_Than_8_Digits
-     (Buffer       : in out String_Buffer; In_Ptr : in out Positive;
+     (Buffer       : out String_Buffer; In_Ptr : in out Positive;
       From_Console : Boolean) is
       use Interfaces;
       use Ada.Characters.Handling;
       use Support;
-      Routine_Name : constant String := "Tokenizer.Less_Than_8_Digits ";
+      Routine_Name  : constant String := "Tokenizer.Less_Than_8_Digits ";
       Index         : Natural := 0;
       Line_Num      : Unsigned_64 := 0;
       OK            : Boolean := False;
@@ -59,7 +59,7 @@ package body Tokenizer is
          --  In_Ptr points to the character after the number unless
          --  Input_Buffer_Length = 1
          if In_Ptr = 1 then
---              String1(1) := Get_Input_Character (1);
+            --              String1(1) := Get_Input_Character (1);
             Line_Num :=
               Unsigned_64'Value (Character'Image (Get_Input_Character (1)));
          else
@@ -76,7 +76,7 @@ package body Tokenizer is
 
    end Less_Than_8_Digits;
 
-   procedure Parse_Line (Token_Buffer : out String_Buffer;
+   procedure Parse_Line (Token_Buffer : in out String_Buffer;
                          Ptr          : in out Positive) is
       use Ada.Characters.Handling;
       use String_Buffer_Package;
@@ -88,16 +88,16 @@ package body Tokenizer is
       Match_P                : Integer := -1;
       Last_Ptr               : Positive := Ptr;
    begin
-      Support.Print_Buffer (Token_Buffer);
+      Put_Line (Routine_Name & "In_Buffer: " & Get_Input_Buffer);
       while Ptr <= Input_Buffer_Length loop
          --           Put_Line (Routine_Name & "Last_Ptr : " & Integer'Image (Last_Ptr));
          Last_Ptr := Ptr;
          aChar := Get_Input_Character (Ptr);
-         --           Put_Line (Routine_Name & "Ptr, aChar, First_Nonwhite: " &
-         --                       Integer'Image (Ptr) & ", " & aChar & ", " &
-         --                       Boolean'Image (First_Nonwhite) );
-         --           Put_Line (Routine_Name & "Input_Buffer_Length : " &
-         --                       Integer'Image (Input_Buffer_Length));
+         Put_Line (Routine_Name & "Ptr, aChar, First_Nonwhite: " &
+                     Integer'Image (Ptr) & ", " & aChar & ", " &
+                     Boolean'Image (First_Nonwhite) );
+         Put_Line (Routine_Name & "Input_Buffer_Length : " &
+                     Integer'Image (Input_Buffer_Length));
          --           delay (1.0);
          if aChar = ' ' then
             Put_Line (Routine_Name & "aChar = ' '");
@@ -121,12 +121,12 @@ package body Tokenizer is
             First_Nonwhite := False;
          elsif First_Nonwhite then
             --  MMBasic  907 - 955
-            --              Put_Line (Routine_Name & "First_Nonwhite, Match_P: " &
-            --                          Integer'Image (Match_P));
+            Put_Line (Routine_Name & "907 First_Nonwhite, Match_P: " &
+                        Integer'Image (Match_P));
             Process_First_Nonwhite (Token_Buffer, Ptr, Label_Valid,
                                     First_Nonwhite, Match_I, Match_P);
---                 Put_Line (Routine_Name & "First_Nonwhite, Ptr: " &
---                             Get_Input_Character(Ptr));
+            Put_Line (Routine_Name & "First_Nonwhite, Ptr: " &
+                        Get_Input_Character(Ptr));
             if Ptr > Integer (Length (Token_Buffer)) then
                Put_Line (Routine_Name & "no more input buffer characters." );
             end if;
@@ -141,8 +141,8 @@ package body Tokenizer is
             --  MMBasic  976
          elsif Label_Valid and then
            M_Basic_Utilities.Is_Name_Start (Get_Input_Character (Ptr)) then
---              Put_Line (Routine_Name & "Label_Valid and Name_Start: " &
---                          Get_Input_Character (Ptr));
+            --              Put_Line (Routine_Name & "Label_Valid and Name_Start: " &
+            --                          Get_Input_Character (Ptr));
             Try_Label (Token_Buffer, Ptr, Label_Valid);
             --  MMBasic  997
          elsif Check_For_Function_Or_Keyword (Token_Buffer, Ptr, First_Nonwhite) then
@@ -160,18 +160,18 @@ package body Tokenizer is
             Put_Line (Routine_Name & "aChar = '(' not implemented: ");
             Ptr := Ptr + 1;
          else  --  None of the above so just copy the one character
---              Put_Line (Routine_Name & "else aChar: " & Character'image (aChar));
+            --              Put_Line (Routine_Name & "else aChar: " & Character'image (aChar));
             Support.Buffer_Append (Token_Buffer, Character'image (aChar));
             Label_Valid := False;
             First_Nonwhite := False;
             Ptr := Ptr + 1;
          end if;
 
---           Put_Line (Routine_Name & "end loop, First_Nonwhite: " &
---                       Boolean'Image (First_Nonwhite) & ", Ptr: " &
---                       Integer'image (Ptr) & ", aChar: " &
---                       Character'image (aChar));
---           New_Line;
+         --           Put_Line (Routine_Name & "end loop, First_Nonwhite: " &
+         --                       Boolean'Image (First_Nonwhite) & ", Ptr: " &
+         --                       Integer'image (Ptr) & ", aChar: " &
+         --                       Character'image (aChar));
+         --           New_Line;
          Assert (Ptr > Last_Ptr, Routine_Name & "Ptr was not incremented");
       end loop;
 
@@ -210,11 +210,11 @@ package body Tokenizer is
       end if;
       Trim_Input_Buffer (Left);
 
-      --  835 Get line number if given
+      --  834 Get line number if given
       Less_Than_8_Digits (Token_Buffer, In_Ptr, From_Console);
 
-      Put_Line (Routine_Name & "834 In_Buffer: " & Get_Input_Buffer);
-      --  834 Process the rest of the line
+      Put_Line (Routine_Name & "841 In_Buffer: " & Get_Input_Buffer);
+      --  841 Process the rest of the line
       if Input_Buffer_Length > In_Ptr then
          Parse_Line (Token_Buffer, In_Ptr);
          Put_Line (Routine_Name & "PARSED LINE:");
