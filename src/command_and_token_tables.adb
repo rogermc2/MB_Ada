@@ -389,22 +389,18 @@ package body Command_And_Token_Tables is
    end Type_Mask;
 
 begin
-   for index in 1 .. Num_Functions loop   --  118
-      Command_Table (index) := Function_Types (index);
-   end loop;
-
    for index in 1 .. Num_Commands loop    --  53
-      Command_Table (Num_Functions + index) := Command_Types (index);
+      Command_Table (index) := Command_Types (index);
    end loop;
 
    for index in 1 .. Num_Function_Commands loop
-      Command_Table (Num_Functions + Num_Commands + index) :=
+      Command_Table (Num_Commands + index) :=
         Function_Commands (index);
    end loop;
 
    for index in 1 ..Num_Operators loop
       Command_Table
-        (Num_Functions + Num_Commands + Num_Function_Commands + index) :=
+        (Num_Commands + Num_Function_Commands + index) :=
         Operators.Operator_Types (index);
    end loop;
 

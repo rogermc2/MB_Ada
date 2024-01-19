@@ -77,30 +77,30 @@ package body Parse_Functions is
 
    end Check_For_Function_Or_Keyword;
 
-   function Get_Command_From_Input (I_Pos : in out Positive)
-                                    return Unbounded_String is
-      use Ada.Characters.Handling;
-      --        Routine_Name  : constant String :=
-      --                          "Parse_Functions.Get_Command_From_Input ";
-      aChar         : Character;
-      Command       : Unbounded_String;
-      Done          : Boolean := False;
-   begin
-      Skip_In_Buffer_Spaces (I_Pos);
-      while not Done loop
-         aChar := Get_Input_Character (I_Pos);
-         Done :=  aChar = ' ' or else
-           (not (aChar = '_' or Is_Alphanumeric (aChar)));
-         if not Done then
-            Append (Command, aChar);
-         end if;
-         I_Pos := I_Pos + 1;
-         Done := Done or else I_Pos > Input_Buffer_Length;
-      end loop;
-
-      return Command;
-
-   end Get_Command_From_Input;
+--     function Get_Command_From_Input (I_Pos : in out Positive)
+--                                      return Unbounded_String is
+--        use Ada.Characters.Handling;
+--        --        Routine_Name  : constant String :=
+--        --                          "Parse_Functions.Get_Command_From_Input ";
+--        aChar         : Character;
+--        Command       : Unbounded_String;
+--        Done          : Boolean := False;
+--     begin
+--        Skip_In_Buffer_Spaces (I_Pos);
+--        while not Done loop
+--           aChar := Get_Input_Character (I_Pos);
+--           Done :=  aChar = ' ' or else
+--             (not (aChar = '_' or Is_Alphanumeric (aChar)));
+--           if not Done then
+--              Append (Command, aChar);
+--           end if;
+--           I_Pos := I_Pos + 1;
+--           Done := Done or else I_Pos > Input_Buffer_Length;
+--        end loop;
+--
+--        return Command;
+--
+--     end Get_Command_From_Input;
 
    function Get_Command_Value (Command : String) return integer is
       Routine_Name  : constant String := "Parse_Functions.Get_Command_Value ";
@@ -123,34 +123,34 @@ package body Parse_Functions is
 
    end Get_Command_Value;
 
-   function Get_Long_Command_From_Input (I_Pos : in out Positive)
-                                         return Unbounded_String is
-      use Ada.Characters.Handling;
-      --        Routine_Name  : constant String :=
-      --                          "Parse_Functions.Get_Long_Command_From_Input ";
-      aChar         : Character;
-      Command       : Unbounded_String;
-      Done          : Boolean := False;
-   begin
-      Command := Get_Command_From_Input (I_Pos);
-      Skip_In_Buffer_Spaces (I_Pos);
-      Done := I_Pos > Input_Buffer_Length;
-
-      while not Done loop
-         --  get second command word
-         aChar := Get_Input_Character (I_Pos);
-         Done :=  aChar = ' ' or else
-           (not (aChar = '_' or Is_Alphanumeric (aChar)));
-         if not Done then
-            Append (Command, aChar);
-         end if;
-         I_Pos := I_Pos + 1;
-         Done := Done or else I_Pos > Input_Buffer_Length;
-      end loop;
-
-      return Command;
-
-   end Get_Long_Command_From_Input;
+--     function Get_Long_Command_From_Input (I_Pos : in out Positive)
+--                                           return Unbounded_String is
+--        use Ada.Characters.Handling;
+--        --        Routine_Name  : constant String :=
+--        --                          "Parse_Functions.Get_Long_Command_From_Input ";
+--        aChar         : Character;
+--        Command       : Unbounded_String;
+--        Done          : Boolean := False;
+--     begin
+--        Command := Get_Command_From_Input (I_Pos);
+--        Skip_In_Buffer_Spaces (I_Pos);
+--        Done := I_Pos > Input_Buffer_Length;
+--
+--        while not Done loop
+--           --  get second command word
+--           aChar := Get_Input_Character (I_Pos);
+--           Done :=  aChar = ' ' or else
+--             (not (aChar = '_' or Is_Alphanumeric (aChar)));
+--           if not Done then
+--              Append (Command, aChar);
+--           end if;
+--           I_Pos := I_Pos + 1;
+--           Done := Done or else I_Pos > Input_Buffer_Length;
+--        end loop;
+--
+--        return Command;
+--
+--     end Get_Long_Command_From_Input;
 
    function Get_Next_Character (I_Pos : in out Positive) return Character is
    begin
@@ -330,13 +330,11 @@ package body Parse_Functions is
       use Ada.Characters.Handling;
       use Support;
       Routine_Name  : constant String := "Parse_Functions.Try_Command ";
-      --  In_Command is the first word of Buffer
-      In_Command    : constant String :=
-        To_Upper (To_String (Get_Command_From_Input (P)));
-      TP2           : Positive := In_Command'First;
+      Line_In       : constant String := To_Upper (Get_Input_Buffer);
+      TP2           : Positive;          --  Line_In ptr
       Command       : Command_Table_Item;
       Index         : Natural := 0;
-      TP_Pos        : Natural;       --  tp  command table index
+      TP_Pos        : Natural := P;      --  tp  command table index
       Match_I       : Integer := -1;
       Match_L       : Integer := 0;
       Match_P       : Integer := 0;
@@ -344,7 +342,7 @@ package body Parse_Functions is
       --        Done          : Boolean := False;
       OK            : Boolean := True;
    begin
-      Put_Line (Routine_Name & "958 In_Command: '" & In_Command & "'");
+      Put_Line (Routine_Name & "958 Line_In: '" & Line_In & "'");
       --  MMBasic 958
       while not Found and then Index < Command_Table'Last loop
          Index := Index + 1;
@@ -352,46 +350,50 @@ package body Parse_Functions is
             TP : constant String :=
               To_Upper (To_String (Command_Table (Index).Name));
          begin
-            --              Put_Line (Routine_Name & "963 TP: '" & TP & "'");
+--              Put_Line (Routine_Name & "963 TP: '" & TP & "'");
             TP_Pos := 1;
-            TP2 := In_Command'First;
+            TP2 := 1;
             --  MMBasic 963
-            --           Found := To_Upper (To_String (TP)) = In_Command;
-            while TP_Pos <= TP'Length and then
-              In_Command (TP2) = TP (TP_Pos) loop
+--              Put_Line (Routine_Name & "Line_In characters: '" &
+--                             Character'Image (TP (TP_Pos)) & "', " &
+--                             Character'Image (Line_In (TP2)));
+            while TP_Pos <= TP'Last and then Line_In (TP2) = TP (TP_Pos) loop
                Put_Line (Routine_Name & "Matching character: '" &
                            Character'Image (TP (TP_Pos)) & "'");
                if TP (TP_Pos) = ' ' then
-                  Skip_Spaces (In_Command, TP2);
+                  Skip_Spaces (Line_In, TP2);
                else
                   TP2 := TP2 + 1;
                end if;
+               TP_Pos := TP_Pos + 1;
 
                --  971
-               if TP2 < In_Command'Length and then TP (TP_Pos) = '(' then
-                  Skip_Spaces (In_Command, TP2);
+               if TP_Pos < TP'Length and then TP (TP_Pos) = '(' then
+                  Skip_Spaces (Line_In, TP2);
                end if;
-               TP_Pos := TP_Pos + 1;
             end loop;
 
-            Found := (TP_Pos - 1 = TP'Length) and then In_Command = TP;
+            Found := (TP_Pos - 1 = TP'Length) and then
+              Line_In (1 .. TP2 - 1) = TP;
             if Found then
-               TP2 := TP2 - 1;
+--                 TP2 := TP2 - 1;
                Command := Command_Table (Index);
                Put_Line (Routine_Name & "975 TP, TP2: '" & TP & "' " &
                            Integer'Image (TP2));
-               Put_Line (Routine_Name & "975 In_Command: '" &
-                           In_Command & "' " );
                Put_Line (Routine_Name & "975 Command name: '" &
                            To_String (Command.Name) & "' " );
             end if;
+
             --  MMBasic 975
             if Found and then
-              (not Is_Name_Character (In_Command (TP2)) or else
+              (not Is_Name_Character (Get_Input_Character (TP2)) or else
                  (Command_Table (Index).Command_Type and T_FUN) =
                    T_FUN) then
+               Put_Line (Routine_Name & "975 Found, Match_I:" &
+                  Integer'Image (Match_I));
+
                if TP (TP_Pos - 1) = '(' or else
-                 Is_Name_Character (In_Command (TP2 - 1)) then
+                 Is_Name_Character (Line_In (TP2 - 1)) then
                   if length (Command_Table (Index).Name) > Match_L then
                      --  MMBasic 982
                      Match_P := TP2;
@@ -404,29 +406,28 @@ package body Parse_Functions is
          TP_Pos := TP_Pos + 1;
       end loop;
 
-      Put_Line (Routine_Name & "956 Command.Name: " &
+      Put_Line (Routine_Name & "990 Found: " & Boolean'Image (Found));
+      Put_Line (Routine_Name & "990 index, Command_Table'Last: "
+                & Integer'Image (Index) & ", " &
+                  Integer'Image (Integer (Command_Table'Last)));
+
+      Put_Line (Routine_Name & "990 Command.Name: " &
                   To_String (Command.Name));
       Put_Line (Routine_Name & "P, Match_I:" & Integer'Image (P) & ", " &
                   Integer'Image (Match_I));
       --  990
       if P < Input_Buffer_Length then
          if Match_I > -1 then
-            --                 Put_Line (Routine_Name & "Match_Index, Match_I_Pos" &
-            --                             Integer'Image (Match_Index) & ", " &
-            --                             Integer'Image (Match_I_Pos));
             --  Match found
             Put_Line (Routine_Name & "Process_Command");
             --  process rest of command line
             Process_Command (Token_Buffer, P, Match_P, Match_I,
                              First_Nonwhite, Label_Valid);
 
-            --  MMBasic 976
+            --  MMBasic 1009
          elsif Label_Valid and then
            Is_Name_Start (Get_Input_Character (P)) then
             OK := True;
-            --                 Put_Line (Routine_Name & "976, Command.Name: " &
-            --                             To_String (Command.Name));
-            --                 Put_Line (Routine_Name & "976, TP: " & Integer'Image (TP));
             Index := 0;
             TP_Pos := 0;
             while OK and then TP_Pos < Length (Command.Name) and then
@@ -436,8 +437,7 @@ package body Parse_Functions is
                OK := Is_Name_Character (Element (Command.Name, TP_Pos));
             end loop;
 
-            --                 Put_Line (Routine_Name & "982, TP: " & Integer'Image (TP));
-            --  MMBasic 982
+            --  MMBasic 1015
             if OK and then Element (Command.Name, TP_Pos) = ':' then
                Label_Valid := False;
                Buffer_Append (Token_Buffer, Integer'Image (Global.T_LABEL));
