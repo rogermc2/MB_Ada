@@ -350,16 +350,16 @@ package body Parse_Functions is
             TP : constant String :=
               To_Upper (To_String (Command_Table (Index).Name));
          begin
---              Put_Line (Routine_Name & "963 TP: '" & TP & "'");
             TP_Pos := 1;
             TP2 := 1;
-            --  MMBasic 963
---              Put_Line (Routine_Name & "Line_In characters: '" &
---                             Character'Image (TP (TP_Pos)) & "', " &
---                             Character'Image (Line_In (TP2)));
-            while TP_Pos <= TP'Last and then Line_In (TP2) = TP (TP_Pos) loop
-               Put_Line (Routine_Name & "Matching character: '" &
-                           Character'Image (TP (TP_Pos)) & "'");
+            --  MMBasic 963  Look for the match with the largest command name
+            while TP_Pos <= TP'Last and then TP2 <= Line_In'Last and then
+              Line_In (TP2) = TP (TP_Pos) loop
+               Put_Line (Routine_Name & "Matching character, TP2, TP_Pos: '" &
+                           Character'Image (TP (TP_Pos)) & "' " &
+                           Integer'Image (TP2) & Integer'Image (TP_Pos) &
+                           Integer'Image (Line_In'Length) &
+                           Integer'Image (TP'Length));
                if TP (TP_Pos) = ' ' then
                   Skip_Spaces (Line_In, TP2);
                else
@@ -385,12 +385,10 @@ package body Parse_Functions is
             end if;
 
             --  MMBasic 975
-            if Found and then
+            if TP_Pos > TP'Last and then TP2 <= Line_In'Length and then
               (not Is_Name_Character (Get_Input_Character (TP2)) or else
                  (Command_Table (Index).Command_Type and T_FUN) =
                    T_FUN) then
-               Put_Line (Routine_Name & "975 Found, Match_I:" &
-                  Integer'Image (Match_I));
 
                if TP (TP_Pos - 1) = '(' or else
                  Is_Name_Character (Line_In (TP2 - 1)) then
@@ -406,15 +404,11 @@ package body Parse_Functions is
          TP_Pos := TP_Pos + 1;
       end loop;
 
-      Put_Line (Routine_Name & "990 Found: " & Boolean'Image (Found));
-      Put_Line (Routine_Name & "990 index, Command_Table'Last: "
-                & Integer'Image (Index) & ", " &
-                  Integer'Image (Integer (Command_Table'Last)));
-
       Put_Line (Routine_Name & "990 Command.Name: " &
                   To_String (Command.Name));
-      Put_Line (Routine_Name & "P, Match_I:" & Integer'Image (P) & ", " &
-                  Integer'Image (Match_I));
+      Put_Line (Routine_Name & "P, Index, Match_I:" & Integer'Image (P)
+                & ", " & Integer'Image (Index)
+                & ", " & Integer'Image (Match_I));
       --  990
       if P < Input_Buffer_Length then
          if Match_I > -1 then
