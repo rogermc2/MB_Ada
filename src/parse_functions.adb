@@ -341,7 +341,7 @@ package body Parse_Functions is
       Match_L       : Integer := 0;
       Match_P       : Integer := 0;
       Found         : Boolean := False;
---        Done          : Boolean := False;
+      --        Done          : Boolean := False;
       OK            : Boolean := True;
    begin
       Put_Line (Routine_Name & "958 In_Command: '" & In_Command & "'");
@@ -404,7 +404,52 @@ package body Parse_Functions is
          TP_Pos := TP_Pos + 1;
       end loop;
 
---        Done := TP2 >= Input_Buffer_Length;
+      Put_Line (Routine_Name & "956 Command.Name: " &
+                  To_String (Command.Name));
+      Put_Line (Routine_Name & "P, Match_I:" & Integer'Image (P) & ", " &
+                  Integer'Image (Match_I));
+      --  990
+      if P < Input_Buffer_Length then
+         if Match_I > -1 then
+            --                 Put_Line (Routine_Name & "Match_Index, Match_I_Pos" &
+            --                             Integer'Image (Match_Index) & ", " &
+            --                             Integer'Image (Match_I_Pos));
+            --  Match found
+            Put_Line (Routine_Name & "Process_Command");
+            --  process rest of command line
+            Process_Command (Token_Buffer, P, Match_P, Match_I,
+                             First_Nonwhite, Label_Valid);
+
+            --  MMBasic 976
+         elsif Label_Valid and then
+           Is_Name_Start (Get_Input_Character (P)) then
+            OK := True;
+            --                 Put_Line (Routine_Name & "976, Command.Name: " &
+            --                             To_String (Command.Name));
+            --                 Put_Line (Routine_Name & "976, TP: " & Integer'Image (TP));
+            Index := 0;
+            TP_Pos := 0;
+            while OK and then TP_Pos < Length (Command.Name) and then
+              Index <= Configuration.MAXVARLEN loop
+               Index := Index + 1;
+               TP_Pos := TP_Pos + 1;
+               OK := Is_Name_Character (Element (Command.Name, TP_Pos));
+            end loop;
+
+            --                 Put_Line (Routine_Name & "982, TP: " & Integer'Image (TP));
+            --  MMBasic 982
+            if OK and then Element (Command.Name, TP_Pos) = ':' then
+               Label_Valid := False;
+               Buffer_Append (Token_Buffer, Integer'Image (Global.T_LABEL));
+               Buffer_Append (Token_Buffer, Integer'Image (TP_Pos - P));
+               Buffer_Append (Token_Buffer, Get_Input_Slice (1, TP_Pos - P));
+            end if;
+
+            P := P + 1;
+
+         end if;
+      end if;
+      --        Done := TP2 >= Input_Buffer_Length;
       --        if not Done and then not Found then
       --           --  Look for a longer Command
       --           P := 1;
@@ -476,51 +521,6 @@ package body Parse_Functions is
       --              end if;
       --           end if;
 
-      Put_Line (Routine_Name & "956 Command.Name: " &
-                  To_String (Command.Name));
-      --           Put_Line (Routine_Name & "P, Match_Index:" & Integer'Image (P) &
-      --                       ", " & Integer'Image (Match_Index));
-      --  990
-      if P < Input_Buffer_Length then
-         if Match_I > -1 then
-            --                 Put_Line (Routine_Name & "Match_Index, Match_I_Pos" &
-            --                             Integer'Image (Match_Index) & ", " &
-            --                             Integer'Image (Match_I_Pos));
-            --  Match found
-            Put_Line (Routine_Name & "Process_Command");
-            --  process rest of command line
-            Process_Command (Token_Buffer, P, Match_P, Match_I,
-                             First_Nonwhite, Label_Valid);
-
-            --  MMBasic 976
-         elsif Label_Valid and then
-           Is_Name_Start (Get_Input_Character (P)) then
-            OK := True;
-            --                 Put_Line (Routine_Name & "976, Command.Name: " &
-            --                             To_String (Command.Name));
-            --                 Put_Line (Routine_Name & "976, TP: " & Integer'Image (TP));
-            Index := 0;
-            TP_Pos := 0;
-            while OK and then TP_Pos < Length (Command.Name) and then
-              Index <= Configuration.MAXVARLEN loop
-               Index := Index + 1;
-               TP_Pos := TP_Pos + 1;
-               OK := Is_Name_Character (Element (Command.Name, TP_Pos));
-            end loop;
-
-            --                 Put_Line (Routine_Name & "982, TP: " & Integer'Image (TP));
-            --  MMBasic 982
-            if OK and then Element (Command.Name, TP_Pos) = ':' then
-               Label_Valid := False;
-               Buffer_Append (Token_Buffer, Integer'Image (Global.T_LABEL));
-               Buffer_Append (Token_Buffer, Integer'Image (TP_Pos - P));
-               Buffer_Append (Token_Buffer, Get_Input_Slice (1, TP_Pos - P));
-            end if;
-
-            P := P + 1;
-
-         end if;
-      end if;
       --        end if;
 
       --  MMBasic 925
