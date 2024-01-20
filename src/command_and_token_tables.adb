@@ -180,6 +180,7 @@ package body Command_And_Token_Tables is
                       (To_Unbounded_String ("Until"), T_NA, 0, op_invalid),
                       (To_Unbounded_String ("While"), T_NA, 0, op_invalid));
 
+   --  from MM_Misc.h
    Function_Types  : array (1 .. Num_Functions) of Command_Table_Item :=
                        ((To_Unbounded_String ("fun_abs"), T_NA, 0, Null),
                         (To_Unbounded_String ("fun_asc"), T_NA, 0, Null),
@@ -389,18 +390,22 @@ package body Command_And_Token_Tables is
    end Type_Mask;
 
 begin
+   for index in 1 .. Num_Functions loop    --  118
+      Command_Table (index) := Function_Types (index);
+   end loop;
+
    for index in 1 .. Num_Commands loop    --  53
-      Command_Table (index) := Command_Types (index);
+      Command_Table (Num_Functions + index) := Command_Types (index);
    end loop;
 
    for index in 1 .. Num_Function_Commands loop
-      Command_Table (Num_Commands + index) :=
+      Command_Table (Num_Functions + Num_Commands + index) :=
         Function_Commands (index);
    end loop;
 
    for index in 1 ..Num_Operators loop
       Command_Table
-        (Num_Commands + Num_Function_Commands + index) :=
+        (Num_Functions + Num_Commands + Num_Function_Commands + index) :=
         Operators.Operator_Types (index);
    end loop;
 

@@ -63,7 +63,7 @@ package Command_And_Token_Tables is
    Num_Operators         : constant Positive := 19;
 
    Command_Table_Size : constant Positive :=
-     Num_Commands + Num_Function_Commands +
+     Num_Functions + Num_Commands + Num_Function_Commands +
        Num_Operators + 1;
    Token_Table_Size   : constant Positive :=
                           Num_Functions + Num_Commands + Num_Operators + 1;
