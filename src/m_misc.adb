@@ -1,6 +1,4 @@
 
-with Interfaces;
-
 with Ada.Assertions; use Ada.Assertions;
 with Ada.Characters.Handling;
 --  with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;

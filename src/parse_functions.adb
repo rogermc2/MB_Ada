@@ -184,19 +184,21 @@ package body Parse_Functions is
                      (Integer (M_Misc.C_Base_Token) + Match_Index));
       --  Step over the input buffer command.
       I_Pos := Match_I_Pos;
-      Put_Line (Routine_Name & "C_Base_Token, Match_Index: " &
-                  Interfaces.Unsigned_16'Image (M_Misc.C_Base_Token) & ", " &
-                  Integer'Image (Match_Index));
-      Put_Line (Routine_Name & "C_Base_Token + Match_Index: " &
-                  Integer'Image (Integer (M_Misc.C_Base_Token) + Match_Index));
+--        Put_Line (Routine_Name & "C_Base_Token, Match_Index: " &
+--                    Interfaces.Unsigned_16'Image (M_Misc.C_Base_Token) & ", " &
+--                    Integer'Image (Match_Index));
+--        Put_Line (Routine_Name & "C_Base_Token + Match_Index: " &
+--                    Integer'Image (Integer (M_Misc.C_Base_Token) + Match_Index));
       Put_Line (Routine_Name & "Buffer:");
       Support.Print_Buffer (Token_Buffer);
+
+      --  MMBasic 995
       if Match_Index + Integer (M_Misc.C_Base_Token) =
         Get_Command_Value ("Rem") then
          --  MMBasic 996 copy everything
          Copy_Slice (Token_Buffer, I_Pos, Input_Buffer_Length);
 
-      elsif Is_Alphanumeric (Get_Input_Character (I_Pos - 1)) and then
+      elsif I_Pos <= Input_Buffer_Length and then Is_Alphanumeric (Get_Input_Character (I_Pos - 1)) and then
         Get_Input_Character (I_Pos) = ' ' then
          I_Pos := I_Pos + 1;
       end if;
@@ -281,7 +283,6 @@ package body Parse_Functions is
          Put_Line (Routine_Name & "Token Buffer:");
          Support.Print_Buffer (Token_Buffer);
       end if;
-      Put_Line (Routine_Name & "done");
 
    end Process_First_Nonwhite;
 
@@ -341,7 +342,7 @@ package body Parse_Functions is
       Match_P       : Integer := 0;
       Found         : Boolean := False;
    begin
-      Put_Line (Routine_Name & "958 Line_In: '" & Line_In & "'");
+--        Put_Line (Routine_Name & "958 Line_In: '" & Line_In & "'");
       --  MMBasic 958
       while not Found and then Index < Command_Table'Last loop
          Index := Index + 1;
@@ -354,11 +355,11 @@ package body Parse_Functions is
             --  MMBasic 963  Look for the match with the largest command name
             while TP_Pos <= TP'Last and then TP2 <= Line_In'Last and then
               Line_In (TP2) = TP (TP_Pos) loop
-               Put_Line (Routine_Name & "Matching character, TP2, TP_Pos: '" &
-                           Character'Image (TP (TP_Pos)) & "' " &
-                           Integer'Image (TP2) & Integer'Image (TP_Pos) &
-                           Integer'Image (Line_In'Length) &
-                           Integer'Image (TP'Length));
+--                 Put_Line (Routine_Name & "Matching character, TP2, TP_Pos: '" &
+--                             Character'Image (TP (TP_Pos)) & "' " &
+--                             Integer'Image (TP2) & Integer'Image (TP_Pos) &
+--                             Integer'Image (Line_In'Length) &
+--                             Integer'Image (TP'Length));
                if TP (TP_Pos) = ' ' then
                   Skip_Spaces (Line_In, TP2);
                else
@@ -375,7 +376,6 @@ package body Parse_Functions is
             Found := (TP_Pos - 1 = TP'Length) and then
               Line_In (1 .. TP2 - 1) = TP;
             if Found then
-               --                 TP2 := TP2 - 1;
                Command := Command_Table (Index);
             end if;
 --              Put_Line (Routine_Name & "975 TP, TP2: '" & TP & "' " &
@@ -405,10 +405,10 @@ package body Parse_Functions is
          TP_Pos := TP_Pos + 1;
       end loop;
 
-      Put_Line (Routine_Name & "990 Command.Name: " & To_String (Command.Name));
-      Put_Line (Routine_Name & "P, Index, Match_I:" & Integer'Image (P)
-                & ", " & Integer'Image (Index)  & ", " &
-                  Integer'Image (Match_I));
+--        Put_Line (Routine_Name & "990 Command.Name: " & To_String (Command.Name));
+--        Put_Line (Routine_Name & "P, Index, Match_I:" & Integer'Image (P)
+--                  & ", " & Integer'Image (Index)  & ", " &
+--                    Integer'Image (Match_I));
       --  990
       if P <= Input_Buffer_Length then
          if Match_I > -1 then

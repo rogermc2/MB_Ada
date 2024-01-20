@@ -93,11 +93,11 @@ package body Tokenizer is
          --           Put_Line (Routine_Name & "Last_Ptr : " & Integer'Image (Last_Ptr));
          Last_Ptr := Ptr;
          aChar := Get_Input_Character (Ptr);
-         Put_Line (Routine_Name & "Ptr, aChar, First_Nonwhite: " &
-                     Integer'Image (Ptr) & ", " & aChar & ", " &
-                     Boolean'Image (First_Nonwhite) );
-         Put_Line (Routine_Name & "Input_Buffer_Length : " &
-                     Integer'Image (Input_Buffer_Length));
+--           Put_Line (Routine_Name & "Ptr, aChar, First_Nonwhite: " &
+--                       Integer'Image (Ptr) & ", " & aChar & ", " &
+--                       Boolean'Image (First_Nonwhite) );
+--           Put_Line (Routine_Name & "Input_Buffer_Length : " &
+--                       Integer'Image (Input_Buffer_Length));
          --           delay (1.0);
          if aChar = ' ' then
             Put_Line (Routine_Name & "aChar = ' '");
@@ -121,8 +121,8 @@ package body Tokenizer is
             First_Nonwhite := False;
          elsif First_Nonwhite then
             --  MMBasic  907 - 955
-            Put_Line (Routine_Name & "907 First_Nonwhite, Match_P: " &
-                        Integer'Image (Match_P));
+--              Put_Line (Routine_Name & "907 First_Nonwhite, Match_P: " &
+--                          Integer'Image (Match_P));
             Process_First_Nonwhite (Token_Buffer, Ptr, Label_Valid,
                                     First_Nonwhite, Match_I, Match_P);
             if Ptr > Integer (Length (Token_Buffer)) then

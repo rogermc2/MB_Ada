@@ -453,7 +453,7 @@ package body M_Basic is
               Character'Pos (Element (Token_Buffer, Program_Ptr));
             --  C_Base_Token is the base of the token numbers.
             Command_Token_Test :=
-              (M_Misc.C_Base_Token and Command_Token) - M_Misc.C_Base_Token;
+              M_Misc.C_Base_Token and (Command_Token - M_Misc.C_Base_Token);
 
             if Command_Token >= Command_Token_Test and then
               Command_Token_Test < Unsigned_16 (Command_Table_Size) and then
