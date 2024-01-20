@@ -383,14 +383,17 @@ package body Parse_Functions is
 --              Put_Line (Routine_Name & "975 Command name: '" &
 --                          To_String (Command.Name) & "' " );
             --  MMBasic 975
-            if TP_Pos > TP'Last and then TP2 <= Line_In'Length and then
-              (not Is_Name_Character (Get_Input_Character (TP2)) or else
+            if TP_Pos > TP'Last and then
+              (TP2 = Line_In'Last + 1 or else
+                 not Is_Name_Character (Get_Input_Character (TP2)) or else
                  (Command_Table (Index).Command_Type and T_FUN) =
                    T_FUN) then
-
-               if TP (TP_Pos - 1) = '(' or else
-                 Is_Name_Character (Line_In (TP2 - 1)) then
-                  if length (Command_Table (Index).Name) > Match_L then
+--                 Put_Line (Routine_Name & "977 TP_Pos > TP'Last and ...");
+               --  MMBasic 977
+               if TP (TP_Pos - 1) = '(' or else TP2 = Line_In'Last + 1 or else
+                 not Is_Name_Character (Line_In (TP2)) then
+--                    Put_Line (Routine_Name & "978 TP (TP_Pos - 1) = '(' or else ...");
+                  if Length (Command_Table (Index).Name) > Match_L then
                      --  MMBasic 982
                      Match_P := TP2;
                      Match_I := Index;
@@ -402,16 +405,14 @@ package body Parse_Functions is
          TP_Pos := TP_Pos + 1;
       end loop;
 
-      Put_Line (Routine_Name & "990 Command.Name: " &
-                  To_String (Command.Name));
+      Put_Line (Routine_Name & "990 Command.Name: " & To_String (Command.Name));
       Put_Line (Routine_Name & "P, Index, Match_I:" & Integer'Image (P)
-                & ", " & Integer'Image (Index)
-                & ", " & Integer'Image (Match_I));
+                & ", " & Integer'Image (Index)  & ", " &
+                  Integer'Image (Match_I));
       --  990
       if P <= Input_Buffer_Length then
          if Match_I > -1 then
             --  Match found
-            Put_Line (Routine_Name & "Process_Command");
             --  993 - 1004 process rest of command line
             Process_Command (Token_Buffer, P, Match_P, Match_I,
                              First_Nonwhite, Label_Valid);

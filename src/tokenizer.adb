@@ -132,12 +132,6 @@ package body Tokenizer is
                            Get_Input_Character(Ptr));
             end if;
 
-            --  MMBasic  976
-         elsif Label_Valid and then
-           M_Basic_Utilities.Is_Name_Start (Get_Input_Character (Ptr)) then
-            --              Put_Line (Routine_Name & "Label_Valid and Name_Start: " &
-            --                          Get_Input_Character (Ptr));
-            Try_Label (Token_Buffer, Ptr, Label_Valid);
             --  MMBasic  997
          elsif Check_For_Function_Or_Keyword (Token_Buffer, Ptr, First_Nonwhite) then
             --              Put_Line (Routine_Name & "Function_Or_Keyword check,  Ptr: " &
