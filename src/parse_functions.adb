@@ -330,7 +330,6 @@ package body Parse_Functions is
       Label_Valid  : in out Boolean; First_Nonwhite : in out Boolean) is
       use Interfaces;
       use Ada.Characters.Handling;
-      use Support;
       Routine_Name  : constant String := "Parse_Functions.Try_Command ";
       Line_In       : constant String := To_Upper (Get_Input_Buffer);
       TP2           : Positive;          --  Line_In ptr
@@ -341,7 +340,6 @@ package body Parse_Functions is
       Match_L       : Integer := 0;
       Match_P       : Integer := 0;
       Found         : Boolean := False;
-      OK            : Boolean := True;
    begin
       Put_Line (Routine_Name & "958 Line_In: '" & Line_In & "'");
       --  MMBasic 958
@@ -421,26 +419,7 @@ package body Parse_Functions is
             --  MMBasic 1009
          elsif Label_Valid and then
            Is_Name_Start (Get_Input_Character (P)) then
-            OK := True;
-            Index := 0;
-            TP_Pos := 0;
-            while OK and then TP_Pos < Length (Command.Name) and then
-              Index <= Configuration.MAXVARLEN loop
-               Index := Index + 1;
-               TP_Pos := TP_Pos + 1;
-               OK := Is_Name_Character (Element (Command.Name, TP_Pos));
-            end loop;
-
-            --  MMBasic 1015
-            if OK and then Element (Command.Name, TP_Pos) = ':' then
-               Label_Valid := False;
-               Buffer_Append (Token_Buffer, Integer'Image (Global.T_LABEL));
-               Buffer_Append (Token_Buffer, Integer'Image (TP_Pos - P));
-               Buffer_Append (Token_Buffer, Get_Input_Slice (1, TP_Pos - P));
-            end if;
-
-            P := P + 1;
-
+           Try_Label (Token_Buffer, P, Label_Valid);
          end if;
       end if;
 
@@ -533,7 +512,7 @@ package body Parse_Functions is
          Append (Token_Buffer, Integer'Image (Global.T_LABEL));
          Append (Token_Buffer, Integer'Image (TP - I_Pos));
          Append (Token_Buffer, Get_Input_Slice (I_Pos, TP));
-         I_Pos := TP + 1;  --  Step over label and terminating :
+         I_Pos := I_Pos + 1;  --  Step over label and terminating :
       end if;
 
    end Try_Label;

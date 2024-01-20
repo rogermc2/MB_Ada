@@ -132,13 +132,6 @@ package body Tokenizer is
                            Get_Input_Character(Ptr));
             end if;
 
-            --  MMBasic  958
-            if Match_I > -1 then
-               Process_Command (Token_Buffer, Ptr, Match_I, Match_P,
-                                First_Nonwhite, Label_Valid);
-               Assert (Ptr > Last_Ptr, Routine_Name & "Ptr not incremented");
-            end if;
-
             --  MMBasic  976
          elsif Label_Valid and then
            M_Basic_Utilities.Is_Name_Start (Get_Input_Character (Ptr)) then
