@@ -125,10 +125,11 @@ package body Tokenizer is
                         Integer'Image (Match_P));
             Process_First_Nonwhite (Token_Buffer, Ptr, Label_Valid,
                                     First_Nonwhite, Match_I, Match_P);
-            Put_Line (Routine_Name & "First_Nonwhite, Ptr: " &
-                        Get_Input_Character(Ptr));
             if Ptr > Integer (Length (Token_Buffer)) then
                Put_Line (Routine_Name & "no more input buffer characters." );
+            else
+               Put_Line (Routine_Name & "958 First_Nonwhite, Ptr: " &
+                           Get_Input_Character(Ptr));
             end if;
 
             --  MMBasic  958

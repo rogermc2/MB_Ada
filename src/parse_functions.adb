@@ -281,6 +281,7 @@ package body Parse_Functions is
          Put_Line (Routine_Name & "Token Buffer:");
          Support.Print_Buffer (Token_Buffer);
       end if;
+      Put_Line (Routine_Name & "done");
 
    end Process_First_Nonwhite;
 
