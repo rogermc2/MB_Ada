@@ -58,7 +58,7 @@ package Command_And_Token_Tables is
 
    Num_Commands          : constant Positive := 53;
    Num_Function_Commands : constant Positive := 45;
-   Num_Functions         : constant Positive := 118;
+   Num_Functions         : constant Positive := 117;
    Num_Tokens            : constant Positive := 9;
    Num_Operators         : constant Positive := 19;
 

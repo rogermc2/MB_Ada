@@ -309,8 +309,8 @@ package body Command_And_Token_Tables is
                         (To_Unbounded_String ("op_xor"), T_NA, 0, Null),
                         (To_Unbounded_String ("op_not"), T_NA, 0, Null),
                         (To_Unbounded_String ("op_shiftleft"), T_NA, 0, Null),
-                        (To_Unbounded_String ("op_shiftright"), T_NA, 0, Null),
-                        (To_Unbounded_String (""), T_NA, 0, Null));
+                        (To_Unbounded_String ("op_shiftright"), T_NA, 0, Null));
+--                          (To_Unbounded_String (""), T_NA, 0, Null));
 
    function Get_Input_Buffer return String is
    begin
