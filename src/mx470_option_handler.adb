@@ -191,13 +191,23 @@ package body MX470_Option_Handler is
    --     end Do_LCD_Panel;
 
    function Do_List (Command_Line : String) return Boolean is
-      Routine_Name : constant String := "MX470_Option_Handler.Do_List ";
+      use Flash;
+      --        Routine_Name : constant String := "MX470_Option_Handler.Do_List ";
       Found        : constant Boolean :=
-          Check_String (Command_Line, "LIST") > 0;
+        Check_String (Command_Line, "LIST") > 0;
    begin
       if Found then
-        Put_Line (Routine_Name & "not implemnted.");
+         if Option.SDCARD_CS > 0 then
+            Put ("OPTION SDCARD " & Integer'Image (Option.SDCARD_CS));
+            if Option.SD_CD > 0 then
+               Put (", " & Integer'Image (Option.SD_CD));
 
+               if Option.SD_WP > 0 then
+                  Put (", " & Integer'Image (Option.SD_WP));
+               end if;
+               New_Line;
+            end if;
+         end if;
       end if;
 
       return Found;
