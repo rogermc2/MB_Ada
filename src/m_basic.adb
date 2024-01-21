@@ -454,6 +454,10 @@ package body M_Basic is
             --  C_Base_Token is the base of the token numbers.
             Command_Token_Test :=
               M_Misc.C_Base_Token and (Command_Token - M_Misc.C_Base_Token);
+            Put_Line (Routine_Name & "Command_Token: " &
+                        Unsigned_16'Image (Command_Token));
+                      Put_Line (Routine_Name & "Command_Token_Test" &
+                          Unsigned_16'Image (Command_Token_Test));
 
             if Command_Token >= Command_Token_Test and then
               Command_Token_Test < Unsigned_16 (Command_Table_Size) and then
