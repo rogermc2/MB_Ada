@@ -20,38 +20,38 @@ package body MX470_Option_Handler is
 
    procedure Save_And_Reset;
 
-   function Get_Arg (E_String : String; TP : Positive) return Unbounded_String is
+   function Get_Arg (Command_Line : String; TP : Positive) return Unbounded_String is
    begin
-      return To_Unbounded_String (Slice (To_Unbounded_String (E_String),
-                                  TP, E_String'Length));
+      return To_Unbounded_String (Slice (To_Unbounded_String (Command_Line),
+                                  TP, Command_Line'Length));
    end Get_Arg;
 
    --  Check_String checks if the next text in an element (a basic statement)
    --  corresponds to an alphabetic string.
 
-   function Do_Console (E_String : String) return Boolean is
+   function Do_Console (Command_Line : String) return Boolean is
       use External;
       use IO_Ports;
       use M_Basic.Conversion;
       Routine_Name : constant String := "MX470_Option_Handler.Do_Console ";
-      TP           : constant Natural := Check_String (E_String, "CONSOLE");
+      TP           : constant Natural := Check_String (Command_Line, "CONSOLE");
       Found        : constant Boolean := TP > 0;
    begin
       if Found then
-         if Check_String (E_String, "OFF") > 0 then
+         if Check_String (Command_Line, "OFF") > 0 then
             Flash.Option.SDCARD_CS := 0;
             Flash.Option.SD_CD := 0;
             Flash.Option.SD_WP := 0;
             Flash.Save_Options;
 
-         elsif Check_String (E_String, "OFF") > 0 then
+         elsif Check_String (Command_Line, "OFF") > 0 then
             if Current_Line_Ptr /= null then
                Put_Line (Routine_Name & "invalid option in a program.");
                Flash.Option.Serial_Con_Disabled := True;
                Save_And_Reset;
             end if;
 
-         elsif Check_String (E_String, "ON") > 0 then
+         elsif Check_String (Command_Line, "ON") > 0 then
             if Current_Line_Ptr /= null then
                Put_Line (Routine_Name & "invalid option in a program.");
             end if;
@@ -63,25 +63,25 @@ package body MX470_Option_Handler is
             Flash.Option.Serial_Con_Disabled := False;
             Save_And_Reset;
 
-         elsif Check_String (E_String, "INVERT") > 0 then
+         elsif Check_String (Command_Line, "INVERT") > 0 then
             Flash.Option.Invert := 1;
             Flash.Save_Options;
             Console.Init_Serial_Console;
 
-         elsif Check_String (E_String, "NOINVERT") > 0 then
+         elsif Check_String (Command_Line, "NOINVERT") > 0 then
             Flash.Option.Invert := 0;
             Flash.Save_Options;
             Console.Init_Serial_Console;
 
-         elsif Check_String (E_String, "AUTO") > 0 then
+         elsif Check_String (Command_Line, "AUTO") > 0 then
             Flash.Option.Invert := 2;
             Flash.Save_Options;
             Console.Init_Serial_Console;
 
-         elsif Check_String (E_String, "ECHO") > 0 then
+         elsif Check_String (Command_Line, "ECHO") > 0 then
             M_Misc.Echo_Option := True;
 
-         elsif Check_String (E_String, "NOECHO") > 0 then
+         elsif Check_String (Command_Line, "NOECHO") > 0 then
             M_Misc.Echo_Option := False;
          end if;
       end if;
@@ -90,14 +90,14 @@ package body MX470_Option_Handler is
 
    end Do_Console;
 
-   function Do_Controls (E_String : String) return Boolean is
+   function Do_Controls (Command_Line : String) return Boolean is
       use Evaluation;
-      TP    : constant Natural := Check_String (E_String, "CONTROLS");
+      TP    : constant Natural := Check_String (Command_Line, "CONTROLS");
       Found : constant Boolean := TP > 0;
       Arg   : Unbounded_String;
    begin
       if Found then
-         Arg := Get_Arg (E_String, TP);
+         Arg := Get_Arg (Command_Line, TP);
          Flash.Option.Max_Controls := Get_Int (Arg, 0, 1000) + 1;
          Save_And_Reset;
       end if;
@@ -106,8 +106,8 @@ package body MX470_Option_Handler is
 
    end Do_Controls;
 
-   function Do_Error (E_String : String) return Boolean is
-      TP    : constant Natural := Check_String (E_String, "ERROR");
+   function Do_Error (Command_Line : String) return Boolean is
+      TP    : constant Natural := Check_String (Command_Line, "ERROR");
       Found : constant Boolean := TP > 0;
    begin
       if Found then
@@ -115,9 +115,9 @@ package body MX470_Option_Handler is
             Put_Line ("SD card has not been configured.");
          end if;
 
-         if Check_String (E_String, "CONTINUE") > 0 then
+         if Check_String (Command_Line, "CONTINUE") > 0 then
             File_IO.Option_File_Error_Abort := False;
-         elsif Check_String (E_String, "ABORT") > 0 then
+         elsif Check_String (Command_Line, "ABORT") > 0 then
             File_IO.Option_File_Error_Abort := True;
          end if;
       end if;
@@ -126,26 +126,26 @@ package body MX470_Option_Handler is
 
    end Do_Error;
 
-   function Do_Keyboard (E_String : String) return Boolean is
+   function Do_Keyboard (Command_Line : String) return Boolean is
       use Keyboard;
-      Found : constant Boolean := Check_String (E_String, "KEYBOARD") > 0;
+      Found : constant Boolean := Check_String (Command_Line, "KEYBOARD") > 0;
    begin
       if Found then
-         if Check_String (E_String, "DISABLE") > 0 then
+         if Check_String (Command_Line, "DISABLE") > 0 then
             Flash.Option.Keyboard_Config := NO_KEYBOARD;
-         elsif Check_String (E_String, "US") > 0 then
+         elsif Check_String (Command_Line, "US") > 0 then
             Flash.Option.Keyboard_Config := CONFIG_US;
-         elsif Check_String (E_String, "FR") > 0 then
+         elsif Check_String (Command_Line, "FR") > 0 then
             Flash.Option.Keyboard_Config := CONFIG_FR;
-         elsif Check_String (E_String, "GR") > 0 then
+         elsif Check_String (Command_Line, "GR") > 0 then
             Flash.Option.Keyboard_Config := CONFIG_GR;
-         elsif Check_String (E_String, "IT") > 0 then
+         elsif Check_String (Command_Line, "IT") > 0 then
             Flash.Option.Keyboard_Config := CONFIG_IT;
-         elsif Check_String (E_String, "BE") > 0 then
+         elsif Check_String (Command_Line, "BE") > 0 then
             Flash.Option.Keyboard_Config := CONFIG_BE;
-         elsif Check_String (E_String, "UK") > 0 then
+         elsif Check_String (Command_Line, "UK") > 0 then
             Flash.Option.Keyboard_Config := CONFIG_UK;
-         elsif Check_String (E_String, "ES") > 0 then
+         elsif Check_String (Command_Line, "ES") > 0 then
             Flash.Option.Keyboard_Config := CONFIG_ES;
          end if;
          Save_And_Reset;
@@ -155,17 +155,17 @@ package body MX470_Option_Handler is
 
    end Do_Keyboard;
 
-   --     function Do_LCD_Panel (E_String : String) return Boolean is
+   --     function Do_LCD_Panel (Command_Line : String) return Boolean is
    --        use Ada.Characters.Handling;
    --        use Draw;
    --        use String_Buffer_Package;
    --        Routine_Name  : constant String := "OPtion_Handler.Do_LCD_Panel ";
-   --        TP            : constant Natural := Check_String (E_String, "LCDPANEL");
+   --        TP            : constant Natural := Check_String (Command_Line, "LCDPANEL");
    --        Found         : constant Boolean := TP > 0;
    --        Arg           : Unbounded_String;
    --     begin
    --        if Found then
-   --           Arguments.Get_Args (To_Unbounded_String (E_String),TP, 13, ",");
+   --           Arguments.Get_Args (To_Unbounded_String (Command_Line),TP, 13, ",");
    --           Arg := To_Unbounded_String (Element (Arguments.Arg_V, 1));
    --
    --           if To_Upper (Element (Arguments.Arg_V, 1)) = "USER" then
@@ -190,11 +190,13 @@ package body MX470_Option_Handler is
    --
    --     end Do_LCD_Panel;
 
-   function Do_List (E_String : String) return Boolean is
-      Found  : constant Boolean := Check_String (E_String, "LIST") > 0;
+   function Do_List (Command_Line : String) return Boolean is
+      Routine_Name : constant String := "MX470_Option_Handler.Do_List ";
+      Found        : constant Boolean :=
+          Check_String (Command_Line, "LIST") > 0;
    begin
       if Found then
-        Put_Line ("MX470_Option_Handler.Do_List not implemnted.");
+        Put_Line (Routine_Name & "not implemnted.");
 
       end if;
 
@@ -202,8 +204,8 @@ package body MX470_Option_Handler is
 
    end Do_List;
 
-   function Do_Reset (E_String : String) return Boolean is
-      Found        : constant Boolean := Check_String (E_String, "RESET") > 0;
+   function Do_Reset (Command_Line : String) return Boolean is
+      Found        : constant Boolean := Check_String (Command_Line, "RESET") > 0;
    begin
       if Found then
          Flash.Reset_All_Options;
@@ -215,20 +217,20 @@ package body MX470_Option_Handler is
 
    end Do_Reset;
 
-   function Do_RTC (E_String : String) return Boolean is
+   function Do_RTC (Command_Line : String) return Boolean is
       use Arguments;
       use Evaluation;
       use Command_And_Token_Tables.String_Buffer_Package;
-      TP    : constant Natural := Check_String (E_String, "RTC");
+      TP    : constant Natural := Check_String (Command_Line, "RTC");
       Arg   : Unbounded_String;
       Found : constant Boolean := TP > 0;
    begin
       if Found then
-         if Check_String (E_String, "DISABLE") > 0 then
+         if Check_String (Command_Line, "DISABLE") > 0 then
             Flash.Option.RTC_Clock := 0;
             Flash.Option.RTC_Data := 0;
          else
-            Get_Args (To_Unbounded_String (E_String), TP, 3 , ",");
+            Get_Args (To_Unbounded_String (Command_Line), TP, 3 , ",");
             if Integer (Arg_C) = 3 then
                Arg := To_Unbounded_String (Element (Arg_V, 1));
                Flash.Option.RTC_Data := Integer (Get_Integer (Arg));
@@ -250,18 +252,18 @@ package body MX470_Option_Handler is
 
    end Do_RTC;
 
-   function Do_SD_Card (E_String : String) return Boolean is
-      TP    : constant Natural := Check_String (E_String, "SDCARD");
+   function Do_SD_Card (Command_Line : String) return Boolean is
+      TP    : constant Natural := Check_String (Command_Line, "SDCARD");
       Found : constant Boolean := TP > 0;
    begin
       if Found then
-         if Check_String (E_String, "DISABLE") > 0 then
+         if Check_String (Command_Line, "DISABLE") > 0 then
             Flash.Option.SDCARD_CS := 0;
             Flash.Option.SD_CD := 0;
             Flash.Option.SD_WP := 0;
             Flash.Save_Options;
          else
-            File_IO.Config_SD_Card (Get_Arg (E_String, TP));
+            File_IO.Config_SD_Card (Get_Arg (Command_Line, TP));
          end if;
          Save_And_Reset;
       end if;
@@ -273,19 +275,19 @@ package body MX470_Option_Handler is
    --  MiscMX470.c 84
    function Other_Options return Boolean is
       Routine_Name : constant String := "MX470_Option_Handler.Other_Options ";
-      E_String     : constant String := To_String (Global.E_UB_String);
+      Command_Line : constant String := To_String (Global.Command_Line);
       Result       : Boolean := False;
    begin
-      Put_Line (Routine_Name & "E_String: '" & E_String & "'");
+      Put_Line (Routine_Name & "Command_Line: '" & Command_Line & "'");
       Result :=
-        Do_Reset(E_String) or else
-        Do_Keyboard (E_String) or else
-        Do_Controls (E_String) or else
-        Do_SD_Card (E_String) or else
-        Do_Error (E_String) or else
-        Do_Console (E_String) or else
-        Do_RTC (E_String) or else
-        Do_List (E_String);
+        Do_Reset(Command_Line) or else
+        Do_Keyboard (Command_Line) or else
+        Do_Controls (Command_Line) or else
+        Do_SD_Card (Command_Line) or else
+        Do_Error (Command_Line) or else
+        Do_Console (Command_Line) or else
+        Do_RTC (Command_Line) or else
+        Do_List (Command_Line);
 
       return Result;
 

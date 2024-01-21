@@ -38,7 +38,7 @@ package body M_Basic is
    Callers_Line_Ptr       : Subfunction_Ptr;
    --     Callers_Line_Ptr : Natural := 0;
    Next_Statement         : Positive;
-   Command_Line           : Unbounded_String;
+   --     Command_Line           : Unbounded_String;
    --     Saved_Command_Line_Pos : Positive := 1;
    --     Cmd_Token              : Positive;
    Current_Comand         : aliased Unbounded_String := Null_Unbounded_String;
@@ -63,9 +63,10 @@ package body M_Basic is
    --  after the matched string if found or 0 otherwise.
    function Check_String (aString, Token : String) return Natural is
       use Ada.Characters.Handling;
-      S_Pos  : Positive := 1;
-      T_Pos  : Positive := 1;
-      Result : Natural  := 0;
+--        Routine_Name     : constant String  := "M_Basic.Check_String ";
+      S_Pos            : Positive := 1;
+      T_Pos            : Positive := 1;
+      Result           : Natural  := 0;
    begin
       --  MMBasic 2704
       Skip_Spaces (aString, S_Pos);
@@ -76,7 +77,7 @@ package body M_Basic is
          T_Pos := T_Pos + 1;
       end loop;
 
-      if T_Pos = Token'Length then
+      if T_Pos = Token'Length + 1 then
          if aString (S_Pos) = ' ' or else aString (S_Pos) = '''
            or else aString (S_Pos) = '\' or else aString (S_Pos) = '('
          then
@@ -134,8 +135,9 @@ package body M_Basic is
       use Interfaces;
       use Arguments;
       Routine_Name     : constant String  := "M_Basic.Defined_Function ";
-      S                : constant Unbounded_String := Command_Line;
-      Fun_Type         : constant Function_Type := Var_Table (Var_Index).Var_Type;
+      S                : constant Unbounded_String := Global.Command_Line;
+      Fun_Type         : constant Function_Type :=
+        Var_Table (Var_Index).Var_Type;
       TP               : constant Arguments.Var_Record := Arguments.Find_Var
         (Fun_Name, Pos, Fun_Type or Global.V_FUNCT);
       TTP              : Positive;
@@ -154,7 +156,7 @@ package body M_Basic is
       Execute_Program
         (Unbounded_Slice (Command, Pos, Length (Command)));
       Current_Line_Ptr := Callers_Line_Ptr;
-      Command_Line := S;
+      Global.Command_Line := S;
       Next_Statement := TTP;
 
       --  787
@@ -442,6 +444,8 @@ package body M_Basic is
 
       --  225
       Next_Statement := Program_Ptr;
+      Global.Command_Line :=
+        Unbounded_Slice (Token_Buffer, Pos + 2, Length (Token_Buffer));
 
       if not Done then
          Done := Program_Ptr >= Flash.Prog_Memory'Length;

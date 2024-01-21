@@ -13,12 +13,12 @@ package body Command_Handler is
    --  Commands.c 180
    procedure List_Cmd is
       Routine_Name : constant String := "Command_Handler.List_Cmd ";
-      E_String     : constant String := To_String (Global.E_UB_String);
+      Command_Line : constant String := To_String (Global.Command_Line);
       P            : Natural := 0;
    begin
-      Put_Line (Routine_Name & "E_String: '" & E_String & "'");
-      if E_String'Length > 0  then
-         P := M_Basic.Check_String (E_String, "ALL");
+      Put_Line (Routine_Name & "Command_Line: '" & Command_Line & "'");
+      if Command_Line'Length > 0  then
+         P := M_Basic.Check_String (Command_Line, "ALL");
       end if;
 
       if P > 0 then
@@ -26,7 +26,7 @@ package body Command_Handler is
          --           Check_End (P);
       else
          List_Program (Flash.Prog_Memory, False);
-         --           Check_End (E_String);
+         --           Check_End (Command_Line);
       end if;
 
    end List_Cmd;

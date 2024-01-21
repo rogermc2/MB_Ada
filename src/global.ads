@@ -8,20 +8,20 @@ with Exceptions;
 
 package Global is
 
-   Bus_Speed   : Positive := 38400;
-   F_Arg_1     : Float := 0.0;
-   F_Arg_2     : Float := 0.0;
-   F_Return    : Float := 0.0;
-   I_Arg_1     : Integer := 0;
-   I_Arg_2     : Integer := 0;
-   I_Return    : Integer := 0;
-   E_Float     : Float := 0.0;
-   E_Integer   : Integer := 0;
-   S_Arg_1     : Unbounded_String;
-   S_Arg_2     : Unbounded_String;
-   S_Return    : Unbounded_String;
-   E_UB_String : Unbounded_String;
-   UB_Return   : Unbounded_String;
+   Bus_Speed    : Positive := 38400;
+   F_Arg_1      : Float := 0.0;
+   F_Arg_2      : Float := 0.0;
+   F_Return     : Float := 0.0;
+   I_Arg_1      : Integer := 0;
+   I_Arg_2      : Integer := 0;
+   I_Return     : Integer := 0;
+   E_Float      : Float := 0.0;
+   E_Integer    : Integer := 0;
+   S_Arg_1      : Unbounded_String;
+   S_Arg_2      : Unbounded_String;
+   S_Return     : Unbounded_String;
+   Command_Line : Unbounded_String;
+   UB_Return    : Unbounded_String;
 
    --  Flags used in the program lines
    --  end of a command
@@ -38,7 +38,7 @@ package Global is
 
    --  these constants are used in the second argument of the findvar()
    --  function, they should be or"d together
-   V_FIND            : constant Unsigned_16:= 0;
+   V_FIND              : constant Unsigned_16:= 0;
    --  a straight forward find, if the variable is not found
    --  it is created and set to zero
    --  throw an error if not found
