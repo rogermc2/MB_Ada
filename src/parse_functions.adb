@@ -77,31 +77,6 @@ package body Parse_Functions is
 
    end Check_For_Function_Or_Keyword;
 
-   --     function Get_Command_From_Input (I_Pos : in out Positive)
-   --                                      return Unbounded_String is
-   --        use Ada.Characters.Handling;
-   --        --        Routine_Name  : constant String :=
-   --        --                          "Parse_Functions.Get_Command_From_Input ";
-   --        aChar         : Character;
-   --        Command       : Unbounded_String;
-   --        Done          : Boolean := False;
-   --     begin
-   --        Skip_In_Buffer_Spaces (I_Pos);
-   --        while not Done loop
-   --           aChar := Get_Input_Character (I_Pos);
-   --           Done :=  aChar = ' ' or else
-   --             (not (aChar = '_' or Is_Alphanumeric (aChar)));
-   --           if not Done then
-   --              Append (Command, aChar);
-   --           end if;
-   --           I_Pos := I_Pos + 1;
-   --           Done := Done or else I_Pos > Input_Buffer_Length;
-   --        end loop;
-   --
-   --        return Command;
-   --
-   --     end Get_Command_From_Input;
-
    function Get_Command_Value (Command : String) return integer is
       Routine_Name  : constant String := "Parse_Functions.Get_Command_Value ";
       Command_Value : Integer := 0;
@@ -340,11 +315,12 @@ package body Parse_Functions is
       Match_I       : Integer := -1;
       Match_L       : Integer := 0;
       Match_P       : Integer := 0;
-      Found         : Boolean := False;
+--        Found         : Boolean := False;
    begin
 --        Put_Line (Routine_Name & "958 Line_In: '" & Line_In & "'");
       --  MMBasic 958
-      while not Found and then Index < Command_Table'Last loop
+--        while not Found and then Index < Command_Table'Last loop
+      while Index < Command_Table'Last loop
          Index := Index + 1;
          declare
             TP : constant String :=
@@ -373,11 +349,11 @@ package body Parse_Functions is
                end if;
             end loop;
 
-            Found := (TP_Pos - 1 = TP'Length) and then
-              Line_In (1 .. TP2 - 1) = TP;
-            if Found then
-               Command := Command_Table (Index);
-            end if;
+--              Found := (TP_Pos - 1 = TP'Length) and then
+--                Line_In (1 .. TP2 - 1) = TP;
+--              if Found then
+--                 Command := Command_Table (Index);
+--              end if;
 --              Put_Line (Routine_Name & "975 TP, TP2: '" & TP & "' " &
 --                          Integer'Image (TP2));
 --              Put_Line (Routine_Name & "975 Command name: '" &
