@@ -8,6 +8,7 @@ with Ada.Assertions;
 with Ada.Characters.Handling;
 with Ada.Exceptions; use Ada.Exceptions;
 with Ada.Strings;
+with Ada.Strings.Fixed;
 with Ada.Text_IO; use Ada.Text_IO;
 with Ada.Unchecked_Conversion;
 
@@ -423,8 +424,14 @@ package body M_Basic is
       Save_Local_Index : in out Natural) is
       use Interfaces;
       use Ada.Assertions;
+      use Ada.Strings;
+      use Ada.Strings.Fixed;
       Routine_Name       : constant String := "M_Basic.Execute_Command ";
-      Command_Token      : Unsigned_16;
+      Buffer             : constant Unbounded_String :=
+        Trim (Token_Buffer, Left);
+      Pos                : constant Natural := Index (To_String (Buffer), " ");
+      Command_Token      : constant Unsigned_16 :=
+        Unsigned_16'Value (Slice (Buffer, 1, Pos));
       Command_Token_Test : Unsigned_16;
       Interupt_Check     : Integer := 0;
       Command_Ptr        : Command_And_Token_Functions.Access_Procedure;
@@ -432,11 +439,11 @@ package body M_Basic is
       Done               : Boolean := Length (Token_Buffer) < 2;
    begin
       Put_Line (Routine_Name & "Token_Buffer: " & To_String (Token_Buffer));
+
       --  225
       Next_Statement := Program_Ptr;
 
       if not Done then
-         --           Done := Is_Command_End (Token_Buffer, Program_Ptr) or else
          Done := Program_Ptr >= Flash.Prog_Memory'Length;
       end if;
 
@@ -449,17 +456,13 @@ package body M_Basic is
             Skip_Element (Token_Buffer, Program_Ptr);
             --  236 if setjmp (ErrNext) = 0 then
             Save_Local_Index := Local_Index;
-            Command_Token :=
-              Character'Pos (Element (Token_Buffer, Program_Ptr));
             --  C_Base_Token is the base of the token numbers.
             Command_Token_Test :=
               M_Misc.C_Base_Token and Command_Token - M_Misc.C_Base_Token;
-            Put_Line (Routine_Name & "M_Misc.C_Base_Token: " &
-                        Unsigned_16'Image (M_Misc.C_Base_Token));
-            Put_Line (Routine_Name & "(Command_Token - M_Misc.C_Base_Token: " &
-                        Unsigned_16'Image (Command_Token - M_Misc.C_Base_Token));
             Put_Line (Routine_Name & "Command_Token: " &
                         Unsigned_16'Image (Command_Token));
+            Put_Line (Routine_Name & "(Command_Token - M_Misc.C_Base_Token: " &
+                        Unsigned_16'Image (Command_Token - M_Misc.C_Base_Token));
             Put_Line (Routine_Name & "Command_Token_Test" &
                         Unsigned_16'Image (Command_Token_Test));
 

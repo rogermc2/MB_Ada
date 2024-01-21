@@ -12,7 +12,7 @@ package body Command_Handler is
 
    --  Commands.c 180
    procedure List_Cmd is
-      Routine_Name : constant String := "Option_Handler.List_Cmd ";
+      Routine_Name : constant String := "Command_Handler.List_Cmd ";
       E_String     : constant String := To_String (Global.E_UB_String);
       P            : Natural := 0;
    begin
@@ -33,7 +33,7 @@ package body Command_Handler is
 
    --  Commands.c 209
    procedure List_Program (Prog : Flash.Prog_Memory_Array; All_Of : Boolean) is
-      Routine_Name : constant String := "Option_Handler.List_Program ";
+      Routine_Name : constant String := "Command_Handler.List_Program ";
    begin
       Put_Line (Routine_Name & "not implemented");
    end List_Program;
