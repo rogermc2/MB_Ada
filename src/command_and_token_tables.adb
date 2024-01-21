@@ -394,44 +394,44 @@ begin
       Command_Table (index) := Function_Types (index);
    end loop;
 
-   for index in 1 .. Num_Commands loop    --  53
+   for index in 1 .. Num_Commands loop           --  53   53
       Command_Table (Num_Functions + index) := Command_Types (index);
    end loop;
 
-   for index in 1 .. Num_Function_Commands loop
+   for index in 1 .. Num_Function_Commands loop  --  45   98
       Command_Table (Num_Functions + Num_Commands + index) :=
         Function_Commands (index);
    end loop;
 
-   for index in 1 ..Num_Operators loop
+   for index in 1 ..Num_Operators loop           --  19   117
       Command_Table
         (Num_Functions + Num_Commands + Num_Function_Commands + index) :=
         Operators.Operator_Types (index);
    end loop;
 
-   Command_Table (Command_Table_Size) :=
+   Command_Table (Command_Table_Size) :=          --  1   118
      (To_Unbounded_String (""), T_NA, 0, Null);
 
-   for index in 1 .. Num_Functions loop  --  118
+   for index in 1 .. Num_Functions loop            --  117  117
       Token_Table (index) := Function_Types (index);
    end loop;
 
-   for index in 1 .. Num_Function_Commands loop  --  45
+   for index in 1 .. Num_Function_Commands loop    --  45   162
       Token_Table (Num_Functions + index) := Function_Commands (index);
    end loop;
 
-   for index in 1 ..Num_Operators loop
+   for index in 1 ..Num_Operators loop              --  19   181
       Token_Table (Num_Functions + Num_Function_Commands + index) :=
         Operators.Operator_Types (index);
    end loop;
 
-   for index in 1 ..Num_Tokens loop
+   for index in 1 ..Num_Tokens loop                  --  9   190
       Token_Table (Num_Functions + Num_Function_Commands +
                      Num_Operators + index) :=
           Token_Types (index);
    end loop;
 
-   Token_Table (Token_Table_Size) :=
+   Token_Table (Token_Table_Size) :=                 --  1   191
      (To_Unbounded_String (""), T_NA, 0, Null);
 
 end  Command_And_Token_Tables;

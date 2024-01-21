@@ -132,10 +132,10 @@ package body M_Basic is
       F_Type  : in out Function_Type) is
       use Interfaces;
       use Arguments;
-      Routine_Name : constant String  := "M_Basic.Defined_Function ";
-      S            : constant Unbounded_String := Command_Line;
-      Fun_Type     : constant Function_Type := Var_Table (Var_Index).Var_Type;
-      TP           : constant Arguments.Var_Record := Arguments.Find_Var
+      Routine_Name     : constant String  := "M_Basic.Defined_Function ";
+      S                : constant Unbounded_String := Command_Line;
+      Fun_Type         : constant Function_Type := Var_Table (Var_Index).Var_Type;
+      TP               : constant Arguments.Var_Record := Arguments.Find_Var
         (Fun_Name, Pos, Fun_Type or Global.V_FUNCT);
       TTP              : Positive;
    begin
@@ -436,7 +436,7 @@ package body M_Basic is
       Next_Statement := Program_Ptr;
 
       if not Done then
---           Done := Is_Command_End (Token_Buffer, Program_Ptr) or else
+         --           Done := Is_Command_End (Token_Buffer, Program_Ptr) or else
          Done := Program_Ptr >= Flash.Prog_Memory'Length;
       end if;
 
@@ -453,11 +453,15 @@ package body M_Basic is
               Character'Pos (Element (Token_Buffer, Program_Ptr));
             --  C_Base_Token is the base of the token numbers.
             Command_Token_Test :=
-              M_Misc.C_Base_Token and (Command_Token - M_Misc.C_Base_Token);
+              M_Misc.C_Base_Token and Command_Token - M_Misc.C_Base_Token;
+            Put_Line (Routine_Name & "M_Misc.C_Base_Token: " &
+                        Unsigned_16'Image (M_Misc.C_Base_Token));
+            Put_Line (Routine_Name & "(Command_Token - M_Misc.C_Base_Token: " &
+                        Unsigned_16'Image (Command_Token - M_Misc.C_Base_Token));
             Put_Line (Routine_Name & "Command_Token: " &
                         Unsigned_16'Image (Command_Token));
-                      Put_Line (Routine_Name & "Command_Token_Test" &
-                          Unsigned_16'Image (Command_Token_Test));
+            Put_Line (Routine_Name & "Command_Token_Test" &
+                        Unsigned_16'Image (Command_Token_Test));
 
             if Command_Token >= Command_Token_Test and then
               Command_Token_Test < Unsigned_16 (Command_Table_Size) and then
