@@ -63,33 +63,38 @@ package body M_Basic is
    --  (space, null, comma, opening bracket or comment).
    --  Check_String returns a pointer to the next non space character
    --  after the matched string if found or 0 otherwise.
-   function Check_String (aString, Token : String) return Natural is
+--     function Check_String (aString, Token : String) return Natural is
+   function Check_String (aString, Token : String) return Boolean is
       use Ada.Characters.Handling;
---        Routine_Name     : constant String  := "M_Basic.Check_String ";
-      S_Pos            : Positive := 1;
-      T_Pos            : Positive := 1;
-      Result           : Natural  := 0;
+      use Ada.Strings;
+      --        Routine_Name     : constant String  := "M_Basic.Check_String ";
+      U_Token          : constant String := To_Upper (Token);
+      U_String         : constant String :=
+        To_Upper (To_String (Trim (To_Unbounded_String (aString), Left)));
+--        S_Pos            : Positive := 1;
+--        T_Pos            : Positive := 1;
+--        Result           : Natural  := 0;
    begin
       --  MMBasic 2704
-      Skip_Spaces (aString, S_Pos);
+--        Skip_Spaces (aString, S_Pos);
 --        Put_Line (Routine_Name & "aString: " & aString);
-      while T_Pos <= Token'Length and then S_Pos <= aString'Length
-        and then To_Upper (Token (T_Pos)) = To_Upper (aString (S_Pos))
-      loop
-         S_Pos := S_Pos + 1;
-         T_Pos := T_Pos + 1;
-      end loop;
+--        while T_Pos <= Token'Length and then S_Pos <= aString'Length
+--          and then To_Upper (Token (T_Pos)) = To_Upper (aString (S_Pos))
+--        loop
+--           S_Pos := S_Pos + 1;
+--           T_Pos := T_Pos + 1;
+--        end loop;
+--
+--        if T_Pos = Token'Length + 1 and then S_Pos <= aString'Length then
+--           if aString (S_Pos) = ' ' or else aString (S_Pos) = '''
+--             or else aString (S_Pos) = '\' or else aString (S_Pos) = '('
+--           then
+--              Skip_Spaces (aString, S_Pos);
+--              Result := S_Pos;
+--           end if;
+--        end if;
 
-      if T_Pos = Token'Length + 1 and then S_Pos <= aString'Length then
-         if aString (S_Pos) = ' ' or else aString (S_Pos) = '''
-           or else aString (S_Pos) = '\' or else aString (S_Pos) = '('
-         then
-            Skip_Spaces (aString, S_Pos);
-            Result := S_Pos;
-         end if;
-      end if;
-
-      return Result;
+      return U_String = U_Token;
 
    end Check_String;
 

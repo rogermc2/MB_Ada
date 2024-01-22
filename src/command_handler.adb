@@ -18,7 +18,8 @@ package body Command_Handler is
       use Global;
       use Command_And_Token_Tables.String_Buffer_Package;
 --        Command_Line : constant String := To_String (Global.Command_Line);
-      P            : Natural := 0;
+--        P            : Natural := 0;
+      P            : Boolean := False;
    begin
 --        Put_Line (Routine_Name & "Command_Line: '" & Command_Line & "'");
       Put_Line (Routine_Name & "Command_Line:");
@@ -29,7 +30,8 @@ package body Command_Handler is
 --           P := M_Basic.Check_String (Command_Line, "ALL");
       end if;
 
-      if P > 0 then
+--        if P > 0 then
+      if P then
          List_Program (Flash.Prog_Memory, True);
          --           Check_End (P);
       else

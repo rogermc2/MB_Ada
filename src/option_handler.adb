@@ -30,14 +30,14 @@ package body Option_Handler is
    end Get_Arg;
 
    function Do_Autorun (Command_Line : String) return Boolean is
-      Found : constant Boolean := Check_String (Command_Line, "AUTORUN") > 0;
+      Found : constant Boolean := Check_String (Command_Line, "AUTORUN");
    begin
       if Found then
-         if Check_String (Command_Line, "ON") > 0 then
+         if Check_String (Command_Line, "ON") then
             Flash.Option.Autorun := True;
             Flash.Save_Options;
          elsif
-           Check_String (Command_Line, "OFF") > 0 then
+           Check_String (Command_Line, "OFF") then
             Flash.Option.Autorun := False;
             Flash.Save_Options;
          end if;
@@ -48,12 +48,14 @@ package body Option_Handler is
    end Do_Autorun;
 
    function Do_Baud_Rate (Command_Line : String) return Boolean is
-      TP    : constant Natural := Check_String (Command_Line, "BAUDRATE");
-      Found : constant Boolean := TP > 0;
+--        TP    : constant Natural := Check_String (Command_Line, "BAUDRATE");
+--        Found : constant Boolean := TP > 0;
+      Found : constant Boolean := Check_String (Command_Line, "BAUDRATE");
       Arg   : Unbounded_String;
    begin
       if Found then
-         Arg := Get_Arg (Command_Line, TP);
+--           Arg := Get_Arg (Command_Line, TP)
+         Arg := Get_Arg (Command_Line, 1);
          Flash.Option.Baud_Rate :=
            Get_Int (Arg, 100, Global.Bus_Speed / 130);
          Flash.Save_Options;
@@ -65,18 +67,18 @@ package body Option_Handler is
    end Do_Baud_Rate;
 
    function Do_Case (Command_Line : String) return Boolean is
-      Found : constant Boolean := Check_String (Command_Line, "CASE") > 0;
+      Found : constant Boolean := Check_String (Command_Line, "CASE");
    begin
       if Found then
-         if Check_String (Command_Line, "LOWER") > 0 then
+         if Check_String (Command_Line, "LOWER") then
             Flash.Option.List_Case := Commands.CONFIG_LOWER;
             Flash.Save_Options;
          elsif
-           Check_String (Command_Line, "UPPER") > 0 then
+           Check_String (Command_Line, "UPPER") then
             Flash.Option.List_Case := Commands.CONFIG_UPPER;
             Flash.Save_Options;
          elsif
-           Check_String (Command_Line, "TITLE") > 0 then
+           Check_String (Command_Line, "TITLE") then
             Flash.Option.List_Case := Commands.CONFIG_TITLE;
             Flash.Save_Options;
          end if;
@@ -87,15 +89,16 @@ package body Option_Handler is
    end Do_Case;
 
    function Do_Colour_Code (Command_Line : String) return Boolean is
-      TP    : constant Natural := Check_String (Command_Line, "COLOURCODE");
-      Found : constant Boolean := TP > 0;
+--        TP    : constant Natural := Check_String (Command_Line, "COLOURCODE");
+--        Found : constant Boolean := TP > 0;
+      Found : constant Boolean := Check_String (Command_Line, "COLOURCODE");
    begin
       if Found then
-         if Check_String (Command_Line, "ON") > 0 then
+         if Check_String (Command_Line, "ON") then
             Flash.Option.Colour_Code := True;
             Flash.Save_Options;
          elsif
-           Check_String (Command_Line, "OFF") > 0 then
+           Check_String (Command_Line, "OFF") then
             Flash.Option.Colour_Code := False;
             Flash.Save_Options;
          end if;
@@ -106,16 +109,16 @@ package body Option_Handler is
    end Do_Colour_Code;
 
    function Do_Default (Command_Line : String) return Boolean is
-      Found : constant Boolean := Check_String (Command_Line, "DEFAULT") > 0;
+      Found : constant Boolean := Check_String (Command_Line, "DEFAULT");
    begin
       if Found then
-         if Check_String (Command_Line, "INTEGER") > 0 then
+         if Check_String (Command_Line, "INTEGER") then
             Arguments.Default_Type := T_INT;
-         elsif Check_String (Command_Line, "FLOAT") > 0 then
+         elsif Check_String (Command_Line, "FLOAT") then
             Arguments.Default_Type := T_NBR;
-         elsif Check_String (Command_Line, "STRING") > 0 then
+         elsif Check_String (Command_Line, "STRING") then
             Arguments.Default_Type := T_STR;
-         elsif Check_String (Command_Line, "NONE") > 0 then
+         elsif Check_String (Command_Line, "NONE") then
             Arguments.Default_Type := T_NOTYPE;
          end if;
       end if;
@@ -127,12 +130,15 @@ package body Option_Handler is
    function Do_Display (Command_Line : String) return Boolean is
       use String_Buffer_Package;
       Routine_Name : constant String := "Option_Handler.Do_Display ";
-      TP           : constant Natural := Check_String (Command_Line, "BAUDRATE");
-      Found        : constant Boolean := TP > 0;
+--        TP           : constant Natural := Check_String (Command_Line, "BAUDRATE");
+--        Found        : constant Boolean := TP > 0;
+      Found        : constant Boolean :=
+        Check_String (Command_Line, "BAUDRATE");
       Arg          : Unbounded_String;
    begin
       if Found then
-         Arguments.Get_Args (To_Unbounded_String (Command_Line),TP, 3, ",");
+--           Arguments.Get_Args (To_Unbounded_String (Command_Line), TP, 3, ",");
+         Arguments.Get_Args (To_Unbounded_String (Command_Line), 2, 3, ",");
          Assert (not Flash.Option.DISPLAY_CONSOLE, Routine_Name &
                    "DISPLAY, LCD console cannot be Changed ");
 
@@ -155,12 +161,13 @@ package body Option_Handler is
       use Draw;
       use String_Buffer_Package;
       Routine_Name  : constant String := "Option_Handler.Do_LCD_Panel ";
-      TP            : constant Natural := Check_String (Command_Line, "LCDPANEL");
-      Found         : constant Boolean := TP > 0;
+--        TP            : constant Natural := Check_String (Command_Line, "LCDPANEL");
+--        Found         : constant Boolean := TP > 0;
+      Found         : constant Boolean := Check_String (Command_Line, "LCDPANEL");
       Arg           : Unbounded_String;
    begin
       if Found then
-         Arguments.Get_Args (To_Unbounded_String (Command_Line),TP, 13, ",");
+         Arguments.Get_Args (To_Unbounded_String (Command_Line), 2, 13, ",");
          Arg := To_Unbounded_String (Element (Arguments.Arg_V, 1));
 
          if To_Upper (Element (Arguments.Arg_V, 1)) = "USER" then
@@ -186,12 +193,13 @@ package body Option_Handler is
    end Do_LCD_Panel;
 
    function Do_PIN (Command_Line : String) return Boolean is
-      TP           : constant Natural := Check_String (Command_Line, "PIN");
-      Found        : constant Boolean := TP > 0;
+--        TP           : constant Natural := Check_String (Command_Line, "PIN");
+--        Found        : constant Boolean := TP > 0;
+      Found        : constant Boolean := Check_String (Command_Line, "PIN");
       Arg          : Unbounded_String;
    begin
       if Found then
-         Arg := Get_Arg (Command_Line, TP);
+         Arg := Get_Arg (Command_Line, 1);
          Flash.Option.PIN := Get_Int (Arg, 0, 99999999);
          Flash.Save_Options;
       end if;
@@ -202,7 +210,7 @@ package body Option_Handler is
 
    function Do_Save (Command_Line : String) return Boolean is
       use M_Basic.Conversion;
-      Found : constant Boolean := Check_String (Command_Line, "SAVE") > 0;
+      Found : constant Boolean := Check_String (Command_Line, "SAVE");
    begin
       if Found and then Current_Line_Ptr /= null then
          Flash.Save_Options;
@@ -213,16 +221,16 @@ package body Option_Handler is
    end Do_Save;
 
    function Do_Tab (Command_Line : String) return Boolean is
-      Found : constant Boolean := Check_String (Command_Line, "TAB") > 0;
+      Found : constant Boolean := Check_String (Command_Line, "TAB");
    begin
       if Found then
-         if Check_String (Command_Line, "2") > 0 then
+         if Check_String (Command_Line, "2") then
             Flash.Option.Tab := 2;
             Flash.Save_Options;
-         elsif Check_String (Command_Line, "4") > 0 then
+         elsif Check_String (Command_Line, "4") then
             Flash.Option.Tab := 4;
             Flash.Save_Options;
-         elsif Check_String (Command_Line, "8") > 0 then
+         elsif Check_String (Command_Line, "8") then
             Flash.Option.Tab := 8;
             Flash.Save_Options;
          end if;
@@ -241,7 +249,7 @@ package body Option_Handler is
       Routine_Name : constant String := "Option_Handler.Option_Cmd ";
       --        Command_Line : constant String := To_String (Global.Command_Line);
       Subfunction  : constant String := Element (Command_Line, 1);
-      TP           : Natural;
+--        TP           : Natural;
       Arg          : Unbounded_String;
       Done         : Boolean := False;
    begin
@@ -260,8 +268,9 @@ package body Option_Handler is
       --  Check_String checks if the next text in an element (a basic statement)
       --  corresponds to an alphabetic string.
 --        TP := Check_String (Command_Line, "BASE");
-      TP := Check_String (Subfunction, "BASE");
-      if TP > 0 then
+--        TP := Check_String (Subfunction, "BASE");
+--        if TP > 0 then
+      if Check_String (Subfunction, "BASE") then
          Assert (not Commands.Dim_Used, Routine_Name &
                    "BASE Option must be before DIM or LOCAL");
          Option_Base := Get_Int (Element (Command_Line, 2), 0, 1);
@@ -269,7 +278,7 @@ package body Option_Handler is
          Done := True;
 
 --        elsif Check_String (Command_Line, "EXPLICIT") > 0 then
-      elsif Check_String (Subfunction, "EXPLICIT") > 0 then
+      elsif Check_String (Subfunction, "EXPLICIT") then
          Assert (Arguments.Var_Count = 0, Routine_Name &
                    "EXPLICIT variables have been defined already.");
          Arguments.Option_Explicit := True;
@@ -278,10 +287,11 @@ package body Option_Handler is
 --        elsif not Do_Default (Command_Line) then
 --           TP := Check_String (Command_Line, "BREAK");
       elsif not Do_Default (Subfunction) then
-         TP := Check_String (Subfunction, "BREAK");
-         if TP > 0 then
+--           TP := Check_String (Subfunction, "BREAK");
+--           if TP > 0 then
+         if Check_String (Subfunction, "BREAK") then
 --              Arg := Get_Arg (Command_Line, TP);
-            Arg := Get_Arg (Subfunction, TP);
+            Arg := Get_Arg (Subfunction, 2);
             Global.Break_Key := Integer (Get_Integer (Arg));
             Done := True;
          end if;

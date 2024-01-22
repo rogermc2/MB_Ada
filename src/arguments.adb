@@ -266,8 +266,8 @@ package body Arguments is
 
             --  MMBasic 2002
             Skip_Spaces (Expression, Pos);
-            Pos := M_Basic.Check_String
-              (Slice (Expression, Pos, Length (Expression)), "Length");
+--              Pos := M_Basic.Check_String
+--                (Slice (Expression, Pos, Length (Expression)), "Length");
             --              if Pos > 0 then
             --                 String_Size :=
             --                   Evaluation.Get_Int (S, 1, Configuration.MAXSTRLEN);

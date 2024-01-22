@@ -39,7 +39,7 @@ package M_Basic is
    Current_Interrupt_Name   : array (1 .. Configuration.MAXVARLEN + 1) of
      Unbounded_String;
 
-   function Check_String (aString, Token : String) return Natural;
+   function Check_String (aString, Token : String) return Boolean;
    procedure Clear_Program;
    procedure Defined_Subfunction
      (Is_Fun       : Boolean; Command : in out Unbounded_String;
