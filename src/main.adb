@@ -66,7 +66,7 @@ begin
       --  311
       if M_Basic.Find_Subfunction (Startup_Token, T_NOTYPE) /= 0 then
             Buffer_Append (Token_Buffer, Startup_Token);
-         M_Basic.Execute_Program (To_UB_String (Token_Buffer));
+         M_Basic.Execute_Program (Token_Buffer);
       else
          Put_Line (Program_Name &
                      "Startup_Token not found,Token_Buffer_Length: " &
@@ -87,7 +87,7 @@ begin
          Global.Error_In_Prompt := True;
          Clear_Buffer (Token_Buffer);
          Buffer_Append (Token_Buffer, "MM.PROMPT");
-         M_Basic.Execute_Program (To_UB_String (Token_Buffer));
+         M_Basic.Execute_Program (Token_Buffer);
       else
          --  Print prompt
          M_Basic.Print_String ("> ");
@@ -99,7 +99,7 @@ begin
          Tokenizer.Tokenize (Token_Buffer, True);
 --           Put_Line (Program_Name & "Token_Buffer: " &
 --                       To_String (To_UB_String (Token_Buffer)));
-         M_Basic.Execute_Program (To_UB_String (Token_Buffer));
+         M_Basic.Execute_Program (Token_Buffer);
       end if;
    end loop;
 

@@ -27,7 +27,7 @@ with Global;
 with M_Basic_Utilities; use M_Basic_Utilities;
 with M_Misc;
 with Memory;
---  with Support;
+with Support;
 
 package body M_Basic is
 
@@ -134,6 +134,7 @@ package body M_Basic is
       F_Type  : in out Function_Type) is
       use Interfaces;
       use Arguments;
+      use String_Buffer_Package;
       Routine_Name     : constant String  := "M_Basic.Defined_Function ";
       S                : constant Unbounded_String := Global.Command_Line;
       Fun_Type         : constant Function_Type :=
@@ -153,8 +154,8 @@ package body M_Basic is
       TTP := Next_Statement;
       --  780
       Put_Line (Routine_Name & "780");
-      Execute_Program
-        (Unbounded_Slice (Command, Pos, Length (Command)));
+      Execute_Program  (To_String_Buffer (Command, Pos));
+--         (To_String_Buffer (Unbounded_Slice (Command, Pos, Length (Command))));
       Current_Line_Ptr := Callers_Line_Ptr;
       Global.Command_Line := S;
       Next_Statement := TTP;
@@ -522,22 +523,25 @@ package body M_Basic is
 
    end Execute_Command;
 
-   procedure Execute_Program (Token_Buffer : Unbounded_String)  is
+   procedure Execute_Program (Token_Buffer : String_Buffer)  is
       use Ada.Strings;
       use Global;
       Routine_Name     : constant String := "M_Basic.Execute_Program ";
+      Buffer           : constant Unbounded_String :=
+        To_UB_String (Token_Buffer);
       Save_Local_Index : Natural         := 0;
       Program_Ptr      : Positive        := 1;
       Done             : Boolean         := False;
    begin
       if not Done then
-         Put_Line (Routine_Name & "Token_Buffer: " & To_String (Token_Buffer));
+         Put_Line (Routine_Name & "Token_Buffer: ");
+         Support.Print_Buffer (Token_Buffer);
          --  194
-         Skip_Spaces (Token_Buffer, Program_Ptr);
+         Skip_Spaces (Buffer, Program_Ptr);
 
          while not Done and then
-           Program_Ptr < Integer (Length (Token_Buffer)) loop
-            if Element (Token_Buffer, Program_Ptr) = '0' then
+           Program_Ptr < Integer (Length (Buffer)) loop
+            if Element (Buffer, Program_Ptr) = '0' then
                --  Step over the 0 indicating the start of a new element'
                Program_Ptr := Program_Ptr + 1;
             end if;
@@ -547,7 +551,7 @@ package body M_Basic is
             --                          Integer'Image (Program_Ptr) & ", " &
             --                          Integer'Image (Integer (Length (Token_Buffer))));
             --  195
-            if Element (Token_Buffer, Program_Ptr) =
+            if Element (Buffer, Program_Ptr) =
               Element (To_Unbounded_String
                        (Integer'Image (T_NEWLINE)), 1) then
                --                 Current_Line_Ptr := Program_Ptr;
@@ -555,31 +559,31 @@ package body M_Basic is
             end if;
 
             --  217
-            if Element (Token_Buffer, Program_Ptr) =
+            if Element (Buffer, Program_Ptr) =
               Element (Trim (To_Unbounded_String
                        (Integer'Image (T_LINENBR)), Left), 1) then
                Program_Ptr := Program_Ptr + 3;
             end if;
-            Skip_Spaces (Token_Buffer, Program_Ptr);
+            Skip_Spaces (Buffer, Program_Ptr);
 
-            if Element (Token_Buffer, 1) =
+            if Element (Buffer, 1) =
               Element (Trim (To_Unbounded_String
                        (Integer'Image (T_LABEL)), Left), 1) then
                --  skip over the label
                Program_Ptr :=
                  Program_Ptr +
-                   Character'Pos (Element (Token_Buffer, Program_Ptr)) + 2;
-               Skip_Spaces (Token_Buffer, Program_Ptr);
+                   Character'Pos (Element (Buffer, Program_Ptr)) + 2;
+               Skip_Spaces (Buffer, Program_Ptr);
             end if;
 
             --  225
-            if Program_Ptr <= Positive (Length (Token_Buffer)) then
+            if Program_Ptr <= Positive (Length (Buffer)) then
                Put_Line (Routine_Name & "225 Execute_Command");
-               Execute_Command (Token_Buffer, Program_Ptr, Save_Local_Index);
+               Execute_Command (Buffer, Program_Ptr, Save_Local_Index);
             end if;
 
             --  279
-            Done := Is_Command_End (Token_Buffer, Program_Ptr);
+            Done := Is_Command_End (Buffer, Program_Ptr);
             if not Done then
                Program_Ptr := Program_Ptr + 1;
             end if;
