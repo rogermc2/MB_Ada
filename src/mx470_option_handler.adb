@@ -15,6 +15,7 @@ with IO_Ports;
 with Keyboard;
 with M_Basic; use M_Basic;
 with M_Misc;
+with Support;
 
 package body MX470_Option_Handler is
 
@@ -274,9 +275,9 @@ package body MX470_Option_Handler is
       TP    : constant Natural := Check_String (Command_Line, "SDCARD");
       Found : constant Boolean := TP > 0;
    begin
---        Put_Line ("Do_SD_Card");
+      Put_Line ("Do_SD_Card");
       if Found then
---           Put_Line ("Do_SD_Card found");
+         Put_Line ("Do_SD_Card found");
          if Check_String (Command_Line, "DISABLE") > 0 then
             Flash.Option.SDCARD_CS := 0;
             Flash.Option.SD_CD := 0;
@@ -297,20 +298,24 @@ package body MX470_Option_Handler is
 
    --  MiscMX470.c 84
    function Other_Options return Boolean is
+      use Command_And_Token_Tables.String_Buffer_Package;
       Routine_Name : constant String := "MX470_Option_Handler.Other_Options ";
-      Command_Line : constant String := To_String (Global.Command_Line);
+      Subfunction  : constant String := Element (Global.Command_Line, 1);
+--        Command_Line : constant String := To_String (Global.Command_Line);
       Result       : Boolean := False;
    begin
-      Put_Line (Routine_Name & "Command_Line: '" & Command_Line & "'");
+--        Put_Line (Routine_Name & "Command_Line: '" & Command_Line & "'");
+      Put_Line (Routine_Name & "Command_Line:");
+      Support.Print_Buffer (Global.Command_Line);
       Result :=
-        Do_Reset(Command_Line) or else
-        Do_Keyboard (Command_Line) or else
-        Do_Controls (Command_Line) or else
-        Do_SD_Card (Command_Line) or else
-        Do_Error (Command_Line) or else
-        Do_Console (Command_Line) or else
-        Do_RTC (Command_Line) or else
-        Do_List (Command_Line);
+        Do_Reset(Subfunction) or else
+        Do_Keyboard (Subfunction) or else
+        Do_Controls (Subfunction) or else
+        Do_SD_Card (Subfunction) or else
+        Do_Error (Subfunction) or else
+        Do_Console (Subfunction) or else
+        Do_RTC (Subfunction) or else
+        Do_List (Subfunction);
         Put_Line (Routine_Name & "Done");
 
       return Result;

@@ -19,6 +19,7 @@ with M_Basic; use M_Basic;
 with M_Misc; use M_Misc;
 with MX470_Option_Handler;
 with SPI_LCD;
+with Support;
 
 package body Option_Handler is
 
@@ -234,15 +235,21 @@ package body Option_Handler is
    --  MM_Misc.c 268
    procedure Option_Cmd is
       use Interfaces;
+      use Global;
       use M_Basic.Conversion;
+      use String_Buffer_Package;
       Routine_Name : constant String := "Option_Handler.Option_Cmd ";
-      Command_Line : constant String := To_String (Global.Command_Line);
+      --        Command_Line : constant String := To_String (Global.Command_Line);
+      Subfunction  : constant String := Element (Command_Line, 1);
       TP           : Natural;
       Arg          : Unbounded_String;
       Done         : Boolean := False;
    begin
-      Put_Line (Routine_Name & "Command_Line: '" & Command_Line & "'");
-      Assert (Length (Global.Command_Line) > 0, Routine_Name &
+--        Put_Line (Routine_Name & "Command_Line: '" & Command_Line & "'");
+      Put_Line (Routine_Name & "Command_Line:");
+      Support.Print_Buffer (Command_Line);
+--        Assert (Length (Global.Command_Line) > 0, Routine_Name &
+      Assert (Integer (Command_Line.Length) > 0, Routine_Name &
                 "called with empty Global.Command_Line");
       Commands.Option_Error_Check := External.CP_IGNORE_INUSE;
       if Current_Line_Ptr /= null then
@@ -252,43 +259,50 @@ package body Option_Handler is
 
       --  Check_String checks if the next text in an element (a basic statement)
       --  corresponds to an alphabetic string.
-      TP := Check_String (Command_Line, "BASE");
+--        TP := Check_String (Command_Line, "BASE");
+      TP := Check_String (Subfunction, "BASE");
       if TP > 0 then
          Assert (not Commands.Dim_Used, Routine_Name &
                    "BASE Option must be before DIM or LOCAL");
-         Option_Base := Get_Int (Global.Command_Line, 0, 1);
+         Option_Base := Get_Int (Element (Command_Line, 2), 0, 1);
+--           Option_Base := Get_Int (Global.Command_Line, 0, 1);
          Done := True;
 
-      elsif Check_String (Command_Line, "EXPLICIT") > 0 then
+--        elsif Check_String (Command_Line, "EXPLICIT") > 0 then
+      elsif Check_String (Subfunction, "EXPLICIT") > 0 then
          Assert (Arguments.Var_Count = 0, Routine_Name &
                    "EXPLICIT variables have been defined already.");
          Arguments.Option_Explicit := True;
          Done := True;
 
-      elsif not Do_Default (Command_Line) then
-         TP := Check_String (Command_Line, "BREAK");
+--        elsif not Do_Default (Command_Line) then
+--           TP := Check_String (Command_Line, "BREAK");
+      elsif not Do_Default (Subfunction) then
+         TP := Check_String (Subfunction, "BREAK");
          if TP > 0 then
-            Arg := Get_Arg (Command_Line, TP);
+--              Arg := Get_Arg (Command_Line, TP);
+            Arg := Get_Arg (Subfunction, TP);
             Global.Break_Key := Integer (Get_Integer (Arg));
             Done := True;
          end if;
       end if;
 
-      Done := Done or else Do_Autorun (Command_Line) or else
-        Do_Case (Command_Line) or else
-        Do_Tab (Command_Line) or else
-        Do_Baud_Rate (Command_Line) or else
-        Do_Display (Command_Line) or else
-        Do_PIN (Command_Line) or else
-        Do_Colour_Code (Command_Line) or else
-        Do_LCD_Panel (Command_Line) or else
-        Do_Save (Command_Line);
+      Done := Done or else Do_Autorun (Subfunction) or else
+        Do_Case (Subfunction) or else
+        Do_Tab (Subfunction) or else
+        Do_Baud_Rate (Subfunction) or else
+        Do_Display (Subfunction) or else
+        Do_PIN (Subfunction) or else
+        Do_Colour_Code (Subfunction) or else
+        Do_LCD_Panel (Subfunction) or else
+        Do_Save (Subfunction);
 
       if not Done then
          Done := MX470_Option_Handler.Other_Options;
       end if;
 
-      Assert (Done, Routine_Name & "unrecognized option " & Command_Line);
+      Assert (Done, Routine_Name & "unrecognized option " & Subfunction);
+--        Assert (Done, Routine_Name & "unrecognized option " & Command_Line);
 
    end Option_Cmd;
 

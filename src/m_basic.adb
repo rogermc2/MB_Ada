@@ -8,7 +8,6 @@ with Ada.Assertions;
 with Ada.Characters.Handling;
 with Ada.Exceptions; use Ada.Exceptions;
 with Ada.Strings;
---  with Ada.Strings.Fixed;
 with Ada.Text_IO; use Ada.Text_IO;
 with Ada.Unchecked_Conversion;
 
@@ -66,13 +65,14 @@ package body M_Basic is
    --  after the matched string if found or 0 otherwise.
    function Check_String (aString, Token : String) return Natural is
       use Ada.Characters.Handling;
-      --        Routine_Name     : constant String  := "M_Basic.Check_String ";
+--        Routine_Name     : constant String  := "M_Basic.Check_String ";
       S_Pos            : Positive := 1;
       T_Pos            : Positive := 1;
       Result           : Natural  := 0;
    begin
       --  MMBasic 2704
       Skip_Spaces (aString, S_Pos);
+--        Put_Line (Routine_Name & "aString: " & aString);
       while T_Pos <= Token'Length and then S_Pos <= aString'Length
         and then To_Upper (Token (T_Pos)) = To_Upper (aString (S_Pos))
       loop
@@ -80,7 +80,7 @@ package body M_Basic is
          T_Pos := T_Pos + 1;
       end loop;
 
-      if T_Pos = Token'Length + 1 then
+      if T_Pos = Token'Length + 1 and then S_Pos <= aString'Length then
          if aString (S_Pos) = ' ' or else aString (S_Pos) = '''
            or else aString (S_Pos) = '\' or else aString (S_Pos) = '('
          then
@@ -137,9 +137,12 @@ package body M_Basic is
       F_Type  : in out Function_Type) is
       use Interfaces;
       use Arguments;
+      use Ada.Strings;
       use String_Buffer_Package;
       Routine_Name     : constant String  := "M_Basic.Defined_Function ";
-      S                : constant Unbounded_String := Global.Command_Line;
+      S                : constant Unbounded_String :=
+        Trim (To_UB_String (Global.Command_Line), Left);
+--          Trim (Global.Command_Line, Left);
       Fun_Type         : constant Function_Type :=
         Var_Table (Var_Index).Var_Type;
       TP               : constant Arguments.Var_Record := Arguments.Find_Var
@@ -160,7 +163,7 @@ package body M_Basic is
       Execute_Program  (To_String_Buffer (Command, Pos));
       --         (To_String_Buffer (Unbounded_Slice (Command, Pos, Length (Command))));
       Current_Line_Ptr := Callers_Line_Ptr;
-      Global.Command_Line := S;
+      Global.Command_Line := To_String_Buffer (S, 1);
       Next_Statement := TTP;
 
       --  787
@@ -430,13 +433,14 @@ package body M_Basic is
       Save_Local_Index : in out Natural) is
       use Interfaces;
       use Ada.Assertions;
+      use Ada.Strings;
       use String_Buffer_Package;
       Routine_Name       : constant String := "M_Basic.Execute_Command ";
       Command_Token      : constant Unsigned_16 :=
         Unsigned_16'Value (Token_Buffer (Program_Ptr));
-      Item               : constant Unbounded_String :=
-        To_Unbounded_String (Token_Buffer (Program_Ptr));
-      Item_Ptr           : Positive := 1;
+      Command            : constant Unbounded_String :=
+        Trim (To_Unbounded_String (Token_Buffer (Program_Ptr)), Left);
+      Command_Pos        : Positive := 1;
       Command_Token_Test : Unsigned_16;
       Interupt_Check     : Integer := 0;
       Command_Ptr        : Command_And_Token_Functions.Access_Procedure;
@@ -447,7 +451,10 @@ package body M_Basic is
       Support.Print_Buffer (Token_Buffer);
       --  225
       Next_Statement := Program_Ptr;
-      Global.Command_Line := Item;
+      Put_Line (Routine_Name & "225 Command: " & To_String (Command));
+--        Global.Command_Line := Delete (Token_Buffer, 1, 1);
+      Global.Command_Line := Token_Buffer;
+      Global.Command_Line.Delete_First;
 
       if not Done then
          Done := Program_Ptr >= Flash.Prog_Memory'Length;
@@ -457,8 +464,8 @@ package body M_Basic is
          Put_Line (Routine_Name & "No more token buffer elements");
       else
          --  ignore comment line if character is '.
-         Skip_Spaces (Item, Item_Ptr);
-          if Element (Item, Item_Ptr) /= ''' then
+         Skip_Spaces (Command, Command_Pos);
+          if Element (Command, Command_Pos) /= ''' then
             Skip_Element (Token_Buffer, Program_Ptr);
             --  236 if setjmp (ErrNext) = 0 then
             Save_Local_Index := Local_Index;
@@ -477,7 +484,7 @@ package body M_Basic is
               Command_Table
                 (Positive (Command_Token - M_Misc.C_Base_Token)).Command_Type =
                   T_CMD then
-               --  246
+               --  243
                T_Arg := T_CMD;   -- type of returned value
                --  Execute the command
                Put_Line

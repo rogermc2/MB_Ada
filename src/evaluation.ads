@@ -23,7 +23,11 @@ package Evaluation is
       Ia         : out Long_Long_Integer; Sa : out Unbounded_String;
       Ta         : in out Function_Type; Flags : Interfaces.Unsigned_16);
    function Get_Int
+     (Expression : String; Lo, Hi : Integer) return Integer;
+   function Get_Int
      (Expression : in out Unbounded_String; Lo, Hi : Integer) return Integer;
+   function Get_Integer
+     (Expression : String) return Long_Long_Integer;
    function Get_Integer
      (Expression : in out Unbounded_String) return Long_Long_Integer;
    function Get_Value

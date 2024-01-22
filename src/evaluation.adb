@@ -398,6 +398,21 @@ package body Evaluation is
 
    end Get_Int;
 
+   function Get_Int
+     (Expression : String; Lo, Hi : Integer) return Integer
+   is
+      Routine_Name : constant String  := "M_Basic.Get_Int ";
+      Value        : constant Integer := Integer (Get_Integer (Expression));
+   begin
+      Assert
+        (Value >= Lo and then Value <= Hi,
+         Routine_Name & Integer'Image (Value) &
+           " is invalid, should be in the range " & Integer'Image (Lo) & " -" &
+           Integer'Image (Hi));
+      return Value;
+
+   end Get_Int;
+
    function Get_Integer
      (Expression : in out Unbounded_String) return Long_Long_Integer
    is
@@ -408,6 +423,25 @@ package body Evaluation is
       I64 : Long_Long_Integer     := 0;
    begin
       Evaluate (Expression, F, I64, S, T, 0);
+
+      if (T and T_NBR) = T_NBR then
+         return Long_Long_Integer (F);
+      else
+         return I64;
+      end if;
+
+   end Get_Integer;
+
+   function Get_Integer
+     (Expression : String) return Long_Long_Integer is
+      use Interfaces;
+      UB  : Unbounded_String := To_Unbounded_String (Expression);
+      T   : Function_Type         := T_INT;
+      F   : Configuration.MMFLOAT := 0.0;
+      S   : Unbounded_String;
+      I64 : Long_Long_Integer     := 0;
+   begin
+      Evaluate (UB, F, I64, S, T, 0);
 
       if (T and T_NBR) = T_NBR then
          return Long_Long_Integer (F);

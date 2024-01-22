@@ -1,10 +1,12 @@
 
-with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
+--  with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Ada.Text_IO; use Ada.Text_IO;
 
+with Command_And_Token_Tables;
 with Flash;
 with Global;
 with M_Basic;
+with Support;
 
 package body Command_Handler is
 
@@ -13,12 +15,18 @@ package body Command_Handler is
    --  Commands.c 180
    procedure List_Cmd is
       Routine_Name : constant String := "Command_Handler.List_Cmd ";
-      Command_Line : constant String := To_String (Global.Command_Line);
+      use Global;
+      use Command_And_Token_Tables.String_Buffer_Package;
+--        Command_Line : constant String := To_String (Global.Command_Line);
       P            : Natural := 0;
    begin
-      Put_Line (Routine_Name & "Command_Line: '" & Command_Line & "'");
-      if Command_Line'Length > 0  then
-         P := M_Basic.Check_String (Command_Line, "ALL");
+--        Put_Line (Routine_Name & "Command_Line: '" & Command_Line & "'");
+      Put_Line (Routine_Name & "Command_Line:");
+      Support.Print_Buffer (Command_Line);
+--        if Command_Line'Length > 0  then
+      if Integer (Command_Line.Length) > 0  then
+         P := M_Basic.Check_String (Element (Command_Line, 1), "ALL");
+--           P := M_Basic.Check_String (Command_Line, "ALL");
       end if;
 
       if P > 0 then

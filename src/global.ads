@@ -3,6 +3,7 @@ with Interfaces; use Interfaces;
 
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 
+with Command_And_Token_Tables; use Command_And_Token_Tables;
 with Configuration;
 with Exceptions;
 
@@ -20,7 +21,7 @@ package Global is
    S_Arg_1      : Unbounded_String;
    S_Arg_2      : Unbounded_String;
    S_Return     : Unbounded_String;
-   Command_Line : Unbounded_String;
+   Command_Line : String_Buffer;
    UB_Return    : Unbounded_String;
 
    --  Flags used in the program lines

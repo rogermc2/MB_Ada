@@ -349,15 +349,6 @@ package body Parse_Functions is
                end if;
             end loop;
 
---              Found := (TP_Pos - 1 = TP'Length) and then
---                Line_In (1 .. TP2 - 1) = TP;
---              if Found then
---                 Command := Command_Table (Index);
---              end if;
---              Put_Line (Routine_Name & "975 TP, TP2: '" & TP & "' " &
---                          Integer'Image (TP2));
---              Put_Line (Routine_Name & "975 Command name: '" &
---                          To_String (Command.Name) & "' " );
             --  MMBasic 975
             if TP_Pos > TP'Last and then
               (TP2 = Line_In'Last + 1 or else
@@ -369,7 +360,8 @@ package body Parse_Functions is
                if TP (TP_Pos - 1) = '(' or else TP2 = Line_In'Last + 1 or else
                  not Is_Name_Character (Line_In (TP2)) then
 --                    Put_Line (Routine_Name & "978 TP (TP_Pos - 1) = '(' or else ...");
-                  if Length (Command_Table (Index).Name) > Match_L then
+                  Command := Command_Table (Index);
+                  if Length (Command.Name) > Match_L then
                      --  MMBasic 982
                      Match_P := TP2;
                      Match_I := Index;
@@ -381,10 +373,10 @@ package body Parse_Functions is
          TP_Pos := TP_Pos + 1;
       end loop;
 
---        Put_Line (Routine_Name & "990 Command.Name: " & To_String (Command.Name));
---        Put_Line (Routine_Name & "P, Index, Match_I:" & Integer'Image (P)
---                  & ", " & Integer'Image (Index)  & ", " &
---                    Integer'Image (Match_I));
+      Put_Line (Routine_Name & "990 Command Name: " & To_String (Command.Name));
+      Put_Line (Routine_Name & "P, Index, Match_I:" & Integer'Image (P)
+                & ", " & Integer'Image (Index)  & ", " &
+                  Integer'Image (Match_I));
       --  990
       if P <= Input_Buffer_Length then
          if Match_I > -1 then
@@ -399,9 +391,6 @@ package body Parse_Functions is
            Try_Label (Token_Buffer, P, Label_Valid);
          end if;
       end if;
-
-      Put_Line (Routine_Name & "done,  Command.Name: " &
-                  To_String (Command.Name));
 
    end Try_Command;
 
