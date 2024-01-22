@@ -8,7 +8,7 @@ with Ada.Assertions;
 with Ada.Characters.Handling;
 with Ada.Exceptions; use Ada.Exceptions;
 with Ada.Strings;
-with Ada.Strings.Fixed;
+--  with Ada.Strings.Fixed;
 with Ada.Text_IO; use Ada.Text_IO;
 with Ada.Unchecked_Conversion;
 
@@ -49,8 +49,9 @@ package body M_Basic is
    procedure Inc_Ptr (Pos : in out Subfunction_Ptr);
    function Is_Command_End (Command : String_Buffer; Pos : Positive)
                             return Boolean;
---     function Is_Command_End (Command : Unbounded_String; Pos : in out Positive)
---                              return Boolean;
+   --     function Is_Command_End (Command : Unbounded_String; Pos : in out Positive)
+   --                              return Boolean;
+   procedure Skip_Element (aLine : String_Buffer; Pos : in out Positive) ;
    procedure Skip_Element (aLine : Unbounded_String; Pos : in out Positive);
    procedure User_Defined_Subfunction
      (Command      : Unbounded_String; TP : Positive;
@@ -425,28 +426,33 @@ package body M_Basic is
    --  program.
 
    procedure Execute_Command
---       (Token_Buffer     : Unbounded_String; Program_Ptr : in out Positive;
+   --       (Token_Buffer     : Unbounded_String; Program_Ptr : in out Positive;
      (Token_Buffer     : String_Buffer; Program_Ptr : in out Positive;
       Save_Local_Index : in out Natural) is
       use Interfaces;
       use Ada.Assertions;
-      use Ada.Strings;
-      use Ada.Strings.Fixed;
+--        use Ada.Strings;
+--        use Ada.Strings.Fixed;
       use String_Buffer_Package;
       Routine_Name       : constant String := "M_Basic.Execute_Command ";
+      --        Buffer             : constant Unbounded_String :=
+      --          Trim (Token_Buffer, Left);
 --        Buffer             : constant Unbounded_String :=
---          Trim (Token_Buffer, Left);
-      Buffer             : constant Unbounded_String :=
-        Trim (To_UB_String (Token_Buffer), Left);
-      Pos                : constant Natural := Index (To_String (Buffer), " ");
+--          Trim (To_UB_String (Token_Buffer), Left);
+--        Pos                : constant Natural := Index (To_String (Buffer), " ");
+--        Command_Token      : constant Unsigned_16 :=
+--          Unsigned_16'Value (Slice (Buffer, 1, Pos));
       Command_Token      : constant Unsigned_16 :=
-        Unsigned_16'Value (Slice (Buffer, 1, Pos));
+        Unsigned_16'Value (Token_Buffer (Program_Ptr));
+      Item               : constant Unbounded_String :=
+        To_Unbounded_String (Token_Buffer (Program_Ptr));
+      Item_Ptr           : Positive := 1;
       Command_Token_Test : Unsigned_16;
       Interupt_Check     : Integer := 0;
       Command_Ptr        : Command_And_Token_Functions.Access_Procedure;
       No_Abort           : Boolean := True;
-      Done               : Boolean := Length (Buffer) < 2;
---        Done               : Boolean := Length (Token_Buffer) < 2;
+--        Done               : Boolean := Length (Buffer) < 2;
+      Done               : Boolean := Natural (Token_Buffer.Length) = 0;
    begin
       Put_Line (Routine_Name & "Token_Buffer:");
       Support.Print_Buffer (Token_Buffer);
@@ -454,8 +460,8 @@ package body M_Basic is
                   Unsigned_16'Image (Command_Token));
       --  225
       Next_Statement := Program_Ptr;
-      Global.Command_Line :=
-        Unbounded_Slice (Buffer, Pos + 2, Length (Buffer));
+      Global.Command_Line := Item;
+--          Unbounded_Slice (Buffer, Pos + 2, Length (Buffer));
 
       if not Done then
          Done := Program_Ptr >= Flash.Prog_Memory'Length;
@@ -465,9 +471,12 @@ package body M_Basic is
          Put_Line (Routine_Name & "No more token buffer elements");
       else
          --  ignore comment line if character is '.
-         Skip_Spaces (Buffer, Program_Ptr);
-         if Element (Buffer, Program_Ptr) /= ''' then
-            Skip_Element (Buffer, Program_Ptr);
+--           Skip_Spaces (Buffer, Program_Ptr);
+         Skip_Spaces (Item, Item_Ptr);
+         --           if Element (Buffer, Program_Ptr) /= ''' then
+         if Element (Item, Item_Ptr) /= ''' then
+            Skip_Element (Token_Buffer, Program_Ptr);
+--              Skip_Element (Buffer, Program_Ptr);
             --  236 if setjmp (ErrNext) = 0 then
             Save_Local_Index := Local_Index;
             --  C_Base_Token is the base of the token numbers.
@@ -537,23 +546,25 @@ package body M_Basic is
       use Global;
       use String_Buffer_Package;
       Routine_Name     : constant String := "M_Basic.Execute_Program ";
-      Buffer           : constant Unbounded_String :=
-        To_UB_String (Token_Buffer);
+--        Buffer           : constant Unbounded_String :=
+--          To_UB_String (Token_Buffer);
       Item             : Unbounded_String;
       Save_Local_Index : Natural         := 0;
       Program_Ptr      : Positive        := 1;
       Item_Ptr         : Positive        := 1;
-      Done             : Boolean         := False;
+      Done             : Boolean         := Integer (Token_Buffer.Length) = 0;
    begin
       if not Done then
          Put_Line (Routine_Name & "Token_Buffer: ");
          Support.Print_Buffer (Token_Buffer);
          --  194
-         Skip_Spaces (Buffer, Program_Ptr);
+--           Skip_Spaces (Buffer, Program_Ptr);
 
          while not Done and then
          --             Program_Ptr < Integer (Length (Token_Buffer)) loop
            Program_Ptr < Integer (Token_Buffer.Length) loop
+            Put_Line (Routine_Name & "Program_Ptr: " &
+                        Integer'Image (Program_Ptr));
             Item := To_Unbounded_String (Token_Buffer (Program_Ptr));
             Item_Ptr := 1;
             if Element (Item, Item_Ptr) = '0' then
@@ -608,21 +619,21 @@ package body M_Basic is
               Element (Trim (To_Unbounded_String
                        (Integer'Image (T_LABEL)), Left), 1) then
                --  skip over the label
-               Item_Ptr :=
-                 Item_Ptr +
+               Item_Ptr := Item_Ptr +
                    Character'Pos (Element (Item, Item_Ptr)) + 2;
                Skip_Spaces (Item, Item_Ptr);
             end if;
 
             --  225
             if Program_Ptr <= Positive (Token_Buffer.Length) then
-               Put_Line (Routine_Name & "225 Execute_Command");
+               Put_Line (Routine_Name & "225 Execute_Command, Program_Ptr: " &
+                        Integer'Image (Program_Ptr));
                Execute_Command (Token_Buffer, Program_Ptr, Save_Local_Index);
             end if;
---              if Program_Ptr <= Positive (Length (Buffer)) then
---                 Put_Line (Routine_Name & "225 Execute_Command");
---                 Execute_Command (Buffer, Program_Ptr, Save_Local_Index);
---              end if;
+            --              if Program_Ptr <= Positive (Length (Buffer)) then
+            --                 Put_Line (Routine_Name & "225 Execute_Command");
+            --                 Execute_Command (Buffer, Program_Ptr, Save_Local_Index);
+            --              end if;
 
             --  279
             --              Done := Is_Command_End (Buffer, Program_Ptr);
@@ -840,22 +851,22 @@ package body M_Basic is
 
    end Is_Command_End;
 
---     function Is_Command_End (Command : Unbounded_String; Pos : in out Positive)
---                              return Boolean is
---        --        Routine_Name : constant String := "M_Basic.Is_Command_End ";
---        Done : constant Boolean := Pos + 1 > Integer (Length (Command)) or else
---          (Element (Command, Pos) = '0'
---           and then Element (Command, Pos + 1) = '0')
---          or else
---            (Element (Command, Pos) = 'f'
---             and then Element (Command, Pos + 1) = 'f');
---     begin
---        if Done then
---           Pos := Pos + 2;
---        end if;
---        return Done;
---
---     end Is_Command_End;
+   --     function Is_Command_End (Command : Unbounded_String; Pos : in out Positive)
+   --                              return Boolean is
+   --        --        Routine_Name : constant String := "M_Basic.Is_Command_End ";
+   --        Done : constant Boolean := Pos + 1 > Integer (Length (Command)) or else
+   --          (Element (Command, Pos) = '0'
+   --           and then Element (Command, Pos + 1) = '0')
+   --          or else
+   --            (Element (Command, Pos) = 'f'
+   --             and then Element (Command, Pos + 1) = 'f');
+   --     begin
+   --        if Done then
+   --           Pos := Pos + 2;
+   --        end if;
+   --        return Done;
+   --
+   --     end Is_Command_End;
 
    procedure Print_String (theString : String) is
    begin
@@ -1076,6 +1087,18 @@ package body M_Basic is
    end Save_Program_To_Flash;
 
    --  Skip_Element skips to the the zero char that preceeds an element
+   procedure Skip_Element (aLine : String_Buffer; Pos : in out Positive) is
+      use String_Buffer_Package;
+      Item     : Unbounded_String := To_Unbounded_String (aLine (Pos));
+   begin
+--        while Pos < Length (aLine) and then Element (aLine, Pos) /= '0' loop
+      while Pos < Integer (aLine.Length) and then Element (Item, 1) /= '0' loop
+         Item := To_Unbounded_String (aLine (Pos));
+         Pos := Pos + 1;
+      end loop;
+
+   end Skip_Element;
+
    procedure Skip_Element (aLine : Unbounded_String; Pos : in out Positive) is
    begin
       while Pos < Length (aLine) and then Element (aLine, Pos) /= '0' loop
@@ -1083,7 +1106,6 @@ package body M_Basic is
       end loop;
 
    end Skip_Element;
-
    --  2413 Skip_Var skips to the end of a variable
    function Skip_Var (Var : String; Pos : Positive) return Positive is
       use Interfaces;

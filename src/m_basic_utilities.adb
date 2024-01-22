@@ -6,7 +6,7 @@ with Interfaces;
 
 with Ada.Assertions;
 with Ada.Characters.Handling;
-with Ada.Text_IO; use Ada.Text_IO;
+--  with Ada.Text_IO; use Ada.Text_IO;
 
 --  with Support;
 
@@ -157,7 +157,7 @@ package body M_Basic_Utilities is
             UB_String :=  UB_String & ' ';
          end if;
       end loop;
-      Put_Line ("To_UB_String done");
+--        Put_Line ("To_UB_String done");
 
       return UB_String;
 
