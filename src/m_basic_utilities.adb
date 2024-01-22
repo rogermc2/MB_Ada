@@ -6,6 +6,9 @@ with Interfaces;
 
 with Ada.Assertions;
 with Ada.Characters.Handling;
+with Ada.Text_IO; use Ada.Text_IO;
+
+--  with Support;
 
 package body M_Basic_Utilities is
 
@@ -146,12 +149,15 @@ package body M_Basic_Utilities is
       use String_Buffer_Package;
       UB_String : Unbounded_String;
    begin
+--        Put_Line ("To_UB_String");
+--        Support.Print_Buffer (Buffer);
       for index in 1 .. Positive (Length (Buffer)) loop
          UB_String :=  UB_String & Element (Buffer, index);
          if index < Positive (Length (Buffer)) then
             UB_String :=  UB_String & ' ';
          end if;
       end loop;
+      Put_Line ("To_UB_String done");
 
       return UB_String;
 

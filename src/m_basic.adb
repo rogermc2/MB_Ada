@@ -425,15 +425,19 @@ package body M_Basic is
    --  program.
 
    procedure Execute_Command
-     (Token_Buffer     : Unbounded_String; Program_Ptr : in out Positive;
+--       (Token_Buffer     : Unbounded_String; Program_Ptr : in out Positive;
+     (Token_Buffer     : String_Buffer; Program_Ptr : in out Positive;
       Save_Local_Index : in out Natural) is
       use Interfaces;
       use Ada.Assertions;
       use Ada.Strings;
       use Ada.Strings.Fixed;
+      use String_Buffer_Package;
       Routine_Name       : constant String := "M_Basic.Execute_Command ";
+--        Buffer             : constant Unbounded_String :=
+--          Trim (Token_Buffer, Left);
       Buffer             : constant Unbounded_String :=
-        Trim (Token_Buffer, Left);
+        Trim (To_UB_String (Token_Buffer), Left);
       Pos                : constant Natural := Index (To_String (Buffer), " ");
       Command_Token      : constant Unsigned_16 :=
         Unsigned_16'Value (Slice (Buffer, 1, Pos));
@@ -441,14 +445,17 @@ package body M_Basic is
       Interupt_Check     : Integer := 0;
       Command_Ptr        : Command_And_Token_Functions.Access_Procedure;
       No_Abort           : Boolean := True;
-      Done               : Boolean := Length (Token_Buffer) < 2;
+      Done               : Boolean := Length (Buffer) < 2;
+--        Done               : Boolean := Length (Token_Buffer) < 2;
    begin
-      Put_Line (Routine_Name & "Token_Buffer: " & To_String (Token_Buffer));
-
+      Put_Line (Routine_Name & "Token_Buffer:");
+      Support.Print_Buffer (Token_Buffer);
+      Put_Line (Routine_Name & "Command_Token:" &
+                  Unsigned_16'Image (Command_Token));
       --  225
       Next_Statement := Program_Ptr;
       Global.Command_Line :=
-        Unbounded_Slice (Token_Buffer, Pos + 2, Length (Token_Buffer));
+        Unbounded_Slice (Buffer, Pos + 2, Length (Buffer));
 
       if not Done then
          Done := Program_Ptr >= Flash.Prog_Memory'Length;
@@ -458,9 +465,9 @@ package body M_Basic is
          Put_Line (Routine_Name & "No more token buffer elements");
       else
          --  ignore comment line if character is '.
-         Skip_Spaces (Token_Buffer, Program_Ptr);
-         if Element (Token_Buffer, Program_Ptr) /= ''' then
-            Skip_Element (Token_Buffer, Program_Ptr);
+         Skip_Spaces (Buffer, Program_Ptr);
+         if Element (Buffer, Program_Ptr) /= ''' then
+            Skip_Element (Buffer, Program_Ptr);
             --  236 if setjmp (ErrNext) = 0 then
             Save_Local_Index := Local_Index;
             --  C_Base_Token is the base of the token numbers.
@@ -610,7 +617,7 @@ package body M_Basic is
             --  225
             if Program_Ptr <= Positive (Token_Buffer.Length) then
                Put_Line (Routine_Name & "225 Execute_Command");
-               Execute_Command (Buffer, Program_Ptr, Save_Local_Index);
+               Execute_Command (Token_Buffer, Program_Ptr, Save_Local_Index);
             end if;
 --              if Program_Ptr <= Positive (Length (Buffer)) then
 --                 Put_Line (Routine_Name & "225 Execute_Command");
