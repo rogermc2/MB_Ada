@@ -27,9 +27,6 @@ package body Arguments is
       J            : Natural;
       Done         : Boolean := False;
    begin
-      --  ASCII.NU is C string terminator
-      --        Append (S, ASCII.NUL);
-
       --  The variable name is now known and, if it is an array, the parameters
       --  search the table looking for a match.
       --  The search is exitted with:
@@ -554,6 +551,8 @@ package body Arguments is
       Op             : Unbounded_String := Arg_Buff;
       Op_Ptr         : Integer := 1;
       String_1       : String (1 .. 1);
+      Token_String   : Unbounded_String;
+      Token_Char     : Character;
       aChar          : Character;
       TP             : Positive := Pos;
       X              : Positive;
@@ -605,8 +604,6 @@ package body Arguments is
          Arg_C := Arg_C +1;
          Op_Ptr := Op_Ptr + 1;
          TP := TP + 1;
-         --  ASCII.NU is C string terminator
-         --        Append (Op, ASCII.NUL);
 
       end C1;
 
@@ -623,6 +620,7 @@ package body Arguments is
       end if;
 
       --  MMBasic 2096  Main processing loop
+      Put_Line (Routine_Name & "Expression: " & To_String (Expression));
       while not Done loop
          Done := (Expect_Bracket and then Element (Expression, TP) = ')')
            or else Element (Expression, TP) = ''';
@@ -631,18 +629,26 @@ package body Arguments is
               (Slice (Expression, TP, Length (Expression)));
             --  MMBasic 2110 Delim is a string of special characters that split the
             --  expression into separate terms;
+            Put_Line (Routine_Name & "Term: " & To_String (Term));
             Match := False;
             for Delim_Index in Delim'Range loop
                String_1 (1) := Delim (Delim_Index);
                Match := Match or else Index (Term, String_1) > 0;
             end loop;
+            Put_Line (Routine_Name & "Match: " & Boolean'Image (Match));
 
             --  MMBasic 2112 block moved to else  Match
             if not Match then
                --  MMBasic 2189  C1 E
-               Token :=
-                 Integer'Value (Character'Image (Element (Expression, Pos)));
+               Token_Char := Element (Expression, Pos);
+               Token_String := To_Unbounded_String (Token_Char'Image);
+               Token := Integer'Value (Slice (Token_String, 2, 2));
+               Put_Line (Routine_Name & "Token: " & Integer'Image (Token));
                Expect_Cmd := Token = Then_Token or else Token = Else_Token;
+               Put_Line (Routine_Name & "Then_Token: " &
+                           Integer'Image (Then_Token));
+               Put_Line (Routine_Name & "Expect_Cmd: " &
+                           Boolean'Image (Expect_Cmd));
 
                --  MMBasic 2201
                if not In_Arg then
@@ -656,8 +662,9 @@ package body Arguments is
                   In_Arg := True;
 
                   aChar := Element (Expression, TP);
+                  Token_String := To_Unbounded_String (aChar'Image);
                   T_Token :=
-                    Token_Type (Integer'Value (Character'Image (aChar)));
+                    Token_Type (Integer'Value (Slice (Token_String, 2, 2)));
                   if aChar = '(' or else ((T_Token and T_FUN) = T_FUN
                                           and then (not Expect_Cmd)) then
                      --  MMBasic 2211 C3
@@ -709,8 +716,6 @@ package body Arguments is
       Assert (Expect_Bracket and then Element (Expression, TP) /= ')',
               Routine_Name & "syntax error");
       Trim (Arg_Buff, Right);
-      --  ASCII.NU is C string terminator
-      --        Append (Arg_Buff, ASCII.NUL);
 
    end Make_Args;
 

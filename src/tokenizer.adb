@@ -88,7 +88,7 @@ package body Tokenizer is
       Match_P                : Integer := -1;
       Last_Ptr               : Positive := Ptr;
    begin
-      Put_Line (Routine_Name & "In_Buffer: " & Get_Input_Buffer);
+--        Put_Line (Routine_Name & "In_Buffer: " & Get_Input_Buffer);
       while Ptr <= Input_Buffer_Length loop
          --           Put_Line (Routine_Name & "Last_Ptr : " & Integer'Image (Last_Ptr));
          Last_Ptr := Ptr;
@@ -100,7 +100,6 @@ package body Tokenizer is
 --                       Integer'Image (Input_Buffer_Length));
          --           delay (1.0);
          if aChar = ' ' then
-            Put_Line (Routine_Name & "aChar = ' '");
             Ptr := Ptr + 1;
          elsif aChar = '"' then
             Put_Line (Routine_Name & '"');
@@ -201,7 +200,7 @@ package body Tokenizer is
       --  834 Get line number if given
       Less_Than_8_Digits (Token_Buffer, In_Ptr, From_Console);
 
-      Put_Line (Routine_Name & "841 In_Buffer: " & Get_Input_Buffer);
+--        Put_Line (Routine_Name & "841 In_Buffer: " & Get_Input_Buffer);
       --  841 Process the rest of the line
       if Input_Buffer_Length > In_Ptr then
          Parse_Line (Token_Buffer, In_Ptr);
