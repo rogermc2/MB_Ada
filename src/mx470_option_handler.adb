@@ -37,6 +37,7 @@ package body MX470_Option_Handler is
       TP           : constant Natural := Check_String (Command_Line, "CONSOLE");
       Found        : constant Boolean := TP > 0;
    begin
+--        Put_Line ("Do_Console");
       if Found then
          if Check_String (Command_Line, "OFF") > 0 then
             Flash.Option.SDCARD_CS := 0;
@@ -96,6 +97,7 @@ package body MX470_Option_Handler is
       Found : constant Boolean := TP > 0;
       Arg   : Unbounded_String;
    begin
+--        Put_Line ("Do_Controls");
       if Found then
          Arg := Get_Arg (Command_Line, TP);
          Flash.Option.Max_Controls := Get_Int (Arg, 0, 1000) + 1;
@@ -110,6 +112,7 @@ package body MX470_Option_Handler is
       TP    : constant Natural := Check_String (Command_Line, "ERROR");
       Found : constant Boolean := TP > 0;
    begin
+--        Put_Line ("Do_Error");
       if Found then
          if Flash.Option.SDCARD_CS = 0 then
             Put_Line ("SD card has not been configured.");
@@ -130,6 +133,7 @@ package body MX470_Option_Handler is
       use Keyboard;
       Found : constant Boolean := Check_String (Command_Line, "KEYBOARD") > 0;
    begin
+--        Put_Line ("Do_Keyboard");
       if Found then
          if Check_String (Command_Line, "DISABLE") > 0 then
             Flash.Option.Keyboard_Config := NO_KEYBOARD;
@@ -192,11 +196,13 @@ package body MX470_Option_Handler is
 
    function Do_List (Command_Line : String) return Boolean is
       use Flash;
-      --        Routine_Name : constant String := "MX470_Option_Handler.Do_List ";
+--        Routine_Name : constant String := "MX470_Option_Handler.Do_List ";
       Found        : constant Boolean :=
         Check_String (Command_Line, "LIST") > 0;
    begin
+--        Put_Line (Routine_Name);
       if Found then
+--           Put_Line (Routine_Name & "FOUND");
          if Option.SDCARD_CS > 0 then
             Put ("OPTION SDCARD " & Integer'Image (Option.SDCARD_CS));
             if Option.SD_CD > 0 then
@@ -235,7 +241,9 @@ package body MX470_Option_Handler is
       Arg   : Unbounded_String;
       Found : constant Boolean := TP > 0;
    begin
+--        Put_Line ("Do_RTC");
       if Found then
+--           Put_Line ("Do_RTC found");
          if Check_String (Command_Line, "DISABLE") > 0 then
             Flash.Option.RTC_Clock := 0;
             Flash.Option.RTC_Data := 0;
@@ -266,17 +274,22 @@ package body MX470_Option_Handler is
       TP    : constant Natural := Check_String (Command_Line, "SDCARD");
       Found : constant Boolean := TP > 0;
    begin
+--        Put_Line ("Do_SD_Card");
       if Found then
+--           Put_Line ("Do_SD_Card found");
          if Check_String (Command_Line, "DISABLE") > 0 then
             Flash.Option.SDCARD_CS := 0;
             Flash.Option.SD_CD := 0;
             Flash.Option.SD_WP := 0;
             Flash.Save_Options;
          else
+--              Put_Line ("Do_SD_Card else");
             File_IO.Config_SD_Card (Get_Arg (Command_Line, TP));
          end if;
+--           Put_Line ("Do_SD_Card Save_And_Reset");
          Save_And_Reset;
       end if;
+--        Put_Line ("Do_SD_Card done");
 
       return Found;
 
@@ -298,6 +311,7 @@ package body MX470_Option_Handler is
         Do_Console (Command_Line) or else
         Do_RTC (Command_Line) or else
         Do_List (Command_Line);
+        Put_Line (Routine_Name & "Done");
 
       return Result;
 

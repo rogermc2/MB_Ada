@@ -1,5 +1,8 @@
 
 with Ada.Assertions; use Ada.Assertions;
+with Ada.Containers;
+with Ada.Text_IO; use Ada.Text_IO;
+
 with Arguments;
 
 --  with Command_And_Token_Tables; use Command_And_Token_Tables;
@@ -16,13 +19,18 @@ package body File_IO is
    end Check_SDCard;
 
    procedure Config_SD_Card (Arg_String : Unbounded_String) is
+      use Ada.Containers;
       use Arguments;
       use Evaluation;
       Routine_Name : constant String := "File_IO.Config_SD_Card ";
-      Arg          : Unbounded_String := To_Unbounded_String (Arg_V (1));
-      Arg_Val      : Integer := Integer (Get_Integer (Arg));
+      Arg          : Unbounded_String;
+      Arg_Val      : Integer;
       --        Pin_Check    : Integer;
    begin
+      Put_Line (Routine_Name);
+      Assert (Arg_V.Length > 0, Routine_Name & "Arg_V is empty");
+      Arg := To_Unbounded_String (Arg_V (1));
+      Arg_Val := Integer (Get_Integer (Arg));
       Get_Args (Arg_String, 1, 5, ",");
       Assert (Integer (Arg_C) > 0 and then Integer (Arg_C) <= 5,
               Routine_Name & "invalid number of arguments:" &
