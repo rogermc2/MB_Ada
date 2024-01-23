@@ -1186,17 +1186,20 @@ package body M_Basic is
       use Ada.Assertions;
       use Arguments;
       use Global;
+      use Arg_Package;
+      use String_Buffer_Package;
       Routine_Name : constant String := "M_Basic.User_Defined_Subfunction ";
       Arg_C1       : unsigned_16 := 0;
       Arg_C2       : unsigned_16 := 0;
-      Arg_Buff1    : Unbounded_String;
-      Arg_Buff2    : Unbounded_String;
-      Arg_V1       : String_Buffer;
-      Arg_V2       : String_Buffer;
+      Arg_Buff1    : String_Buffer;  --  indec type: Positive
+      Arg_Buff2    : String_Buffer;
+      Arg_V1       : Arg_Vector;     --  indec type: Positive
+      Arg_V2       : Arg_Vector;
       Arg_Val      : Var_Vector;
       Arg_Type     : Function_Type := T_NOTYPE;
       Var          : Var_Record;
       C1           : Positive;
+      Arg_Buff_I   : Unsigned_16;
       Arg          : Unbounded_String;
       Delim        : Unbounded_String;
       Ia           : Long_Long_Integer;
@@ -1246,9 +1249,11 @@ package body M_Basic is
          --  610
          Index_C := 0;
          while Index_C < Arg_C2 loop
-            C1 := Integer (Index_C + 1);
+            C1 := Positive (Index_C + 1);
+            Arg_Buff_I := Arg_V1 (C1);
             if Index_C < Arg_C1 and then
-              Arg_V1 (C1) /= Integer'Image (0) then
+              Element (Arg_Buff1, Positive (Arg_Buff_I)) /=
+                Integer'Image (0) then
                if (C1 < Integer (Arg_C1) and then
                    Is_Name_Start  (Arg_V1 (C1)(1))) and then
                  (Skip_Var (Arg_V1 (C1), Integer (Index_C)) = 1) then

@@ -559,7 +559,7 @@ package body Arguments is
       Then_Token     : constant Natural := tokenTHEN;
       Else_Token     : constant Natural := tokenELSE;
       Arg_Buff_Index : Positive;
-      Op             : Positive := 1;  --  Index into Arg_Buff
+      Op             : Positive := 1;  --  Character index into Arg_Buff
       Op_Ptr         : Integer := 1;
       String_1       : String (1 .. 1);
       Token_String   : Unbounded_String;
@@ -685,8 +685,13 @@ package body Arguments is
                   Arg_C := Arg_C + 1;
                   In_Arg := True;
 
+                  --  MMBasic 2252 If an opening bracket '(', copy everything
+                  --  until the matching closing bracket.
+                  --  This includes special characters such as , and ; and
+                  --  keeps track of any nested brackets.
                   aChar := Element (Expression, TP);
                   Token_String := To_Unbounded_String (aChar'Image);
+                  Put_Line (Routine_Name & "2252: " &  To_String (Token_String));
                   T_Token :=
                     Token_Type (Integer'Value (Slice (Token_String, 2, 2)));
                   Put_Line (Routine_Name & "T_Token: " &
@@ -697,7 +702,8 @@ package body Arguments is
                      X := M_Basic_Utilities.Get_Close_Bracket (Expression, TP);
                      X := X - TP + 1;
                      for index in TP .. X loop
-                        Append (Arg_Buff, Element (Expression, index));
+                        null;
+--                          Append (Arg_Buff, Element (Expression, index));
                      end loop;
                      Op_Ptr := Op_Ptr + X;
                      TP := TP + X;
@@ -706,7 +712,7 @@ package body Arguments is
                      --  MMBasic 2266 C4
                      while Element (Expression, TP + 1) /=  '"' loop
                         TP := TP + 1;
-                        Append (Op, Element (Expression, TP));
+--                          Append (Op, Element (Expression, TP));
                         Assert (TP < length (Expression), Routine_Name &
                                   "syntax error, no closing "".");
                         Op_Ptr := Op_Ptr + 1;
@@ -714,12 +720,12 @@ package body Arguments is
 
                      --  MMBasic 2273
                      TP := TP + 1;
-                     Append (Op, Element (Expression, TP));
+--                       Append (Op, Element (Expression, TP));
                      Op_Ptr := Op_Ptr + 1;
 
                   else  --  anythin else
                      --  MMBasic 2278
-                     Append (Op, Element (Expression, TP));
+--                       Append (Op, Element (Expression, TP));
                      Op_Ptr := Op_Ptr + 1;
                      TP := TP + 1;
                      Expect_Cmd := False;
@@ -742,7 +748,7 @@ package body Arguments is
       --  MMBasic 2282
       Assert (Expect_Bracket and then Element (Expression, TP) /= ')',
               Routine_Name & "syntax error, bracket expected.");
-      Trim (Arg_Buff, Right);
+--        Trim (Arg_Buff, Right);
 
    end Make_Args;
 

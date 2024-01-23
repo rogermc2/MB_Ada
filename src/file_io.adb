@@ -30,7 +30,7 @@ package body File_IO is
       Put_Line (Routine_Name & "Arg_String: " & To_String (Arg_String));
       Get_Args (Arg_String, 1, 5, ",");
       Assert (Arg_V.Length > 0, Routine_Name & "Arg_V is empty");
-      Arg := To_Unbounded_String (Arg_V (1));
+--        Arg := To_Unbounded_String (Arg_V (1));
       Arg_Val := Integer (Get_Integer (Arg));
       Assert (Integer (Arg_C) > 0 and then Integer (Arg_C) <= 5,
               Routine_Name & "invalid number of arguments:" &
@@ -42,14 +42,14 @@ package body File_IO is
       Flash.Option.SDCARD_CS := Arg_Val;
 
       if Integer (Arg_C) > 2 then
-         Arg := To_Unbounded_String (Arg_V (3));
+--           Arg := To_Unbounded_String (Arg_V (3));
          Arg_Val := Integer (Get_Integer (Arg));
          --        Pin_Check := External.Check_Pin (abs (Arg_3_Val), Commands.Option_Error_Check);
          Flash.Option.SD_CD := Arg_Val;
       end if;
 
       if Integer (Arg_C) = 5 then
-         Arg := To_Unbounded_String (Arg_V (5));
+--           Arg := To_Unbounded_String (Arg_V (5));
          Arg_Val := Integer (Get_Integer (Arg));
          --        Pin_Check := External.Check_Pin (abs (Arg_3_Val), Commands.Option_Error_Check);
          Flash.Option.SD_WP := Arg_Val;
