@@ -320,9 +320,10 @@ package body MX470_Option_Handler is
 
    --  MiscMX470.c 84
    function Other_Options return Boolean is
+      use Global;
       use String_Buffer_Package;
       Routine_Name : constant String := "MX470_Option_Handler.Other_Options ";
-      Subfunction  : String_Buffer := Global.Command_Line;
+      Subfunction  : String_Buffer := Command_Line;
       --        Command_Line : constant String := To_String (Global.Command_Line);
       Result       : Boolean := False;
    begin
@@ -331,14 +332,14 @@ package body MX470_Option_Handler is
       Put_Line (Routine_Name & "Subfunction:");
       Support.Print_Buffer (Subfunction);
       Result :=
-        Do_Reset(Subfunction) or else
-        Do_Keyboard (Subfunction) or else
-        Do_Controls (Subfunction) or else
-        Do_SD_Card (Subfunction) or else
-        Do_Error (Subfunction) or else
-        Do_Console (Subfunction) or else
-        Do_RTC (Subfunction) or else
-        Do_List (Subfunction);
+        Do_Reset(Command_Line) or else
+        Do_Keyboard (Command_Line) or else
+        Do_Controls (Command_Line) or else
+        Do_SD_Card (Command_Line) or else
+        Do_Error (Command_Line) or else
+        Do_Console (Command_Line) or else
+        Do_RTC (Command_Line) or else
+        Do_List (Command_Line);
       Put_Line (Routine_Name & "Done");
 
       return Result;
