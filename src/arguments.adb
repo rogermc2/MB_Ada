@@ -1,4 +1,6 @@
 
+with Interfaces;
+
 with Ada.Assertions;
 with Ada.Characters.Handling;
 with Ada.Text_IO; use Ada.Text_IO;
@@ -19,6 +21,7 @@ package body Arguments is
    procedure Do_AA (IP, TP      : in out Natural; Var_I : in out Natural;
                     Name_Length : Natural; I_Free : in out Natural;
                     Tmp         : in out Integer; Name  : Unbounded_String) is
+      use Interfaces;
       --        Routine_Name : constant String := "M_Basic_Utilities.Do_AA ";
       Item         : Var_Record;
       TP_Name      : Unbounded_String;
@@ -90,6 +93,7 @@ package body Arguments is
                    V_Type         : Function_Type; Name : Unbounded_String;
                    Dim            : Dim_Array; Action  : Function_Type;
                    Result         : out Var_Record) return Boolean is
+      use Interfaces;
       use Ada.Assertions;
       use Global;
       use M_Misc;   --  for Option_Base
@@ -190,6 +194,7 @@ package body Arguments is
                     V_Type     : in out Function_Type; Action : Function_Type;
                     Name       : Unbounded_String; I_Free : Natural;
                     D_Num      : Integer; Dim : Dim_Array) is
+      use Interfaces;
       use Ada.Assertions;
       use Global;
       use M_Basic.Conversion;
@@ -368,6 +373,7 @@ package body Arguments is
    --   T_INT integer variable
    function Find_Var (Expression : Unbounded_String; Pos : in out Positive;
                       Action     : Function_Type) return Var_Record is
+      use Interfaces;
       use Ada.Assertions;
       use Ada.Characters.Handling;
       use Global;
@@ -455,7 +461,7 @@ package body Arguments is
 
          else
             Get_Args (Expression, Pos, 2 * Configuration.MAXDIM, "(,");
-            Assert ((Arg_C and 1) /= 0, Routine_Name & "invalid dimensions.");
+            Assert ((Unsigned_16 (Arg_C) and 1) /= 0, Routine_Name & "invalid dimensions.");
          end if;
 
          --  MMBasic 1772
@@ -549,7 +555,8 @@ package body Arguments is
    procedure  Make_Args
      (Expression : Unbounded_String; Pos : Positive; Max_Args : Positive;
       Arg_Buff   : out String_Buffer; Arg_V  : out Arg_Vector;
-      Arg_C      : out Interfaces.Unsigned_16; Delim : String) is
+      Arg_C      : out Natural; Delim : String) is
+      use Interfaces;
       use Ada.Assertions;
       use Ada.Strings;
       use Command_And_Token_Functions;
@@ -619,7 +626,7 @@ package body Arguments is
          --  MMBasic 2222
          In_Arg := False;
          Assert (Integer (Arg_C) <= Max_Args, Routine_Name & "Too many arguments");
-         Append (Arg_V, Unsigned_16 (Op_Ptr));
+         Append (Arg_V, Op_Ptr);
          Arg_C := Arg_C +1;
          Op_Ptr := Op_Ptr + 1;
          TP := TP + 1;

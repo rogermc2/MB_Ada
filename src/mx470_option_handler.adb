@@ -270,11 +270,11 @@ package body MX470_Option_Handler is
          else
             Get_Args (To_Unbounded_String (Element (Command_Line, 2)), 1, 3 , ",");
             if Integer (Arg_C) = 3 then
-               Arg := To_Unbounded_String (Element (Arg_V, 1));
+               Arg := To_Unbounded_String (Arg_Buffer (Arg_V (1)));
                Flash.Option.RTC_Data := Integer (Get_Integer (Arg));
                External.Check_Pin
                  (Flash.Option.RTC_Data, Commands.Option_Error_Check);
-               Arg := To_Unbounded_String (Element (Arg_V, 3));
+               Arg := To_Unbounded_String (Arg_Buffer (Arg_V (3)));
                Flash.Option.RTC_Clock := Integer (Get_Integer (Arg));
                External.Check_Pin
                  (Flash.Option.RTC_Data, Commands.Option_Error_Check);

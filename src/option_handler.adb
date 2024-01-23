@@ -138,6 +138,7 @@ package body Option_Handler is
    end Do_Default;
 
    function Do_Display (Command_Line : String_Buffer) return Boolean is
+      use Arguments.Arg_Package;
       use String_Buffer_Package;
       Routine_Name : constant String := "Option_Handler.Do_Display ";
 --        TP           : constant Natural := Check_String (Command_Line, "BAUDRATE");
@@ -169,6 +170,7 @@ package body Option_Handler is
 
    function Do_LCD_Panel (Command_Line : String_Buffer) return Boolean is
       use Ada.Characters.Handling;
+      use Arguments;
       use Draw;
       use String_Buffer_Package;
       Routine_Name  : constant String := "Option_Handler.Do_LCD_Panel ";
@@ -181,17 +183,17 @@ package body Option_Handler is
       if Found then
          Arguments.Get_Args
            (To_Unbounded_String (Element (Command_Line, 2)), 2, 13, ",");
-         Arg := To_Unbounded_String (Element (Arguments.Arg_V, 1));
+         Arg := To_Unbounded_String (Arg_Buffer (Arg_V (1)));
 
-         if To_Upper (Element (Arguments.Arg_V, 1)) = "USER" then
+         if To_Upper (Arg_Buffer (Arg_V (1))) = "USER" then
             Assert (Flash.Option.Display_Type > 0, Routine_Name &
                       "display has been configured already.");
             Assert (Integer (Arguments.Arg_C) = 5, Routine_Name &
                       "invalid number of arguments.");
-            Arg := To_Unbounded_String (Element (Arguments.Arg_V, 2));
+            Arg := To_Unbounded_String (Arg_Buffer (Arg_V (2)));
             Display_H_Res := Get_Int (Arg, 1, 10000);
             H_Res := Display_H_Res;
-            Arg := To_Unbounded_String (Element (Arguments.Arg_V, 4));
+            Arg := To_Unbounded_String (Arg_Buffer (Arg_V (4)));
             Display_V_Res := Get_Int (Arg, 1, 10000);
             V_Res := Display_V_Res;
             Flash.Option.Display_Type := SPI_LCD.DISP_USER;

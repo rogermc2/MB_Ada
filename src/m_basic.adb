@@ -1186,11 +1186,10 @@ package body M_Basic is
       use Ada.Assertions;
       use Arguments;
       use Global;
-      use Arg_Package;
       use String_Buffer_Package;
       Routine_Name : constant String := "M_Basic.User_Defined_Subfunction ";
-      Arg_C1       : unsigned_16 := 0;
-      Arg_C2       : unsigned_16 := 0;
+      Arg_C1       : Natural := 0;
+      Arg_C2       : Natural := 0;
       Arg_Buff1    : String_Buffer;  --  indec type: Positive
       Arg_Buff2    : String_Buffer;
       Arg_V1       : Arg_Vector;     --  indec type: Positive
@@ -1199,12 +1198,11 @@ package body M_Basic is
       Arg_Type     : Function_Type := T_NOTYPE;
       Var          : Var_Record;
       C1           : Positive;
-      Arg_Buff_I   : Unsigned_16;
       Arg          : Unbounded_String;
       Delim        : Unbounded_String;
       Ia           : Long_Long_Integer;
       S            : Unbounded_String;
-      Index_C      : unsigned_16 := 0;
+      Index_C      : Natural := 0;
       Pos          : Positive := TP;
    begin
       --  588
@@ -1231,13 +1229,14 @@ package body M_Basic is
          end if;
          Make_Args (Command, TP, Configuration.MAX_ARG_COUNT, Arg_Buff2,
                     Arg_V2, Arg_C2, To_String (Delim));
-         Assert (Arg_C2 = 0 or else (Arg_C2 and 1) /= 0, Routine_Name &
-                   "invalid argument list, Arg_C2: " & unsigned_16'Image (Arg_C2));
+         Assert (Arg_C2 = 0 or else
+                   (Unsigned_16 (Arg_C2) and 1) /= 0, Routine_Name &
+                   "invalid argument list, Arg_C2: " & Integer'Image (Arg_C2));
          Current_Line_Ptr := Callers_Line_Ptr;
-         Assert (Arg_C2 <= Arg_C1 and then (Arg_C1 and (Arg_C1 and 1)) /= 0,
+         Assert (Arg_C2 <= Arg_C1 and then (Unsigned_16 (Arg_C1) and (Unsigned_16 (Arg_C1) and 1)) /= 0,
                  Routine_Name & "invalid argument list, Arg_C1: " &
-                   unsigned_16'Image (Arg_C1) & ", Arg_C2: " &
-                   unsigned_16'Image (Arg_C2));
+                   Integer'Image (Arg_C1) & ", Arg_C2: " &
+                   Integer'Image (Arg_C2));
 
          --  605 Step through the arguments supplied by the caller and get the
          --  value supplied which can be:
@@ -1250,15 +1249,14 @@ package body M_Basic is
          Index_C := 0;
          while Index_C < Arg_C2 loop
             C1 := Positive (Index_C + 1);
-            Arg_Buff_I := Arg_V1 (C1);
             if Index_C < Arg_C1 and then
-              Element (Arg_Buff1, Positive (Arg_Buff_I)) /=
+              Element (Arg_Buff1, Arg_V1 (C1)) /=
                 Integer'Image (0) then
                if (C1 < Integer (Arg_C1) and then
-                   Is_Name_Start  (Arg_V1 (C1)(1))) and then
-                 (Skip_Var (Arg_V1 (C1), Integer (Index_C)) = 1) then
+                   Is_Name_Start  (Arg_Buff1 (Arg_V1 (C1))(1))) and then
+                 (Skip_Var (Arg_Buff1 (Arg_V1 (C1)), Integer (Index_C)) = 1) then
                   --  Expression is a variable or user defined function
-                  if Find_Subfunction (Arg_V1 (C1), 1) < 0 or else
+                  if Find_Subfunction (Arg_Buff1 (Arg_V1 (C1)), 1) < 0 or else
                     Index (To_Unbounded_String (Arg_V1 (C1)), "(") > 0 then
                      --  618
                      Var_Index := 1;
@@ -1303,7 +1301,7 @@ package body M_Basic is
          while Index_C < Arg_C2 loop
             C1 := Integer (Index_C + 1);
             Arg_Type := T_NOTYPE;
-            Pos := Skip_Var (Arg_V2 (C1), Pos);
+            Pos := Skip_Var (Arg_Buff2 (Arg_V1 (C1)), Pos);
             Skip_Spaces (Command, Pos);
             Index_C := Index_C + 2;
 
