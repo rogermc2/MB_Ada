@@ -11,6 +11,11 @@ package Arguments is
 
    type Dims_Array is array (1 .. Configuration.MAXDIM) of Natural;
 
+   use Interfaces;
+   package Arg_Package is new
+     Ada.Containers.Vectors (Positive, Unsigned_16);
+   subtype Arg_Vector is Arg_Package.Vector;
+
    type Var_Record is record
       Name     : Unbounded_String;
       Var_Type : Function_Type;
@@ -31,8 +36,8 @@ package Arguments is
    Var_Table       : Var_Vector;
    Var_Index       : Natural := 0;
    Var_Count       : Natural := 0;
-   Arg_C       	   : Interfaces.Unsigned_16;
-   Arg_V           : String_Buffer;
+   Arg_C       	   : Interfaces.Unsigned_16 := 0;
+   Arg_V           : Arg_Vector;
    Arg_T           : Function_Type;
 
    Arg_Var_Index   : array (1 .. Natural (Length (Var_Table))) of Integer;
@@ -42,8 +47,8 @@ package Arguments is
    procedure Get_Args (Expression   : Unbounded_String; Pos : Positive;
                        Max_Num_Args : Natural; Delim : String);
    procedure Make_Args
-     (Expression :    Unbounded_String; Pos : Positive; Max_Args : Positive;
-      Arg_Buff   : in out Unbounded_String; Arg_V : in out String_Buffer;
-      Arg_C      :    out Interfaces.Unsigned_16; Delim : String);
+     (Expression : Unbounded_String; Pos : Positive; Max_Args : Positive;
+      Arg_Buff   : out String_Buffer; Arg_V : out Arg_Vector;
+      Arg_C      : out Interfaces.Unsigned_16; Delim : String);
 
 end Arguments;
