@@ -302,11 +302,7 @@ package body Option_Handler is
          Done := True;
 
       elsif not Do_Default (Command_Line) then
---           TP := Check_String (Command_Line, "BREAK");
---           TP := Check_String (Subfunction, "BREAK");
---           if TP > 0 then
          if Check_String (Subfunction, "BREAK") then
---              Arg := Get_Arg (Command_Line, TP);
             Arg := To_Unbounded_String (Element (Command_Line, 2));
             Global.Break_Key := Integer (Get_Integer (Arg));
             Done := True;
@@ -328,7 +324,6 @@ package body Option_Handler is
       end if;
 
       Assert (Done, Routine_Name & "unrecognized option " & Subfunction);
---        Assert (Done, Routine_Name & "unrecognized option " & Command_Line);
 
    end Option_Cmd;
 

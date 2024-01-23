@@ -40,7 +40,7 @@ package Arguments is
    function Find_Var (Expression : Unbounded_String; Pos : in out Positive;
                        Action     : Function_Type) return Var_Record;
    procedure Get_Args (Expression   : Unbounded_String; Pos : Positive;
-                       Max_Num_Args : Natural; S : String);
+                       Max_Num_Args : Natural; Delim : String);
    procedure Make_Args
      (Expression :    Unbounded_String; Pos : Positive; Max_Args : Positive;
       Arg_Buff   : in out Unbounded_String; Arg_V : in out String_Buffer;

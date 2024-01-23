@@ -529,10 +529,10 @@ package body Arguments is
    end Find_Var;
 
    procedure Get_Args (Expression   : Unbounded_String; Pos : Positive;
-                       Max_Num_Args : Natural; S : String) is
+                       Max_Num_Args : Natural; Delim : String) is
    begin
       --  MMBasic.h 142
-      Make_Args (Expression, Pos, Max_Num_Args, Arg_Buff, Arg_V, Arg_C, S);
+      Make_Args (Expression, Pos, Max_Num_Args, Arg_Buff, Arg_V, Arg_C, Delim);
 
    end Get_Args;
 
@@ -563,7 +563,9 @@ package body Arguments is
       Token          : Natural;
       T_Token        : Function_Type;
       Term           : Unbounded_String;
-      Match          : Boolean := False;
+      Delim_Index    : Natural := 0;
+      Delim_Pos      : Natural := 0;
+      Delim_Found    : Boolean := False;
       Done           : Boolean := False;
 
       procedure C1 is
@@ -573,19 +575,20 @@ package body Arguments is
          Token        : constant Natural
            := Integer'Value (Character'Image (Element (Expression, Pos)));
       begin
-         --  MMBasic 2165
+         Put_Line (Routine_Name & "C1 ");
+         --  MMBasic 2281
          if Token = Then_Token or else Token = Else_Token then
             Expect_Cmd := True;
          end if;
 
-         --  MMBasic 2167
+         --  MMBasic 2253
          if In_Arg then
             while Op_Ptr > Length (Arg_Buff) and
               Element (Op, Op_Ptr - 1) = ' ' loop
                Op_Ptr := Op_Ptr - 1;
             end loop;
 
-            --  MMBasic 2173
+            --  MMBasic 2243
          elsif Arg_C > 0 then
             --  otherwise we have two delimiters in a row
             --  (except for the first argument).
@@ -597,7 +600,7 @@ package body Arguments is
             Op_Ptr := Length (Op);
          end if;
 
-         --  MMBasic 2179
+         --  MMBasic 2245
          In_Arg := False;
          Assert (Integer (Arg_C) <= Max_Args, Routine_Name & "Too many arguments");
          Append (Arg_V, Integer'Image (Op_Ptr));
@@ -608,55 +611,60 @@ package body Arguments is
       end C1;
 
    begin
-      --  MMBasic 2069 Test_Tack_Overflow
+      --  MMBasic 2163 Test_Stack_Overflow
       Arg_C := 0;
       Skip_Spaces (Expression, TP);
       if Delim = "(" then
          Assert (Element (Expression, TP) = '(', Routine_Name &
-                   "syntax error.");
+                   "'(' syntax error.");
          Expect_Bracket := True;
          Delim_Ptr := Delim_Ptr + 1;
          TP := TP + 1;
       end if;
 
-      --  MMBasic 2096  Main processing loop
-      Put_Line (Routine_Name & "Expression: " & To_String (Expression));
+      --  MMBasic 2191  Main processing loop
+      Put_Line (Routine_Name & "2191 Expression: " & To_String (Expression));
       while not Done loop
          Done := (Expect_Bracket and then Element (Expression, TP) = ')')
            or else Element (Expression, TP) = ''';
          if not Done then
             Term := To_Unbounded_String
               (Slice (Expression, TP, Length (Expression)));
-            --  MMBasic 2110 Delim is a string of special characters that split the
-            --  expression into separate terms;
-            Put_Line (Routine_Name & "Term: " & To_String (Term));
-            Match := False;
-            for Delim_Index in Delim'Range loop
+            --  MMBasic 2205 Delim is a string of special characters that split
+            --  the expression into separate terms;
+            Put_Line (Routine_Name & "2205 Term: " & To_String (Term));
+            Delim_Index := 0;
+            Delim_Found := False;
+            while not Delim_Found and then Delim_Index < Delim'Last loop
+               Delim_Index := Delim_Index + 1;
                String_1 (1) := Delim (Delim_Index);
-               Match := Match or else Index (Term, String_1) > 0;
+               Delim_Pos := Index (Term, String_1);
+               Delim_Found := Delim_Pos > 0;
             end loop;
-            Put_Line (Routine_Name & "Match: " & Boolean'Image (Match));
+            Put_Line (Routine_Name & "2206 Delim_Found: " &
+                        Boolean'Image (Delim_Found));
 
-            --  MMBasic 2112 block moved to else  Match
-            if not Match then
+            --  MMBasic 2206 block moved to else  Delim_Found
+            if not Delim_Found then
                --  MMBasic 2189  C1 E
                Token_Char := Element (Expression, Pos);
                Token_String := To_Unbounded_String (Token_Char'Image);
                Token := Integer'Value (Slice (Token_String, 2, 2));
-               Put_Line (Routine_Name & "Token: " & Integer'Image (Token));
+               Put_Line (Routine_Name & "2207 Token: " & Integer'Image (Token));
+               --  MMBasic 2207
                Expect_Cmd := Token = Then_Token or else Token = Else_Token;
-               Put_Line (Routine_Name & "Then_Token: " &
+               Put_Line (Routine_Name & "2207 Then_Token: " &
                            Integer'Image (Then_Token));
-               Put_Line (Routine_Name & "Expect_Cmd: " &
+               Put_Line (Routine_Name & "2207 Expect_Cmd: " &
                            Boolean'Image (Expect_Cmd));
 
-               --  MMBasic 2201
+               --  MMBasic 2243
                if not In_Arg then
                   --  C2 E
-                  --  MMBasic 2194 moved to else
-                  --  MMBasic 22202 Not a special char so start a new argument
+                  --  MMBasic 2206? moved to else
+                  --  MMBasic 22432 Not a special char so start a new argument
                   Assert (Integer (Arg_C) <= Max_Args, Routine_Name &
-                            "Too many arguments");
+                            "2243 Too many arguments");
                   Append (Arg_V, To_String (Arg_Buff));
                   Arg_C := Arg_C + 1;
                   In_Arg := True;
@@ -665,9 +673,11 @@ package body Arguments is
                   Token_String := To_Unbounded_String (aChar'Image);
                   T_Token :=
                     Token_Type (Integer'Value (Slice (Token_String, 2, 2)));
+                  Put_Line (Routine_Name & "T_Token: " &
+                              Unsigned_16'Image (T_Token));
                   if aChar = '(' or else ((T_Token and T_FUN) = T_FUN
                                           and then (not Expect_Cmd)) then
-                     --  MMBasic 2211 C3
+                     --  MMBasic 2255 C3
                      X := M_Basic_Utilities.Get_Close_Bracket (Expression, TP);
                      X := X - TP + 1;
                      for index in TP .. X loop
@@ -677,7 +687,7 @@ package body Arguments is
                      TP := TP + X;
 
                   elsif aChar = '"' then
-                     --  MMBasic 2224 C4
+                     --  MMBasic 2266 C4
                      while Element (Expression, TP + 1) /=  '"' loop
                         TP := TP + 1;
                         Append (Op, Element (Expression, TP));
@@ -686,13 +696,13 @@ package body Arguments is
                         Op_Ptr := Op_Ptr + 1;
                      end loop;
 
-                     --  MMBasic 2231
+                     --  MMBasic 2273
                      TP := TP + 1;
                      Append (Op, Element (Expression, TP));
                      Op_Ptr := Op_Ptr + 1;
 
                   else  --  anythin else
-                     --  MMBasic 2236
+                     --  MMBasic 2278
                      Append (Op, Element (Expression, TP));
                      Op_Ptr := Op_Ptr + 1;
                      TP := TP + 1;
@@ -710,11 +720,12 @@ package body Arguments is
          end if;  --  First not Done
 
          Done := TP > Length (Expression);
-
+         --  MMBasic 2280
       end loop;
 
+      --  MMBasic 2282
       Assert (Expect_Bracket and then Element (Expression, TP) /= ')',
-              Routine_Name & "syntax error");
+              Routine_Name & "syntax error, bracket expected.");
       Trim (Arg_Buff, Right);
 
    end Make_Args;
