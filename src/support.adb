@@ -150,30 +150,61 @@ package body Support is
    procedure Restart is
       use Flash;
    begin
-      if Except_Code = RESET_COMMAND or else
-        Except_Code = RESTART_NO_AUTORUN or else
-        Except_Code = RESTART_DO_AUTORUN then
+      if not (Except_Code = RESET_COMMAND or else
+              Except_Code = RESTART_NO_AUTORUN or else
+              Except_Code = RESTART_DO_AUTORUN) then
          if Except_Code = WATCHDOG_TIMEOUT then
             Watchdog_Set := True;
             New_Line;
             Put_Line ("Watchdog timeout!");
-         elsif Except_Code /= PIN_RESTART and then
-           Except_Cause /= Cause_Nothing and then
-           Except_Cause = Cause_MM_Startup then
-            New_Line;
-            Put_Line ("Error in MM_Startup!");
+         elsif Except_Code /= PIN_RESTART then
+            if Except_Cause /= Cause_Nothing then
+               if Except_Cause = Cause_MM_Startup then
+                  New_Line;
+                  Put_Line ("Error in MM_Startup!");
+               else
+                  New_Line;
+                  Put ("Option error - Cleared OPTION ");
+                  case Except_Cause is
+                  when Cause_Display =>
+                     Put_Line ("LCD PANEL");
+                     Option.Display_Type := 0;
+                  when Cause_File_IO =>
+                     Put_Line ("SDCARD");
+                     Option.SDCARD_CS := 0;
+                  when Cause_Keyboard =>
+                     Put_Line ("KEYBOARD");
+                     Option.Keyboard_Config := Keyboard.NO_KEYBOARD;
+                  when Cause_RTC =>
+                     Put_Line ("RTC");
+                     Option.RTC_Data := 0;
+                  when Cause_Touch =>
+                     Put_Line ("TOUCH");
+                     Option.Touch_CS := 0;
+                  when others => null;
+                  end case;
+
+                  Save_Options;
+               end if;
+            end if;
          else
             New_Line;
-            Put ("Option error - Cleared OPTION ");
-            case Except_Cause is
-            when Cause_Display =>
-               Put_Line ("LCD PANEL");
-               Option.Display_Type := 0;
-            when Cause_File_IO =>
-               Put_Line ("SDCARD");
-               Option.SDCARD_CS := 0;
-            when others => null;
+            Put ("CPU exception # ");
+            Put (Exception_Code'Image (Except_Code) & " ");
+
+            --  191
+            case Except_Code is
+               when EXCEP_AdEL =>
+                  Put_Line ("(address error on load or ifetch)");
+               when EXCEP_AdES => Put_Line ("(address error store)");
+               when EXCEP_IBE =>  Put_Line ("(bus error on ifetch)");
+               when EXCEP_DBE =>  Put_Line ("(bus error on load or store)");
+               when EXCEP_Overflow => Put_Line ("(arithmetic overflow)");
+               when EXCEP_Trap =>  Put_Line ("(possible divide by zero)");
+               when others => null;
             end case;
+
+            M_Basic.Prepare_Program (False);
          end if;
       end if;
    end Restart;

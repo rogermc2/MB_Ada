@@ -39,9 +39,6 @@ package Arguments is
    Var_Table       : Var_Vector;
    Var_Index       : Natural := 0;
    Var_Count       : Natural := 0;
-   --     Arg_C       	   : Natural := 0;
-   --     Arg_V           : Arg_Vector;
-   --     Arg_Buffer      : String_Buffer;
    Arg_T           : Function_Type;
 
    Arg_Var_Index   : array (1 .. Natural (Length (Var_Table))) of Integer;
