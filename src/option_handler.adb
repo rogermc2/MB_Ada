@@ -145,20 +145,21 @@ package body Option_Handler is
 --        Found        : constant Boolean := TP > 0;
       Found        : constant Boolean :=
         Check_String (Element (Command_Line, 1), "BAUDRATE");
+      Arg_Data     : Arguments.Arguments_Record;
       Arg          : Unbounded_String;
    begin
       if Found then
 --           Arguments.Get_Args (To_Unbounded_String (Command_Line), TP, 3, ",");
-         Arguments.Get_Args
+         Arg_Data := Arguments.Get_Args
            (To_Unbounded_String (Element (Command_Line, 2)), 2, 3, ",");
          Assert (not Flash.Option.DISPLAY_CONSOLE, Routine_Name &
                    "DISPLAY, LCD console cannot be Changed ");
 
-         Arg := To_Unbounded_String (Element (Arguments.Arg_V, 1));
+         Arg := To_Unbounded_String (Element (Arg_Data.Arg_V, 1));
          Flash.Option.Height := Get_Int (Arg, 5, 100);
 
-         if Integer (Arguments.Arg_C) = 3 then
-            Arg := To_Unbounded_String  (Element (Arguments.Arg_V, 2));
+         if Arg_Data.Arg_C = 3 then
+            Arg := To_Unbounded_String  (Element (Arg_Data.Arg_V, 2));
             Flash.Option.Width := Get_Int (Arg, 37, 132);
             Flash.Save_Options;
          end if;
@@ -178,22 +179,25 @@ package body Option_Handler is
 --        Found         : constant Boolean := TP > 0;
       Found         : constant Boolean :=
         Check_String (Element (Command_Line, 1), "LCDPANEL");
+      Arg_Data      : Arguments_Record;
       Arg           : Unbounded_String;
    begin
       if Found then
-         Arguments.Get_Args
+         Arg_Data := Arguments.Get_Args
            (To_Unbounded_String (Element (Command_Line, 2)), 2, 13, ",");
-         Arg := To_Unbounded_String (Arg_Buffer (Arg_V (1)));
+         Arg := To_Unbounded_String (Arg_Data.Arg_Buffer (Arg_Data.Arg_V (1)));
 
-         if To_Upper (Arg_Buffer (Arg_V (1))) = "USER" then
+         if To_Upper (Arg_Data.Arg_Buffer (Arg_Data.Arg_V (1))) = "USER" then
             Assert (Flash.Option.Display_Type > 0, Routine_Name &
                       "display has been configured already.");
-            Assert (Integer (Arguments.Arg_C) = 5, Routine_Name &
+            Assert (Arg_Data.Arg_C = 5, Routine_Name &
                       "invalid number of arguments.");
-            Arg := To_Unbounded_String (Arg_Buffer (Arg_V (2)));
+            Arg :=
+              To_Unbounded_String (Arg_Data.Arg_Buffer (Arg_Data.Arg_V (2)));
             Display_H_Res := Get_Int (Arg, 1, 10000);
             H_Res := Display_H_Res;
-            Arg := To_Unbounded_String (Arg_Buffer (Arg_V (4)));
+            Arg :=
+              To_Unbounded_String (Arg_Data.Arg_Buffer (Arg_Data.Arg_V (4)));
             Display_V_Res := Get_Int (Arg, 1, 10000);
             V_Res := Display_V_Res;
             Flash.Option.Display_Type := SPI_LCD.DISP_USER;

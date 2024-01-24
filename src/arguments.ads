@@ -28,25 +28,33 @@ package Arguments is
    subtype Var_Vector is Var_Package.Vector;
    use Var_Package;
 
+   type Arguments_Record is record
+      Arg_C      : Natural := 0;
+      Arg_V      : Arg_Vector;
+      Arg_Buffer : String_Buffer;
+   end record;
+
    Default_Type    : Function_Type := T_NBR;
    Option_Explicit : Boolean := False;
    Var_Table       : Var_Vector;
    Var_Index       : Natural := 0;
    Var_Count       : Natural := 0;
-   Arg_C       	   : Natural := 0;
-   Arg_V           : Arg_Vector;
-   Arg_Buffer      : String_Buffer;
+   --     Arg_C       	   : Natural := 0;
+   --     Arg_V           : Arg_Vector;
+   --     Arg_Buffer      : String_Buffer;
    Arg_T           : Function_Type;
 
    Arg_Var_Index   : array (1 .. Natural (Length (Var_Table))) of Integer;
 
-   function Find_Var (Expression : Unbounded_String; Pos : in out Positive;
-                       Action     : Function_Type) return Var_Record;
-   procedure Get_Args (Expression   : Unbounded_String; Pos : Positive;
-                       Max_Num_Args : Natural; Delim : String);
-   procedure Make_Args
-     (Expression : Unbounded_String; Pos : Positive; Max_Args : Positive;
-      Arg_Buff   : out String_Buffer; Arg_V : out Arg_Vector;
-      Arg_C      : out Natural; Delim : String);
+   function Find_Var
+     (Expression : Unbounded_String; Pos : in out Positive;
+      Arg_Data   : in out Arguments_Record; Action : Function_Type)
+      return Var_Record;
+   function Get_Args (Expression   : Unbounded_String; Pos : Positive;
+                      Max_Num_Args : Natural; Delim : String)
+                      return Arguments_Record;
+   function Make_Args (Expression : Unbounded_String; Pos : Positive;
+                       Max_Args   : Positive; Delim : String)
+                       return Arguments_Record;
 
 end Arguments;

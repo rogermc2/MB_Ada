@@ -157,6 +157,7 @@ package body Evaluation is
       F          : in out Configuration.MMFLOAT; I64 : in out Long_Long_Integer;
       S          : in out Unbounded_String;  T  : in out Function_Type) is
       Routine_Name : constant String := "Evaluation.Do_Name_Start ";
+      Arg_Data              : Arguments.Arguments_Record;
       Save_Current_Line_Ptr : M_Basic.Subfunction_Ptr;
       Var                   : Arguments.Var_Record;
       TP                    : Positive := P + 1;
@@ -181,12 +182,11 @@ package body Evaluation is
          --  MMBasic 1406
          Save_Current_Line_Ptr := M_Basic.Current_Line_Ptr;
          M_Basic.Defined_Subfunction
---             (True, Slice (Expression, P, Length (Expression)),
            (True, M_Basic.Subfunctions (P).all, Index, F, I64, S, T);
          M_Basic.Current_Line_Ptr := Save_Current_Line_Ptr;
       else
          --  MMBasic 1412
-         Var := Arguments.Find_Var (Expression, P,  Global.V_FIND);
+         Var := Arguments.Find_Var (Expression, P, Arg_Data, Global.V_FIND);
          S := Global.UB_Return;
       end if;
 

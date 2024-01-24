@@ -17,8 +17,6 @@ package body Arguments is
 
    type Dim_Array is array (1 .. Configuration.MAXDIM) of Integer;
 
-   Arg_Buff    : String_Buffer;
-
    procedure Do_AA (IP, TP      : in out Natural; Var_I : in out Natural;
                     Name_Length : Natural; I_Free : in out Natural;
                     Tmp         : in out Integer; Name  : Unbounded_String) is
@@ -372,36 +370,38 @@ package body Arguments is
    --   T_STR string variable
    --   T_NBR holds a float
    --   T_INT integer variable
-   function Find_Var (Expression : Unbounded_String; Pos : in out Positive;
-                      Action     : Function_Type) return Var_Record is
+   function Find_Var
+     (Expression : Unbounded_String; Pos : in out Positive;
+      Arg_Data   : in out Arguments_Record; Action : Function_Type)
+      return Var_Record is
       use Interfaces;
       use Ada.Assertions;
       use Ada.Characters.Handling;
       use Global;
       use Arg_Package;
       use String_Buffer_Package;
-      Routine_Name : constant String := "M_Basic_Utilities.Find_Var ";
-      PP           : Positive;
-      Dim          : Dim_Array := (others => 0);
-      F            : Configuration.MMFLOAT := 0.0;
-      I64          : Long_Long_Integer := 0;
-      T_Arg        : Function_Type := T_NOTYPE;
-      Arg          : Unbounded_String;
-      Name         : Unbounded_String;
-      S            : Unbounded_String;   --  New variable name
-      Name_Length  : Natural := 0;
-      V_Type       : Function_Type := T_NA;
-      D_Num        : Integer := 0;
-      I_Free       : Natural := Var_Count;
-      Tmp          : Integer;
-      Index        : Positive := 1;
+      Routine_Name   : constant String := "M_Basic_Utilities.Find_Var ";
+      PP             : Positive;
+      Dim            : Dim_Array := (others => 0);
+      F              : Configuration.MMFLOAT := 0.0;
+      I64            : Long_Long_Integer := 0;
+      T_Arg          : Function_Type := T_NOTYPE;
+      Arg            : Unbounded_String;
+      Name           : Unbounded_String;
+      S              : Unbounded_String;   --  New variable name
+      Name_Length    : Natural := 0;
+      V_Type         : Function_Type := T_NA;
+      D_Num          : Integer := 0;
+      I_Free         : Natural := Var_Count;
+      Tmp            : Integer;
+      Index          : Positive := 1;
       Arg_Buff_Index :  Positive;
-      V_Index      : Natural := 0;
-      Var_I        : Natural := 0;
-      IP           : Positive := 1;
-      TP           : Positive := 1;
-      Done         : Boolean := False;
-      Result       : Var_Record;
+      V_Index        : Natural := 0;
+      Var_I          : Natural := 0;
+      IP             : Positive := 1;
+      TP             : Positive := 1;
+      Done           : Boolean := False;
+      Result         : Var_Record;
    begin
       --  Test_Stack_Overflow of pic32 stack
       Skip_Spaces (Expression, Pos);
@@ -461,18 +461,21 @@ package body Arguments is
             D_Num := -1;
 
          else
-            Get_Args (Expression, Pos, 2 * Configuration.MAXDIM, "(,");
-            Assert ((Unsigned_16 (Arg_C) and 1) /= 0, Routine_Name & "invalid dimensions.");
+            Arg_Data := Get_Args (Expression, Pos, 2 * Configuration.MAXDIM,
+                                  "(,");
+            Assert ((Unsigned_16 (Arg_Data.Arg_C) and 1) /= 0, Routine_Name &
+                      "invalid dimensions.");
          end if;
 
          --  MMBasic 1772
-         D_Num := Integer (Arg_C / 2) + 1;
+         D_Num := Arg_Data.Arg_C / 2 + 1;
          Assert (D_Num <= Configuration.MAXDIM, Routine_Name &
                    "invalid dimensions.");
          Index := 1;
-         while Index < Integer (Arg_C / 2) loop
-            Arg_Buff_Index := Positive (Element (Arg_V, Index));
-            Arg := To_Unbounded_String (Element (Arg_Buff, Arg_Buff_Index));
+         while Index < Arg_Data.Arg_C / 2 loop
+            Arg_Buff_Index := Element (Arg_Data.Arg_V, Index);
+            Arg := To_Unbounded_String
+              (Element (Arg_Data.Arg_Buffer, Arg_Buff_Index));
             Evaluation.Evaluate (Arg, F, I64, S, T_Arg, 0);
             if T_Arg = T_STR then
                --  Force later error
@@ -534,11 +537,12 @@ package body Arguments is
 
    end Find_Var;
 
-   procedure Get_Args (Expression   : Unbounded_String; Pos : Positive;
-                       Max_Num_Args : Natural; Delim : String) is
+   function Get_Args (Expression   : Unbounded_String; Pos : Positive;
+                      Max_Num_Args : Natural; Delim : String)
+                      return Arguments_Record is
    begin
       --  MMBasic.h 142
-      Make_Args (Expression, Pos, Max_Num_Args, Arg_Buff, Arg_V, Arg_C, Delim);
+      return Make_Args (Expression, Pos, Max_Num_Args, Delim);
 
    end Get_Args;
 
@@ -553,10 +557,9 @@ package body Arguments is
    --                   If the first char of that string is an opening bracket
    --                  '(' this function will expect the arg list to be
    --                   enclosed in brackets.
-   procedure  Make_Args
-     (Expression : Unbounded_String; Pos : Positive; Max_Args : Positive;
-      Arg_Buff   : out String_Buffer; Arg_V  : out Arg_Vector;
-      Arg_C      : out Natural; Delim : String) is
+   function Make_Args (Expression : Unbounded_String; Pos : Positive;
+                       Max_Args   : Positive; Delim : String)
+                       return Arguments_Record is
       use Interfaces;
       use Ada.Assertions;
       use Ada.Strings;
@@ -567,10 +570,10 @@ package body Arguments is
       Then_Token     : constant Natural := tokenTHEN;
       Else_Token     : constant Natural := tokenELSE;
       Arg_Buff_Index : Positive;
---        Op             : Positive := 1;  --  Character index into Arg_Buff
+      --        Op             : Positive := 1;  --  Character index into Arg_Buff
       Op_Ptr         : Integer := 1;
       String_1       : String (1 .. 1);
---        Token_String   : Unbounded_String;
+      --        Token_String   : Unbounded_String;
       TP             : Positive := Pos;
       TP2            : Natural := 0;
       X              : Positive;
@@ -585,6 +588,7 @@ package body Arguments is
       Delim_Pos      : Natural := 0;
       Delim_Found    : Boolean := False;
       Done           : Boolean := False;
+      Result         : Arguments_Record;
 
       procedure C1 is
          Routine_Name : constant String := "M_Basic_Utilities.Make_Args.C! ";
@@ -601,34 +605,28 @@ package body Arguments is
 
          --  MMBasic 2210
          if In_Arg then
-            Arg_Buff_Index := Last_Index (Arg_Buff);
-            Term := To_Unbounded_String (Last_Element (Arg_Buff));
+            Arg_Buff_Index := Last_Index (Result.Arg_Buffer);
+            Term := To_Unbounded_String (Last_Element (Result.Arg_Buffer));
             Trim (Term, Both);
-            Replace_Element (Arg_Buff, Arg_Buff_Index, To_String (Term));
---              while Op_Ptr - 1 > 1 and
---                Element (Op, Op_Ptr - 1) = ' ' loop
---                 Op_Ptr := Op_Ptr - 1;
---              end loop;
+            Replace_Element (Result.Arg_Buffer, Arg_Buff_Index, To_String (Term));
 
-         --  MMBasic 2216
-         elsif Arg_C > 0 then
+            --  MMBasic 2216
+         elsif Result.Arg_C > 0 then
             --  otherwise we have two delimiters in a row
             --  (except for the first argument).
             --  so, create a null argument to go between the two delimiters.
-            Arg_C := Arg_C + 1;
-            Arg_V.Append (Arg_C);
-            Arg_Buff_Index := Positive (Element (Arg_V, Arg_Buff_Index));
-            Replace_Element (Arg_Buff, Arg_Buff_Index, "");
-            --  ASCII.NU is C string terminator
-            --           Append (Op, ASCII.NUL);
-            Op_Ptr := Arg_Buff.First_Index;
+            Result.Arg_C := Result.Arg_C + 1;
+            Result.Arg_V.Append (Result.Arg_C);
+            Arg_Buff_Index := Positive (Element (Result.Arg_V, Arg_Buff_Index));
+            Replace_Element (Result.Arg_Buffer, Arg_Buff_Index, "");
+            Op_Ptr := Result.Arg_Buffer.First_Index;
          end if;
 
          --  MMBasic 2222
          In_Arg := False;
-         Assert (Integer (Arg_C) <= Max_Args, Routine_Name & "Too many arguments");
-         Append (Arg_V, Op_Ptr);
-         Arg_C := Arg_C +1;
+         Assert (Result.Arg_C <= Max_Args, Routine_Name & "Too many arguments");
+         Append (Result.Arg_V, Op_Ptr);
+         Result.Arg_C := Result.Arg_C +1;
          Op_Ptr := Op_Ptr + 1;
          TP := TP + 1;
 
@@ -636,7 +634,7 @@ package body Arguments is
 
    begin
       --  MMBasic 2163 Test_Stack_Overflow
-      Arg_C := 0;
+      Result.Arg_C := 0;
       Skip_Spaces (Expression, TP);
       if Delim = "(" then
          Assert (Element (Expression, TP) = '(', Routine_Name &
@@ -656,7 +654,7 @@ package body Arguments is
               (Slice (Expression, TP, Length (Expression)));
             --  MMBasic 2205 Delim is a string of special characters that split
             --  the expression into separate terms;
---              Put_Line (Routine_Name & "2205 Term: " & To_String (Term));
+            --              Put_Line (Routine_Name & "2205 Term: " & To_String (Term));
             Delim_Index := 0;
             Delim_Found := False;
             while not Delim_Found and then Delim_Index < Delim'Last loop
@@ -665,31 +663,31 @@ package body Arguments is
                Delim_Pos := Index (Term, String_1);
                Delim_Found := Delim_Pos > 0;
             end loop;
---              Put_Line (Routine_Name & "2206 Delim_Found: " &
---                          Boolean'Image (Delim_Found));
+            --              Put_Line (Routine_Name & "2206 Delim_Found: " &
+            --                          Boolean'Image (Delim_Found));
 
             --  MMBasic 2206 block moved to else  Delim_Found
             if not Delim_Found then
                --  MMBasic 2231  C1 E
                Token := Integer'Value (To_String (Expression));
---                 Put_Line (Routine_Name & "2231 Token: " & Integer'Image (Token));
+               --                 Put_Line (Routine_Name & "2231 Token: " & Integer'Image (Token));
                --  MMBasic 2234
                Expect_Cmd := Token = Then_Token or else Token = Else_Token;
---                 Put_Line (Routine_Name & "2234 Then_Token: " &
---                             Integer'Image (Then_Token));
---                 Put_Line (Routine_Name & "2234 Expect_Cmd: " &
---                             Boolean'Image (Expect_Cmd));
+               --                 Put_Line (Routine_Name & "2234 Then_Token: " &
+               --                             Integer'Image (Then_Token));
+               --                 Put_Line (Routine_Name & "2234 Expect_Cmd: " &
+               --                             Boolean'Image (Expect_Cmd));
 
                --  MMBasic 2244
                if not In_Arg then
                   --  C2 E
                   --  MMBasic 2237 moved to else
                   --  MMBasic 2244 Not a special char so start a new argument
-                  Assert (Integer (Arg_C) < Max_Args, Routine_Name &
+                  Assert (Integer (Result.Arg_C) < Max_Args, Routine_Name &
                             "2246 Too many arguments");
                   --  Arg_C is a pointer into Argbuff, yet to be loaded
-                  Arg_C := Arg_C + 1;
-                  Append (Arg_V, Arg_C);
+                  Result.Arg_C := Result.Arg_C + 1;
+                  Append (Result.Arg_V, Result.Arg_C);
                   In_Arg := True;
 
                   --  MMBasic 2252 If an opening bracket '(', copy everything
@@ -698,14 +696,14 @@ package body Arguments is
                   --  keeps track of any nested brackets.
                   String_1 (1) := Element (Expression, TP);
                   T_Token := Token_Type (Integer'Value (String_1));
---                    Put_Line (Routine_Name & "T_Token: " &
---                                Unsigned_16'Image (T_Token));
+                  --                    Put_Line (Routine_Name & "T_Token: " &
+                  --                                Unsigned_16'Image (T_Token));
                   if String_1 = "(" or else ((T_Token and T_FUN) = T_FUN
-                                          and then (not Expect_Cmd)) then
+                                             and then (not Expect_Cmd)) then
                      --  MMBasic 2255 C3
                      X := M_Basic_Utilities.Get_Close_Bracket (Expression, TP);
                      X := X - TP + 1;
-                     Append (Arg_Buff, Slice (Expression, TP, X));
+                     Append (Result.Arg_Buffer, Slice (Expression, TP, X));
                      Op_Ptr := Op_Ptr + X;
                      TP := TP + X;
 
@@ -714,14 +712,14 @@ package body Arguments is
                      TP2 := Index (Source  => Expression,
                                    Pattern => """",
                                    From    => TP + 1);
-                        Assert (TP2 > 0, Routine_Name &
-                                  "syntax error, no closing "".");
-                     Append (Arg_Buffer, Slice (Expression, TP, TP2));
+                     Assert (TP2 > 0, Routine_Name &
+                               "syntax error, no closing "".");
+                     Append (Result.Arg_Buffer, Slice (Expression, TP, TP2));
                      TP := TP2 + 1;
 
                   else  --  anything else
                      --  MMBasic 2281
-                     Append (Arg_Buffer, To_String (Expression));
+                     Append (Result.Arg_Buffer, To_String (Expression));
                      TP := Length (Expression) + 1;
                      Expect_Cmd := False;
                   end if;  --  if aChar /= '('
@@ -744,10 +742,12 @@ package body Arguments is
       if Expect_Bracket and then Element (Expression, TP) /= ')' then
          Assert (False, Routine_Name & "syntax error, bracket expected.");
       end if;
---        Trim (Arg_Buff, Right);
+      --        Trim (Arg_Buff, Right);
 
       Put_Line (Routine_Name & "done, Arg_Buffer: ");
-      Support.Print_Buffer (Arg_Buffer);
+      Support.Print_Buffer (Result.Arg_Buffer);
+
+      return Result;
 
    end Make_Args;
 

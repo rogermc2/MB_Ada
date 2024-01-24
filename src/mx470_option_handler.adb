@@ -261,9 +261,9 @@ package body MX470_Option_Handler is
       use Evaluation;
       use String_Buffer_Package;
       --        TP    : constant Natural := Check_String (Command_Line, "RTC");
-      Arg   : Unbounded_String;
-      --        Found : constant Boolean := TP > 0;
-      Found : constant Boolean :=
+      Arg_Data : Arguments_Record;
+      Arg      : Unbounded_String;
+      Found    : constant Boolean :=
         Check_String (Element (Command_Line, 1), "RTC");
    begin
       --        Put_Line ("Do_RTC");
@@ -273,13 +273,16 @@ package body MX470_Option_Handler is
             Flash.Option.RTC_Clock := 0;
             Flash.Option.RTC_Data := 0;
          else
-            Get_Args (To_Unbounded_String (Element (Command_Line, 2)), 1, 3 , ",");
-            if Integer (Arg_C) = 3 then
-               Arg := To_Unbounded_String (Arg_Buffer (Arg_V (1)));
+            Arg_Data :=
+              Get_Args (To_Unbounded_String (Element (Command_Line, 2)), 1, 3 , ",");
+            if Arg_Data.Arg_C = 3 then
+               Arg :=
+                 To_Unbounded_String (Arg_Data.Arg_Buffer (Arg_Data.Arg_V (1)));
                Flash.Option.RTC_Data := Integer (Get_Integer (Arg));
                External.Check_Pin
                  (Flash.Option.RTC_Data, Commands.Option_Error_Check);
-               Arg := To_Unbounded_String (Arg_Buffer (Arg_V (3)));
+               Arg :=
+                 To_Unbounded_String (Arg_Data.Arg_Buffer (Arg_Data.Arg_V (3)));
                Flash.Option.RTC_Clock := Integer (Get_Integer (Arg));
                External.Check_Pin
                  (Flash.Option.RTC_Data, Commands.Option_Error_Check);

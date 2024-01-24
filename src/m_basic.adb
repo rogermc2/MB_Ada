@@ -50,8 +50,8 @@ package body M_Basic is
                             return Boolean;
    --     function Is_Command_End (Command : Unbounded_String; Pos : in out Positive)
    --                              return Boolean;
---     procedure Skip_Element (aLine : String_Buffer; Pos : in out Positive) ;
---     procedure Skip_Element (aLine : Unbounded_String; Pos : in out Positive);
+   --     procedure Skip_Element (aLine : String_Buffer; Pos : in out Positive) ;
+   --     procedure Skip_Element (aLine : Unbounded_String; Pos : in out Positive);
    procedure User_Defined_Subfunction
      (Command      : Unbounded_String; TP : Positive;
       Sub_Line_Ptr : Subfunction_Ptr);
@@ -150,8 +150,9 @@ package body M_Basic is
       --          Trim (Global.Command_Line, Left);
       Fun_Type         : constant Function_Type :=
         Var_Table (Var_Index).Var_Type;
+      Arg_Data         : Arguments_Record;
       TP               : constant Arguments.Var_Record := Arguments.Find_Var
-        (Fun_Name, Pos, Fun_Type or Global.V_FUNCT);
+        (Fun_Name, Pos, Arg_Data, Fun_Type or Global.V_FUNCT);
       TTP              : Positive;
    begin
       --  766
@@ -161,7 +162,7 @@ package body M_Basic is
 
       Var_Table (Var_Index).Var_Type := Var_Table (Var_Index).Var_Type or T_PTR;
       --  Point to the function's body
---        Skip_Element (Command, Pos);
+      --        Skip_Element (Command, Pos);
       TTP := Next_Statement;
       --  780
       Put_Line (Routine_Name & "780");
@@ -399,7 +400,7 @@ package body M_Basic is
          --  Exit from the subfunction is via cmd_return which will decrement
          --  LocalIndex.
          if not Is_Fun then
---              Skip_Element (Sub_Line_Ptr.all, SL_Pos);
+            --              Skip_Element (Sub_Line_Ptr.all, SL_Pos);
             Next_Statement := SL_Pos;
          else
             Defined_Function (Command, Fun_Name, SL_Pos, Fa, I64a, Sa,
@@ -434,7 +435,7 @@ package body M_Basic is
    --  program.
 
    procedure Execute_Command
-     (Token_Buffer     : String_Buffer; Program_Ptr : in out Positive;
+     (Token_Buffer     : String_Buffer; Program_Ptr : Positive;
       Save_Local_Index : in out Natural) is
       use Interfaces;
       use Ada.Assertions;
@@ -474,7 +475,7 @@ package body M_Basic is
          Skip_Spaces (Command, Command_Pos);
          --  228
          if Element (Command, Command_Pos) /= ''' then
---              Skip_Element (Token_Buffer, Program_Ptr);
+            --              Skip_Element (Token_Buffer, Program_Ptr);
             Put_Line (Routine_Name & "236 Element skipped Program_Ptr: " &
                         Integer'Image (Program_Ptr));
             --  236 if setjmp (ErrNext) = 0 then
@@ -1053,26 +1054,26 @@ package body M_Basic is
    end Save_Program_To_Flash;
 
    --  Skip_Element skips to the the zero (null) char that preceeds an element
---     procedure Skip_Element (aLine : String_Buffer; Pos : in out Positive) is
---        use String_Buffer_Package;
---        Item     : Unbounded_String := To_Unbounded_String (aLine (Pos));
---     begin
---        while Pos < Integer (aLine.Length) and then
---          Element (Item, 1) /= ASCII.NUL loop
---           Item := To_Unbounded_String (aLine (Pos));
---           Pos := Pos + 1;
---        end loop;
---
---     end Skip_Element;
---
---     procedure Skip_Element (aLine : Unbounded_String; Pos : in out Positive) is
---     begin
---        while Pos < Length (aLine) and then
---          Element (aLine, Pos) /= ASCII.NUL loop
---           Pos := Pos + 1;
---        end loop;
---
---     end Skip_Element;
+   --     procedure Skip_Element (aLine : String_Buffer; Pos : in out Positive) is
+   --        use String_Buffer_Package;
+   --        Item     : Unbounded_String := To_Unbounded_String (aLine (Pos));
+   --     begin
+   --        while Pos < Integer (aLine.Length) and then
+   --          Element (Item, 1) /= ASCII.NUL loop
+   --           Item := To_Unbounded_String (aLine (Pos));
+   --           Pos := Pos + 1;
+   --        end loop;
+   --
+   --     end Skip_Element;
+   --
+   --     procedure Skip_Element (aLine : Unbounded_String; Pos : in out Positive) is
+   --     begin
+   --        while Pos < Length (aLine) and then
+   --          Element (aLine, Pos) /= ASCII.NUL loop
+   --           Pos := Pos + 1;
+   --        end loop;
+   --
+   --     end Skip_Element;
 
    --  2413 Skip_Var skips to the end of a variable
    function Skip_Var (Var : String; Pos : Positive) return Positive is
@@ -1199,6 +1200,8 @@ package body M_Basic is
       use Global;
       use String_Buffer_Package;
       Routine_Name : constant String := "M_Basic.User_Defined_Subfunction ";
+      Arg_Data1    : Arguments_Record;
+      Arg_Data2    : Arguments_Record;
       Arg_C1       : Natural := 0;
       Arg_C2       : Natural := 0;
       Arg_Buff1    : String_Buffer;  --  indec type: Positive
@@ -1226,8 +1229,11 @@ package body M_Basic is
          else
             Delim := To_Unbounded_String (",");
          end if;
-         Make_Args (Command, TP, Configuration.MAX_ARG_COUNT, Arg_Buff1,
-                    Arg_V1, Arg_C1, To_String (Delim));
+         Arg_Data1 := Make_Args (Command, TP, Configuration.MAX_ARG_COUNT,
+                                 To_String (Delim));
+         Arg_C1 := Arg_Data1.Arg_C;
+         Arg_V1 := Arg_Data1.Arg_V;
+         Arg_Buff1 := Arg_Data1.Arg_Buffer;
       end if;
 
       Current_Line_Ptr := Sub_Line_Ptr;
@@ -1238,13 +1244,18 @@ package body M_Basic is
          else
             Delim := To_Unbounded_String (",");
          end if;
-         Make_Args (Command, TP, Configuration.MAX_ARG_COUNT, Arg_Buff2,
-                    Arg_V2, Arg_C2, To_String (Delim));
-         Assert (Arg_C2 = 0 or else
-                   (Unsigned_16 (Arg_C2) and 1) /= 0, Routine_Name &
-                   "invalid argument list, Arg_C2: " & Integer'Image (Arg_C2));
+         Arg_Data2 := Make_Args (Command, TP, Configuration.MAX_ARG_COUNT,
+                                 To_String (Delim));
+         Arg_C2 := Arg_Data2.Arg_C;
+         Arg_V2 := Arg_Data2.Arg_V;
+         Arg_Buff2 := Arg_Data2.Arg_Buffer;
+
+         Assert (Arg_C2 = 0 or else (Unsigned_16 (Arg_C2) and 1) /= 0,
+                 Routine_Name & "invalid argument list, Arg_C2: " &
+                   Integer'Image (Arg_C2));
          Current_Line_Ptr := Callers_Line_Ptr;
-         Assert (Arg_C2 <= Arg_C1 and then (Unsigned_16 (Arg_C1) and (Unsigned_16 (Arg_C1) and 1)) /= 0,
+         Assert (Arg_C2 <= Arg_C1 and then
+                   (Unsigned_16 (Arg_C1) and (Unsigned_16 (Arg_C1) and 1)) /= 0,
                  Routine_Name & "invalid argument list, Arg_C1: " &
                    Integer'Image (Arg_C1) & ", Arg_C2: " &
                    Integer'Image (Arg_C2));
@@ -1261,8 +1272,7 @@ package body M_Basic is
          while Index_C < Arg_C2 loop
             C1 := Positive (Index_C + 1);
             if Index_C < Arg_C1 and then
-              Element (Arg_Buff1, Arg_V1 (C1)) /=
-                Integer'Image (0) then
+              Element (Arg_Buff1, Arg_V1 (C1)) /= Integer'Image (0) then
                if (C1 < Integer (Arg_C1) and then
                    Is_Name_Start  (Arg_Buff1 (Arg_V1 (C1))(1))) and then
                  (Skip_Var (Arg_Buff1 (Arg_V1 (C1)), Integer (Index_C)) = 1) then
@@ -1271,8 +1281,9 @@ package body M_Basic is
                     Index (To_Unbounded_String (Arg_V1 (C1)), "(") > 0 then
                      --  618
                      Var_Index := 1;
-                     Var.S := Find_Var (To_Unbounded_String (Arg_V1 (C1)),
-                                        Var_Index, V_FIND or V_EMPTY_OK).S;
+                     Var.S := Find_Var
+                       (To_Unbounded_String (Arg_Buff1 (Arg_V1 (C1))),
+                        Var_Index, Arg_Data1, V_FIND or V_EMPTY_OK).S;
                      Var := Var_Table (Var_Index);
                      if (Var.Var_Type and T_CONST) = T_CONST then
                         Var.Var_Type := T_NOTYPE;
@@ -1310,9 +1321,9 @@ package body M_Basic is
 
          Index_C := 0;
          while Index_C < Arg_C2 loop
-            C1 := Integer (Index_C + 1);
+            C1 := Index_C + 1;
             Arg_Type := T_NOTYPE;
-            Pos := Skip_Var (Arg_Buff2 (Arg_V1 (C1)), Pos);
+            Pos := Skip_Var (Arg_Buff2 (Arg_V2 (C1)), Pos);
             Skip_Spaces (Command, Pos);
             Index_C := Index_C + 2;
 
@@ -1330,8 +1341,12 @@ package body M_Basic is
             --  664
             Arg_Type :=
               Arg_Type or V_FIND or V_DIM_VAR or V_LOCAL or V_EMPTY_OK;
-            Var := Arguments.Find_Var (To_Unbounded_String (Arg_V2 (C1)),
-                                       Pos, Arg_Type);
+            Arg_Data2.Arg_C := Arg_C2;
+            Arg_Data2.Arg_V := Arg_V2;
+            Arg_Data2.Arg_Buffer := Arg_Buff2;
+            Var := Arguments.Find_Var
+              (To_Unbounded_String (Arg_Buff2 (Arg_V2 (C1))), Pos, Arg_Data2,
+               Arg_Type);
             Assert (Var_Table (Var_Index).Dims (1) > 0, Routine_Name &
                       "Invalid argument list.");
             Current_Line_Ptr := Callers_Line_Ptr;
