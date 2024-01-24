@@ -22,6 +22,7 @@ with Watchdog_Timer;
 package body Support is
 
    Saved_Cause  : Setup_Exception := Cause_Nothing;
+   Watchdog_Set : Boolean := False;
 
    procedure Buffer_Append (Buffer : in out String_Buffer; Item : String) is
       use String_Buffer_Package;
@@ -53,7 +54,7 @@ package body Support is
 
    procedure Clear_Buffer (Buffer : in out String_Buffer) is
       use String_Buffer_Package;
-      begin
+   begin
       Buffer := Empty_Vector;
 
    end Clear_Buffer;
@@ -103,7 +104,7 @@ package body Support is
 
    procedure Process_Commands is
       use M_Basic.Conversion;
---        Routine_Name : constant String := "Support.Process_Commands";
+      --        Routine_Name : constant String := "Support.Process_Commands";
    begin
       if Flash.Option.DISPLAY_CONSOLE then
          Draw.Set_Font (Global.Prompt_Font);
@@ -115,8 +116,8 @@ package body Support is
          end if;
       end if;
 
---        Put_Line (Routine_Name & "Current_Line_Ptr: " &
---                    Integer'Image (M_Basic.Current_Line_Ptr));
+      --        Put_Line (Routine_Name & "Current_Line_Ptr: " &
+      --                    Integer'Image (M_Basic.Current_Line_Ptr));
 
       if M_Basic.Current_Line_Ptr /= null then
          Audio.Close_Audio;
@@ -147,8 +148,34 @@ package body Support is
    end Process_Commands;
 
    procedure Restart is
+      use Flash;
    begin
-      null;
+      if Except_Code = RESET_COMMAND or else
+        Except_Code = RESTART_NO_AUTORUN or else
+        Except_Code = RESTART_DO_AUTORUN then
+         if Except_Code = WATCHDOG_TIMEOUT then
+            Watchdog_Set := True;
+            New_Line;
+            Put_Line ("Watchdog timeout!");
+         elsif Except_Code /= PIN_RESTART and then
+           Except_Cause /= Cause_Nothing and then
+           Except_Cause = Cause_MM_Startup then
+            New_Line;
+            Put_Line ("Error in MM_Startup!");
+         else
+            New_Line;
+            Put ("Option error - Cleared OPTION ");
+            case Except_Cause is
+            when Cause_Display =>
+               Put_Line ("LCD PANEL");
+               Option.Display_Type := 0;
+            when Cause_File_IO =>
+               Put_Line ("SDCARD");
+               Option.SDCARD_CS := 0;
+            when others => null;
+            end case;
+         end if;
+      end if;
    end Restart;
 
    procedure Setup is
