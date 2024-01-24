@@ -10,7 +10,7 @@ with Arguments;
 with Evaluation;
 --  with External;
 with Flash;
-with Support;
+--  with Support;
 
 package body File_IO is
 
@@ -31,11 +31,11 @@ package body File_IO is
       Put_Line (Routine_Name & "Arg_String: " & To_String (Arg_String));
       Get_Args (Arg_String, 1, 5, ",");
       Assert (Arg_V.Length > 0, Routine_Name & "Arg_V is empty");
-      Put_Line (Routine_Name & "Arg_C: " & Integer'Image (Arg_C));
-      Put_Line (Routine_Name & "Arg_Buffer: ");
-      Support.Print_Buffer (Arg_Buffer);
+--        Put_Line (Routine_Name & "Arg_C: " & Integer'Image (Arg_C));
+--        Put_Line (Routine_Name & "Arg_Buffer: ");
+--        Support.Print_Buffer (Arg_Buffer);
       Arg := To_Unbounded_String (Arg_Buffer (Arg_V (1)));
---        Arg_Val := Integer (Get_Integer (Arg));
+      Arg_Val := Integer'Value (Arg_Buffer (Arg_V (1)));
       Put_Line (Routine_Name & "Arg_Val: " & Integer'Image (Arg_Val));
       Assert (Integer (Arg_C) > 0 and then Integer (Arg_C) <= 5,
               Routine_Name & "invalid number of arguments:" &

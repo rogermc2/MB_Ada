@@ -1,8 +1,11 @@
 
+with Interfaces;
+
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Ada.Text_IO; use Ada.Text_IO;
 
 with Arguments;
+with C_Functions;
 with Commands;
 with Command_And_Token_Tables; use Command_And_Token_Tables;
 with Console;
@@ -18,6 +21,8 @@ with M_Misc;
 with Support;
 
 package body MX470_Option_Handler is
+
+   UIOTGSTAT : Interfaces.Unsigned_16 :=0;
 
    procedure Save_And_Reset;
 
@@ -347,12 +352,20 @@ package body MX470_Option_Handler is
    end Other_Options;
 
    procedure Save_And_Reset is
+      use Interfaces;
       use M_Basic.Conversion;
+      use Support;
       Routine_Name : constant String := "MX470_Option_Handler.Save_And_Reset ";
    begin
       if Current_Line_Ptr = null and then Flash.Save_Options then
          delay (0.2);
-         Put_Line (Routine_Name & "Restart the Micromite");
+         if (UIOTGSTAT and 1) > 0 then
+         Put_Line (Routine_Name);
+            Put_Line ("Please restart the Micromite");
+         else
+            Except_Code := RESTART_NO_AUTORUN;
+            C_Functions.Soft_Reset;
+         end if;
       end if;
 
    end Save_And_Reset;

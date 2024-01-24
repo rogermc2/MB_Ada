@@ -42,4 +42,10 @@ package body C_Functions is
 
    end Check_Abort;
 
+   procedure Soft_Reset is
+   begin
+      null;
+
+   end Soft_Reset;
+
 end C_Functions;

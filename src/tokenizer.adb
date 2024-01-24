@@ -105,17 +105,16 @@ package body Tokenizer is
             Put_Line (Routine_Name & '"');
             Process_Double_Quote (Token_Buffer, Ptr);
          elsif aChar = ''' then
-            --  MMBasic 862  copy anything after a comment
+            --  MMBasic 892  copy anything after a comment
             Put_Line (Routine_Name & "'");
             Process_Quote (Token_Buffer, Ptr);
          elsif aChar = ':' then
-            --  MMBasic 871
+            --  MMBasic 904
             Put_Line (Routine_Name & ':');
             Process_Colon (Token_Buffer, Ptr);
             First_Nonwhite := True;
          elsif Is_Digit (aChar) or aChar = '.' then
-            --  MMBasic 887
-            --  not white space or string or comment so try a number
+            --  MMBasic 921 not white space or string or comment so try number.
             Try_Number (Token_Buffer, Ptr);
             First_Nonwhite := False;
          elsif First_Nonwhite then
@@ -166,7 +165,7 @@ package body Tokenizer is
 
    end Parse_Line;
 
-   --  Tokenize:
+   --  MMBasic 811 Tokenize:
    --  takes an input string in inpbuf[] and copy it to tknbuf[] and:
    --  converts the line number to a binary number
    --  converts a label to the token format
@@ -182,7 +181,7 @@ package body Tokenizer is
       aChar          : Character;
       In_Ptr         : Positive := 1;  --  tp
    begin
-      --  MMBasic 786 make sure that only printable characters are in the line
+      --  MMBasic 819 make sure that only printable characters are in the line
       for index in 1 .. Input_Buffer_Length loop
          aChar := Get_Input_Character (index);
          if Character'Pos (aChar) < 32 or Character'Pos (aChar) > 127 then
@@ -191,7 +190,7 @@ package body Tokenizer is
       end loop;
 
       Support.Clear_Buffer (Token_Buffer);
-      --  MMBasic 798
+      --  MMBasic 831
       if not From_Console then
          Buffer_Append (Token_Buffer, Integer'Image (Global.T_NEWLINE));
       end if;
@@ -204,7 +203,7 @@ package body Tokenizer is
       --  841 Process the rest of the line
       if Input_Buffer_Length > In_Ptr then
          Parse_Line (Token_Buffer, In_Ptr);
-         Put_Line (Routine_Name & "PARSED LINE:");
+         Put_Line (Routine_Name & "841 PARSED LINE:");
          Print_Buffer (Token_Buffer);
       end if;
 

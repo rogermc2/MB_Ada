@@ -50,8 +50,8 @@ package body M_Basic is
                             return Boolean;
    --     function Is_Command_End (Command : Unbounded_String; Pos : in out Positive)
    --                              return Boolean;
-   procedure Skip_Element (aLine : String_Buffer; Pos : in out Positive) ;
-   procedure Skip_Element (aLine : Unbounded_String; Pos : in out Positive);
+--     procedure Skip_Element (aLine : String_Buffer; Pos : in out Positive) ;
+--     procedure Skip_Element (aLine : Unbounded_String; Pos : in out Positive);
    procedure User_Defined_Subfunction
      (Command      : Unbounded_String; TP : Positive;
       Sub_Line_Ptr : Subfunction_Ptr);
@@ -63,7 +63,7 @@ package body M_Basic is
    --  (space, null, comma, opening bracket or comment).
    --  Check_String returns a pointer to the next non space character
    --  after the matched string if found or 0 otherwise.
---     function Check_String (aString, Token : String) return Natural is
+   --     function Check_String (aString, Token : String) return Natural is
    function Check_String (aString, Token : String) return Boolean is
       use Ada.Characters.Handling;
       use Ada.Strings;
@@ -71,28 +71,28 @@ package body M_Basic is
       U_Token          : constant String := To_Upper (Token);
       U_String         : constant String :=
         To_Upper (To_String (Trim (To_Unbounded_String (aString), Left)));
---        S_Pos            : Positive := 1;
---        T_Pos            : Positive := 1;
---        Result           : Natural  := 0;
+      --        S_Pos            : Positive := 1;
+      --        T_Pos            : Positive := 1;
+      --        Result           : Natural  := 0;
    begin
       --  MMBasic 2704
---        Skip_Spaces (aString, S_Pos);
---        Put_Line (Routine_Name & "aString: " & aString);
---        while T_Pos <= Token'Length and then S_Pos <= aString'Length
---          and then To_Upper (Token (T_Pos)) = To_Upper (aString (S_Pos))
---        loop
---           S_Pos := S_Pos + 1;
---           T_Pos := T_Pos + 1;
---        end loop;
---
---        if T_Pos = Token'Length + 1 and then S_Pos <= aString'Length then
---           if aString (S_Pos) = ' ' or else aString (S_Pos) = '''
---             or else aString (S_Pos) = '\' or else aString (S_Pos) = '('
---           then
---              Skip_Spaces (aString, S_Pos);
---              Result := S_Pos;
---           end if;
---        end if;
+      --        Skip_Spaces (aString, S_Pos);
+      --        Put_Line (Routine_Name & "aString: " & aString);
+      --        while T_Pos <= Token'Length and then S_Pos <= aString'Length
+      --          and then To_Upper (Token (T_Pos)) = To_Upper (aString (S_Pos))
+      --        loop
+      --           S_Pos := S_Pos + 1;
+      --           T_Pos := T_Pos + 1;
+      --        end loop;
+      --
+      --        if T_Pos = Token'Length + 1 and then S_Pos <= aString'Length then
+      --           if aString (S_Pos) = ' ' or else aString (S_Pos) = '''
+      --             or else aString (S_Pos) = '\' or else aString (S_Pos) = '('
+      --           then
+      --              Skip_Spaces (aString, S_Pos);
+      --              Result := S_Pos;
+      --           end if;
+      --        end if;
 
       return U_String = U_Token;
 
@@ -147,7 +147,7 @@ package body M_Basic is
       Routine_Name     : constant String  := "M_Basic.Defined_Function ";
       S                : constant Unbounded_String :=
         Trim (To_UB_String (Global.Command_Line), Left);
---          Trim (Global.Command_Line, Left);
+      --          Trim (Global.Command_Line, Left);
       Fun_Type         : constant Function_Type :=
         Var_Table (Var_Index).Var_Type;
       TP               : constant Arguments.Var_Record := Arguments.Find_Var
@@ -161,7 +161,7 @@ package body M_Basic is
 
       Var_Table (Var_Index).Var_Type := Var_Table (Var_Index).Var_Type or T_PTR;
       --  Point to the function's body
-      Skip_Element (Command, Pos);
+--        Skip_Element (Command, Pos);
       TTP := Next_Statement;
       --  780
       Put_Line (Routine_Name & "780");
@@ -399,7 +399,7 @@ package body M_Basic is
          --  Exit from the subfunction is via cmd_return which will decrement
          --  LocalIndex.
          if not Is_Fun then
-            Skip_Element (Sub_Line_Ptr.all, SL_Pos);
+--              Skip_Element (Sub_Line_Ptr.all, SL_Pos);
             Next_Statement := SL_Pos;
          else
             Defined_Function (Command, Fun_Name, SL_Pos, Fa, I64a, Sa,
@@ -434,7 +434,7 @@ package body M_Basic is
    --  program.
 
    procedure Execute_Command
-      (Token_Buffer     : String_Buffer; Program_Ptr : in out Positive;
+     (Token_Buffer     : String_Buffer; Program_Ptr : in out Positive;
       Save_Local_Index : in out Natural) is
       use Interfaces;
       use Ada.Assertions;
@@ -457,7 +457,7 @@ package body M_Basic is
       --  225
       Next_Statement := Program_Ptr;
       Put_Line (Routine_Name & "225 Command: " & To_String (Command));
---        Global.Command_Line := Delete (Token_Buffer, 1, 1);
+      --        Global.Command_Line := Delete (Token_Buffer, 1, 1);
       Global.Command_Line := Token_Buffer;
       Global.Command_Line.Delete_First;
 
@@ -468,10 +468,15 @@ package body M_Basic is
       if Done then
          Put_Line (Routine_Name & "No more token buffer elements");
       else
+         Put_Line (Routine_Name & "226 Program_Ptr: " &
+                     Integer'Image (Program_Ptr));
          --  ignore comment line if character is '.
          Skip_Spaces (Command, Command_Pos);
-          if Element (Command, Command_Pos) /= ''' then
-            Skip_Element (Token_Buffer, Program_Ptr);
+         --  228
+         if Element (Command, Command_Pos) /= ''' then
+--              Skip_Element (Token_Buffer, Program_Ptr);
+            Put_Line (Routine_Name & "236 Element skipped Program_Ptr: " &
+                        Integer'Image (Program_Ptr));
             --  236 if setjmp (ErrNext) = 0 then
             Save_Local_Index := Local_Index;
             --  C_Base_Token is the base of the token numbers.
@@ -497,6 +502,8 @@ package body M_Basic is
                     Unsigned_16'Image (Command_Token) &
                     ", Command_Table index: " &
                     Unsigned_16'Image (Command_Token - M_Misc.C_Base_Token));
+               Put_Line (Routine_Name & "247 Program_Ptr: " &
+                           Integer'Image (Program_Ptr));
                Command_Ptr := Command_Table
                  (Integer (Command_Token - M_Misc.C_Base_Token)).Function_Ptr;
                Assert
@@ -554,7 +561,7 @@ package body M_Basic is
          while not Done and then
          --             Program_Ptr < Integer (Length (Token_Buffer)) loop
            Program_Ptr < Integer (Token_Buffer.Length) loop
-            Put_Line (Routine_Name & "Program_Ptr: " &
+            Put_Line (Routine_Name & "194 Program_Ptr: " &
                         Integer'Image (Program_Ptr));
             Item := To_Unbounded_String (Token_Buffer (Program_Ptr));
             Item_Ptr := 1;
@@ -582,19 +589,19 @@ package body M_Basic is
                        (Integer'Image (T_LABEL)), Left), 1) then
                --  skip over the label
                Item_Ptr := Item_Ptr +
-                   Character'Pos (Element (Item, Item_Ptr)) + 2;
+                 Character'Pos (Element (Item, Item_Ptr)) + 2;
                Skip_Spaces (Item, Item_Ptr);
             end if;
 
             --  225
             if Program_Ptr <= Positive (Token_Buffer.Length) then
                Put_Line (Routine_Name & "225 Execute_Command, Program_Ptr: " &
-                        Integer'Image (Program_Ptr));
+                           Integer'Image (Program_Ptr));
                Execute_Command (Token_Buffer, Program_Ptr, Save_Local_Index);
             end if;
 
             --  279
-             Done := Is_Command_End (Token_Buffer, Program_Ptr);
+            Done := Is_Command_End (Token_Buffer, Program_Ptr);
             if not Done then
                Program_Ptr := Program_Ptr + 1;
             end if;
@@ -797,13 +804,15 @@ package body M_Basic is
 
    function Is_Command_End (Command : String_Buffer; Pos : Positive)
                             return Boolean is
-      --        Routine_Name : constant String := "M_Basic.Is_Command_End ";
+      Routine_Name : constant String := "M_Basic.Is_Command_End ";
       use String_Buffer_Package;
-      Item : constant String := Command (Pos);
-      Done : constant Boolean := Item (Pos .. Pos + 1) = "00" or else
-        Item (Pos .. Pos + 1) = "ff";
+      Item         : constant String := Command (Pos);
+      Done         : Boolean;
    begin
-
+      Put_Line (Routine_Name & "Item " & Item);
+      Put_Line (Routine_Name & "Pos " & Integer'Image (Pos));
+      Done := Item (Pos .. Pos + 1) = "00" or else
+        Item (Pos .. Pos + 1) = "ff";
       return Done;
 
    end Is_Command_End;
@@ -1043,26 +1052,28 @@ package body M_Basic is
       null;
    end Save_Program_To_Flash;
 
-   --  Skip_Element skips to the the zero char that preceeds an element
-   procedure Skip_Element (aLine : String_Buffer; Pos : in out Positive) is
-      use String_Buffer_Package;
-      Item     : Unbounded_String := To_Unbounded_String (aLine (Pos));
-   begin
---        while Pos < Length (aLine) and then Element (aLine, Pos) /= '0' loop
-      while Pos < Integer (aLine.Length) and then Element (Item, 1) /= '0' loop
-         Item := To_Unbounded_String (aLine (Pos));
-         Pos := Pos + 1;
-      end loop;
+   --  Skip_Element skips to the the zero (null) char that preceeds an element
+--     procedure Skip_Element (aLine : String_Buffer; Pos : in out Positive) is
+--        use String_Buffer_Package;
+--        Item     : Unbounded_String := To_Unbounded_String (aLine (Pos));
+--     begin
+--        while Pos < Integer (aLine.Length) and then
+--          Element (Item, 1) /= ASCII.NUL loop
+--           Item := To_Unbounded_String (aLine (Pos));
+--           Pos := Pos + 1;
+--        end loop;
+--
+--     end Skip_Element;
+--
+--     procedure Skip_Element (aLine : Unbounded_String; Pos : in out Positive) is
+--     begin
+--        while Pos < Length (aLine) and then
+--          Element (aLine, Pos) /= ASCII.NUL loop
+--           Pos := Pos + 1;
+--        end loop;
+--
+--     end Skip_Element;
 
-   end Skip_Element;
-
-   procedure Skip_Element (aLine : Unbounded_String; Pos : in out Positive) is
-   begin
-      while Pos < Length (aLine) and then Element (aLine, Pos) /= '0' loop
-         Pos := Pos + 1;
-      end loop;
-
-   end Skip_Element;
    --  2413 Skip_Var skips to the end of a variable
    function Skip_Var (Var : String; Pos : Positive) return Positive is
       use Interfaces;

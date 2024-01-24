@@ -21,7 +21,7 @@ package C_Functions is
      (Sub_Line_Ptr    : Subfunction_Ptr; Name_Ptr, Pos : Positive;
       Callers_Line_Ptr: Subfunction_Ptr)
       return Unbounded_String;
-
    procedure Check_Abort;
+   procedure Soft_Reset;
 
 end C_Functions;
