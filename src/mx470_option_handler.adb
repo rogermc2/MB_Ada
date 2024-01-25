@@ -368,6 +368,8 @@ package body MX470_Option_Handler is
          else
             Except_Code := RESTART_NO_AUTORUN;
             C_Functions.Soft_Reset;
+            Put_Line ("Restart");
+            Support.Restart;
          end if;
       end if;
 

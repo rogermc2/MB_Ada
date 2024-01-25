@@ -34,9 +34,6 @@ procedure Main is
    use String_Buffer_Package;
    use M_Basic_Utilities;
    Program_Name    : constant String := "Main ";
-   Startup_Token   : constant String := "MM.Startup";
-   Token_Buffer    : String_Buffer;
-   Watchdog_Set    : Boolean := False;
    Basic_Running   : Boolean := True;
    Error_In_Prompt : Boolean := False;
 begin
@@ -52,56 +49,7 @@ begin
       --        end if;
    end if;
 
-   Setup;
-
-   --  298
-   if Except_Cause /= Cause_MM_Startup then
-      M_Basic.Clear_Program;
-      M_Basic.Prepare_Program (True);
-
-      Except_Cause := Cause_MM_Startup;
-      Clear_Buffer (Token_Buffer);
-      Buffer_Append (Token_Buffer, Startup_Token);
-
-      --  311
-      if M_Basic.Find_Subfunction (Startup_Token, T_NOTYPE) /= 0 then
-            Buffer_Append (Token_Buffer, Startup_Token);
-         M_Basic.Execute_Program (Token_Buffer);
-      else
-         Put_Line (Program_Name &
-                     "Startup_Token not found,Token_Buffer_Length: " &
-                     Integer'Image (Buffer_Length (Token_Buffer)));
-         Put_Line (Program_Name & "Token_Buffer (1): " &
-                     Buffer_Item (Token_Buffer, 1));
-      end if;
-   end if;
-
-   --  Autorun code
-
-   Except_Cause := Cause_Nothing;
-   loop
-      Process_Commands;
-
-      if not Global.Error_In_Prompt and M_Basic.Find_Subfunction
-        ("MM.PROMPT", T_NOTYPE) /= 0 then
-         Global.Error_In_Prompt := True;
-         Clear_Buffer (Token_Buffer);
-         Buffer_Append (Token_Buffer, "MM.PROMPT");
-         M_Basic.Execute_Program (Token_Buffer);
-      else
-         --  Print prompt
-         M_Basic.Print_String ("> ");
-      end if;
-
-      Global.Error_In_Prompt := False;
-      Load_Input_Buffer (0);
-      if Input_Buffer_Length > 0 then
-         Tokenizer.Tokenize (Token_Buffer, True);
---           Put_Line (Program_Name & "Token_Buffer: " &
---                       To_String (To_UB_String (Token_Buffer)));
-         M_Basic.Execute_Program (Token_Buffer);
-      end if;
-   end loop;
+   Support.Execute;
 
 exception
    when others => Put_Line (Program_Name);
