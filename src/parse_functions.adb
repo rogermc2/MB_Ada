@@ -487,13 +487,14 @@ package body Parse_Functions is
      (Token_Buffer : out String_Buffer; I_Pos : in out Positive) is
       use Ada.Characters.Handling;
       use String_Buffer_Package;
-      --        Routine_Name : constant String := "Parse_Functions.Try_Number ";
+      Routine_Name : constant String := "Parse_Functions.Try_Number ";
       aChar        : Character := Get_Input_Character (I_Pos);
       Number       : Unbounded_String;
       Done         : Boolean := False;
    begin
-      --  MMBasic 887
+      --  MMBasic 919
       if Is_Digit (aChar) or else aChar = '.' then
+         Put_Line (Routine_Name & "919 I_Pos: " & Integer'Image (I_Pos));
          while not Done
            and then (Is_Digit (aChar) or else aChar = '.' or else aChar = 'E'
                      or else aChar = 'e') loop
@@ -509,19 +510,24 @@ package body Parse_Functions is
                   aChar := Get_Next_Character (I_Pos);
                end if;
             else
-               --  MMBasic 897
-               --                 Put_Line (Routine_Name & "Number: " & To_String (Number));
+               --  MMBasic 932
+               --                 Put_Line (Routine_Name & "932 Number: " & To_String (Number));
                Number := Number & aChar;
-               --                 Put_Line (Routine_Name & "updated Number: " & To_String (Number));
+               Put_Line (Routine_Name & "932 updated Number: " &
+                           To_String (Number));
                if I_Pos < Input_Buffer_Length then
                   aChar := Get_Next_Character (I_Pos);
+                  Put_Line (Routine_Name & "932 I_Pos, aChar: " &
+                              Integer'Image (I_Pos) & ", " &
+                               Support.To_String (aChar));
                end if;
             end if;
          end loop;
 
          Append (Token_Buffer, To_String (Number));
-         I_Pos := I_Pos + 1;
+--           I_Pos := I_Pos + 1;
       end if;
+      Put_Line (Routine_Name & "exit I_Pos: " & Integer'Image (I_Pos));
 
    end Try_Number;
 

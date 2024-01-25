@@ -21,7 +21,7 @@ package body Arguments is
                     Name_Length : Natural; I_Free : in out Natural;
                     Tmp         : in out Integer; Name  : Unbounded_String) is
       use Interfaces;
-      --        Routine_Name : constant String := "M_Basic_Utilities.Do_AA ";
+      --        Routine_Name : constant String := "Arguments.Do_AA ";
       Item         : Var_Record;
       TP_Name      : Unbounded_String;
       IP_Name      : Unbounded_String;
@@ -96,7 +96,7 @@ package body Arguments is
       use Ada.Assertions;
       use Global;
       use M_Misc;   --  for Option_Base
-      Routine_Name : constant String := "M_Basic_Utilities.Do_BA ";
+      Routine_Name : constant String := "Arguments.Do_BA ";
       Item         : Var_Record;
       Item_2       : Var_Record;
       J            : Natural;
@@ -197,7 +197,7 @@ package body Arguments is
       use Ada.Assertions;
       use Global;
       use M_Basic.Conversion;
-      Routine_Name  : constant String := "M_Basic_Utilities.Do_YA ";
+      Routine_Name  : constant String := "Arguments.Do_YA ";
       --        aChar        : Character;
       S             : Unbounded_String;   --  New variable name
       Var_I         : Natural;
@@ -380,7 +380,7 @@ package body Arguments is
       use Global;
       use Arg_Package;
       use String_Buffer_Package;
-      Routine_Name   : constant String := "M_Basic_Utilities.Find_Var ";
+      Routine_Name   : constant String := "Arguments.Find_Var ";
       PP             : Positive;
       Dim            : Dim_Array := (others => 0);
       F              : Configuration.MMFLOAT := 0.0;
@@ -566,7 +566,7 @@ package body Arguments is
       use Command_And_Token_Functions;
       use String_Buffer_Package;
       use Arg_Package;
-      Routine_Name   : constant String := "M_Basic_Utilities.Make_Args ";
+      Routine_Name   : constant String := "Arguments.Make_Args ";
       Then_Token     : constant Natural := tokenTHEN;
       Else_Token     : constant Natural := tokenELSE;
       Arg_Buff_Index : Positive;
@@ -646,6 +646,7 @@ package body Arguments is
 
       --  MMBasic 2191  Main processing loop
       Put_Line (Routine_Name & "2191 Expression: " & To_String (Expression));
+      Put_Line (Routine_Name & "2191 TP: " & Integer'Image (TP));
       while not Done loop
          Done := (Expect_Bracket and then Element (Expression, TP) = ')')
            or else Element (Expression, TP) = ''';
@@ -654,29 +655,29 @@ package body Arguments is
               (Slice (Expression, TP, Length (Expression)));
             --  MMBasic 2205 Delim is a string of special characters that split
             --  the expression into separate terms;
-            --              Put_Line (Routine_Name & "2205 Term: " & To_String (Term));
+            Put_Line (Routine_Name & "2205 Term: " & To_String (Term));
             Delim_Index := 0;
             Delim_Found := False;
             while not Delim_Found and then Delim_Index < Delim'Last loop
                Delim_Index := Delim_Index + 1;
-               String_1 (1) := Delim (Delim_Index);
+               String_1 := Support.To_String (Delim (Delim_Index));
                Delim_Pos := Index (Term, String_1);
                Delim_Found := Delim_Pos > 0;
             end loop;
-            --              Put_Line (Routine_Name & "2206 Delim_Found: " &
-            --                          Boolean'Image (Delim_Found));
+            Put_Line (Routine_Name & "2206 Delim_Found: " &
+                        Boolean'Image (Delim_Found));
 
             --  MMBasic 2206 block moved to else  Delim_Found
             if not Delim_Found then
                --  MMBasic 2231  C1 E
                Token := Integer'Value (To_String (Expression));
-               --                 Put_Line (Routine_Name & "2231 Token: " & Integer'Image (Token));
+               Put_Line (Routine_Name & "2231 Token: " & Integer'Image (Token));
                --  MMBasic 2234
                Expect_Cmd := Token = Then_Token or else Token = Else_Token;
-               --                 Put_Line (Routine_Name & "2234 Then_Token: " &
-               --                             Integer'Image (Then_Token));
-               --                 Put_Line (Routine_Name & "2234 Expect_Cmd: " &
-               --                             Boolean'Image (Expect_Cmd));
+               Put_Line (Routine_Name & "2234 Then_Token: " &
+                           Integer'Image (Then_Token));
+               Put_Line (Routine_Name & "2234 Expect_Cmd: " &
+                           Boolean'Image (Expect_Cmd));
 
                --  MMBasic 2244
                if not In_Arg then
@@ -694,7 +695,7 @@ package body Arguments is
                   --  until the matching closing bracket.
                   --  This includes special characters such as , and ; and
                   --  keeps track of any nested brackets.
-                  String_1 (1) := Element (Expression, TP);
+                  String_1 := Support.To_String (Element (Expression, TP));
                   T_Token := Token_Type (Integer'Value (String_1));
                   --                    Put_Line (Routine_Name & "T_Token: " &
                   --                                Unsigned_16'Image (T_Token));

@@ -49,7 +49,7 @@ begin
       --        end if;
    end if;
 
-   Support.Execute;
+   Support.Execute_MM_Basic;
 
 exception
    when others => Put_Line (Program_Name);

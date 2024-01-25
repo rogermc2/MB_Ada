@@ -24,7 +24,7 @@ with Watchdog_Timer;
 package body Support is
 
    Saved_Cause  : Setup_Exception := Cause_Nothing;
-   Watchdog_Set : Boolean := False;
+--     Watchdog_Set : Boolean := False;
 
    procedure Buffer_Append (Buffer : in out String_Buffer; Item : String) is
       use String_Buffer_Package;
@@ -76,8 +76,8 @@ package body Support is
       null;
    end Do_PIN;
 
-   procedure Execute is
-      Routine_Name  : constant String := "Support.Execute";
+   procedure Execute_MM_Basic is
+      Routine_Name  : constant String := "Support.Execute_MM_Basic ";
       Startup_Token : constant String := "MM.Startup";
       Token_Buffer  : String_Buffer;
    begin
@@ -132,7 +132,7 @@ package body Support is
          end if;
       end loop;
 
-   end Execute;
+   end Execute_MM_Basic;
 
    procedure Initialize is
    begin
@@ -214,7 +214,7 @@ package body Support is
               Except_Code = RESTART_NO_AUTORUN or else
               Except_Code = RESTART_DO_AUTORUN) then
          if Except_Code = WATCHDOG_TIMEOUT then
-            Watchdog_Set := True;
+--              Watchdog_Set := True;
             New_Line;
             Put_Line ("Watchdog timeout!");
          elsif Except_Code /= PIN_RESTART then
@@ -332,5 +332,13 @@ package body Support is
       end loop;
 
    end Skip_Buffer_Spaces;
+
+  function To_String (aChar : Character) return String is
+      String1 : String (1 ..1);
+   begin
+      String1 (1) := aChar;
+      return String1;
+
+   end To_String;
 
 end Support;

@@ -32,10 +32,9 @@ package body MX470_Option_Handler is
                      return Unbounded_String is
       use String_Buffer_Package;
    begin
-      return To_Unbounded_String (Element (Command_Line, 2));
-      --        return To_Unbounded_String (Slice (To_Unbounded_String (Command_Line),
-      --                                    TP, Command_Line'Length));
-   end Get_Arg;
+      return To_Unbounded_String (Element (Command_Line, TP));
+
+    end Get_Arg;
 
    --  Check_String checks if the next text in an element (a basic statement)
    --  corresponds to an alphabetic string.
@@ -307,7 +306,8 @@ package body MX470_Option_Handler is
       Found : constant Boolean :=
         Check_String (Element (Command_Line, 1), "SDCARD");
    begin
-      Put_Line ("Do_SD_Card, Command_Line: " & Element (Command_Line, 1));
+      Put_Line ("Do_SD_Card, Command_Line:");
+      Support.Print_Buffer (Command_Line);
       if Found then
          Put_Line ("Do_SD_Card found");
          if Check_String (Element (Command_Line, 2), "DISABLE") then
@@ -316,13 +316,11 @@ package body MX470_Option_Handler is
             Flash.Option.SD_WP := 0;
             Flash.Save_Options;
          else
-            --              Put_Line ("Do_SD_Card else");
-            File_IO.Config_SD_Card (Get_Arg (Command_Line, 1));
+            File_IO.Config_SD_Card (Command_Line);
          end if;
-         --           Put_Line ("Do_SD_Card Save_And_Reset");
+
          Save_And_Reset;
       end if;
-      --        Put_Line ("Do_SD_Card done");
 
       return Found;
 
@@ -377,7 +375,7 @@ package body MX470_Option_Handler is
       end if;
 
    exception
-         when Restart_Exception => Support.Execute;
+         when Restart_Exception => Support.Execute_MM_Basic;
          when others => Put_Line (Routine_Name);
 
    end Save_And_Reset;

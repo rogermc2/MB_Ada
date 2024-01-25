@@ -1,16 +1,17 @@
 
 with Ada.Assertions; use Ada.Assertions;
 with Ada.Containers;
+with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Ada.Text_IO; use Ada.Text_IO;
 
 with Arguments;
 
---  with Command_And_Token_Tables; use Command_And_Token_Tables;
 --  with Commands;
 with Evaluation;
 --  with External;
 with Flash;
---  with Support;
+with M_Basic_Utilities;
+with Support;
 
 package body File_IO is
 
@@ -19,22 +20,26 @@ package body File_IO is
       null;
    end Check_SDCard;
 
-   procedure Config_SD_Card (Arg_String : Unbounded_String) is
+   procedure Config_SD_Card (Command_Line : String_Buffer) is
       use Ada.Containers;
       use Arguments;
       use Evaluation;
+      use M_Basic_Utilities;
       Routine_Name : constant String := "File_IO.Config_SD_Card ";
-      Arg_Data     : constant Arguments_Record :=
-        Get_Args (Arg_String, 1, 5, ",");
+      Args         : String_Buffer := Command_Line;
+      Arg_Data     : Arguments_Record;
       Arg          : Unbounded_String;
       Arg_Val      : Integer := 0;
       --        Pin_Check    : Integer;
    begin
-      Put_Line (Routine_Name & "Arg_String: " & To_String (Arg_String));
+      Put_Line (Routine_Name & "Command_Line: ");
+      Support.Print_Buffer (Command_Line);
+      Args.Delete_First;
+      Arg_Data := Get_Args (To_UB_String (Args), 1, 5, ",");
       Assert (Arg_Data.Arg_V.Length > 0, Routine_Name & "Arg_V is empty");
---        Put_Line (Routine_Name & "Arg_C: " & Integer'Image (Arg_C));
---        Put_Line (Routine_Name & "Arg_Buffer: ");
---        Support.Print_Buffer (Arg_Buffer);
+      Put_Line (Routine_Name & "Arg_C: " & Integer'Image (Arg_Data.Arg_C));
+      Put_Line (Routine_Name & "Arg_Buffer: ");
+      Support.Print_Buffer (Arg_Data.Arg_Buffer);
       Arg := To_Unbounded_String (Arg_Data.Arg_Buffer (Arg_Data.Arg_V (1)));
       Arg_Val := Integer'Value (Arg_Data.Arg_Buffer (Arg_Data.Arg_V (1)));
       Put_Line (Routine_Name & "Arg_Val: " & Integer'Image (Arg_Val));

@@ -270,16 +270,13 @@ package body Option_Handler is
       use M_Basic.Conversion;
       use String_Buffer_Package;
       Routine_Name : constant String := "Option_Handler.Option_Cmd ";
-      --        Command_Line : constant String := To_String (Global.Command_Line);
       Subfunction  : constant String := Element (Command_Line, 1);
 --        TP           : Natural;
       Arg          : Unbounded_String;
       Done         : Boolean := False;
    begin
---        Put_Line (Routine_Name & "Command_Line: '" & Command_Line & "'");
       Put_Line (Routine_Name & "Command_Line:");
       Support.Print_Buffer (Command_Line);
---        Assert (Length (Global.Command_Line) > 0, Routine_Name &
       Assert (Integer (Command_Line.Length) > 0, Routine_Name &
                 "called with empty Global.Command_Line");
       Commands.Option_Error_Check := External.CP_IGNORE_INUSE;
@@ -290,17 +287,12 @@ package body Option_Handler is
 
       --  Check_String checks if the next text in an element (a basic statement)
       --  corresponds to an alphabetic string.
---        TP := Check_String (Command_Line, "BASE");
---        TP := Check_String (Subfunction, "BASE");
---        if TP > 0 then
       if Check_String (Subfunction, "BASE") then
          Assert (not Commands.Dim_Used, Routine_Name &
                    "BASE Option must be before DIM or LOCAL");
          Option_Base := Get_Int (Element (Command_Line, 2), 0, 1);
---           Option_Base := Get_Int (Global.Command_Line, 0, 1);
          Done := True;
 
---        elsif Check_String (Command_Line, "EXPLICIT") > 0 then
       elsif Check_String (Subfunction, "EXPLICIT") then
          Assert (Arguments.Var_Count = 0, Routine_Name &
                    "EXPLICIT variables have been defined already.");

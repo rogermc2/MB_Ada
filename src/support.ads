@@ -59,7 +59,7 @@ package Support is
    procedure Copy_Slice (Buffer : in out String_Buffer;
                          Pos1   : in out Positive; Pos2 : Positive);
    procedure Do_PIN;
-   procedure Execute;
+   procedure Execute_MM_Basic;
    procedure Initialize;
    procedure Print_Buffer (Buffer : String_Buffer);
    procedure Process_Commands;
@@ -70,4 +70,6 @@ package Support is
                                   Pos    : in out Positive);
    procedure Skip_Buffer_Spaces (Buffer : in out String_Buffer;
                                  Pos    : in out Positive);
+   function To_String (aChar : Character) return String;
+
 end Support;
