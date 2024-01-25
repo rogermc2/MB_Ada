@@ -1,11 +1,12 @@
 
 with Interfaces;
 
+--  with Ada.Exceptions;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Ada.Text_IO; use Ada.Text_IO;
 
 with Arguments;
-with C_Functions;
+--  with C_Functions;
 with Commands;
 with Command_And_Token_Tables; use Command_And_Token_Tables;
 with Console;
@@ -22,7 +23,8 @@ with Support;
 
 package body MX470_Option_Handler is
 
-   UIOTGSTAT : Interfaces.Unsigned_16 :=0;
+   Restart_Exception : Exception;
+   UIOTGSTAT : Interfaces.Unsigned_16 := 0;
 
    procedure Save_And_Reset;
 
@@ -367,11 +369,16 @@ package body MX470_Option_Handler is
             Put_Line ("Please restart the Micromite");
          else
             Except_Code := RESTART_NO_AUTORUN;
-            C_Functions.Soft_Reset;
+--              C_Functions.Soft_Reset;
             Put_Line ("Restart");
-            Support.Restart;
+            raise Restart_Exception;
+--              Support.Restart;
          end if;
       end if;
+
+   exception
+         when Restart_Exception => Support.Execute;
+         when others => Put_Line (Routine_Name);
 
    end Save_And_Reset;
 
