@@ -93,9 +93,9 @@ package body Tokenizer is
          --           Put_Line (Routine_Name & "Last_Ptr : " & Integer'Image (Last_Ptr));
          Last_Ptr := Ptr;
          aChar := Get_Input_Character (Ptr);
-         Put_Line (Routine_Name & "Ptr, aChar, First_Nonwhite: " &
-                     Integer'Image (Ptr) & ", " & aChar & ", " &
-                     Boolean'Image (First_Nonwhite) );
+--           Put_Line (Routine_Name & "Ptr, aChar, First_Nonwhite: " &
+--                       Integer'Image (Ptr) & ", " & aChar & ", " &
+--                       Boolean'Image (First_Nonwhite) );
 --           Put_Line (Routine_Name & "Input_Buffer_Length : " &
 --                       Integer'Image (Input_Buffer_Length));
          --           delay (1.0);
@@ -116,8 +116,6 @@ package body Tokenizer is
          elsif Is_Digit (aChar) or aChar = '.' then
             --  MMBasic 921 not white space or string or comment so try number.
             Try_Number (Token_Buffer, Ptr);
-            Put_Line (Routine_Name & "921 Token_Buffer:");
-            Support.Print_Buffer (Token_Buffer);
             First_Nonwhite := False;
          elsif First_Nonwhite then
             --  MMBasic  939 - 1026
@@ -141,15 +139,11 @@ package body Tokenizer is
             --  MMBasic  1067
          elsif M_Basic_Utilities.Is_Name_Start (aChar) then
             Process_Name_Start (Token_Buffer, Ptr, First_Nonwhite, Label_Valid);
-            Put_Line (Routine_Name & "1067 Name_Start processed, Token_Buffer");
-            Support.Print_Buffer (Token_Buffer);
             --  MMBasic  1086
          elsif aChar = '(' then
             Put_Line (Routine_Name & "1086 aChar = '(' not implemented: ");
             Ptr := Ptr + 1;
          else  --  1098 None of the above so just copy the one character
-            Put_Line (Routine_Name & "1098 else aChar: " &
-                        Support.To_String (aChar));
             Support.Buffer_Append (Token_Buffer, Support.To_String (aChar));
             Label_Valid := False;
             First_Nonwhite := False;

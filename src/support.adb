@@ -24,7 +24,7 @@ with Watchdog_Timer;
 package body Support is
 
    Saved_Cause  : Setup_Exception := Cause_Nothing;
---     Watchdog_Set : Boolean := False;
+   --     Watchdog_Set : Boolean := False;
 
    procedure Buffer_Append (Buffer : in out String_Buffer; Item : String) is
       use String_Buffer_Package;
@@ -152,11 +152,15 @@ package body Support is
       end if;
    end Initialize;
 
-   procedure Print_Buffer (Buffer : String_Buffer) is
+   procedure Print_Buffer (Buffer     : String_Buffer;
+                           With_Delim : Boolean := False) is
       use String_Buffer_Package;
    begin
       for index in Buffer.First_Index .. Buffer.Last_Index loop
-         Put (Element (Buffer, index) & " ");
+         Put (Element (Buffer, index));
+         if With_Delim then
+            Put (" ");
+         end if;
       end loop;
       New_Line;
 
@@ -214,7 +218,7 @@ package body Support is
               Except_Code = RESTART_NO_AUTORUN or else
               Except_Code = RESTART_DO_AUTORUN) then
          if Except_Code = WATCHDOG_TIMEOUT then
---              Watchdog_Set := True;
+            --              Watchdog_Set := True;
             New_Line;
             Put_Line ("Watchdog timeout!");
          elsif Except_Code /= PIN_RESTART then
@@ -275,7 +279,7 @@ package body Support is
          end if;
       end if;
 
---        P32mx470f512h.RCONCLR := 16#0040#;
+      --        P32mx470f512h.RCONCLR := 16#0040#;
 
    end Restart;
 
@@ -333,7 +337,7 @@ package body Support is
 
    end Skip_Buffer_Spaces;
 
-  function To_String (aChar : Character) return String is
+   function To_String (aChar : Character) return String is
       String1 : String (1 ..1);
    begin
       String1 (1) := aChar;

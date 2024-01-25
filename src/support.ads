@@ -61,7 +61,8 @@ package Support is
    procedure Do_PIN;
    procedure Execute_MM_Basic;
    procedure Initialize;
-   procedure Print_Buffer (Buffer : String_Buffer);
+   procedure Print_Buffer (Buffer     : String_Buffer;
+                           With_Delim : Boolean := False);
    procedure Process_Commands;
    procedure Restart;
    procedure Setup;
