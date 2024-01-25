@@ -145,19 +145,18 @@ package body M_Basic_Utilities is
 
    end To_String_Buffer;
 
-   function To_UB_String (Buffer : String_Buffer) return Unbounded_String is
+   function To_UB_String
+     (Buffer  : String_Buffer; With_Delimit : Boolean := False)
+      return Unbounded_String is
       use String_Buffer_Package;
       UB_String : Unbounded_String;
    begin
---        Put_Line ("To_UB_String");
---        Support.Print_Buffer (Buffer);
       for index in 1 .. Positive (Length (Buffer)) loop
-         UB_String :=  UB_String & Element (Buffer, index);
-         if index < Positive (Length (Buffer)) then
+         UB_String := UB_String & Element (Buffer, index);
+         if With_Delimit and then index < Positive (Length (Buffer)) then
             UB_String :=  UB_String & ' ';
          end if;
       end loop;
---        Put_Line ("To_UB_String done");
 
       return UB_String;
 

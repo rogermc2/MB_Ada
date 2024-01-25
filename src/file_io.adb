@@ -35,6 +35,8 @@ package body File_IO is
       Put_Line (Routine_Name & "Command_Line: ");
       Support.Print_Buffer (Command_Line);
       Args.Delete_First;
+      Put_Line (Routine_Name & "Args: ");
+      Support.Print_Buffer (Args);
       Arg_Data := Get_Args (To_UB_String (Args), 1, 5, ",");
       Assert (Arg_Data.Arg_V.Length > 0, Routine_Name & "Arg_V is empty");
       Put_Line (Routine_Name & "Arg_C: " & Integer'Image (Arg_Data.Arg_C));
