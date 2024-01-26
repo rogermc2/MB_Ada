@@ -143,7 +143,6 @@ package body Option_Handler is
       Routine_Name : constant String := "Option_Handler.Do_Display ";
 --        TP           : constant Natural := Check_String (Command_Line, "BAUDRATE");
 --        Found        : constant Boolean := TP > 0;
-      Pos          : Positive := 2;
       Found        : constant Boolean :=
         Check_String (Element (Command_Line, 1), "BAUDRATE");
       Arg_Data     : Arguments.Arguments_Record;
@@ -152,7 +151,7 @@ package body Option_Handler is
       if Found then
 --           Arguments.Get_Args (To_Unbounded_String (Command_Line), TP, 3, ",");
          Arg_Data := Arguments.Get_Args
-           (To_Unbounded_String (Element (Command_Line, 2)), Pos, 3, ",");
+           (To_Unbounded_String (Element (Command_Line, 2)), 2, 3, ",");
          Assert (not Flash.Option.DISPLAY_CONSOLE, Routine_Name &
                    "DISPLAY, LCD console cannot be Changed ");
 
@@ -180,13 +179,12 @@ package body Option_Handler is
 --        Found         : constant Boolean := TP > 0;
       Found         : constant Boolean :=
         Check_String (Element (Command_Line, 1), "LCDPANEL");
-      Pos           : Positive := 2;
       Arg_Data      : Arguments_Record;
       Arg           : Unbounded_String;
    begin
       if Found then
          Arg_Data := Arguments.Get_Args
-           (To_Unbounded_String (Element (Command_Line, 2)), Pos, 13, ",");
+           (To_Unbounded_String (Element (Command_Line, 2)), 2, 13, ",");
          Arg := To_Unbounded_String (Arg_Data.Arg_Buffer (Arg_Data.Arg_V (1)));
 
          if To_Upper (Arg_Data.Arg_Buffer (Arg_Data.Arg_V (1))) = "USER" then

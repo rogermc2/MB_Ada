@@ -537,7 +537,7 @@ package body Arguments is
 
    end Find_Var;
 
-   function Get_Args (Expression   : Unbounded_String; Pos : in out Positive;
+   function Get_Args (Expression   : Unbounded_String; Pos : Positive;
                       Max_Num_Args : Natural; Delim : String)
                       return Arguments_Record is
    begin
@@ -557,7 +557,7 @@ package body Arguments is
    --                   If the first char of that string is an opening bracket
    --                  '(' this function will expect the arg list to be
    --                   enclosed in brackets.
-   function Make_Args (Expression : Unbounded_String; Pos : in out Positive;
+   function Make_Args (Expression : Unbounded_String; Pos : Positive;
                        Max_Args   : Positive; Delim : String)
                        return Arguments_Record is
       use Interfaces;
@@ -571,9 +571,8 @@ package body Arguments is
       Else_Token     : constant Natural := tokenELSE;
       Arg_Buff_Index : Natural;
       --        Op             : Positive := 1;  --  Character index into Arg_Buff
-      Op_Ptr         : Integer := 1;
+      Arg_Buff_Ptr   : Integer := 1;    --  Op
       String_1       : String (1 .. 1);
-      --        Token_String   : Unbounded_String;
       TP             : Positive := Pos;
       TP2            : Natural := 0;
       X              : Positive;
@@ -598,7 +597,7 @@ package body Arguments is
            Integer'Value (Support.To_String (Element (Expression, Pos)));
       begin
          Put_Line (Routine_Name & "Expression: " & To_String (Expression));
-         Put_Line (Routine_Name & "Pos" & Integer'Image (Pos));
+         Put_Line (Routine_Name & "TP: " & Integer'Image (TP));
          Put_Line (Routine_Name & "Token" & Integer'Image (Token));
          --  MMBasic 2208
          if Token = Then_Token or else Token = Else_Token then
@@ -609,33 +608,40 @@ package body Arguments is
          if In_Arg then
             Put_Line (Routine_Name & "2210 In_Arg");
             Arg_Buff_Index := Last_Index (Result.Arg_Buffer);
-            Term := Support.To_UB_String (Element (Expression, Pos));
+            Term := Support.To_UB_String (Element (Expression, TP));
             Trim (Term, Both);
-            Replace_Element (Result.Arg_Buffer, Arg_Buff_Index, To_String (Term));
+            Replace_Element (Result.Arg_Buffer, Arg_Buff_Index,
+                             To_String (Term));
 
             --  MMBasic 2216
          elsif Result.Arg_C > 0 then
             --  otherwise we have two delimiters in a row
             --  (except for the first argument).
             --  so, create a null argument to go between the two delimiters.
-            Result.Arg_V.Replace_Element (Result.Arg_C, Pos);
-            Pos := Pos + 1;
+            Result.Arg_V.Replace_Element (Result.Arg_C, TP);
+            TP := TP + 1;
             Put_Line (Routine_Name & "2216 Arg_C set");
             Append (Result.Arg_Buffer, Support.To_String (ASCII.NUL));
             Result.Arg_C := Result.Arg_C + 1;
-            Op_Ptr := Result.Arg_Buffer.First_Index;
+            Arg_Buff_Ptr := Result.Arg_Buffer.Last_Index + 1;
          end if;
          Put_Line (Routine_Name & "2222");
 
          --  MMBasic 2222
          In_Arg := False;
          Assert (Result.Arg_C <= Max_Args, Routine_Name & "Too many arguments");
-         Append (Result.Arg_V, Op_Ptr);
-         Result.Arg_C := Result.Arg_C +1;
-         Op_Ptr := Op_Ptr + 1;
-         TP := TP + 1;
-         Pos := Pos + 1;
+         Append (Result.Arg_V, Arg_Buff_Ptr);
+         Result.Arg_C := Result.Arg_C + 1;
 
+         --  MMBasic 2226
+         Put_Line (Routine_Name & "2226 ");
+         Append (Result.Arg_Buffer,
+                 Support.To_String (Element (Expression, TP)));
+         Arg_Buff_Ptr := Arg_Buff_Ptr + 1;
+         TP := TP + 1;    --  step over delimiter?
+
+         Append (Result.Arg_Buffer, Support.To_String (ASCII.NUL));
+         Arg_Buff_Ptr := Arg_Buff_Ptr + 1;
       end C1;
 
    begin
@@ -711,7 +717,7 @@ package body Arguments is
                      X := M_Basic_Utilities.Get_Close_Bracket (Expression, TP);
                      X := X - TP + 1;
                      Append (Result.Arg_Buffer, Slice (Expression, TP, X));
-                     Op_Ptr := Op_Ptr + X;
+                     Arg_Buff_Ptr := Arg_Buff_Ptr + X;
                      TP := TP + X;
 
                   elsif String_1 = """" then
