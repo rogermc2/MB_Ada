@@ -537,7 +537,7 @@ package body Arguments is
 
    end Find_Var;
 
-   function Get_Args (Expression   : Unbounded_String; Pos : Positive;
+   function Get_Args (Expression   : Unbounded_String; Pos : in out Positive;
                       Max_Num_Args : Natural; Delim : String)
                       return Arguments_Record is
    begin
@@ -557,7 +557,7 @@ package body Arguments is
    --                   If the first char of that string is an opening bracket
    --                  '(' this function will expect the arg list to be
    --                   enclosed in brackets.
-   function Make_Args (Expression : Unbounded_String; Pos : Positive;
+   function Make_Args (Expression : Unbounded_String; Pos : in out Positive;
                        Max_Args   : Positive; Delim : String)
                        return Arguments_Record is
       use Interfaces;
@@ -569,7 +569,7 @@ package body Arguments is
       Routine_Name   : constant String := "Arguments.Make_Args ";
       Then_Token     : constant Natural := tokenTHEN;
       Else_Token     : constant Natural := tokenELSE;
-      Arg_Buff_Index : Positive;
+      Arg_Buff_Index : Natural;
       --        Op             : Positive := 1;  --  Character index into Arg_Buff
       Op_Ptr         : Integer := 1;
       String_1       : String (1 .. 1);
@@ -591,13 +591,15 @@ package body Arguments is
       Result         : Arguments_Record;
 
       procedure C1 is
-         Routine_Name : constant String := "M_Basic_Utilities.Make_Args.C! ";
+         Routine_Name : constant String := "Arguments.Make_Args.C1 ";
          Then_Token   : constant Natural := tokenTHEN;
          Else_Token   : constant Natural := tokenELSE;
-         Token        : constant Natural
-           := Integer'Value (Character'Image (Element (Expression, Pos)));
+         Token        : constant Natural:=
+           Integer'Value (Support.To_String (Element (Expression, Pos)));
       begin
-         Put_Line (Routine_Name & "C1 ");
+         Put_Line (Routine_Name & "Expression: " & To_String (Expression));
+         Put_Line (Routine_Name & "Pos" & Integer'Image (Pos));
+         Put_Line (Routine_Name & "Token" & Integer'Image (Token));
          --  MMBasic 2208
          if Token = Then_Token or else Token = Else_Token then
             Expect_Cmd := True;
@@ -605,8 +607,9 @@ package body Arguments is
 
          --  MMBasic 2210
          if In_Arg then
+            Put_Line (Routine_Name & "2210 In_Arg");
             Arg_Buff_Index := Last_Index (Result.Arg_Buffer);
-            Term := To_Unbounded_String (Last_Element (Result.Arg_Buffer));
+            Term := Support.To_UB_String (Element (Expression, Pos));
             Trim (Term, Both);
             Replace_Element (Result.Arg_Buffer, Arg_Buff_Index, To_String (Term));
 
@@ -615,12 +618,14 @@ package body Arguments is
             --  otherwise we have two delimiters in a row
             --  (except for the first argument).
             --  so, create a null argument to go between the two delimiters.
+            Result.Arg_V.Replace_Element (Result.Arg_C, Pos);
+            Pos := Pos + 1;
+            Put_Line (Routine_Name & "2216 Arg_C set");
+            Append (Result.Arg_Buffer, Support.To_String (ASCII.NUL));
             Result.Arg_C := Result.Arg_C + 1;
-            Result.Arg_V.Append (Result.Arg_C);
-            Arg_Buff_Index := Positive (Element (Result.Arg_V, Arg_Buff_Index));
-            Replace_Element (Result.Arg_Buffer, Arg_Buff_Index, "");
             Op_Ptr := Result.Arg_Buffer.First_Index;
          end if;
+         Put_Line (Routine_Name & "2222");
 
          --  MMBasic 2222
          In_Arg := False;
@@ -629,6 +634,7 @@ package body Arguments is
          Result.Arg_C := Result.Arg_C +1;
          Op_Ptr := Op_Ptr + 1;
          TP := TP + 1;
+         Pos := Pos + 1;
 
       end C1;
 
@@ -731,7 +737,6 @@ package body Arguments is
 
             else
                C1;
-
             end if;  --  not Match
          end if;  --  First not Done
 

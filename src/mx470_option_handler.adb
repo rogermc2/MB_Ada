@@ -264,6 +264,7 @@ package body MX470_Option_Handler is
       --        TP    : constant Natural := Check_String (Command_Line, "RTC");
       Arg_Data : Arguments_Record;
       Arg      : Unbounded_String;
+      Pos      : Positive := 1;
       Found    : constant Boolean :=
         Check_String (Element (Command_Line, 1), "RTC");
    begin
@@ -275,7 +276,7 @@ package body MX470_Option_Handler is
             Flash.Option.RTC_Data := 0;
          else
             Arg_Data :=
-              Get_Args (To_Unbounded_String (Element (Command_Line, 2)), 1, 3 , ",");
+              Get_Args (To_Unbounded_String (Element (Command_Line, 2)), Pos, 3 , ",");
             if Arg_Data.Arg_C = 3 then
                Arg :=
                  To_Unbounded_String (Arg_Data.Arg_Buffer (Arg_Data.Arg_V (1)));

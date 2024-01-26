@@ -47,10 +47,10 @@ package Arguments is
      (Expression : Unbounded_String; Pos : in out Positive;
       Arg_Data   : in out Arguments_Record; Action : Function_Type)
       return Var_Record;
-   function Get_Args (Expression   : Unbounded_String; Pos : Positive;
+   function Get_Args (Expression   : Unbounded_String; Pos : in out Positive;
                       Max_Num_Args : Natural; Delim : String)
                       return Arguments_Record;
-   function Make_Args (Expression : Unbounded_String; Pos : Positive;
+   function Make_Args (Expression : Unbounded_String; Pos : in out Positive;
                        Max_Args   : Positive; Delim : String)
                        return Arguments_Record;
 

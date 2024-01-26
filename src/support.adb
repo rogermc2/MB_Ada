@@ -345,4 +345,15 @@ package body Support is
 
    end To_String;
 
+   function To_UB_String (aChar : Character)
+                          return Ada.Strings.Unbounded.Unbounded_String is
+      use Ada.Strings.Unbounded;
+      String1 : String (1 ..1);
+   begin
+      String1 (1) := aChar;
+
+      return To_Unbounded_String (String1);
+
+   end To_UB_String;
+
 end Support;

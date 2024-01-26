@@ -53,7 +53,7 @@ package body M_Basic is
    --     procedure Skip_Element (aLine : String_Buffer; Pos : in out Positive) ;
    --     procedure Skip_Element (aLine : Unbounded_String; Pos : in out Positive);
    procedure User_Defined_Subfunction
-     (Command      : Unbounded_String; TP : Positive;
+     (Command      : Unbounded_String; TP : in out Positive;
       Sub_Line_Ptr : Subfunction_Ptr);
 
    --  Check_String checks if the next text in an element (a basic statement)
@@ -1192,7 +1192,7 @@ package body M_Basic is
    end Token_Function;
 
    procedure User_Defined_Subfunction
-     (Command      : Unbounded_String; TP : Positive;
+     (Command      : Unbounded_String; TP : in out Positive;
       Sub_Line_Ptr : Subfunction_Ptr) is
       use Interfaces;
       use Ada.Assertions;

@@ -1,4 +1,6 @@
 
+with Ada.Strings.Unbounded;
+
 with Command_And_Token_Tables; use Command_And_Token_Tables;
 
 package Support is
@@ -72,5 +74,7 @@ package Support is
    procedure Skip_Buffer_Spaces (Buffer : in out String_Buffer;
                                  Pos    : in out Positive);
    function To_String (aChar : Character) return String;
+   function To_UB_String (aChar : Character)
+                          return Ada.Strings.Unbounded.Unbounded_String;
 
 end Support;

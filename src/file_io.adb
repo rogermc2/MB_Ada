@@ -27,6 +27,7 @@ package body File_IO is
       use M_Basic_Utilities;
       Routine_Name : constant String := "File_IO.Config_SD_Card ";
       Args         : String_Buffer := Command_Line;
+      Pos          : Positive := 1;
       Arg_Data     : Arguments_Record;
       Arg          : Unbounded_String;
       Arg_Val      : Integer := 0;
@@ -37,7 +38,7 @@ package body File_IO is
       Args.Delete_First;
       Put_Line (Routine_Name & "Args: ");
       Support.Print_Buffer (Args);
-      Arg_Data := Get_Args (To_UB_String (Args), 1, 5, ",");
+      Arg_Data := Get_Args (To_UB_String (Args), Pos, 5, ",");
       Assert (Arg_Data.Arg_V.Length > 0, Routine_Name & "Arg_V is empty");
       Put_Line (Routine_Name & "Arg_C: " & Integer'Image (Arg_Data.Arg_C));
       Put_Line (Routine_Name & "Arg_Buffer: ");
