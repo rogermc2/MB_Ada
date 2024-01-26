@@ -53,7 +53,7 @@ package body M_Basic is
    --     procedure Skip_Element (aLine : String_Buffer; Pos : in out Positive) ;
    --     procedure Skip_Element (aLine : Unbounded_String; Pos : in out Positive);
    procedure User_Defined_Subfunction
-     (Command      : Unbounded_String; TP : in out Positive;
+     (Command      : Unbounded_String; TP : Positive;
       Sub_Line_Ptr : Subfunction_Ptr);
 
    --  Check_String checks if the next text in an element (a basic statement)
@@ -1192,7 +1192,7 @@ package body M_Basic is
    end Token_Function;
 
    procedure User_Defined_Subfunction
-     (Command      : Unbounded_String; TP : in out Positive;
+     (Command      : Unbounded_String; TP : Positive;
       Sub_Line_Ptr : Subfunction_Ptr) is
       use Interfaces;
       use Ada.Assertions;
@@ -1229,8 +1229,10 @@ package body M_Basic is
          else
             Delim := To_Unbounded_String (",");
          end if;
-         Arg_Data1 := Make_Args (Command, TP, Configuration.MAX_ARG_COUNT,
-                                 To_String (Delim));
+
+         Arg_Data1 :=
+           Make_Args (To_String_Buffer (Command, TP), TP,
+                      Configuration.MAX_ARG_COUNT, To_String (Delim));
          Arg_C1 := Arg_Data1.Arg_C;
          Arg_V1 := Arg_Data1.Arg_V;
          Arg_Buff1 := Arg_Data1.Arg_Buffer;
@@ -1244,8 +1246,9 @@ package body M_Basic is
          else
             Delim := To_Unbounded_String (",");
          end if;
-         Arg_Data2 := Make_Args (Command, TP, Configuration.MAX_ARG_COUNT,
-                                 To_String (Delim));
+         Arg_Data2 :=
+           Make_Args (To_String_Buffer (Command, TP), TP,
+                      Configuration.MAX_ARG_COUNT, To_String (Delim));
          Arg_C2 := Arg_Data2.Arg_C;
          Arg_V2 := Arg_Data2.Arg_V;
          Arg_Buff2 := Arg_Data2.Arg_Buffer;

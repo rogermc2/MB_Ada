@@ -150,8 +150,7 @@ package body Option_Handler is
    begin
       if Found then
 --           Arguments.Get_Args (To_Unbounded_String (Command_Line), TP, 3, ",");
-         Arg_Data := Arguments.Get_Args
-           (To_Unbounded_String (Element (Command_Line, 2)), 2, 3, ",");
+         Arg_Data := Arguments.Get_Args (Command_Line, 2, 3, ",");
          Assert (not Flash.Option.DISPLAY_CONSOLE, Routine_Name &
                    "DISPLAY, LCD console cannot be Changed ");
 
@@ -183,8 +182,7 @@ package body Option_Handler is
       Arg           : Unbounded_String;
    begin
       if Found then
-         Arg_Data := Arguments.Get_Args
-           (To_Unbounded_String (Element (Command_Line, 2)), 2, 13, ",");
+         Arg_Data := Arguments.Get_Args (Command_Line, 2, 13, ",");
          Arg := To_Unbounded_String (Arg_Data.Arg_Buffer (Arg_Data.Arg_V (1)));
 
          if To_Upper (Arg_Data.Arg_Buffer (Arg_Data.Arg_V (1))) = "USER" then

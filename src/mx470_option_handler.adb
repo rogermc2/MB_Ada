@@ -275,8 +275,9 @@ package body MX470_Option_Handler is
             Flash.Option.RTC_Data := 0;
          else
             Arg_Data :=
-              Get_Args (To_Unbounded_String (Element (Command_Line, 2)),
-                        1, 3 , ",");
+              Get_Args (Command_Line, 1, 3 , ",");
+--                Get_Args (To_Unbounded_String (Element (Command_Line, 2)),
+--                          1, 3 , ",");
             if Arg_Data.Arg_C = 3 then
                Arg :=
                  To_Unbounded_String (Arg_Data.Arg_Buffer (Arg_Data.Arg_V (1)));

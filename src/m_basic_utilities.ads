@@ -7,6 +7,8 @@ with M_Basic;
 package M_Basic_Utilities is
 
    function Get_Close_Bracket
+     (Expression : String; Pos : in out Positive) return Positive;
+   function Get_Close_Bracket
      (Expression : Unbounded_String; Pos : in out Positive) return Positive;
    function Get_Word (Expression : Unbounded_String; Pos : Positive)
                       return String;

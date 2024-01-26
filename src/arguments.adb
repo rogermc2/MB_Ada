@@ -461,8 +461,8 @@ package body Arguments is
             D_Num := -1;
 
          else
-            Arg_Data := Get_Args (Expression, Pos, 2 * Configuration.MAXDIM,
-                                  "(,");
+            Arg_Data := Get_Args (To_String_Buffer (Expression, Pos),
+                                  Pos, 2 * Configuration.MAXDIM, "(,");
             Assert ((Unsigned_16 (Arg_Data.Arg_C) and 1) /= 0, Routine_Name &
                       "invalid dimensions.");
          end if;
@@ -537,7 +537,7 @@ package body Arguments is
 
    end Find_Var;
 
-   function Get_Args (Expression   : Unbounded_String; Pos : Positive;
+   function Get_Args (Expression   : String_Buffer; Pos : Positive;
                       Max_Num_Args : Natural; Delim : String)
                       return Arguments_Record is
    begin
@@ -557,7 +557,7 @@ package body Arguments is
    --                   If the first char of that string is an opening bracket
    --                  '(' this function will expect the arg list to be
    --                   enclosed in brackets.
-   function Make_Args (Expression : Unbounded_String; Pos : Positive;
+   function Make_Args (Expression : String_Buffer; Pos : Positive;
                        Max_Args   : Positive; Delim : String)
                        return Arguments_Record is
       use Interfaces;
@@ -574,8 +574,8 @@ package body Arguments is
       Arg_Buff_Ptr   : Integer := 1;    --  Op
       String_1       : String (1 .. 1);
       TP             : Positive := Pos;
-      TP2            : Natural := 0;
-      X              : Positive;
+--        TP2            : Natural := 0;
+--        X              : Positive;
       In_Arg         : Boolean := False;
       Expect_Cmd     : Boolean := False;
       Expect_Bracket : Boolean := False;
@@ -594,9 +594,10 @@ package body Arguments is
          Then_Token   : constant Natural := tokenTHEN;
          Else_Token   : constant Natural := tokenELSE;
          Token        : constant Natural:=
-           Integer'Value (Support.To_String (Element (Expression, Pos)));
+           Integer'Value (Element (Expression, Pos));
       begin
-         Put_Line (Routine_Name & "Expression: " & To_String (Expression));
+         Put_Line (Routine_Name & "Expression: ");
+         Support.Print_Buffer (Expression);
          Put_Line (Routine_Name & "TP: " & Integer'Image (TP));
          Put_Line (Routine_Name & "Token" & Integer'Image (Token));
          --  MMBasic 2208
@@ -608,7 +609,7 @@ package body Arguments is
          if In_Arg then
             Put_Line (Routine_Name & "2210 In_Arg");
             Arg_Buff_Index := Last_Index (Result.Arg_Buffer);
-            Term := Support.To_UB_String (Element (Expression, TP));
+            Term := To_Unbounded_String (Element (Expression, TP));
             Trim (Term, Both);
             Replace_Element (Result.Arg_Buffer, Arg_Buff_Index,
                              To_String (Term));
@@ -635,8 +636,7 @@ package body Arguments is
 
          --  MMBasic 2226
          Put_Line (Routine_Name & "2226 ");
-         Append (Result.Arg_Buffer,
-                 Support.To_String (Element (Expression, TP)));
+         Append (Result.Arg_Buffer, Element (Expression, TP));
          Arg_Buff_Ptr := Arg_Buff_Ptr + 1;
          TP := TP + 1;    --  step over delimiter?
 
@@ -647,9 +647,9 @@ package body Arguments is
    begin
       --  MMBasic 2163 Test_Stack_Overflow
       Result.Arg_C := 0;
-      Skip_Spaces (Expression, TP);
+      --        Skip_Spaces (Expression, TP);
       if Delim = "(" then
-         Assert (Element (Expression, TP) = '(', Routine_Name &
+         Assert (Element (Expression, TP) = "(", Routine_Name &
                    "'(' syntax error.");
          Expect_Bracket := True;
          Delim_Ptr := Delim_Ptr + 1;
@@ -657,14 +657,17 @@ package body Arguments is
       end if;
 
       --  MMBasic 2191  Main processing loop
-      Put_Line (Routine_Name & "2191 Expression: " & To_String (Expression));
+      Put_Line (Routine_Name & "2191 Expression: ");
+      Support.Print_Buffer (Expression);
       Put_Line (Routine_Name & "2191 TP: " & Integer'Image (TP));
       while not Done loop
-         Done := (Expect_Bracket and then Element (Expression, TP) = ')')
-           or else Element (Expression, TP) = ''';
+         Put_Line (Routine_Name & "2191 Arg_Buffer:");
+         Support.Print_Buffer (Result.Arg_Buffer);
+         Done := (Expect_Bracket and then Element (Expression, TP) = ")")
+           or else Element (Expression, TP) = "'";
          if not Done then
             Term := To_Unbounded_String
-              (Slice (Expression, TP, Length (Expression)));
+              (Element (Expression, TP));
             --  MMBasic 2205 Delim is a string of special characters that split
             --  the expression into separate terms;
             Put_Line (Routine_Name & "2205 Term: " & To_String (Term));
@@ -682,7 +685,7 @@ package body Arguments is
             --  MMBasic 2206 block moved to else  Delim_Found
             if not Delim_Found then
                --  MMBasic 2231  C1 E
-               Token := Integer'Value (To_String (Expression));
+               Token := Integer'Value (Element (Expression, TP));
                Put_Line (Routine_Name & "2231 Token: " & Integer'Image (Token));
                --  MMBasic 2234
                Expect_Cmd := Token = Then_Token or else Token = Else_Token;
@@ -707,33 +710,68 @@ package body Arguments is
                   --  until the matching closing bracket.
                   --  This includes special characters such as , and ; and
                   --  keeps track of any nested brackets.
-                  String_1 := Support.To_String (Element (Expression, TP));
-                  T_Token := Token_Type (Integer'Value (String_1));
+                  --                    String_1 := Support.To_String (Element (Expression, TP));
+                  --                    T_Token := Token_Type (Integer'Value (String_1));
+                  T_Token := Token_Type (Integer'Value (Expression (TP)));
                   --                    Put_Line (Routine_Name & "T_Token: " &
                   --                                Unsigned_16'Image (T_Token));
                   if String_1 = "(" or else ((T_Token and T_FUN) = T_FUN
                                              and then (not Expect_Cmd)) then
-                     --  MMBasic 2255 C3
-                     X := M_Basic_Utilities.Get_Close_Bracket (Expression, TP);
-                     X := X - TP + 1;
-                     Append (Result.Arg_Buffer, Slice (Expression, TP, X));
-                     Arg_Buff_Ptr := Arg_Buff_Ptr + X;
-                     TP := TP + X;
+                     --  MMBasic 2256 C3
+                     --                       X := M_Basic_Utilities.Get_Close_Bracket (Expression, TP);
+                     --                       X := M_Basic_Utilities.Get_Close_Bracket (Element (Expression, TP), TP);
+                     --                       X := X - TP + 1;
+                     --                       Append (Result.Arg_Buffer, Slice (Expression, TP, X));
+                     --                       Arg_Buff_Ptr := Arg_Buff_Ptr + X;
+                     --                       TP := TP + X;
+                     --  MMBasic 2259 copy everything until the matching closing bracket.
+                     while (TP < Integer (Length (Expression))) and then
+                       (Element (Expression, TP) /= ")") loop
+                        TP := TP + 1;
+                        Append (Result.Arg_Buffer, Element (Expression, TP));
+                        Result.Arg_C := Result.Arg_C + 1;
+                        Append (Result.Arg_V, Arg_Buff_Ptr);
+                        Arg_Buff_Ptr := Arg_Buff_Ptr + 1;
+                     end loop;
+                     Assert (TP <= Integer (Length (Expression)) or else
+                             Last_Element (Expression) = ")", Routine_Name
+                             & "syntax error, closing braket missing");
 
                   elsif String_1 = """" then
-                     --  MMBasic 2269 C4
-                     TP2 := Index (Source  => Expression,
-                                   Pattern => """",
-                                   From    => TP + 1);
-                     Assert (TP2 > 0, Routine_Name &
-                               "syntax error, no closing "".");
-                     Append (Result.Arg_Buffer, Slice (Expression, TP, TP2));
-                     TP := TP2 + 1;
+                     --  MMBasic 2265 C4 if quote mark " copy everything until
+                     --  the closing quote including special characters such
+                     --   as , and ;.
+                     --  The tokenise() function will have ensured that the
+                     --  closing quote is always there.
+                     --                       TP2 := Index (Source  => Expression,
+                     --                                     Pattern => """",
+                     --                                     From    => TP + 1);
+                     --                       Assert (TP2 > 0, Routine_Name &
+                     --                                 "syntax error, no closing "".");
+                     --                       Append (Result.Arg_Buffer, Slice (Expression, TP, TP2));
+                     --                       TP := TP2 + 1;
+                     while (TP < Integer (Length (Expression))) and then
+                       (Element (Expression, TP) /= """") loop
+                        TP := TP + 1;
+                        Append (Result.Arg_Buffer, Element (Expression, TP));
+                        Result.Arg_C := Result.Arg_C + 1;
+                        Append (Result.Arg_V, Arg_Buff_Ptr);
+                        Arg_Buff_Ptr := Arg_Buff_Ptr + 1;
+                     end loop;
+
+                     Assert (TP <= Integer (Length (Expression)) or else
+                             Last_Element (Expression) = """", Routine_Name
+                             & "syntax error, closing quote missing");
 
                   else  --  anything else
                      --  MMBasic 2281
-                     Append (Result.Arg_Buffer, To_String (Expression));
-                     TP := Length (Expression) + 1;
+                     --                       Append (Result.Arg_Buffer, To_String (Expression));
+                     --                       TP := Length (Expression) + 1;
+                     Append (Result.Arg_Buffer, Expression (TP));
+                     TP := TP + 1;
+                     Result.Arg_C := Result.Arg_C + 1;
+                     Append (Result.Arg_V, Arg_Buff_Ptr);
+                     Arg_Buff_Ptr := Arg_Buff_Ptr + 1;
                      Expect_Cmd := False;
                   end if;  --  if aChar /= '('
 
@@ -746,14 +784,15 @@ package body Arguments is
             end if;  --  not Match
          end if;  --  First not Done
 
-         Done := TP > Length (Expression);
+         Done := TP >Integer (Expression.Length);
          --  MMBasic 2280
       end loop;
 
       --  MMBasic 2285
-      if Expect_Bracket and then Element (Expression, TP) /= ')' then
-         Assert (False, Routine_Name & "syntax error, bracket expected.");
-      end if;
+--        if Expect_Bracket and then Expression (TP) /= ')' then
+      Assert (not Expect_Bracket or else Expression (TP) = ")",
+              Routine_Name & "syntax error, bracket expected.");
+--        end if;
       --        Trim (Arg_Buff, Right);
 
       Put_Line (Routine_Name & "done, Arg_Buffer: ");

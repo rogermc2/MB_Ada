@@ -13,6 +13,12 @@ with Ada.Characters.Handling;
 package body M_Basic_Utilities is
 
    function Get_Close_Bracket
+     (Expression : String; Pos : in out Positive) return Positive is
+   begin
+      return Get_Close_Bracket (To_Unbounded_String (Expression), Pos);
+   end Get_Close_Bracket;
+
+   function Get_Close_Bracket
      (Expression : Unbounded_String; Pos : in out Positive) return Positive is
       use Ada.Assertions;
       use Interfaces;

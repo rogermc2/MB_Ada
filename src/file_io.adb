@@ -10,7 +10,7 @@ with Arguments;
 with Evaluation;
 --  with External;
 with Flash;
-with M_Basic_Utilities;
+--  with M_Basic_Utilities;
 with Support;
 
 package body File_IO is
@@ -24,7 +24,7 @@ package body File_IO is
       use Ada.Containers;
       use Arguments;
       use Evaluation;
-      use M_Basic_Utilities;
+--        use M_Basic_Utilities;
       Routine_Name : constant String := "File_IO.Config_SD_Card ";
       Args         : String_Buffer := Command_Line;
       Arg_Data     : Arguments_Record;
@@ -37,7 +37,8 @@ package body File_IO is
       Args.Delete_First;
       Put_Line (Routine_Name & "Args: ");
       Support.Print_Buffer (Args);
-      Arg_Data := Get_Args (To_UB_String (Args), 1, 5, ",");
+      Arg_Data := Get_Args (Args, 1, 5, ",");
+--        Arg_Data := Get_Args (To_UB_String (Args), 1, 5, ",");
       Assert (Arg_Data.Arg_V.Length > 0, Routine_Name & "Arg_V is empty");
       Put_Line (Routine_Name & "Arg_C: " & Integer'Image (Arg_Data.Arg_C));
       Put_Line (Routine_Name & "Arg_Buffer: ");
