@@ -727,10 +727,8 @@ package body Arguments is
                      --  MMBasic 2259 copy everything until the matching closing bracket.
                      while (TP < Integer (Length (Expression))) and then
                        (Element (Expression, TP) /= ")") loop
-                        TP := TP + 1;
                         Append (Result.Arg_Buffer, Element (Expression, TP));
-                        Result.Arg_C := Result.Arg_C + 1;
-                        Append (Result.Arg_V, Arg_Buff_Ptr);
+                        TP := TP + 1;
                         Arg_Buff_Ptr := Arg_Buff_Ptr + 1;
                      end loop;
                      Assert (TP <= Integer (Length (Expression)) or else
@@ -752,10 +750,8 @@ package body Arguments is
                      --                       TP := TP2 + 1;
                      while (TP < Integer (Length (Expression))) and then
                        (Element (Expression, TP) /= """") loop
-                        TP := TP + 1;
                         Append (Result.Arg_Buffer, Element (Expression, TP));
-                        Result.Arg_C := Result.Arg_C + 1;
-                        Append (Result.Arg_V, Arg_Buff_Ptr);
+                        TP := TP + 1;
                         Arg_Buff_Ptr := Arg_Buff_Ptr + 1;
                      end loop;
 
@@ -769,8 +765,6 @@ package body Arguments is
                      --                       TP := Length (Expression) + 1;
                      Append (Result.Arg_Buffer, Expression (TP));
                      TP := TP + 1;
-                     Result.Arg_C := Result.Arg_C + 1;
-                     Append (Result.Arg_V, Arg_Buff_Ptr);
                      Arg_Buff_Ptr := Arg_Buff_Ptr + 1;
                      Expect_Cmd := False;
                   end if;  --  if aChar /= '('
