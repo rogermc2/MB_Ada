@@ -21,8 +21,8 @@ package body File_IO_Handler is
       if Command_Line.Is_Empty then
          Append (P, "*");
       else
-         Append (P,  Command_Line (1));
-                 end if;
+         P := Command_Line;
+      end if;
 
    end Files_Cmd;
 
