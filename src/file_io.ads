@@ -6,6 +6,7 @@ package File_IO is
    Option_File_Error_Abort : Boolean := True;
 
    procedure Check_SDCard;
+--     procedure cmd_files;
    procedure Config_SD_Card (Command_Line : String_Buffer);
    function File_Get_Character (File_Num : Positive) return Character;
    procedure Init_File_IO;

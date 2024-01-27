@@ -9,6 +9,7 @@ with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 
 with Command_And_Token_Functions; use Command_And_Token_Functions;
 with Command_Handler;
+with File_IO_Handler; use File_IO_Handler;
 with Option_Handler; use Option_Handler;
 
 package Command_And_Token_Tables is
@@ -58,16 +59,18 @@ package Command_And_Token_Tables is
    end record;
 
    Num_Commands          : constant Positive := 53;
+   Num_File_IO_Commands  : constant Positive := 9;
    Num_Function_Commands : constant Positive := 45;
    Num_Functions         : constant Positive := 117;
-   Num_Tokens            : constant Positive := 9;
+   Num_Tokens            : constant Positive := 11;
    Num_Operators         : constant Positive := 19;
 
    Command_Table_Size : constant Positive :=
      Num_Functions + Num_Commands + Num_Function_Commands +
-       Num_Operators + 1;
+      Num_File_IO_Commands + Num_Operators + 1;
    Token_Table_Size   : constant Positive :=
-                          Num_Functions + Num_Commands + Num_Operators + 1;
+     Num_Functions + Num_Commands + Num_Operators +
+       Num_Tokens + 1;
 
    --  Command_Table and Token_Table are loaded by
    --  Command_and_Token_Tables.adb initialization.
@@ -171,6 +174,16 @@ package Command_And_Token_Tables is
    cmd_const          : constant Access_Procedure :=  Null;
    cmd_select         : constant Access_Procedure :=  Null;
    cmd_case           : constant Access_Procedure :=  Null;
+
+   cmd_save           : constant Access_Procedure :=  Null;
+   cmd_load           : constant Access_Procedure :=  Null;
+   cmd_mkdir          : constant Access_Procedure :=  Null;
+   cmd_rmdir          : constant Access_Procedure :=  Null;
+   cmd_chdir          : constant Access_Procedure :=  Null;
+   cmd_kill           : constant Access_Procedure :=  Null;
+   cmd_seek           : constant Access_Procedure :=  Null;
+   cmd_files          : constant Access_Procedure :=  Files_Cmd'Access;
+   cmd_name           : constant Access_Procedure :=  Null;
 
    function Get_Input_Buffer return String;
    function Get_Input_Character (Pos : Positive) return Character;
