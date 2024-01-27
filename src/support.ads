@@ -63,6 +63,7 @@ package Support is
    procedure Do_PIN;
    procedure Execute_MM_Basic;
    procedure Initialize;
+   function Is_Integer (Term : String) return Boolean;
    procedure Print_Buffer (Buffer     : String_Buffer;
                            With_Delim : Boolean := False);
    procedure Process_Commands;

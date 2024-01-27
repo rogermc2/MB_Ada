@@ -59,11 +59,10 @@ package body File_IO is
       --  File_IO 115
       Flash.Option.SDCARD_CS := Arg_Val;
 
-      Put_Line (Routine_Name & "Arg_Val 1: " & Integer'Image (Arg_Val));
       if Arg_Data.Arg_C > 2 then
          Put_Line (Routine_Name & "Arg_C > 2");
-         Arg := To_Unbounded_String (Arg_Data.Arg_Buffer (Arg_Data.Arg_V (2)));
-         Put_Line (Routine_Name & "Arg: '" & To_String (Arg) & "'");
+         Arg := To_Unbounded_String (Arg_Data.Arg_Buffer (Arg_Data.Arg_V (3)));
+         Put_Line (Routine_Name & "Arg: " & To_String (Arg));
          Arg_Val := Integer (Get_Integer (Arg));
          Put_Line (Routine_Name & "Arg_Val: " & Integer'Image (Arg_Val));
          --        Pin_Check := External.Check_Pin (abs (Arg_3_Val), Commands.Option_Error_Check);

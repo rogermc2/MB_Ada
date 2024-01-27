@@ -1,4 +1,5 @@
 
+with Ada.Characters.Handling;
 with Ada.Text_IO; use Ada.Text_IO;
 
 with Audio;
@@ -151,6 +152,18 @@ package body Support is
          Saved_Cause := Cause_Nothing;
       end if;
    end Initialize;
+
+   function Is_Integer (Term : String) return Boolean is
+      use Ada.Characters.Handling;
+      OK : Boolean := True;
+   begin
+      for char of Term loop
+         OK := OK and Is_Digit (char);
+      end loop;
+
+      return OK;
+
+   end Is_Integer;
 
    procedure Print_Buffer (Buffer     : String_Buffer;
                            With_Delim : Boolean := False) is
