@@ -26,20 +26,12 @@ with Global;
 with M_Basic_Utilities; use M_Basic_Utilities;
 with M_Misc;
 with Memory;
-with Support;
+--  with Support;
 
 package body M_Basic is
 
-   --     package Multi_Value_Package is new
-   --       Ada.Containers.Indefinite_Vectors (Positive, Multi_Value);
-   --     subtype Multi_Value_Vector is Multi_Value_Package.Vector;
-
    Callers_Line_Ptr       : Subfunction_Ptr;
-   --     Callers_Line_Ptr : Natural := 0;
    Next_Statement         : Positive;
-   --     Command_Line           : Unbounded_String;
-   --     Saved_Command_Line_Pos : Positive := 1;
-   --     Cmd_Token              : Positive;
    Current_Comand         : aliased Unbounded_String := Null_Unbounded_String;
 
    --     Trace_On : Boolean := False;
@@ -48,10 +40,6 @@ package body M_Basic is
    procedure Inc_Ptr (Pos : in out Subfunction_Ptr);
    function Is_Command_End (Command : String_Buffer; Pos : Positive)
                             return Boolean;
-   --     function Is_Command_End (Command : Unbounded_String; Pos : in out Positive)
-   --                              return Boolean;
-   --     procedure Skip_Element (aLine : String_Buffer; Pos : in out Positive) ;
-   --     procedure Skip_Element (aLine : Unbounded_String; Pos : in out Positive);
    procedure User_Defined_Subfunction
      (Command      : Unbounded_String; TP : Positive;
       Sub_Line_Ptr : Subfunction_Ptr);
@@ -63,7 +51,6 @@ package body M_Basic is
    --  (space, null, comma, opening bracket or comment).
    --  Check_String returns a pointer to the next non space character
    --  after the matched string if found or 0 otherwise.
-   --     function Check_String (aString, Token : String) return Natural is
    function Check_String (aString, Token : String) return Boolean is
       use Ada.Characters.Handling;
       use Ada.Strings;
@@ -71,10 +58,7 @@ package body M_Basic is
       U_Token          : constant String := To_Upper (Token);
       U_String         : constant String :=
         To_Upper (To_String (Trim (To_Unbounded_String (aString), Left)));
-      --        S_Pos            : Positive := 1;
-      --        T_Pos            : Positive := 1;
-      --        Result           : Natural  := 0;
-   begin
+    begin
       --  MMBasic 2704
       --        Skip_Spaces (aString, S_Pos);
       --        Put_Line (Routine_Name & "aString: " & aString);
@@ -167,7 +151,6 @@ package body M_Basic is
       --  780
       Put_Line (Routine_Name & "780");
       Execute_Program  (To_String_Buffer (Command, Pos));
-      --         (To_String_Buffer (Unbounded_Slice (Command, Pos, Length (Command))));
       Current_Line_Ptr := Callers_Line_Ptr;
       Global.Command_Line := To_String_Buffer (S, 1);
       Next_Statement := TTP;
@@ -215,7 +198,6 @@ package body M_Basic is
       Routine_Name  : constant String  := "M_Basic.Defined_Subfunction ";
       --  Sub_Line_Ptr is pointer to a program memory elenment
       Sub_Line_Ptr  : constant Subfunction_Ptr := Subfunctions (Subfun_Index);
-      --        Sub_Line      : Unbounded_String := Sub_Line_Ptr.all;
       SL_Pos        : Positive := 1;      --  p
       SL_Pos2       : Positive;           --  ttp
       SL_Pos3       : Positive;           --  pp
@@ -453,12 +435,10 @@ package body M_Basic is
       No_Abort           : Boolean := True;
       Done               : Boolean := Natural (Token_Buffer.Length) = 0;
    begin
-      Put_Line (Routine_Name & "Token_Buffer:");
-      Support.Print_Buffer (Token_Buffer);
+      --        Put_Line (Routine_Name & "Token_Buffer:");
+      --        Support.Print_Buffer (Token_Buffer);
       --  225
       Next_Statement := Program_Ptr;
-      Put_Line (Routine_Name & "225 Command: " & To_String (Command));
-      --        Global.Command_Line := Delete (Token_Buffer, 1, 1);
       Global.Command_Line := Token_Buffer;
       Global.Command_Line.Delete_First;
 
@@ -469,26 +449,15 @@ package body M_Basic is
       if Done then
          Put_Line (Routine_Name & "No more token buffer elements");
       else
-         Put_Line (Routine_Name & "226 Program_Ptr: " &
-                     Integer'Image (Program_Ptr));
          --  ignore comment line if character is '.
          Skip_Spaces (Command, Command_Pos);
          --  228
          if Element (Command, Command_Pos) /= ''' then
-            --              Skip_Element (Token_Buffer, Program_Ptr);
-            Put_Line (Routine_Name & "236 Element skipped Program_Ptr: " &
-                        Integer'Image (Program_Ptr));
             --  236 if setjmp (ErrNext) = 0 then
             Save_Local_Index := Local_Index;
             --  C_Base_Token is the base of the token numbers.
             Command_Token_Test :=
               M_Misc.C_Base_Token and Command_Token - M_Misc.C_Base_Token;
-            --              Put_Line (Routine_Name & "Command_Token: " &
-            --                          Unsigned_16'Image (Command_Token));
-            --              Put_Line (Routine_Name & "(Command_Token - M_Misc.C_Base_Token: " &
-            --                          Unsigned_16'Image (Command_Token - M_Misc.C_Base_Token));
-            --              Put_Line (Routine_Name & "Command_Token_Test" &
-            --                          Unsigned_16'Image (Command_Token_Test));
 
             if Command_Token >= Command_Token_Test and then
               Command_Token_Test < Unsigned_16 (Command_Table_Size) and then
@@ -498,18 +467,10 @@ package body M_Basic is
                --  243
                T_Arg := T_CMD;   -- type of returned value
                --  Execute the command
-               Put_Line
-                 (Routine_Name & "247 Executing command, Token: " &
-                    Unsigned_16'Image (Command_Token) &
-                    ", Command_Table index: " &
-                    Unsigned_16'Image (Command_Token - M_Misc.C_Base_Token));
-               Put_Line (Routine_Name & "247 Program_Ptr: " &
-                           Integer'Image (Program_Ptr));
                Command_Ptr := Command_Table
                  (Integer (Command_Token - M_Misc.C_Base_Token)).Function_Ptr;
-               Assert
-                 (Command_Ptr /= null,
-                  Routine_Name & "247 Command_Ptr is null");
+               Assert (Command_Ptr /= null, Routine_Name &
+                         "247 Command_Ptr is null");
                Command_Ptr.all;
 
             end if;
@@ -556,14 +517,12 @@ package body M_Basic is
       Done             : Boolean         := Integer (Token_Buffer.Length) = 0;
    begin
       if not Done then
-         Put_Line (Routine_Name & "Token_Buffer: ");
-         Support.Print_Buffer (Token_Buffer);
+         --           Put_Line (Routine_Name & "Token_Buffer: ");
+         --           Support.Print_Buffer (Token_Buffer);
          --  194
          while not Done and then
          --             Program_Ptr < Integer (Length (Token_Buffer)) loop
            Program_Ptr < Integer (Token_Buffer.Length) loop
-            Put_Line (Routine_Name & "194 Program_Ptr: " &
-                        Integer'Image (Program_Ptr));
             Item := To_Unbounded_String (Token_Buffer (Program_Ptr));
             Item_Ptr := 1;
             if Element (Item, Item_Ptr) = '0' then
@@ -596,8 +555,6 @@ package body M_Basic is
 
             --  225
             if Program_Ptr <= Positive (Token_Buffer.Length) then
-               Put_Line (Routine_Name & "225 Execute_Command, Program_Ptr: " &
-                           Integer'Image (Program_Ptr));
                Execute_Command (Token_Buffer, Program_Ptr, Save_Local_Index);
             end if;
 

@@ -27,7 +27,6 @@ package body Command_Handler is
 --        if Command_Line'Length > 0  then
       if Integer (Command_Line.Length) > 0  then
          P := M_Basic.Check_String (Element (Command_Line, 1), "ALL");
---           P := M_Basic.Check_String (Command_Line, "ALL");
       end if;
 
 --        if P > 0 then

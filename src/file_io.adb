@@ -2,12 +2,12 @@
 with Ada.Assertions; use Ada.Assertions;
 with Ada.Containers;
 --  with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
-with Ada.Text_IO; use Ada.Text_IO;
+--  with Ada.Text_IO; use Ada.Text_IO;
 
 with Arguments;
 
 with Flash;
-with Support;
+--  with Support;
 
 package body File_IO is
 
@@ -26,17 +26,12 @@ package body File_IO is
       --        Pin_Check    : Integer;
    begin
       --  File_IO 107
-      Put_Line (Routine_Name & "Command_Line: ");
-      Support.Print_Buffer (Command_Line);
       Args.Delete_First;
-      Put_Line (Routine_Name & "Args: ");
-      Support.Print_Buffer (Args);
       --  File_IO 109
       Arg_Data := Get_Args (Args, 1, 5, ",");
 
       Assert (Arg_Data.Arg_V.Length > 0, Routine_Name & "Arg_V is empty");
       Arg_Val := Integer'Value (Arg_Data.Arg_Buffer (Arg_Data.Arg_V (1)));
-      Put_Line (Routine_Name & "Arg_Val 1: " & Integer'Image (Arg_Val));
       Assert (Arg_Data.Arg_C > 0 and then Arg_Data.Arg_C <= 5,
               Routine_Name & "invalid number of arguments:" &
                 Integer'Image (Arg_Data.Arg_C) &
@@ -51,7 +46,6 @@ package body File_IO is
 
       if Arg_Data.Arg_C > 2 then
          Arg_Val := Integer'Value (Arg_Data.Arg_Buffer (Arg_Data.Arg_V (3)));
-         Put_Line (Routine_Name & "Arg_Val: " & Integer'Image (Arg_Val));
          --        Pin_Check := External.Check_Pin (abs (Arg_3_Val), Commands.Option_Error_Check);
          Flash.Option.SD_CD := Arg_Val;
       end if;

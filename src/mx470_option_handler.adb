@@ -303,15 +303,10 @@ package body MX470_Option_Handler is
 
    function Do_SD_Card (Command_Line : String_Buffer) return Boolean is
       use String_Buffer_Package;
-      --        TP    : constant Natural := Check_String (Command_Line, "SDCARD");
-      --        Found : constant Boolean := TP > 0;
       Found : constant Boolean :=
         Check_String (Element (Command_Line, 1), "SDCARD");
    begin
-      Put_Line ("Do_SD_Card, Command_Line:");
-      Support.Print_Buffer (Command_Line);
       if Found then
-         Put_Line ("Do_SD_Card found");
          if Check_String (Element (Command_Line, 2), "DISABLE") then
             Flash.Option.SDCARD_CS := 0;
             Flash.Option.SD_CD := 0;
@@ -334,13 +329,9 @@ package body MX470_Option_Handler is
       use String_Buffer_Package;
       Routine_Name : constant String := "MX470_Option_Handler.Other_Options ";
       Subfunction  : String_Buffer := Command_Line;
-      --        Command_Line : constant String := To_String (Global.Command_Line);
       Result       : Boolean := False;
    begin
-      --        Put_Line (Routine_Name & "Command_Line: '" & Command_Line & "'");
       Delete_First (Subfunction);
-      Put_Line (Routine_Name & "Subfunction:");
-      Support.Print_Buffer (Subfunction);
       Result :=
         Do_Reset(Command_Line) or else
         Do_Keyboard (Command_Line) or else
