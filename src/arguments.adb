@@ -569,13 +569,10 @@ package body Arguments is
       Routine_Name   : constant String := "Arguments.Make_Args ";
       Then_Token     : constant Natural := tokenTHEN;
       Else_Token     : constant Natural := tokenELSE;
-      Arg_Buff_Index : Natural;
-      --        Op             : Positive := 1;  --  Character index into Arg_Buff
+--        Arg_Buff_Index : Natural;
       Arg_Buff_Ptr   : Integer := 1;    --  Op
       String_1       : String (1 .. 1);
       TP             : Positive := Pos;
-      --        TP2            : Natural := 0;
-      --        X              : Positive;
       In_Arg         : Boolean := False;
       Expect_Cmd     : Boolean := False;
       Expect_Bracket : Boolean := False;
@@ -595,25 +592,21 @@ package body Arguments is
          Else_Token   : constant Natural := tokenELSE;
          Delim        : constant String := Expression (TP);
       begin
-         Put_Line (Routine_Name & "Expression: ");
-         Support.Print_Buffer (Expression);
-         Put_Line (Routine_Name & "TP: " & Integer'Image (TP));
-         Put_Line (Routine_Name & "Delim: " & Delim);
+--           Put_Line (Routine_Name & "Expression: ");
+--           Support.Print_Buffer (Expression);
+--           Put_Line (Routine_Name & "TP: " & Integer'Image (TP));
+--           Put_Line (Routine_Name & "Delim: " & Delim);
          --  MMBasic 2208
          if Delim not in Delimiters then
             Expect_Cmd := Integer'Value (Delim) = Then_Token or else
               Integer'Value (Delim) = Else_Token;
          end if;
-         Put_Line (Routine_Name & "2209 In_Arg");
 
          --  MMBasic 2210
          if In_Arg then
-            Put_Line (Routine_Name & "2210 In_Arg");
-            Arg_Buff_Index := Last_Index (Result.Arg_Buffer);
+--              Arg_Buff_Index := Last_Index (Result.Arg_Buffer);
             Term := To_Unbounded_String (Delim);
             Trim (Term, Both);
-            Replace_Element (Result.Arg_Buffer, Arg_Buff_Index,
-                             To_String (Term));
 
             --  MMBasic 2216
          elsif Result.Arg_C > 0 then
@@ -622,27 +615,22 @@ package body Arguments is
             --  so, create a null argument to go between the two delimiters.
             Result.Arg_V.Replace_Element (Result.Arg_C, TP);
             TP := TP + 1;
-            Put_Line (Routine_Name & "2216 Arg_C set");
-            Append (Result.Arg_Buffer, Support.To_String (ASCII.NUL));
             Result.Arg_C := Result.Arg_C + 1;
             Arg_Buff_Ptr := Result.Arg_Buffer.Last_Index + 1;
          end if;
-         Put_Line (Routine_Name & "2222");
 
          --  MMBasic 2222
          In_Arg := False;
          Assert (Result.Arg_C <= Max_Args, Routine_Name & "Too many arguments");
+
          Append (Result.Arg_V, Arg_Buff_Ptr);
          Result.Arg_C := Result.Arg_C + 1;
-
          --  MMBasic 2226
-         Put_Line (Routine_Name & "2226 ");
-         Append (Result.Arg_Buffer, Element (Expression, TP));
+         Append (Result.Arg_Buffer, To_String (Term));
          Arg_Buff_Ptr := Arg_Buff_Ptr + 1;
          TP := TP + 1;    --  step over delimiter?
-
-         Append (Result.Arg_Buffer, Support.To_String (ASCII.NUL));
          Arg_Buff_Ptr := Arg_Buff_Ptr + 1;
+
       end Process_Delim;
 
    begin
@@ -658,12 +646,12 @@ package body Arguments is
       end if;
 
       --  MMBasic 2191  Main processing loop
-      Put_Line (Routine_Name & "2191 Expression: ");
-      Support.Print_Buffer (Expression);
-      Put_Line (Routine_Name & "2191 TP: " & Integer'Image (TP));
+--        Put_Line (Routine_Name & "2191 Expression: ");
+--        Support.Print_Buffer (Expression);
+--        Put_Line (Routine_Name & "2191 TP: " & Integer'Image (TP));
       while not Done loop
-         Put_Line (Routine_Name & "2191 Arg_Buffer:");
-         Support.Print_Buffer (Result.Arg_Buffer);
+--           Put_Line (Routine_Name & "2191 Arg_Buffer:");
+--           Support.Print_Buffer (Result.Arg_Buffer);
          --  MMBasic 2194
          Done := (Expect_Bracket and then Element (Expression, TP) = ")")
            or else Element (Expression, TP) = "'";
@@ -671,7 +659,7 @@ package body Arguments is
             Term := To_Unbounded_String (Expression (TP));
             --  MMBasic 2205 Delim is a string of special characters that split
             --  the expression into separate terms;
-            Put_Line (Routine_Name & "2205 Term: " & To_String (Term));
+--              Put_Line (Routine_Name & "2205 Term: " & To_String (Term));
             Delim_Found := False;
             Delim_Index := 0;
             while not Delim_Found and then Delim_Index < Delimiters'Last loop
@@ -680,20 +668,20 @@ package body Arguments is
                Delim_Pos := Index (Term, String_1);
                Delim_Found := Delim_Pos > 0;
             end loop;
-            Put_Line (Routine_Name & "2206 Delim_Found: " &
-                        Boolean'Image (Delim_Found));
+--              Put_Line (Routine_Name & "2206 Delim_Found: " &
+--                          Boolean'Image (Delim_Found));
 
             --  MMBasic 2206 block moved to else  Delim_Found
             if not Delim_Found then
                --  MMBasic 2231  C1 E
                Token := Integer'Value (Element (Expression, TP));
-               Put_Line (Routine_Name & "2231 Token: " & Integer'Image (Token));
+--                 Put_Line (Routine_Name & "2231 Token: " & Integer'Image (Token));
                --  MMBasic 2234
                Expect_Cmd := Token = Then_Token or else Token = Else_Token;
-               Put_Line (Routine_Name & "2234 Then_Token: " &
-                           Integer'Image (Then_Token));
-               Put_Line (Routine_Name & "2234 Expect_Cmd: " &
-                           Boolean'Image (Expect_Cmd));
+--                 Put_Line (Routine_Name & "2234 Then_Token: " &
+--                             Integer'Image (Then_Token));
+--                 Put_Line (Routine_Name & "2234 Expect_Cmd: " &
+--                             Boolean'Image (Expect_Cmd));
 
                --  MMBasic 2244
                if not In_Arg then
@@ -762,8 +750,6 @@ package body Arguments is
 
                   else  --  anything else
                      --  MMBasic 2281
-                     --                       Append (Result.Arg_Buffer, To_String (Expression));
-                     --                       TP := Length (Expression) + 1;
                      Append (Result.Arg_Buffer, Expression (TP));
                      TP := TP + 1;
                      Arg_Buff_Ptr := Arg_Buff_Ptr + 1;
@@ -784,11 +770,8 @@ package body Arguments is
       end loop;
 
       --  MMBasic 2285
-      --        if Expect_Bracket and then Expression (TP) /= ')' then
       Assert (not Expect_Bracket or else Expression (TP) = ")",
               Routine_Name & "syntax error, bracket expected.");
-      --        end if;
-      --        Trim (Arg_Buff, Right);
 
       Put_Line (Routine_Name & "done, Arg_Buffer: ");
       Support.Print_Buffer (Result.Arg_Buffer);
