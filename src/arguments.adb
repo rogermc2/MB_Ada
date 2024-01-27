@@ -558,7 +558,7 @@ package body Arguments is
    --                  '(' this function will expect the arg list to be
    --                   enclosed in brackets.
    function Make_Args (Expression : String_Buffer; Pos : Positive;
-                       Max_Args   : Positive; Delim : String)
+                       Max_Args   : Positive; Delimiters : String)
                        return Arguments_Record is
       use Interfaces;
       use Ada.Assertions;
@@ -574,8 +574,8 @@ package body Arguments is
       Arg_Buff_Ptr   : Integer := 1;    --  Op
       String_1       : String (1 .. 1);
       TP             : Positive := Pos;
---        TP2            : Natural := 0;
---        X              : Positive;
+      --        TP2            : Natural := 0;
+      --        X              : Positive;
       In_Arg         : Boolean := False;
       Expect_Cmd     : Boolean := False;
       Expect_Bracket : Boolean := False;
@@ -589,27 +589,28 @@ package body Arguments is
       Done           : Boolean := False;
       Result         : Arguments_Record;
 
-      procedure C1 is
-         Routine_Name : constant String := "Arguments.Make_Args.C1 ";
+      procedure Process_Delim is  --  C1
+         Routine_Name : constant String := "Arguments.Make_Args.Process_Delim ";
          Then_Token   : constant Natural := tokenTHEN;
          Else_Token   : constant Natural := tokenELSE;
-         Token        : constant Natural:=
-           Integer'Value (Element (Expression, Pos));
+         Delim        : constant String := Expression (TP);
       begin
          Put_Line (Routine_Name & "Expression: ");
          Support.Print_Buffer (Expression);
          Put_Line (Routine_Name & "TP: " & Integer'Image (TP));
-         Put_Line (Routine_Name & "Token" & Integer'Image (Token));
+         Put_Line (Routine_Name & "Delim: " & Delim);
          --  MMBasic 2208
-         if Token = Then_Token or else Token = Else_Token then
-            Expect_Cmd := True;
+         if Delim not in Delimiters then
+            Expect_Cmd := Integer'Value (Delim) = Then_Token or else
+              Integer'Value (Delim) = Else_Token;
          end if;
+         Put_Line (Routine_Name & "2209 In_Arg");
 
          --  MMBasic 2210
          if In_Arg then
             Put_Line (Routine_Name & "2210 In_Arg");
             Arg_Buff_Index := Last_Index (Result.Arg_Buffer);
-            Term := To_Unbounded_String (Element (Expression, TP));
+            Term := To_Unbounded_String (Delim);
             Trim (Term, Both);
             Replace_Element (Result.Arg_Buffer, Arg_Buff_Index,
                              To_String (Term));
@@ -642,14 +643,14 @@ package body Arguments is
 
          Append (Result.Arg_Buffer, Support.To_String (ASCII.NUL));
          Arg_Buff_Ptr := Arg_Buff_Ptr + 1;
-      end C1;
+      end Process_Delim;
 
    begin
-      --  MMBasic 2163 Test_Stack_Overflow
+      --  MMBasic 2182 Test_Stack_Overflow
       Result.Arg_C := 0;
       --        Skip_Spaces (Expression, TP);
-      if Delim = "(" then
-         Assert (Element (Expression, TP) = "(", Routine_Name &
+      if Delimiters = "(" then
+         Assert (Expression (TP) = "(", Routine_Name &
                    "'(' syntax error.");
          Expect_Bracket := True;
          Delim_Ptr := Delim_Ptr + 1;
@@ -663,19 +664,19 @@ package body Arguments is
       while not Done loop
          Put_Line (Routine_Name & "2191 Arg_Buffer:");
          Support.Print_Buffer (Result.Arg_Buffer);
+         --  MMBasic 2194
          Done := (Expect_Bracket and then Element (Expression, TP) = ")")
            or else Element (Expression, TP) = "'";
          if not Done then
-            Term := To_Unbounded_String
-              (Element (Expression, TP));
+            Term := To_Unbounded_String (Expression (TP));
             --  MMBasic 2205 Delim is a string of special characters that split
             --  the expression into separate terms;
             Put_Line (Routine_Name & "2205 Term: " & To_String (Term));
-            Delim_Index := 0;
             Delim_Found := False;
-            while not Delim_Found and then Delim_Index < Delim'Last loop
+            Delim_Index := 0;
+            while not Delim_Found and then Delim_Index < Delimiters'Last loop
                Delim_Index := Delim_Index + 1;
-               String_1 := Support.To_String (Delim (Delim_Index));
+               String_1 := Support.To_String (Delimiters (Delim_Index));
                Delim_Pos := Index (Term, String_1);
                Delim_Found := Delim_Pos > 0;
             end loop;
@@ -773,20 +774,20 @@ package body Arguments is
                   TP := TP + 1;
                end if;  -- not In_Arg
 
-            else
-               C1;
+            else  --  Delim_Found
+               Process_Delim;  --  C1;
             end if;  --  not Match
          end if;  --  First not Done
 
-         Done := TP >Integer (Expression.Length);
+         Done := TP > Integer (Expression.Length);
          --  MMBasic 2280
       end loop;
 
       --  MMBasic 2285
---        if Expect_Bracket and then Expression (TP) /= ')' then
+      --        if Expect_Bracket and then Expression (TP) /= ')' then
       Assert (not Expect_Bracket or else Expression (TP) = ")",
               Routine_Name & "syntax error, bracket expected.");
---        end if;
+      --        end if;
       --        Trim (Arg_Buff, Right);
 
       Put_Line (Routine_Name & "done, Arg_Buffer: ");

@@ -51,7 +51,7 @@ package Arguments is
                       Max_Num_Args : Natural; Delim : String)
                       return Arguments_Record;
    function Make_Args (Expression : String_Buffer; Pos : Positive;
-                       Max_Args   : Positive; Delim : String)
+                       Max_Args   : Positive; Delimiters : String)
                        return Arguments_Record;
 
 end Arguments;
