@@ -1,4 +1,5 @@
 
+with Command_And_Token_Tables;
 package Fat_File is
 
    type F_Result is (FR_OK,		--  (0) Succeeded
@@ -21,7 +22,37 @@ package Fat_File is
                      FR_NOT_ENOUGH_CORE, --  (17) LFN working buffer could not be allocated
                      FR_TOO_MANY_OPEN_FILES, --  (18) Number of open files > _FS_LOCK
                      FR_INVALID_PARAMETER);  --  (19) Given parameter is invalid
+   type Fat_FS is record
+      FS_Type             : Natural := 0;
+      Drive_Num           : Natural := 0;
+      Num_Fats            : Positive := 1;
+      Win_Flag            : Boolean := False;
+      Fsi_Flag            : Boolean := False;
+      ID                  : Natural := 0;
+      Root_Dir_Size       : Natural := 0;  --  n_rootdir
+      Cluster_Size        : Natural := 0;
+      Sector_Size         : Natural := 0;
+      Lfn_Buffer          : Command_And_Token_Tables.String_Buffer;
+      Dir_Buffer          : Command_And_Token_Tables.String_Buffer;
+      Last_Cluster        : Long_Integer := 0;
+      Free_Cluster        : Long_Integer := 0;
+      Current_Directory   : Long_Integer := 0;
+      --  Containing directory start cluster (invalid when cdir is 0)
+      Cdc_Scl             : Long_Integer := 0;
+      Cdc_Size            : Long_Integer := 0;  --  Size of containing directory
+      --  Offset in the containing directory (invalid when cdir is 0)
+      Cdc_Ofs             : Long_Integer := 0;
+      Num_Fat_Entries     : Long_Integer := 0;
+      Fat_Sector_Size     : Long_Integer := 0;
+      Volume_Base         : Long_Integer := 0;
+      Fat_Base            : Long_Integer := 0;
+      Current_Dir_Cluster : Long_Integer := 0;
+      Dir_Base            : Long_Integer := 0;
+      Data_Base           : Long_Integer := 0;
+      Win_Sector          : Long_Integer := 0;
+      Win                 : Command_And_Token_Tables.String_Buffer;
+   end record;
 
-   function F_Mount return F_Result;
+   function F_Mount (FS : Fat_FS; Path : String; Opt : Integer) return F_Result;
 
 end Fat_File;

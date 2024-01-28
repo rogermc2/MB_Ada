@@ -23,7 +23,7 @@ package File_IO is
       To_Unbounded_String ("File system error"),
       To_Unbounded_String ("Directory not empty" ));
 
-   procedure Check_SD_Card;
+   procedure Check_SDCard;
    procedure Config_SD_Card (Command_Line : String_Buffer);
    function File_Get_Character (File_Num : Positive) return Character;
    procedure Init_File_IO;
