@@ -6,6 +6,7 @@ with Ada.Text_IO; use Ada.Text_IO;
 with Arguments;
 
 with Disk_IO;
+with Fat_File;
 with Flash;
 with Global;
 with MMC_Pic32;
@@ -14,10 +15,10 @@ with Serial_File_IO;
 
 package body File_IO is
 
-   procedure Check_SDCard is
+   procedure Check_SD_Card is
    begin
       null;
-   end Check_SDCard;
+   end Check_SD_Card;
 
    procedure Config_SD_Card (Command_Line : String_Buffer) is
       use Ada.Containers;
@@ -72,11 +73,12 @@ package body File_IO is
       null;
    end Init_File_IO;
 
-   function Init_SDCard return Boolean is
+   function Init_SD_Card return Boolean is
       use Disk_IO;
       use MMC_Pic32;
       use Serial_File_IO;
-      OK : Boolean := Global.Bus_Speed >= 30000000;
+      Mount_ID : Natural;
+      OK       : Boolean := Global.Bus_Speed >= 30000000;
    begin
       if not OK then
          Put_Line ("CPU speed is to low.");
@@ -98,8 +100,10 @@ package body File_IO is
          end loop;
       end if;
 
+      Mount_ID := Fat_File.F_Mount
+
       return OK;
 
-   end Init_SDCard;
+   end Init_SD_Card;
 
 end File_IO;
