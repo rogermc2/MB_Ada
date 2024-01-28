@@ -2,19 +2,60 @@
 with Ada.Characters.Handling;
 with Ada.Strings.Fixed;
 --  with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
+--  with Ada.Text_IO; use Ada.Text_IO;
 
-with Flat_File_Configuration;
+with Flat_File_Configuration; use Flat_File_Configuration;
 
 package body Fat_File is
 
-   Current_Vol : Natural := 0;
+   Current_Vol  : Natural := 0;
+   Fat_File_Sys : array (0 .. Num_Volumes - 1) of Fat_FS;
 
    function Get_Logical_Drive_Num (Path : String) return Natural;
 
-   function F_Mount (FS : Fat_FS; Path : String; Opt : Integer)
-                     return F_Result is
-      Result : F_Result;
+   function Find_Volume (Path : String; RFS : in out Fat_FS;
+                         Mode : in out Interfaces.Unsigned_16)
+                         return F_Result is
+      Vol_ID  : constant Integer := Get_Logical_Drive_Num (Path);
+      FS      : Fat_FS;
+      Result  : F_Result;
    begin
+      if Vol_ID < 0 then
+         Result := FR_INVALID_DRIVE;
+      else
+         FS := Fat_File_Sys (Vol_ID);
+         RFS := FS;
+         Mode := Mode and (not FA_READ);
+      end if;
+
+      return Result;
+
+   end Find_Volume;
+
+   function F_Mount (FS : in out Fat_FS; Path : String; Opt : Integer)
+                     return F_Result is
+--        Routine_Name : constant String := "Fat_File.F_Mount ";
+      Vol      : constant Integer := Get_Logical_Drive_Num (Path);
+      CFS      : Fat_FS;
+      Path_Pos : Positive := 1;
+      Mode     : Unsigned_16 := 0;
+      Res      : F_Result;
+      Result   : F_Result;
+   begin
+      if Vol < 0 then
+         Result := FR_INVALID_DRIVE;
+      else
+         CFS := Fat_File_Sys (Vol);
+         CFS.FS_Type := 0;
+         FS.FS_Type := 0;
+         Fat_File_Sys (Vol) := FS;
+         if Opt /= 1 then
+            Result := FR_OK;
+         else
+            Res := Find_Volume (Path, FS, Mode);
+         end if;
+      end if;
+
       return Result;
 
    end F_Mount;

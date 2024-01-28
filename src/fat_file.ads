@@ -1,4 +1,5 @@
 
+with Interfaces; use Interfaces;
 with Command_And_Token_Tables;
 
 package Fat_File is
@@ -55,6 +56,15 @@ package Fat_File is
       Win                 : Command_And_Token_Tables.String_Buffer;
    end record;
 
-   function F_Mount (FS : Fat_FS; Path : String; Opt : Integer) return F_Result;
+   FA_READ	    : constant Unsigned_16 := 16#01#;
+   FA_WRITE         : constant Unsigned_16 := 16#02#;
+   FA_OPEN_EXISTING : constant Unsigned_16 := 16#00#;
+   FA_CREATE_NEW    : constant Unsigned_16 := 16#04#;
+   FA_CREATE_ALWAYS : constant Unsigned_16 := 16#08#;
+   FA_OPEN_ALWAYS   : constant Unsigned_16 := 16#10#;
+   FA_OPEN_APPEND   : constant Unsigned_16 := 16#30#;
+
+   function F_Mount (FS : in out Fat_FS; Path : String; Opt : Integer)
+                     return F_Result;
 
 end Fat_File;
