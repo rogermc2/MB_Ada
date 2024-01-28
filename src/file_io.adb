@@ -68,4 +68,11 @@ package body File_IO is
       null;
    end Init_File_IO;
 
+   function Init_SDCard return Boolean is
+      OK : Boolean := False;
+   begin
+      return OK;
+
+   end Init_SDCard;
+
 end File_IO;

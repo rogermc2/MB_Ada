@@ -27,5 +27,6 @@ package File_IO is
    procedure Config_SD_Card (Command_Line : String_Buffer);
    function File_Get_Character (File_Num : Positive) return Character;
    procedure Init_File_IO;
+   function Init_SDCard return Boolean;
 
 end File_IO;

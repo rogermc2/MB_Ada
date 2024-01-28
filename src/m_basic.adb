@@ -58,7 +58,7 @@ package body M_Basic is
       U_Token          : constant String := To_Upper (Token);
       U_String         : constant String :=
         To_Upper (To_String (Trim (To_Unbounded_String (aString), Left)));
-    begin
+   begin
       --  MMBasic 2704
       --        Skip_Spaces (aString, S_Pos);
       --        Put_Line (Routine_Name & "aString: " & aString);
@@ -435,8 +435,8 @@ package body M_Basic is
       No_Abort           : Boolean := True;
       Done               : Boolean := Natural (Token_Buffer.Length) = 0;
    begin
-      --        Put_Line (Routine_Name & "Token_Buffer:");
-      --        Support.Print_Buffer (Token_Buffer);
+--        Put_Line (Routine_Name & "Token_Buffer:");
+--        Support.Print_Buffer (Token_Buffer);
       --  225
       Next_Statement := Program_Ptr;
       Global.Command_Line := Token_Buffer;
@@ -471,6 +471,7 @@ package body M_Basic is
                  (Integer (Command_Token - M_Misc.C_Base_Token)).Function_Ptr;
                Assert (Command_Ptr /= null, Routine_Name &
                          "247 Command_Ptr is null");
+               Put_Line (Routine_Name & "executing command:");
                Command_Ptr.all;
 
             end if;
@@ -517,12 +518,11 @@ package body M_Basic is
       Done             : Boolean         := Integer (Token_Buffer.Length) = 0;
    begin
       if not Done then
-         --           Put_Line (Routine_Name & "Token_Buffer: ");
-         --           Support.Print_Buffer (Token_Buffer);
+--           Put_Line (Routine_Name & "Token_Buffer: ");
+--           Support.Print_Buffer (Token_Buffer);
          --  194
          while not Done and then
-         --             Program_Ptr < Integer (Length (Token_Buffer)) loop
-           Program_Ptr < Integer (Token_Buffer.Length) loop
+            Program_Ptr <= Integer (Token_Buffer.Length) loop
             Item := To_Unbounded_String (Token_Buffer (Program_Ptr));
             Item_Ptr := 1;
             if Element (Item, Item_Ptr) = '0' then
