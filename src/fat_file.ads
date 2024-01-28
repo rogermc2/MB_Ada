@@ -1,5 +1,6 @@
 
 with Command_And_Token_Tables;
+
 package Fat_File is
 
    type F_Result is (FR_OK,		--  (0) Succeeded
@@ -22,6 +23,7 @@ package Fat_File is
                      FR_NOT_ENOUGH_CORE, --  (17) LFN working buffer could not be allocated
                      FR_TOO_MANY_OPEN_FILES, --  (18) Number of open files > _FS_LOCK
                      FR_INVALID_PARAMETER);  --  (19) Given parameter is invalid
+
    type Fat_FS is record
       FS_Type             : Natural := 0;
       Drive_Num           : Natural := 0;
