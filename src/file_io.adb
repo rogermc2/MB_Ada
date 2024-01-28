@@ -1,11 +1,15 @@
 
 with Ada.Assertions; use Ada.Assertions;
 with Ada.Containers;
---  with Ada.Text_IO; use Ada.Text_IO;
+with Ada.Text_IO; use Ada.Text_IO;
 
 with Arguments;
 
+with Disk_IO;
 with Flash;
+with Global;
+with MMC_Pic32;
+with Serial_File_IO;
 --  with Support;
 
 package body File_IO is
@@ -69,8 +73,31 @@ package body File_IO is
    end Init_File_IO;
 
    function Init_SDCard return Boolean is
-      OK : Boolean := False;
+      use Disk_IO;
+      use MMC_Pic32;
+      use Serial_File_IO;
+      OK : Boolean := Global.Bus_Speed >= 30000000;
    begin
+      if not OK then
+         Put_Line ("CPU speed is to low.");
+      elsif Flash.Option.SDCARD_CS = 0 then
+         Put_Line ("The SD card has not been configured.");
+         OK := False;
+      elsif not MMC_Pic32.MDD_SDSPI_Card_Detect_State then
+         Put_Line (To_String (F_Error_Message (2)));
+         OK := False;
+      elsif SD_Card_Stat = STA_NOINIT then
+         OK := True;
+      else
+         for index in 1 .. Max_Open_Files loop
+            if File_Table (index).Com > Max_Com_Ports then
+               if File_Table (index).Name /= Null_Unbounded_String then
+                  Close (File_Table (index).File_ID);
+               end if;
+            end if;
+         end loop;
+      end if;
+
       return OK;
 
    end Init_SDCard;

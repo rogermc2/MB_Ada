@@ -1,11 +1,13 @@
 
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
+with Ada.Text_IO; use Ada.Text_IO;
 
 package Serial_File_IO is
 
    type File_Data is record
-      Com  : Natural := 0;
-      Name : Unbounded_String;
+      Com     : Natural := 0;
+      Name    : Unbounded_String;
+      File_ID : File_Type;
    end record;
 
    Max_Com_Ports  : constant Positive := 4;
