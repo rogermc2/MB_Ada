@@ -1,6 +1,8 @@
 
 with Interfaces; use Interfaces;
+
 with Command_And_Token_Tables;
+with Disk_IO;
 
 package Fat_File is
 
@@ -28,6 +30,7 @@ package Fat_File is
    type Fat_FS is record
       FS_Type             : Natural := 0;
       Drive_Num           : Natural := 0;
+      Drive_Typ           : Disk_IO.Drive_Type;
       Num_Fats            : Positive := 1;
       Win_Flag            : Boolean := False;
       Fsi_Flag            : Boolean := False;
