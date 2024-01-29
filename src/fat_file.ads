@@ -49,13 +49,13 @@ package Fat_File is
       --  Offset in the containing directory (invalid when cdir is 0)
       Cdc_Ofs             : Long_Integer := 0;
       Num_Fat_Entries     : Long_Integer := 0;
-      Fat_Sector_Size     : Long_Integer := 0;
+      Fat_Size            : Long_Integer := 0;
       Volume_Base         : Long_Integer := 0;
       Fat_Base            : Long_Integer := 0;
       Current_Dir_Cluster : Long_Integer := 0;
       Dir_Base            : Long_Integer := 0;
       Data_Base           : Long_Integer := 0;
-      Win_Sector          : Long_Integer := 0;
+      Win_Sector          : Long_Integer := Long_Integer (16#FFFFFFFF#);
       Win                 : Command_And_Token_Tables.String_Buffer;
    end record;
 

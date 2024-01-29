@@ -14,6 +14,19 @@ package body Fat_File is
 
    function Get_Logical_Drive_Num (Path : String) return Natural;
    function LD2PD (Vol : Natural) return Natural;
+   function Move_Window (FS : in out Fat_FS; Sector :in out  Long_Integer)
+                         return F_Result;
+
+   function Check_File_System (FS : in out Fat_FS; B_Sect : Natural)
+                               return Natural is
+      Result : Natural := 2;
+   begin
+      FS.Win_Flag := False;
+      FS.Win_Sector := Long_Integer (16#FFFFFFFF#);
+
+      return Result;
+
+   end Check_File_System;
 
    function Find_Volume (Path : String; RFS : in out Fat_FS;
                          Mode : in out Interfaces.Unsigned_16)
@@ -50,7 +63,7 @@ package body Fat_File is
               Status =STA_PROTECT then
                Result := FR_WRITE_PROTECTED;
             else
-                Format := Check_File_System (FS, B_Sect);
+               Format := Check_File_System (FS, B_Sect);
             end if;
          end if;
       end if;
@@ -90,7 +103,6 @@ package body Fat_File is
    function Get_Logical_Drive_Num (Path : String) return Natural is
       use Ada.Characters.Handling;
       use Ada.Strings.Fixed;
-      use Flat_File_Configuration;
       Path_Ptr : Positive := 1;
       TT       : Natural;
       TP       : Positive := 1;  --  Path ptr?
@@ -159,6 +171,57 @@ package body Fat_File is
          return Vol;
       end if;
 
-      end LD2PD;
+   end LD2PD;
+
+   function Sync_Window (FS : in out Fat_FS) return F_Result is
+      use Disk_IO;
+      W_Sect       : Long_Integer;
+      Write_Result : D_Result := Res_OK;
+      Result       : F_Result := FR_OK;
+   begin
+      if FS.Win_Flag then
+         W_Sect := FS.Win_Sector;
+         Write_Result := Disk_Write (FS.Drive_Typ, FS.Win, W_Sect, 1);
+         if Write_Result /= Res_OK then
+            Result := FR_DISK_ERR;
+         else
+            FS.Win_Flag := False;
+            if W_Sect - FS.Fat_Base < FS.Fat_Size then
+               for nf in reverse 3 .. FS.Fat_Size loop
+                  W_Sect := W_Sect + FS.Fat_Size;
+                  if Write_Result = Res_OK then
+                     Write_Result :=
+                       Disk_Write (FS.Drive_Typ, FS.Win, W_Sect, 1);
+                  end if;
+               end loop;
+               if Write_Result /= Res_OK then
+                  Result := FR_DISK_ERR;
+               end if;
+            end if;
+         end if;
+      end if;
+
+      return Result;
+
+   end Sync_Window;
+
+   function Move_Window (FS : in out Fat_FS; Sector : in out Long_Integer)
+                         return F_Result is
+      use Disk_IO;
+      Result : F_Result := FR_OK;
+   begin
+      if Sector /= FS.Win_Sector and then not FS_Read_Only then
+         Result := Sync_Window (FS);
+      end if;
+
+      if Result = FR_OK and then
+        Disk_Read (FS.Drive_Typ, FS.Win, Sector, 1) /= Res_OK then
+         Sector := Long_Integer (16#FFFFFFFF#);
+         Result := FR_DISK_ERR;
+      end if;
+
+      return Result;
+
+   end Move_Window;
 
 end Fat_File;
