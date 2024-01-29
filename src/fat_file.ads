@@ -26,8 +26,9 @@ package Fat_File is
                      FR_NOT_ENOUGH_CORE, --  (17) LFN working buffer could not be allocated
                      FR_TOO_MANY_OPEN_FILES, --  (18) Number of open files > _FS_LOCK
                      FR_INVALID_PARAMETER);  --  (19) Given parameter is invalid
+subtype Win_Range is Long_Integer range 1 .. Long_Integer'Max_Size_In_Storage_Elements;
 
-   type Fat_FS is record
+   type Fat_FS (Win_Size : Win_Range := 1) is record
       FS_Type             : Natural := 0;
       Drive_Num           : Natural := 0;
       Drive_Typ           : Disk_IO.Drive_Type;
@@ -38,8 +39,8 @@ package Fat_File is
       Root_Dir_Size       : Natural := 0;  --  n_rootdir
       Cluster_Size        : Natural := 0;
       Sector_Size         : Natural := 0;
-      Lfn_Buffer          : Byte_Array_Ptr;
-      Dir_Buffer          : Byte_Array_Ptr;
+      Lfn_Buffer          : Byte_Array (1 .. Win_Size);
+      Dir_Buffer          : Byte_Array (1 .. Win_Size);
       Last_Cluster        : Long_Integer := 0;
       Free_Cluster        : Long_Integer := 0;
       Current_Directory   : Long_Integer := 0;
@@ -56,7 +57,7 @@ package Fat_File is
       Dir_Base            : Long_Integer := 0;
       Data_Base           : Long_Integer := 0;
       Win_Sector          : Long_Integer := Long_Integer (16#FFFFFFFF#);
-      Win                 : Byte_Array_Ptr;
+      Win                 : Byte_Array (1 .. Win_Size);
    end record;
 
    type FA_Status is (FA_OPEN_EXISTING, FA_READ, FA_WRITE, FA_CREATE_NEW,

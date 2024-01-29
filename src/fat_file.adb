@@ -9,7 +9,6 @@ with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 --  with Ada.Text_IO; use Ada.Text_IO;
 
 with Flat_File_Configuration; use Flat_File_Configuration;
-with Support;
 
 package body Fat_File is
 
@@ -18,7 +17,7 @@ package body Fat_File is
    PTE_Size      : constant Positive := 16;
    PTE_System_ID : constant Positive := 4;
    PTE_St_Lba    : constant Long_Integer := 8;    --  MBR PTE: Start in LBA
-   BS_55AA       : constant Word := 510;          --  Signature word
+   BS_55AA       : constant Long_Integer := 510;  --  Signature word
 
    Current_Vol   : Natural := 0;
    Fat_File_Sys  : array (0 .. Num_Volumes - 1) of Fat_FS;
@@ -26,22 +25,22 @@ package body Fat_File is
    function Get_Logical_Drive_Num (Path : String) return Natural;
    function LD2PD (Vol : Natural) return Natural;
 
-   function Load_DWord (Ptr : Unsigned_Byte_Ptr) return DWord;
-   function Load_QWord (Ptr : Unsigned_Byte_Ptr) return QWord;
-   function Load_Word (Ptr : Byte_Array_Ptr) return Word;
+   function Load_DWord (Data : Byte_Array; Ptr : Long_Integer) return DWord;
+   function Load_QWord (Data : Byte_Array; Ptr : Long_Integer) return QWord;
+   function Load_Word (Data : Byte_Array; Ptr : Long_Integer) return Word;
    function Move_Window (FS : in out Fat_FS; Sector :in out  Long_Integer)
                          return F_Result;
 
    function Check_File_System (FS : in out Fat_FS; Sect : in out Long_Integer)
                                return Natural is
-      use Support;
       Result : Natural := 2;
    begin
       FS.Win_Flag := False;
       FS.Win_Sector := Long_Integer (16#FFFFFFFF#);
       if Move_Window (FS, Sect) /= FR_OK then
          Result := 4;
-      elsif Load_Word (FS.Win + BS_55AA) /= 16#AA55# then
+         --        elsif Load_Word (FS.Win + BS_55AA) /= 16#AA55# then
+      elsif Load_Word (BS_55AA) /= 16#AA55# then
          null;
       end if;
 
@@ -50,10 +49,10 @@ package body Fat_File is
    end Check_File_System;
 
    function F_Mount (FS : in out Fat_FS; Path : String; Opt : Integer)
-                  return F_Result is
+                     return F_Result is
       --        Routine_Name : constant String := "Fat_File.F_Mount ";
       Vol      : constant Integer := Get_Logical_Drive_Num (Path);
-      CFS      : Fat_FS;
+      CFS      : Fat_FS (FS.Win_Size);
       Path_Pos : Positive := 1;
       Mode     : Unsigned_16 := 0;
       Res      : F_Result;
@@ -79,7 +78,7 @@ package body Fat_File is
 
    function Find_Volume (Path : String; RFS : in out Fat_FS;
                          Mode : in out Interfaces.Unsigned_16)
-                      return F_Result is
+                         return F_Result is
       use Disk_IO;
       use String_Buffer_Package;
       Vol_ID   : constant Integer := Get_Logical_Drive_Num (Path);
@@ -206,58 +205,45 @@ package body Fat_File is
    function LD2PD (Vol : Natural) return Natural is
       use Ada.Assertions;
    begin
-      if Multi_Partition then
-         Assert (False, "Fat_File.LD2PD, Vol_To_Part not implmented");
-      else
-         return Vol;
-      end if;
+      Assert (Multi_Partition, "Fat_File.LD2PD, Vol_To_Part not implmented");
+
+      return Vol;
 
    end LD2PD;
 
-   function Load_DWord (Ptr : Unsigned_Byte_Ptr) return DWord is
-      use Unsigned_Byte_Pointers;
-      RV0 : constant Unsigned_Byte := Ptr.all;
---        RV1 : constant Unsigned_Byte := Ptr.all (1);
---        RV2 : constant Unsigned_Byte := Ptr.all (2);
---        RV3 : constant Unsigned_Byte := Ptr.all (3);
-      RV  : DWord := Unsigned_32 (RV3);
+   function Load_DWord (Data : Byte_Array; Ptr : Long_Integer) return DWord is
+      RV_Ptr : Long_Integer := Ptr;
+      RV     : DWord := Unsigned_32 (Data (RV_Ptr + 3));
    begin
-      RV := Shift_Left (Unsigned_32 (RV3), 8) or Unsigned_32 (RV2);
-      RV := Shift_Left (RV, 8) or Unsigned_32 (RV1);
-      return Shift_Left (RV, 8) or Unsigned_32 (RV0);
+      for index in reverse RV_Ptr .. RV_Ptr + 2 loop
+         RV := Shift_Left (RV, 8) or Unsigned_32 (Data (index));
+      end loop;
+
+      return RV;
 
    end Load_DWord;
 
-   function Load_QWord (Ptr : Unsigned_Byte_Ptr) return QWord is
-      use Unsigned_Byte_Pointers;
-      RV_Ptr : Byte_Array_Ptr := Ptr;
-      RV0 : constant Unsigned_8 := Ptr.all;
-      RV1 : constant Unsigned_8 := Ptr.all (1);
-      RV2 : constant Unsigned_8 := Ptr.all (2);
-      RV3 : constant Unsigned_8 := Ptr.all (3);
-      RV4 : constant Unsigned_8 := Ptr.all (4);
-      RV5 : constant Unsigned_8 := Ptr.all (5);
-      RV6 : constant Unsigned_8 := Ptr.all (6);
-      RV7 : constant Unsigned_8 := Ptr.all (7);
-      RV  : Unsigned_64 := Unsigned_64 (RV7);
+   function Load_QWord (Data : Byte_Array; Ptr : Long_Integer) return QWord is
+      RV_Ptr : Long_Integer := Ptr;
+      RV     : Unsigned_64 := Unsigned_64 (Data (RV_Ptr + 7));
    begin
-      RV := Shift_Left (Unsigned_32 (RV7), 8) or Unsigned_32 (RV6);
-      RV := Shift_Left (RV, 8) or Unsigned_32 (RV5);
-      RV := Shift_Left (RV, 8) or Unsigned_32 (RV4);
-      RV := Shift_Left (RV, 8) or Unsigned_32 (RV3);
-      RV := Shift_Left (RV, 8) or Unsigned_32 (RV2);
-      RV := Shift_Left (RV, 8) or Unsigned_32 (RV1);
-      return Shift_Left (RV, 8) or Unsigned_32 (RV0);
+      for index in reverse RV_Ptr .. RV_Ptr + 6 loop
+         RV := Shift_Left (RV, 8) or Unsigned_64 (Data (index));
+      end loop;
+
+      return RV;
 
    end Load_QWord;
 
-   function Load_Word (Ptr : Byte_Array_Ptr) return Word is
-      use Unsigned_Byte_Pointers;
-      RV_Ptr : Byte_Array_Ptr := Ptr;
-      RV0    : constant Unsigned_Byte := RV_Ptr.all;
+   function Load_Word (Data : Byte_Array; Ptr : Long_Integer) return Word is
+      --        use Unsigned_Byte_Pointers;
+      RV_Ptr : Long_Integer := Ptr;
+      RV0    : constant Byte := Data (RV_Ptr);
+      --        RV0    : constant Byte := RV_Ptr.all;
    begin
-      Increment (RV_Ptr);
-      return Shift_Left (Unsigned_16 (RV_Ptr.all), 8) or Unsigned_16 (RV0);
+      RV_Ptr := RV_Ptr + 1;
+      return Shift_Left (Unsigned_16 (RV0), 8) or Unsigned_16 (RV0);
+      --        return Shift_Left (Unsigned_16 (RV_Ptr.all), 8) or Unsigned_16 (RV0);
 
    end Load_Word;
 
@@ -294,7 +280,7 @@ package body Fat_File is
    end Sync_Window;
 
    function Move_Window (FS : in out Fat_FS; Sector : in out Long_Integer)
-                      return F_Result is
+                         return F_Result is
       use Disk_IO;
       Result : F_Result := FR_OK;
    begin

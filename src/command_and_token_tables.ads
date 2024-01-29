@@ -3,8 +3,8 @@ with System; use System;
 with System.Address_To_Access_Conversions;
 
 with Interfaces; use Interfaces;
-with Interfaces.C; use Interfaces.C;
-with Interfaces.C.Pointers;
+--  with Interfaces.C; use Interfaces.C;
+--  with Interfaces.C.Pointers;
 
 with Ada.Containers.Indefinite_Vectors;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
@@ -32,18 +32,18 @@ package Command_And_Token_Tables is
    --     type Unsigned_2Byte is mod 65536;
    subtype US_Long_Integer is Long_Integer range 0 .. 2**31 - 1;
 
-   subtype Unsigned_Byte is Unsigned_8;
+   subtype Byte is Unsigned_8;
    subtype Word is Unsigned_16;
    subtype DWord is Unsigned_32;
    subtype QWord is Unsigned_64;
-   type Unsigned_Byte_Ptr is access Unsigned_Byte;
-   type Unsigned_Byte_Array is
-     array (unsigned_long range <>) of aliased Unsigned_Byte;
-   pragma Convention (C, Unsigned_Byte_Array);
+   type Byte_Ptr is access Byte;
+   type Byte_Array is
+     array (Long_Integer range <>) of Byte;
+--     pragma Convention (C, Unsigned_Byte_Array);
 
-   package Unsigned_Byte_Pointers is new Interfaces.C.Pointers
-     (unsigned_long, Unsigned_Byte, Unsigned_Byte_Array, Unsigned_Byte'Last);
-   subtype Byte_Array_Ptr is Unsigned_Byte_Pointers.Pointer;
+--     package Unsigned_Byte_Pointers is new Interfaces.C.Pointers
+--       (unsigned_long, Unsigned_Byte, Unsigned_Byte_Array, Unsigned_Byte'Last);
+--     subtype Byte_Array_Ptr is Unsigned_Byte_Pointers.Pointer;
 
    subtype Function_Type is Unsigned_16;
    --     type Function_Type_Ptr is access Function_Type;
