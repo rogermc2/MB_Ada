@@ -8,14 +8,15 @@ with Command_And_Token_Tables; use Command_And_Token_Tables;
 
 package Support is
 
+   subtype Byte is Interfaces.Unsigned_8;
    subtype US_Long_Integer is Long_Integer range 0 .. 2**31 - 1;
-   function "=" (L, R : Interfaces.Unsigned_8) return Boolean;
+   function "=" (L, R : Byte) return Boolean;
 
-   package Byte_Data_Package is new Ada.Containers.Vectors
-     (Natural, Interfaces.Unsigned_8);
+   package Byte_Data_Package is new Ada.Containers.Vectors (Natural, Byte);
    subtype Byte_Vector is Byte_Data_Package.Vector;
 
    type Byte_Vector_Ptr is access Byte_Vector;
+   type Byte_Ptr is access Byte;
 
 --     type Byte_Array is array (Integer range <>) of Interfaces.Unsigned_8;
 

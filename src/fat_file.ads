@@ -1,9 +1,8 @@
 
 with Interfaces; use Interfaces;
 
-with Command_And_Token_Tables;
+with Command_And_Token_Tables; use Command_And_Token_Tables;
 with Disk_IO;
-with Support;
 
 package Fat_File is
 
@@ -39,8 +38,8 @@ package Fat_File is
       Root_Dir_Size       : Natural := 0;  --  n_rootdir
       Cluster_Size        : Natural := 0;
       Sector_Size         : Natural := 0;
-      Lfn_Buffer          : Command_And_Token_Tables.String_Buffer;
-      Dir_Buffer          : Command_And_Token_Tables.String_Buffer;
+      Lfn_Buffer          : Byte_Array_Ptr;
+      Dir_Buffer          : Byte_Array_Ptr;
       Last_Cluster        : Long_Integer := 0;
       Free_Cluster        : Long_Integer := 0;
       Current_Directory   : Long_Integer := 0;
@@ -57,7 +56,7 @@ package Fat_File is
       Dir_Base            : Long_Integer := 0;
       Data_Base           : Long_Integer := 0;
       Win_Sector          : Long_Integer := Long_Integer (16#FFFFFFFF#);
-      Win                 : Support.Byte_Vector_Ptr;
+      Win                 : Byte_Array_Ptr;
    end record;
 
    type FA_Status is (FA_OPEN_EXISTING, FA_READ, FA_WRITE, FA_CREATE_NEW,

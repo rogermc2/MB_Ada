@@ -27,7 +27,7 @@ package body Support is
    Saved_Cause  : Setup_Exception := Cause_Nothing;
    --     Watchdog_Set : Boolean := False;
 
-   function "=" (L, R : Interfaces.Unsigned_8) return Boolean is
+   function "=" (L, R : Byte) return Boolean is
    begin
       return R = L;
 

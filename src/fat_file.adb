@@ -1,4 +1,7 @@
 
+--  with System;
+--  with System.Address_To_Access_Conversions;
+
 with Ada.Assertions;
 with Ada.Characters.Handling;
 with Ada.Strings.Fixed;
@@ -6,6 +9,7 @@ with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 --  with Ada.Text_IO; use Ada.Text_IO;
 
 with Flat_File_Configuration; use Flat_File_Configuration;
+with Support;
 
 package body Fat_File is
 
@@ -14,16 +18,17 @@ package body Fat_File is
    PTE_Size      : constant Positive := 16;
    PTE_System_ID : constant Positive := 4;
    PTE_St_Lba    : constant Long_Integer := 8;    --  MBR PTE: Start in LBA
-   BS_55AA       : constant Unsigned_16 := 510;  --  Signature word
+   BS_55AA       : constant Word := 510;          --  Signature word
+
    Current_Vol   : Natural := 0;
    Fat_File_Sys  : array (0 .. Num_Volumes - 1) of Fat_FS;
 
    function Get_Logical_Drive_Num (Path : String) return Natural;
    function LD2PD (Vol : Natural) return Natural;
 
-   function Load_DWord (Ptr : Support.Byte_Vector_Ptr) return Unsigned_32;
-   function Load_QWord (Ptr : Support.Byte_Vector_Ptr) return Unsigned_64;
-   function Load_Word (Ptr : Support.Byte_Vector_Ptr) return Unsigned_16;
+   function Load_DWord (Ptr : Unsigned_Byte_Ptr) return DWord;
+   function Load_QWord (Ptr : Unsigned_Byte_Ptr) return QWord;
+   function Load_Word (Ptr : Byte_Array_Ptr) return Word;
    function Move_Window (FS : in out Fat_FS; Sector :in out  Long_Integer)
                          return F_Result;
 
@@ -76,7 +81,6 @@ package body Fat_File is
                          Mode : in out Interfaces.Unsigned_16)
                       return F_Result is
       use Disk_IO;
-      use Command_And_Token_Tables;
       use String_Buffer_Package;
       Vol_ID   : constant Integer := Get_Logical_Drive_Num (Path);
       FS       : Fat_FS;
@@ -210,13 +214,13 @@ package body Fat_File is
 
    end LD2PD;
 
-   function Load_DWord (Ptr : Support.Byte_Vector_Ptr) return Unsigned_32 is
-      use Support.Byte_Data_Package;
-      RV0 : constant Unsigned_8 := Ptr.all (0);
-      RV1 : constant Unsigned_8 := Ptr.all (1);
-      RV2 : constant Unsigned_8 := Ptr.all (2);
-      RV3 : constant Unsigned_8 := Ptr.all (3);
-      RV  : Unsigned_32 := Unsigned_32 (3);
+   function Load_DWord (Ptr : Unsigned_Byte_Ptr) return DWord is
+      use Unsigned_Byte_Pointers;
+      RV0 : constant Unsigned_Byte := Ptr.all;
+--        RV1 : constant Unsigned_Byte := Ptr.all (1);
+--        RV2 : constant Unsigned_Byte := Ptr.all (2);
+--        RV3 : constant Unsigned_Byte := Ptr.all (3);
+      RV  : DWord := Unsigned_32 (RV3);
    begin
       RV := Shift_Left (Unsigned_32 (RV3), 8) or Unsigned_32 (RV2);
       RV := Shift_Left (RV, 8) or Unsigned_32 (RV1);
@@ -224,9 +228,10 @@ package body Fat_File is
 
    end Load_DWord;
 
-   function Load_QWord (Ptr : Support.Byte_Vector_Ptr) return Unsigned_32 is
-      use Support.Byte_Data_Package;
-      RV0 : constant Unsigned_8 := Ptr.all (0);
+   function Load_QWord (Ptr : Unsigned_Byte_Ptr) return QWord is
+      use Unsigned_Byte_Pointers;
+      RV_Ptr : Byte_Array_Ptr := Ptr;
+      RV0 : constant Unsigned_8 := Ptr.all;
       RV1 : constant Unsigned_8 := Ptr.all (1);
       RV2 : constant Unsigned_8 := Ptr.all (2);
       RV3 : constant Unsigned_8 := Ptr.all (3);
@@ -234,7 +239,7 @@ package body Fat_File is
       RV5 : constant Unsigned_8 := Ptr.all (5);
       RV6 : constant Unsigned_8 := Ptr.all (6);
       RV7 : constant Unsigned_8 := Ptr.all (7);
-      RV  : Unsigned_32 := Unsigned_32 (7);
+      RV  : Unsigned_64 := Unsigned_64 (RV7);
    begin
       RV := Shift_Left (Unsigned_32 (RV7), 8) or Unsigned_32 (RV6);
       RV := Shift_Left (RV, 8) or Unsigned_32 (RV5);
@@ -246,12 +251,13 @@ package body Fat_File is
 
    end Load_QWord;
 
-   function Load_Word (Ptr : Support.Byte_Vector_Ptr) return Unsigned_16 is
-      use Support.Byte_Data_Package;
-      RV0 : constant Unsigned_8 := Ptr.all (0);
-      RV1 : constant Unsigned_8 := Ptr.all (1);
+   function Load_Word (Ptr : Byte_Array_Ptr) return Word is
+      use Unsigned_Byte_Pointers;
+      RV_Ptr : Byte_Array_Ptr := Ptr;
+      RV0    : constant Unsigned_Byte := RV_Ptr.all;
    begin
-      return Shift_Left (Unsigned_16 (RV1), 8) or Unsigned_16 (RV0);
+      Increment (RV_Ptr);
+      return Shift_Left (Unsigned_16 (RV_Ptr.all), 8) or Unsigned_16 (RV0);
 
    end Load_Word;
 
