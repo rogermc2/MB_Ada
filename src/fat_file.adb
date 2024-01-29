@@ -1,7 +1,4 @@
 
---  with System;
---  with System.Address_To_Access_Conversions;
-
 with Ada.Assertions;
 with Ada.Characters.Handling;
 with Ada.Strings.Fixed;
@@ -40,7 +37,7 @@ package body Fat_File is
       if Move_Window (FS, Sect) /= FR_OK then
          Result := 4;
          --        elsif Load_Word (FS.Win + BS_55AA) /= 16#AA55# then
-      elsif Load_Word (BS_55AA) /= 16#AA55# then
+      elsif Load_Word (FS.Win, BS_55AA) /= 16#AA55# then
          null;
       end if;
 
