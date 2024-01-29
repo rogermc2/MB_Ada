@@ -3,6 +3,7 @@ with Interfaces; use Interfaces;
 
 with Command_And_Token_Tables;
 with Disk_IO;
+with Support;
 
 package Fat_File is
 
@@ -56,16 +57,18 @@ package Fat_File is
       Dir_Base            : Long_Integer := 0;
       Data_Base           : Long_Integer := 0;
       Win_Sector          : Long_Integer := Long_Integer (16#FFFFFFFF#);
-      Win                 : Command_And_Token_Tables.String_Buffer;
+      Win                 : Support.Byte_Vector;
    end record;
 
-   FA_READ	    : constant Unsigned_16 := 16#01#;
-   FA_WRITE         : constant Unsigned_16 := 16#02#;
-   FA_OPEN_EXISTING : constant Unsigned_16 := 16#00#;
-   FA_CREATE_NEW    : constant Unsigned_16 := 16#04#;
-   FA_CREATE_ALWAYS : constant Unsigned_16 := 16#08#;
-   FA_OPEN_ALWAYS   : constant Unsigned_16 := 16#10#;
-   FA_OPEN_APPEND   : constant Unsigned_16 := 16#30#;
+   type FA_Status is (FA_OPEN_EXISTING, FA_READ, FA_WRITE, FA_CREATE_NEW,
+                      FA_CREATE_ALWAYS, FA_OPEN_ALWAYS, FA_OPEN_APPEND);
+   for FA_Status use (FA_OPEN_EXISTING => 16#00#,
+                      FA_READ          => 16#01#,
+                      FA_WRITE         => 16#02#,
+                      FA_CREATE_NEW    => 16#04#,
+                      FA_CREATE_ALWAYS => 16#08#,
+                      FA_OPEN_ALWAYS   => 16#10#,
+                      FA_OPEN_APPEND   => 16#30#);
 
    function F_Mount (FS : in out Fat_FS; Path : String; Opt : Integer)
                      return F_Result;

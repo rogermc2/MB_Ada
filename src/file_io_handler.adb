@@ -33,7 +33,7 @@ package body File_IO_Handler is
          P := Command_Line;
       end if;
 
-      if not Init_SDCard then
+      if not Init_SD_Card then
          Put_Line (To_String (File_IO.F_Error_Message (2)));
       end if;
 

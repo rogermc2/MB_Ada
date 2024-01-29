@@ -27,6 +27,12 @@ package body Support is
    Saved_Cause  : Setup_Exception := Cause_Nothing;
    --     Watchdog_Set : Boolean := False;
 
+   function "=" (L, R : Interfaces.Unsigned_8) return Boolean is
+   begin
+      return R = L;
+
+   end "=";
+
    procedure Buffer_Append (Buffer : in out String_Buffer; Item : String) is
       use String_Buffer_Package;
    begin

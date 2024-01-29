@@ -6,7 +6,6 @@ with Ada.Text_IO; use Ada.Text_IO;
 with Arguments;
 
 with Disk_IO;
-with Fat_File;
 with Flash;
 with Global;
 with MMC_Pic32;
@@ -100,7 +99,7 @@ package body File_IO is
          end loop;
       end if;
 
-      Mount_ID := Fat_File.F_Mount
+--        Mount_ID := Fat_File.F_Mount
 
       return OK;
 

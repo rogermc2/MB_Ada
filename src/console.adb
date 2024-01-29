@@ -56,7 +56,7 @@ package body Console is
    begin
       while not Done loop
          --           Process_Touch;
-         File_IO.Check_SDCard;
+         File_IO.Check_SD_Card;
          SSD_1963.Show_Cursor (True);
          declare
             In_Code : constant String := IO_Support.MM_Inkey (OK);

@@ -1,9 +1,21 @@
 
+with Interfaces;
+
+with Ada.Containers.Vectors;
 with Ada.Strings.Unbounded;
 
 with Command_And_Token_Tables; use Command_And_Token_Tables;
 
 package Support is
+
+   subtype US_Long_Integer is Long_Integer range 0 .. 2**31 - 1;
+   function "=" (L, R : Interfaces.Unsigned_8) return Boolean;
+
+   package Byte_Data is new Ada.Containers.Vectors
+     (Natural, Interfaces.Unsigned_8);
+   subtype Byte_Vector is Byte_Data.Vector;
+
+   type Byte_Array is array (Integer range <>) of Interfaces.Unsigned_8;
 
    type Setup_Exception is (Cause_Nothing, Cause_Display, Cause_File_IO,
                             Cause_Keyboard, Cause_RTC, Cause_Touch,
