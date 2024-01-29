@@ -218,6 +218,28 @@ package body Fat_File is
 
    end Load_DWord;
 
+   function Load_QWord (Ptr : Support.Byte_Vector_Ptr) return Unsigned_32 is
+      use Support.Byte_Data_Package;
+      RV0 : constant Unsigned_8 := Ptr.all (0);
+      RV1 : constant Unsigned_8 := Ptr.all (1);
+      RV2 : constant Unsigned_8 := Ptr.all (2);
+      RV3 : constant Unsigned_8 := Ptr.all (3);
+      RV4 : constant Unsigned_8 := Ptr.all (4);
+      RV5 : constant Unsigned_8 := Ptr.all (5);
+      RV6 : constant Unsigned_8 := Ptr.all (6);
+      RV7 : constant Unsigned_8 := Ptr.all (7);
+      RV  : Unsigned_32 := Unsigned_32 (7);
+   begin
+      RV := Shift_Left (Unsigned_32 (RV7), 8) or Unsigned_32 (RV6);
+      RV := Shift_Left (RV, 8) or Unsigned_32 (RV5);
+      RV := Shift_Left (RV, 8) or Unsigned_32 (RV4);
+      RV := Shift_Left (RV, 8) or Unsigned_32 (RV3);
+      RV := Shift_Left (RV, 8) or Unsigned_32 (RV2);
+      RV := Shift_Left (RV, 8) or Unsigned_32 (RV1);
+      return Shift_Left (RV, 8) or Unsigned_32 (RV0);
+
+   end Load_QWord;
+
    function Load_Word (Ptr : Support.Byte_Vector_Ptr) return Unsigned_16 is
       use Support.Byte_Data_Package;
       RV0 : constant Unsigned_8 := Ptr.all (0);
