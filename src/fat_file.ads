@@ -57,7 +57,7 @@ package Fat_File is
       Dir_Base            : Long_Integer := 0;
       Data_Base           : Long_Integer := 0;
       Win_Sector          : Long_Integer := Long_Integer (16#FFFFFFFF#);
-      Win                 : Support.Byte_Vector;
+      Win                 : Support.Byte_Vector_Ptr;
    end record;
 
    type FA_Status is (FA_OPEN_EXISTING, FA_READ, FA_WRITE, FA_CREATE_NEW,
@@ -70,6 +70,8 @@ package Fat_File is
                       FA_OPEN_ALWAYS   => 16#10#,
                       FA_OPEN_APPEND   => 16#30#);
 
+   function Check_File_System (FS : in out Fat_FS; Sect : Natural)
+                               return Natural;
    function F_Mount (FS : in out Fat_FS; Path : String; Opt : Integer)
                      return F_Result;
    function Find_Volume (Path : String; RFS : in out Fat_FS;

@@ -22,19 +22,24 @@ package body Fat_File is
    function Move_Window (FS : in out Fat_FS; Sector :in out  Long_Integer)
                          return F_Result;
 
-   function Check_File_System (FS : in out Fat_FS; B_Sect : Natural)
+   function Check_File_System (FS : in out Fat_FS; Sect : Natural)
                                return Natural is
       Result : Natural := 2;
    begin
       FS.Win_Flag := False;
       FS.Win_Sector := Long_Integer (16#FFFFFFFF#);
+      if Move_Window (FS, Sect) /= FR_OK then
+         Result := 4;
+      elsif FS.Win = Null_Ptr then
+         null;
+      end if;
 
       return Result;
 
    end Check_File_System;
 
    function F_Mount (FS : in out Fat_FS; Path : String; Opt : Integer)
-                     return F_Result is
+                  return F_Result is
       --        Routine_Name : constant String := "Fat_File.F_Mount ";
       Vol      : constant Integer := Get_Logical_Drive_Num (Path);
       CFS      : Fat_FS;
@@ -63,7 +68,7 @@ package body Fat_File is
 
    function Find_Volume (Path : String; RFS : in out Fat_FS;
                          Mode : in out Interfaces.Unsigned_16)
-                         return F_Result is
+                      return F_Result is
       use Disk_IO;
       use Command_And_Token_Tables;
       use String_Buffer_Package;
@@ -76,6 +81,7 @@ package body Fat_File is
       Win_Pos  : Long_Integer := 0;
       BR       : array (1 .. 4) of Long_Integer;
       Status   : D_Status;
+      F_Stat   : FA_Status;
       Result   : F_Result;
    begin
       if Vol_ID < 0 then
@@ -83,7 +89,7 @@ package body Fat_File is
       else
          FS := Fat_File_Sys (Vol_ID);
          RFS := FS;
-         Mode := Mode and (not FA_READ);
+         Mode := Mode and F_Stat /= FA_READ;
          if FS.FS_Type > 0 then
             Status := Disk_Status (FS.Drive_Typ);
             if not FS_Read_Only and then Mode /= 0 and then
@@ -115,7 +121,7 @@ package body Fat_File is
                      if Part (PTE_System_ID) > 0 then
                         BR (idx + 1) := Part_Ptr + PTE_St_Lba;
                      end if;
-                    end loop;
+                  end loop;
                end if;
             end if;
          end if;
@@ -198,6 +204,29 @@ package body Fat_File is
 
    end LD2PD;
 
+   function Load_DWord (Ptr : Support.Byte_Vector_Ptr) return Unsigned_32 is
+      use Support.Byte_Data_Package;
+      RV0 : constant Unsigned_8 := Ptr.all (0);
+      RV1 : constant Unsigned_8 := Ptr.all (1);
+      RV2 : constant Unsigned_8 := Ptr.all (2);
+      RV3 : constant Unsigned_8 := Ptr.all (3);
+      RV  : Unsigned_32 := Unsigned_32 (3);
+   begin
+      RV := Shift_Left (Unsigned_32 (RV3), 8) or Unsigned_32 (RV2);
+      RV := Shift_Left (RV, 8) or Unsigned_32 (RV1);
+      return Shift_Left (RV, 8) or Unsigned_32 (RV0);
+
+   end Load_DWord;
+
+   function Load_Word (Ptr : Support.Byte_Vector_Ptr) return Unsigned_16 is
+      use Support.Byte_Data_Package;
+      RV0 : constant Unsigned_8 := Ptr.all (0);
+      RV1 : constant Unsigned_8 := Ptr.all (1);
+   begin
+      return Shift_Left (Unsigned_16 (RV1), 8) or Unsigned_16 (RV0);
+
+   end Load_Word;
+
    function Sync_Window (FS : in out Fat_FS) return F_Result is
       use Disk_IO;
       W_Sect       : Long_Integer;
@@ -231,7 +260,7 @@ package body Fat_File is
    end Sync_Window;
 
    function Move_Window (FS : in out Fat_FS; Sector : in out Long_Integer)
-                         return F_Result is
+                      return F_Result is
       use Disk_IO;
       Result : F_Result := FR_OK;
    begin
