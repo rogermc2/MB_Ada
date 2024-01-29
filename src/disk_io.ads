@@ -13,11 +13,11 @@ package Disk_IO is
 --                          STA_PROTECT => 4);
 
    function Disk_Initialize (Drv_Typ : Drive_Type) return D_Status;
-   function Disk_Read (Drv_Typ : Drive_Type; Buffer : String_Buffer;
+   function Disk_Read (Drv_Typ : Drive_Type; Buffer : Byte_Array;
                        Sector  : Long_Integer; Count : Natural)
                        return D_Result;
    function Disk_Status (Drv_Typ : Drive_Type) return D_Status;
-   function Disk_Write (Drv_Typ : Drive_Type; Buffer : String_Buffer;
+   function Disk_Write (Drv_Typ : Drive_Type; Buffer : Byte_Array;
                         Sector  : Long_Integer; Count : Natural)
                         return D_Result;
 

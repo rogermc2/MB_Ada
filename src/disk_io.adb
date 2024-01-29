@@ -17,7 +17,7 @@ package body Disk_IO is
 
    end Disk_Initialize;
 
-   function Disk_Read (Drv_Typ : Drive_Type; Buffer : String_Buffer;
+   function Disk_Read (Drv_Typ : Drive_Type; Buffer : Byte_Array;
                        Sector  : Long_Integer; Count : Natural)
                        return D_Result is
       Result : constant D_Result := Res_Not_Ready;
@@ -48,7 +48,7 @@ package body Disk_IO is
 
    end Disk_Status;
 
-   function Disk_Write (Drv_Typ : Drive_Type; Buffer : String_Buffer;
+   function Disk_Write (Drv_Typ : Drive_Type; Buffer : Byte_Array;
                        Sector  : Long_Integer; Count : Natural)
                        return D_Result is
       Result : constant D_Result := Res_Not_Ready;

@@ -1,4 +1,6 @@
 
+with Interfaces;
+
 with Ada.Assertions;
 with Ada.Characters.Handling;
 with Ada.Strings.Fixed;
@@ -30,6 +32,7 @@ package body Fat_File is
 
    function Check_File_System (FS : in out Fat_FS; Sect : in out Long_Integer)
                                return Natural is
+      use Interfaces;
       Result : Natural := 2;
    begin
       FS.Win_Flag := False;
@@ -51,7 +54,7 @@ package body Fat_File is
       Vol      : constant Integer := Get_Logical_Drive_Num (Path);
       CFS      : Fat_FS (FS.Win_Size);
       Path_Pos : Positive := 1;
-      Mode     : Unsigned_16 := 0;
+      Mode     : Word := 0;
       Res      : F_Result;
       Result   : F_Result;
    begin
@@ -74,11 +77,12 @@ package body Fat_File is
    end F_Mount;
 
    function Find_Volume (Path : String; RFS : in out Fat_FS;
-                         Mode : in out Interfaces.Unsigned_16)
+                         Mode : in out Word)
                          return F_Result is
+      use Interfaces;
       use Disk_IO;
-      use String_Buffer_Package;
       Vol_ID   : constant Integer := Get_Logical_Drive_Num (Path);
+      FR       : constant Word := FA_Status'Enum_Rep (FA_READ);
       FS       : Fat_FS;
       B_Sect   : Natural := 0;
       Format   : Natural := 0;
@@ -95,7 +99,7 @@ package body Fat_File is
       else
          FS := Fat_File_Sys (Vol_ID);
          RFS := FS;
-         Mode := Mode and F_Stat /= FA_READ;
+         Mode := Mode and (not FR);
          if FS.FS_Type > 0 then
             Status := Disk_Status (FS.Drive_Typ);
             if not FS_Read_Only and then Mode /= 0 and then

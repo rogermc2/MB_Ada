@@ -1,6 +1,4 @@
 
-with Interfaces; use Interfaces;
-
 with Command_And_Token_Tables; use Command_And_Token_Tables;
 with Disk_IO;
 
@@ -62,20 +60,20 @@ subtype Win_Range is Long_Integer range 1 .. Long_Integer'Max_Size_In_Storage_El
 
    type FA_Status is (FA_OPEN_EXISTING, FA_READ, FA_WRITE, FA_CREATE_NEW,
                       FA_CREATE_ALWAYS, FA_OPEN_ALWAYS, FA_OPEN_APPEND);
-   for FA_Status use (FA_OPEN_EXISTING => 16#00#,
-                      FA_READ          => 16#01#,
-                      FA_WRITE         => 16#02#,
-                      FA_CREATE_NEW    => 16#04#,
-                      FA_CREATE_ALWAYS => 16#08#,
-                      FA_OPEN_ALWAYS   => 16#10#,
-                      FA_OPEN_APPEND   => 16#30#);
+   for FA_Status use (FA_OPEN_EXISTING => Word (16#00#),
+                      FA_READ          => Word (16#01#),
+                      FA_WRITE         => Word (16#02#),
+                      FA_CREATE_NEW    => Word (16#04#),
+                      FA_CREATE_ALWAYS => Word (16#08#),
+                      FA_OPEN_ALWAYS   => Word (16#10#),
+                      FA_OPEN_APPEND   => Word (16#30#));
 
    function Check_File_System (FS : in out Fat_FS; Sect : in out Long_Integer)
                                return Natural;
    function F_Mount (FS : in out Fat_FS; Path : String; Opt : Integer)
                      return F_Result;
    function Find_Volume (Path : String; RFS : in out Fat_FS;
-                         Mode : in out Interfaces.Unsigned_16)
+                         Mode : in out Word)
                          return F_Result;
 
 end Fat_File;
