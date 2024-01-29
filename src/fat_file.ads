@@ -69,5 +69,8 @@ package Fat_File is
 
    function F_Mount (FS : in out Fat_FS; Path : String; Opt : Integer)
                      return F_Result;
+   function Find_Volume (Path : String; RFS : in out Fat_FS;
+                         Mode : in out Interfaces.Unsigned_16)
+                         return F_Result;
 
 end Fat_File;
