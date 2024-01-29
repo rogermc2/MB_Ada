@@ -70,7 +70,7 @@ package Fat_File is
                       FA_OPEN_ALWAYS   => 16#10#,
                       FA_OPEN_APPEND   => 16#30#);
 
-   function Check_File_System (FS : in out Fat_FS; Sect : Natural)
+   function Check_File_System (FS : in out Fat_FS; Sect : in out Long_Integer)
                                return Natural;
    function F_Mount (FS : in out Fat_FS; Path : String; Opt : Integer)
                      return F_Result;

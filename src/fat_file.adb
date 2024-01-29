@@ -13,24 +13,30 @@ package body Fat_File is
    MBR_Table     : constant Positive := 446;
    PTE_Size      : constant Positive := 16;
    PTE_System_ID : constant Positive := 4;
-   PTE_St_Lba    : constant Long_Integer := 8;   --  MBR PTE: Start in LBA
+   PTE_St_Lba    : constant Long_Integer := 8;    --  MBR PTE: Start in LBA
+   BS_55AA       : constant Unsigned_16 := 510;  --  Signature word
    Current_Vol   : Natural := 0;
    Fat_File_Sys  : array (0 .. Num_Volumes - 1) of Fat_FS;
 
    function Get_Logical_Drive_Num (Path : String) return Natural;
    function LD2PD (Vol : Natural) return Natural;
+
+   function Load_DWord (Ptr : Support.Byte_Vector_Ptr) return Unsigned_32;
+   function Load_QWord (Ptr : Support.Byte_Vector_Ptr) return Unsigned_64;
+   function Load_Word (Ptr : Support.Byte_Vector_Ptr) return Unsigned_16;
    function Move_Window (FS : in out Fat_FS; Sector :in out  Long_Integer)
                          return F_Result;
 
-   function Check_File_System (FS : in out Fat_FS; Sect : Natural)
+   function Check_File_System (FS : in out Fat_FS; Sect : in out Long_Integer)
                                return Natural is
+      use Support;
       Result : Natural := 2;
    begin
       FS.Win_Flag := False;
       FS.Win_Sector := Long_Integer (16#FFFFFFFF#);
       if Move_Window (FS, Sect) /= FR_OK then
          Result := 4;
-      elsif FS.Win = Null_Ptr then
+      elsif Load_Word (FS.Win + BS_55AA) /= 16#AA55# then
          null;
       end if;
 
