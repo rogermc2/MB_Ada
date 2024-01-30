@@ -3,6 +3,8 @@ package Flat_File_Configuration is
 
    Use_Long_FileName : constant Natural := 2;
    Max_Long_FileName : constant Natural := 127;
+   Min_SS            : constant Long_Integer := 512;
+   Max_SS            : constant Long_Integer := 512;
    FS_Read_Only      : constant Boolean := False;
    FS_EXFAT          : constant Boolean := True;
 

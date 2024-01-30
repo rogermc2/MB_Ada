@@ -4,22 +4,26 @@ with Interfaces;
 with Ada.Assertions;
 with Ada.Characters.Handling;
 with Ada.Strings.Fixed;
---  with Ada.Text_IO; use Ada.Text_IO;
+with Ada.Text_IO; use Ada.Text_IO;
 
 with Flat_File_Configuration; use Flat_File_Configuration;
 
 package body Fat_File is
 
    --  Offset of partition table in the MBR
-   MBR_Table     : constant Positive := 446;
-   BPD_Zeroed_Ex : constant Long_Integer := 11;   --  EXFAT: MBZ firld
-   PTE_Size      : constant Positive := 16;
-   PTE_System_ID : constant Long_Integer := 4;
-   PTE_St_Lba    : constant Long_Integer := 8;    --  MBR PTE: Start in LBA
-   BS_55AA       : constant Long_Integer := 510;  --  Signature word
+   MBR_Table              : constant Positive := 446;
+   BPD_Zeroed_Ex          : constant Long_Integer := 11;   --  EXFAT: MBZ field
+   --  EXFAT: File system version
+   BPB_FS_Ver_EX          : constant Long_Integer := 104;
+   BPD_Byts_Per_Sector_Ex : constant Long_Integer := 108;
+   PTE_Size               : constant Positive := 16;
+   PTE_System_ID          : constant Long_Integer := 4;
+   --  MBR PTE: Start in LBA
+   PTE_St_Lba             : constant Long_Integer := 8;
+   BS_55AA                : constant Long_Integer := 510;  --  Signature word
 
-   Current_Vol   : Natural := 0;
-   Fat_File_Sys  : array (0 .. Num_Volumes - 1) of Fat_FS;
+   Current_Vol            : Natural := 0;
+   Fat_File_Sys           : array (0 .. Num_Volumes - 1) of Fat_FS;
 
    function Get_Logical_Drive_Num (Path : String) return Natural;
    function LD2PD (Vol : Natural) return Natural;
@@ -84,15 +88,15 @@ package body Fat_File is
       return F_Result is
       use Interfaces;
       use Disk_IO;
-      B_Sect   : Long_Integer := 0;
-      Format   : Natural;
-      Part_Ptr : Long_Integer := 0;
-      BR       : array (1 .. 4) of Long_Integer := (others => 0);
+      B_Sect    : Long_Integer := 0;
+      Format    : Natural;
+      Part_Ptr  : Long_Integer := 0;
+      BR        : array (1 .. 4) of Long_Integer := (others => 0);
       BR_Index  : Positive;
       bpb_index : Long_Integer;
-      Max_LBA  : QWord := 0;
-      Status   : D_Status;
-      Result   : F_Result;
+      Max_LBA   : QWord := 0;
+      Status    : D_Status;
+      Result    : F_Result := FR_OK;
    begin
       FS.FS_Type := 0;
       --  Bind the logical drive to a physical drive.
@@ -139,6 +143,7 @@ package body Fat_File is
          elsif Format >= 2 then
             Result := FR_NO_FILESYSTEM;
          elsif FS_EXFAT and then Format = 1 then
+            --  Check zero filler
             bpb_index := BPD_Zeroed_Ex;
             while bpb_index < BPD_Zeroed_Ex + 53 and then
               FS.Win (bpb_index) = 0 loop
@@ -147,6 +152,15 @@ package body Fat_File is
             if bpb_index < BPD_Zeroed_Ex + 53  then
                Result := FR_NO_FILESYSTEM;
             end if;
+         elsif Load_Word (FS.Win, BPB_FS_Ver_EX) /= 16#100# then
+            Result := FR_NO_FILESYSTEM;
+            Put_Line
+              ("Invalid file  system version: " &
+                 Word'Image (Load_Word (FS.Win, BPB_FS_Ver_EX)) &
+                 ".  Version 1.0 is required.");
+         elsif Load_Word (FS.Win, BPD_Byts_Per_Sector_Ex) /= SS (FS) then
+            Result := FR_NO_FILESYSTEM;
+
          end if;
       end if;
 
