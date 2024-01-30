@@ -75,9 +75,22 @@ package body Fat_File is
 
    end F_Mount;
 
+   --  Find_Volume_Aux attempts to mount a volume for which the file system
+   --  object is not valid.
+   --  It analyzes the BPB and initializes the fs object.
+   function Find_Volume_Aux (Path : String; RFS : in out Fat_FS;
+                             Mode : in out Word) return F_Result is
+      use Interfaces;
+      use Disk_IO;
+      Result   : F_Result;
+   begin
+
+      return Result;
+
+   end Find_Volume_Aux;
+
    function Find_Volume (Path : String; RFS : in out Fat_FS;
-                         Mode : in out Word)
-                         return F_Result is
+                         Mode : in out Word) return F_Result is
       use Interfaces;
       use Disk_IO;
       Vol_ID   : constant Integer := Get_Logical_Drive_Num (Path);
@@ -86,15 +99,14 @@ package body Fat_File is
       B_Sect   : Long_Integer := 0;
       Format   : Natural := 0;
       Part_Ptr : Long_Integer := 0;
-      Win_Pos  : Long_Integer := 0;
-      BR       : array (1 .. 4) of Long_Integer;
+      BR       : array (1 .. 4) of Long_Integer := (others => 0);
+      BR_Index : Positive;
       Status   : D_Status;
-      F_Stat   : FA_Status;
       Result   : F_Result;
    begin
       if Vol_ID < 0 then
          Result := FR_INVALID_DRIVE;
-      else
+      else --  Vol_ID >= 0
          FS := Fat_File_Sys (Vol_ID);
          RFS := FS;
          Mode := Mode and (not F_READ);
@@ -121,18 +133,34 @@ package body Fat_File is
                   --  Not a FAT-VBR or forced partition number
                   for idx in 0 .. 3 loop
                      --  Get partition offset
-                     Win_Pos := Win_Pos + 1;
                      Part_Ptr :=
-                       Win_Pos + Long_Integer (MBR_Table + idx * PTE_Size);
-                     BR (idx + 1) := 0;
+                       Long_Integer (MBR_Table + idx * PTE_Size);
                      if FS.Win (Part_Ptr + PTE_System_ID) > 0 then
-                        BR (idx + 1) := Part_Ptr + PTE_St_Lba;
+                        BR (idx + 1) := Long_Integer
+                          (Load_DWord (FS.Win, Part_Ptr + PTE_St_Lba));
                      end if;
+                  end loop;
+
+                  BR_Index := LD2PD (Vol_ID);
+                  if BR_Index > 2 then
+                     BR_Index := BR_Index - 1;
+                  end if;
+                  loop
+                     if BR (BR_Index) > 0 then
+                        Format := Check_File_System (FS, BR (BR_Index));
+                     else
+                        Format := 3;
+                     end if;
+                     BR_Index := BR_Index + 1;
+                     exit when LD2PD (Vol_ID) = 0 and then
+                       Format >= 2 and then BR_Index < 5;
                   end loop;
                end if;
             end if;
-         end if;
-      end if;
+         end if;  --  FS.FS_Type > 0
+
+         Result := Find_Volume_Aux (Path, FS, Mode);
+      end if;  --  Vol_ID >= 0
 
       return Result;
 
@@ -211,8 +239,8 @@ package body Fat_File is
 
    function Load_DWord (Data : Byte_Array; Ptr : Long_Integer) return DWord is
       use Interfaces;
-      RV_Ptr : Long_Integer := Ptr;
-      RV     : DWord := Unsigned_32 (Data (RV_Ptr + 3));
+      RV_Ptr : constant Long_Integer := Ptr;
+      RV     : DWord := Unsigned_32 (Data (Ptr + 3));
    begin
       for index in reverse RV_Ptr .. RV_Ptr + 2 loop
          RV := Shift_Left (RV, 8) or Unsigned_32 (Data (index));
@@ -224,7 +252,7 @@ package body Fat_File is
 
    function Load_QWord (Data : Byte_Array; Ptr : Long_Integer) return QWord is
       use Interfaces;
-      RV_Ptr : Long_Integer := Ptr;
+      RV_Ptr : constant Long_Integer := Ptr;
       RV     : Unsigned_64 := Unsigned_64 (Data (RV_Ptr + 7));
    begin
       for index in reverse RV_Ptr .. RV_Ptr + 6 loop
@@ -237,14 +265,9 @@ package body Fat_File is
 
    function Load_Word (Data : Byte_Array; Ptr : Long_Integer) return Word is
       use Interfaces;
-      --        use Unsigned_Byte_Pointers;
-      RV_Ptr : Long_Integer := Ptr;
-      RV0    : constant Byte := Data (RV_Ptr);
-      --        RV0    : constant Byte := RV_Ptr.all;
    begin
-      RV_Ptr := RV_Ptr + 1;
-      return Shift_Left (Unsigned_16 (RV0), 8) or Unsigned_16 (RV0);
-      --        return Shift_Left (Unsigned_16 (RV_Ptr.all), 8) or Unsigned_16 (RV0);
+      return Shift_Left (Unsigned_16 (Data (Ptr)), 8) or
+        Unsigned_16 (Data (Ptr + 1));
 
    end Load_Word;
 
@@ -269,6 +292,7 @@ package body Fat_File is
                        Disk_Write (FS.Drive_Typ, FS.Win, W_Sect, 1);
                   end if;
                end loop;
+
                if Write_Result /= Res_OK then
                   Result := FR_DISK_ERR;
                end if;
