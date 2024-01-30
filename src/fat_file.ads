@@ -35,7 +35,7 @@ subtype Win_Range is Long_Integer range 1 .. Long_Integer'Max_Size_In_Storage_El
       Fsi_Flag            : Boolean := False;
       ID                  : Natural := 0;
       Root_Dir_Size       : Natural := 0;  --  n_rootdir
-      Cluster_Size        : Natural := 0;
+      Cluster_Size        : Byte := 0;
       Sector_Size         : Long_Integer := 0;
       Lfn_Buffer          : Byte_Array (1 .. Win_Size);
       Dir_Buffer          : Byte_Array (1 .. Win_Size);

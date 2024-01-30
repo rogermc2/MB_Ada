@@ -11,23 +11,24 @@ with Flat_File_Configuration; use Flat_File_Configuration;
 package body Fat_File is
 
    --  Offset of partition table in the MBR
-   MBR_Table              : constant Positive := 446;
-   BPD_Zeroed_Ex          : constant Long_Integer := 11;  --  EXFAT: MBZ field
+   MBR_Table               : constant Positive := 446;
+   BPD_Zeroed_Ex           : constant Long_Integer := 11;  --  EXFAT: MBZ field
    --  EXFAT: Volume size (number of sectors)
-   BPB_Total_Sector_Ex    : constant Long_Integer := 72;
-   BPB_FAT_Size_Ex        : constant Long_Integer := 84;
-   BPB_Num_FATs_Ex        : constant Long_Integer := 110;
+   BPB_Total_Sector_Ex     : constant Long_Integer := 72;
+   BPB_FAT_Size_Ex         : constant Long_Integer := 84;
+   BPB_Num_FATs_Ex         : constant Long_Integer := 110;
+   BPB_Secs_Per_Cluster_Ex : constant Long_Integer := 109;
    --  EXFAT: File system version
-   BPB_FS_Ver_EX          : constant Long_Integer := 104;
-   BPB_Byts_Per_Sector_Ex : constant Long_Integer := 108;
-   PTE_Size               : constant Positive := 16;
-   PTE_System_ID          : constant Long_Integer := 4;
+   BPB_FS_Ver_EX           : constant Long_Integer := 104;
+   BPB_Byts_Per_Sector_Ex  : constant Long_Integer := 108;
+   PTE_Size                : constant Positive := 16;
+   PTE_System_ID           : constant Long_Integer := 4;
    --  MBR PTE: Start in LBA
-   PTE_St_Lba             : constant Long_Integer := 8;
-   BS_55AA                : constant Long_Integer := 510;  --  Signature word
+   PTE_St_Lba              : constant Long_Integer := 8;
+   BS_55AA                 : constant Long_Integer := 510;  --  Signature word
 
-   Current_Vol            : Natural := 0;
-   Fat_File_Sys           : array (0 .. Num_Volumes - 1) of Fat_FS;
+   Current_Vol             : Natural := 0;
+   Fat_File_Sys            : array (0 .. Num_Volumes - 1) of Fat_FS;
 
    function Get_Logical_Drive_Num (Path : String) return Natural;
    function LD2PD (Vol : Natural) return Natural;
@@ -194,6 +195,13 @@ package body Fat_File is
                   FS.Fat_Size :=
                     Long_Integer (Load_DWord (FS.Win, BPB_FAT_Size_Ex));
                   FS.Num_Fats := FS.Win (BPB_Num_FATs_Ex);
+                  if FS.Num_Fats > 1 then
+                     Result := FR_NO_FILESYSTEM;
+                     Put_Line
+                       ("Invalid file system, more than one FAT.");
+                  else
+                     FS.Cluster_Size := FS.Win (BPB_Secs_Per_Cluster_Ex);
+                  end if;
                end if;
             end if;
          end if;
@@ -403,7 +411,7 @@ package body Fat_File is
    end Sync_Window;
 
    function Move_Window (FS : in out Fat_FS; Sector : in out Long_Integer)
-                         return F_Result is
+                            return F_Result is
       use Disk_IO;
       Result : F_Result := FR_OK;
    begin
