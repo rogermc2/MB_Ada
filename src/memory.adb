@@ -6,10 +6,11 @@ package body Memory is
       null;
    end Clear_Temp_Memory;
 
-   function Get_Temp_Memory (Num_Bytes : Positive) return Unsigned_Byte_Array is
-      Byte_Array : Unsigned_Byte_Array (1 .. Num_Bytes) := (others => 0);
+   function Get_Temp_Memory (Num_Bytes : Long_Integer)
+                             return Byte_Array is
+      Bytes : Byte_Array (1 .. Num_Bytes) := (others => 0);
    begin
-      return Byte_Array;
+      return Bytes;
 
    end Get_Temp_Memory;
 

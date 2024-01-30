@@ -4,7 +4,6 @@ with Interfaces;
 with Ada.Assertions;
 with Ada.Characters.Handling;
 with Ada.Strings.Fixed;
-with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 --  with Ada.Text_IO; use Ada.Text_IO;
 
 with Flat_File_Configuration; use Flat_File_Configuration;
@@ -14,7 +13,7 @@ package body Fat_File is
    --  Offset of partition table in the MBR
    MBR_Table     : constant Positive := 446;
    PTE_Size      : constant Positive := 16;
-   PTE_System_ID : constant Positive := 4;
+   PTE_System_ID : constant Long_Integer := 4;
    PTE_St_Lba    : constant Long_Integer := 8;    --  MBR PTE: Start in LBA
    BS_55AA       : constant Long_Integer := 510;  --  Signature word
 
@@ -82,12 +81,11 @@ package body Fat_File is
       use Interfaces;
       use Disk_IO;
       Vol_ID   : constant Integer := Get_Logical_Drive_Num (Path);
-      FR       : constant Word := FA_Status'Enum_Rep (FA_READ);
+      F_READ   : constant Word := FA_Status'Enum_Rep (FA_READ);
       FS       : Fat_FS;
-      B_Sect   : Natural := 0;
+      B_Sect   : Long_Integer := 0;
       Format   : Natural := 0;
       Part_Ptr : Long_Integer := 0;
-      Part     : Unbounded_String;
       Win_Pos  : Long_Integer := 0;
       BR       : array (1 .. 4) of Long_Integer;
       Status   : D_Status;
@@ -99,7 +97,7 @@ package body Fat_File is
       else
          FS := Fat_File_Sys (Vol_ID);
          RFS := FS;
-         Mode := Mode and (not FR);
+         Mode := Mode and (not F_READ);
          if FS.FS_Type > 0 then
             Status := Disk_Status (FS.Drive_Typ);
             if not FS_Read_Only and then Mode /= 0 and then
@@ -125,10 +123,9 @@ package body Fat_File is
                      --  Get partition offset
                      Win_Pos := Win_Pos + 1;
                      Part_Ptr :=
-                       Long_Integer (Win_Pos + MBR_Table + idx * PTE_Size);
-                     Part := To_Unbounded_String (FS.Win (Win_Pos));
+                       Win_Pos + Long_Integer (MBR_Table + idx * PTE_Size);
                      BR (idx + 1) := 0;
-                     if Part (PTE_System_ID) > 0 then
+                     if FS.Win (Part_Ptr + PTE_System_ID) > 0 then
                         BR (idx + 1) := Part_Ptr + PTE_St_Lba;
                      end if;
                   end loop;
@@ -213,6 +210,7 @@ package body Fat_File is
    end LD2PD;
 
    function Load_DWord (Data : Byte_Array; Ptr : Long_Integer) return DWord is
+      use Interfaces;
       RV_Ptr : Long_Integer := Ptr;
       RV     : DWord := Unsigned_32 (Data (RV_Ptr + 3));
    begin
@@ -225,6 +223,7 @@ package body Fat_File is
    end Load_DWord;
 
    function Load_QWord (Data : Byte_Array; Ptr : Long_Integer) return QWord is
+      use Interfaces;
       RV_Ptr : Long_Integer := Ptr;
       RV     : Unsigned_64 := Unsigned_64 (Data (RV_Ptr + 7));
    begin
@@ -237,6 +236,7 @@ package body Fat_File is
    end Load_QWord;
 
    function Load_Word (Data : Byte_Array; Ptr : Long_Integer) return Word is
+      use Interfaces;
       --        use Unsigned_Byte_Pointers;
       RV_Ptr : Long_Integer := Ptr;
       RV0    : constant Byte := Data (RV_Ptr);
