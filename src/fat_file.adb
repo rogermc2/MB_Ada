@@ -12,7 +12,11 @@ package body Fat_File is
 
    --  Offset of partition table in the MBR
    MBR_Table              : constant Positive := 446;
-   BPD_Zeroed_Ex          : constant Long_Integer := 11;   --  EXFAT: MBZ field
+   BPD_Zeroed_Ex          : constant Long_Integer := 11;  --  EXFAT: MBZ field
+   --  EXFAT: Volume size (number of sectors)
+   BPB_Total_Sector_Ex    : constant Long_Integer := 72;
+   BPB_FAT_Size_Ex        : constant Long_Integer := 84;
+   BPB_Num_FATs_Ex        : constant Long_Integer := 110;
    --  EXFAT: File system version
    BPB_FS_Ver_EX          : constant Long_Integer := 104;
    BPB_Byts_Per_Sector_Ex : constant Long_Integer := 108;
@@ -33,6 +37,7 @@ package body Fat_File is
    function Load_Word (Data : Byte_Array; Ptr : Long_Integer) return Word;
    function Move_Window (FS : in out Fat_FS; Sector :in out  Long_Integer)
                          return F_Result;
+   function Sector_Size (FS : Fat_FS) return Long_Integer;
 
    function Check_File_System (FS : in out Fat_FS; Sect : in out Long_Integer)
                                return Natural is
@@ -117,14 +122,14 @@ package body Fat_File is
    --  Find_Volume_Aux attempts to mount a volume for which the file system
    --  object is not valid.
    --  It analyzes the BPB and initializes the fs object.
-   function Find_Volume_Aux
-     (Path : String; FS : in out Fat_FS; Vol_ID : Integer; Mode : in out Word)
-      return F_Result is
+   function Find_Volume_Aux (FS : in out Fat_FS; Vol_ID : Integer; Mode : Word)
+                             return F_Result is
       use Interfaces;
       use Disk_IO;
       B_Sect    : Long_Integer := 0;
       Format    : Natural;
       bpb_index : Long_Integer;
+      Max_LBA   : QWord;
       Status    : D_Status;
       Result    : F_Result := FR_OK;
    begin
@@ -136,9 +141,11 @@ package body Fat_File is
       if Status = STA_NOINIT then
          Result := FR_NOT_READY;
       elsif FS_Read_Only and then Mode = 0 and then
-        Status =STA_PROTECT then
+        Status = STA_PROTECT then
          Result := FR_WRITE_PROTECTED;
       else
+         --  Find an FAT partition on the drive.
+         --  Supports only generic partitioning rules, FDISK and SFD.
          Format := Check_File_System (FS, B_Sect);
          if Format = 2 or else (Format < 2 and LD2PD (Vol_ID) /= 0) then
             --  Not a FAT-VBR or forced partition number
@@ -146,9 +153,14 @@ package body Fat_File is
          end if;  --  Format = 2 ...
 
          if Format = 4 then
+            --  An error occurred in the disk IO layer.
             Result := FR_DISK_ERR;
          elsif Format >= 2 then
+            --  No FAT volume was found.
             Result := FR_NO_FILESYSTEM;
+
+            --  3097 Otherwise, a FAT volume has been found (bsect).
+            --  The following code initializes the file system object.
          elsif FS_EXFAT and then Format = 1 then
             --  Check zero filler
             bpb_index := BPD_Zeroed_Ex;
@@ -157,18 +169,33 @@ package body Fat_File is
                bpb_index := bpb_index + 1;
             end loop;
 
-            if bpb_index < BPD_Zeroed_Ex + 53  then
+            if bpb_index < BPD_Zeroed_Ex + 53 then
                Result := FR_NO_FILESYSTEM;
-            end if;
-         elsif Load_Word (FS.Win, BPB_FS_Ver_EX) /= 16#100# then
-            Result := FR_NO_FILESYSTEM;
-            Put_Line
-              ("Invalid file  system version: " &
-                 Word'Image (Load_Word (FS.Win, BPB_FS_Ver_EX)) &
-                 ".  Version 1.0 is required.");
-         elsif Load_Word (FS.Win, BPB_Byts_Per_Sector_Ex) /= SS (FS) then
-            Result := FR_NO_FILESYSTEM;
 
+            elsif Load_Word (FS.Win, BPB_FS_Ver_EX) /= 16#100# then
+               Result := FR_NO_FILESYSTEM;
+               Put_Line
+                 ("Invalid file  system version: " &
+                    Word'Image (Load_Word (FS.Win, BPB_FS_Ver_EX)) &
+                    ".  Version 1.0 is required.");
+            elsif BPB_Byts_Per_Sector_Ex / 2 /= Sector_Size (FS) then
+               --  BPB_Byts_Per_Sector_Ex equal the physical sector size.
+               Result := FR_NO_FILESYSTEM;
+               Put_Line ("Invalid file  system sector size.");
+            else
+               --  Set Max_LBA to last LBA + 1 of the volume.
+               Max_LBA := Load_QWord (FS.Win, BPB_Total_Sector_Ex) +
+                 QWord (B_Sect);
+               if Max_LBA >= 16#100000000# then
+                  Result := FR_NO_FILESYSTEM;
+                  Put_Line
+                    ("Invalid file system cannot be processed a 32 bit LBA.");
+               else
+                  FS.Fat_Size :=
+                    Long_Integer (Load_DWord (FS.Win, BPB_FAT_Size_Ex));
+                  FS.Num_Fats := FS.Win (BPB_Num_FATs_Ex);
+               end if;
+            end if;
          end if;
       end if;
 
@@ -220,8 +247,8 @@ package body Fat_File is
             end if;
          end if;  --  FS.FS_Type > 0
 
-         Result := Find_Volume_Aux (Path, FS, Vol_ID, Mode);
-      end if;  --  Vol_ID >= 0
+         Result := Find_Volume_Aux (FS, Vol_ID, Mode);
+      end if;
 
       return Result;
 
@@ -331,6 +358,16 @@ package body Fat_File is
         Unsigned_16 (Data (Ptr + 1));
 
    end Load_Word;
+
+   function Sector_Size (FS : Fat_FS) return Long_Integer is
+   begin
+      if Max_SS = Min_SS then
+         return Max_SS;
+      else
+         return FS.Sector_Size;
+      end if;
+
+   end Sector_Size;
 
    function Sync_Window (FS : in out Fat_FS) return F_Result is
       use Disk_IO;
