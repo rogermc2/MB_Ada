@@ -12,6 +12,7 @@ package body Fat_File is
 
    --  Offset of partition table in the MBR
    MBR_Table     : constant Positive := 446;
+   BPD_Zeroed_Ex : constant Long_Integer := 11;   --  EXFAT: MBZ firld
    PTE_Size      : constant Positive := 16;
    PTE_System_ID : constant Long_Integer := 4;
    PTE_St_Lba    : constant Long_Integer := 8;    --  MBR PTE: Start in LBA
@@ -78,12 +79,76 @@ package body Fat_File is
    --  Find_Volume_Aux attempts to mount a volume for which the file system
    --  object is not valid.
    --  It analyzes the BPB and initializes the fs object.
-   function Find_Volume_Aux (Path : String; RFS : in out Fat_FS;
-                             Mode : in out Word) return F_Result is
+   function Find_Volume_Aux
+     (Path : String; FS : in out Fat_FS; Vol_ID : Integer; Mode : in out Word)
+      return F_Result is
       use Interfaces;
       use Disk_IO;
+      B_Sect   : Long_Integer := 0;
+      Format   : Natural;
+      Part_Ptr : Long_Integer := 0;
+      BR       : array (1 .. 4) of Long_Integer := (others => 0);
+      BR_Index  : Positive;
+      bpb_index : Long_Integer;
+      Max_LBA  : QWord := 0;
+      Status   : D_Status;
       Result   : F_Result;
    begin
+      FS.FS_Type := 0;
+      --  Bind the logical drive to a physical drive.
+      FS.Drive_Num := LD2PD (Vol_ID);
+      --  Initialize the physical drive.
+      Status := Disk_Initialize (FS.Drive_Typ);
+      if Status = STA_NOINIT then
+         Result := FR_NOT_READY;
+      elsif FS_Read_Only and then Mode = 0 and then
+        Status =STA_PROTECT then
+         Result := FR_WRITE_PROTECTED;
+      else
+         Format := Check_File_System (FS, B_Sect);
+         if Format = 2 or else (Format < 2 and LD2PD (Vol_ID) /= 0) then
+            --  Not a FAT-VBR or forced partition number
+            for idx in 0 .. 3 loop
+               --  Get partition offset
+               Part_Ptr :=
+                 Long_Integer (MBR_Table + idx * PTE_Size);
+               if FS.Win (Part_Ptr + PTE_System_ID) > 0 then
+                  BR (idx + 1) := Long_Integer
+                    (Load_DWord (FS.Win, Part_Ptr + PTE_St_Lba));
+               end if;
+               BR_Index := LD2PD (Vol_ID);
+               if BR_Index > 2 then
+                  BR_Index := BR_Index - 1;
+               end if;
+               loop
+                  if BR (BR_Index) > 0 then
+                     Format := Check_File_System (FS, BR (BR_Index));
+                  else
+                     Format := 3;
+                  end if;
+                  BR_Index := BR_Index + 1;
+                  exit when LD2PD (Vol_ID) = 0 and then
+                    Format >= 2 and then BR_Index < 5;
+               end loop;
+            end loop;
+
+         end if;  --  Format = 2 ,,
+
+         if Format = 4 then
+            Result := FR_DISK_ERR;
+         elsif Format >= 2 then
+            Result := FR_NO_FILESYSTEM;
+         elsif FS_EXFAT and then Format = 1 then
+            bpb_index := BPD_Zeroed_Ex;
+            while bpb_index < BPD_Zeroed_Ex + 53 and then
+              FS.Win (bpb_index) = 0 loop
+               bpb_index := bpb_index + 1;
+            end loop;
+            if bpb_index < BPD_Zeroed_Ex + 53  then
+               Result := FR_NO_FILESYSTEM;
+            end if;
+         end if;
+      end if;
 
       return Result;
 
@@ -159,7 +224,7 @@ package body Fat_File is
             end if;
          end if;  --  FS.FS_Type > 0
 
-         Result := Find_Volume_Aux (Path, FS, Mode);
+         Result := Find_Volume_Aux (Path, FS, Vol_ID, Mode);
       end if;  --  Vol_ID >= 0
 
       return Result;
