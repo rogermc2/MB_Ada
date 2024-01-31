@@ -131,6 +131,7 @@ package body Fat_File is
       Max_LBA      : Long_Integer;
       Num_Clusters : DWord;
       Sector       : Long_Integer;
+      FA_Size      : Long_Integer;
       Status       : D_Status;
       Done         : Boolean := False;
       Result       : F_Result := FR_OK;
@@ -249,11 +250,27 @@ package body Fat_File is
                                  FAT_Format := FS_EXFAT;  --  FAT sub-type
                               elsif Long_Integer
                                 (Load_Word (FS.Win, BPB_BytsPerSec)) /=
-                                Sector_Size (FS) then
+                                  Sector_Size (FS) then
                                  Result := FR_NO_FILESYSTEM;
                                  Put_Line ("Invalid file system");
                                  Put ("BPB_BytsPerSec must be equal to the ");
                                  Put_Line ("physical sector size");
+                              else
+                                 FA_Size := Long_Integer
+                                   (Load_Word (FS.Win, BPB_FATSz16));
+                                 if FA_Size = 0 then
+                                    FA_Size :=
+                                      Load_DWord (FS.Win, BPB_FATSz32);
+                                 end if;
+
+                                 FS.Fat_Size := FA_Size;
+                                 FS.Num_Fats := fs.Win (BPB_NumFATs);
+                                 if FS.Num_Fats /= 1 and then
+                                   FS.Num_Fats /= 2 then
+                                    Result := FR_NO_FILESYSTEM;
+                                    Put_Line ("Invalid file system");
+                                    Put_Line ("Number of Fats must be 1 or 2");
+                                 end if;
                               end if;
                            end if;
                         end if;
@@ -391,7 +408,7 @@ package body Fat_File is
    end LD2PD;
 
    function Load_DWord (Data : Byte_Array; Ptr : Long_Integer)
-                        return Long_Integer is
+                           return Long_Integer is
       Result : constant DWord := Load_DWord (Data, Ptr);
    begin
       return Long_Integer (Result);
@@ -476,7 +493,7 @@ package body Fat_File is
    end Sync_Window;
 
    function Move_Window (FS : in out Fat_FS; Sector : in out Long_Integer)
-                         return F_Result is
+                            return F_Result is
       use Disk_IO;
       Result : F_Result := FR_OK;
    begin
