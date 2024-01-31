@@ -98,9 +98,11 @@ package body Fat_File is
       Idx          : Long_Integer;
       Max_LBA      : Long_Integer;
       Num_Clusters : Long_Integer;
+      Sector       : Long_Integer;
+      Done         : Boolean;
       Result       : F_Result;
    begin
-      --  Check zero filler
+      --  3099 Check zero filler
       Idx := BPB_ZeroedEx;
       while Idx < BPB_ZeroedEx + 53 and then FS.Win (Idx) = 0 loop
          Idx := Idx + 1;
@@ -150,8 +152,37 @@ package body Fat_File is
                     Load_DWord (fs.Win, BPB_DataOfsEx);
                   FS.Fat_Base :=
                     B_Sect + Load_DWord (fs.Win, BPB_FatOfsEx);
-                  Result := Find_Vol_A (FS, Max_LBA, B_Sect,
-                                        Num_Clusters);
+                  if Max_LBA < FS.Data_Base +
+                    Num_Clusters * Long_Integer (FS.Cluster_Size) then
+                     Result := FR_NO_FILESYSTEM;
+                     Put_Line ("Invalid file system.");
+                  else
+                     FS.Dir_Base := Load_DWord (FS.Win, BPB_RootClusEx);
+                     Sector := Clust2Sec (FS, FS.Dir_Base);
+                     if Move_Window (FS, Sector) /= FR_OK then
+                        Result := FR_DISK_ERR;
+                        Put_Line ("Invalid file system.");
+                     else
+                        Idx := 0;
+                        Done := False;
+                        while not Done and then Idx < Sector_Size (FS) loop
+                           Done := FS.Win (Idx) = 16#81# and then
+                             Load_DWord (FS.Win, Idx + 20) =
+                             Long_Integer (2);
+                           if not Done then
+                              Idx := Idx + SZDIRE;
+                           end if;
+                        end loop;
+
+                        if Idx = Sector_Size (FS) then
+                           Result := FR_NO_FILESYSTEM;
+                           Put_Line ("Invalid file system.");
+                        elsif not FS_Read_Only then
+                           FS.Last_Cluster :=  16#FFFFFFFF#;
+                           FS.Free_Cluster :=  16#FFFFFFFF#;
+                        end if;
+                     end if;
+                  end if;
                end if;
             end if;
          end if;
@@ -363,9 +394,6 @@ package body Fat_File is
       use Disk_IO;
       B_Sect       : Long_Integer := 0;
       Format       : Natural;
-      Idx          : Long_Integer;
-      Max_LBA      : Long_Integer;
-      Num_Clusters : Long_Integer;
       Status       : D_Status;
       Result       : F_Result := FR_OK;
    begin
