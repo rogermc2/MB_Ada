@@ -1,4 +1,6 @@
 
+with Command_And_Token_Tables; use Command_And_Token_Tables;
+
 package FF_Parameters is
 
    --  Additional file attribute bits for internal use
@@ -28,7 +30,7 @@ package FF_Parameters is
    MAX_FAT12  : constant Integer := 16#FF5#;  --  Max FAT12 clusters (differs from specs, but correct for real DOS/Windows behavior)
    MAX_FAT16  : constant Integer := 16#FFF5#;  --  Max FAT16 clusters (differs from specs, but correct for real DOS/Windows behavior)
    MAX_FAT32 : constant := 16#0FFFFFF5#;  --  Max FAT32 clusters (not specified, practical limit)
-   MAX_EXFAT  : constant Integer := 16#7FFFFFFD#;  --  Max exFAT clusters (differs from specs, implementation limit)
+   MAX_EXFAT  : constant DWord := 16#7FFFFFFD#;  --  Max exFAT clusters (differs from specs, implementation limit)
 
    --  FatFs refers the FAT structure as simple byte array instead of structure member
    --  because the C structure is not binary compatible between different platforms
@@ -54,7 +56,7 @@ package FF_Parameters is
    BS_VolLab  : constant Integer := 43;  --  Volume label string (8-byte)
    BS_FilSysType   : constant Integer := 54;  --  File system type string (8-byte)
    BS_BootCode    : constant Integer := 62;  --  Boot code (448-byte)
-   BS_55AA     : constant Integer := 510;  --  Signature word (WORD)
+   BS_55AA     : constant Long_Integer := 510;  --  Signature word (WORD)
 
    BPB_FATSz32  : constant Integer := 36;  --  FAT32: FAT size [sector] (DWORD)
    BPB_ExtFlags32 : constant Integer := 40;  --  FAT32: Extended flags (WORD)
@@ -73,10 +75,10 @@ package FF_Parameters is
    BPB_ZeroedEx : constant Long_Integer := 11;  --  exFAT: MBZ field (53-byte)
    BPB_VolOfsEx   : constant Integer := 64;  --  exFAT: Volume offset from top of the drive [sector] (QWORD)
    BPB_TotSecEx   : constant Long_Integer := 72;  --  exFAT: Volume size [sector] (QWORD)
-   BPB_FatOfsEx : constant Integer := 80;  --  exFAT: FAT offset from top of the volume [sector] (DWORD)
+   BPB_FatOfsEx : constant Long_Integer := 80;  --  exFAT: FAT offset from top of the volume [sector] (DWORD)
    BPB_FatSzEx  : constant Long_Integer := 84;  --  exFAT: FAT size [sector] (DWORD)
-   BPB_DataOfsEx : constant Integer := 88;  --  exFAT: Data offset from top of the volume [sector] (DWORD)
-   BPB_NumClusEx   : constant Integer := 92;  --  exFAT: Number of clusters (DWORD)
+   BPB_DataOfsEx : constant Long_Integer := 88;  --  exFAT: Data offset from top of the volume [sector] (DWORD)
+   BPB_NumClusEx   : constant Long_Integer := 92;  --  exFAT: Number of clusters (DWORD)
    BPB_RootClusEx   : constant Integer := 96;  --  exFAT: Root directory start cluster (DWORD)
    BPB_VolIDEx  : constant Integer := 100;  --  exFAT: Volume serial number (DWORD)
    BPB_FSVerEx  : constant Long_Integer := 104;  --  exFAT: File system version (WORD)

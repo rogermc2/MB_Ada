@@ -17,6 +17,8 @@ package body Fat_File is
    function Get_Logical_Drive_Num (Path : String) return Natural;
    function LD2PD (Vol : Natural) return Natural;
 
+   function Load_DWord (Data : Byte_Array; Ptr : Long_Integer)
+                        return Long_Integer;
    function Load_DWord (Data : Byte_Array; Ptr : Long_Integer) return DWord;
    function Load_QWord (Data : Byte_Array; Ptr : Long_Integer) return QWord;
    function Load_Word (Data : Byte_Array; Ptr : Long_Integer) return Word;
@@ -53,8 +55,7 @@ package body Fat_File is
          --  Get partition offset
          Part_Ptr := Long_Integer (MBR_Table + idx * SZ_PTE);
          if FS.Win (Part_Ptr + PTE_System) > 0 then
-            BR (idx + 1) := Long_Integer
-              (Load_DWord (FS.Win, Part_Ptr + PTE_StLba));
+            BR (idx + 1) := (Load_DWord (FS.Win, Part_Ptr + PTE_StLba));
          end if;
 
          BR_Index := LD2PD (Vol_ID);
@@ -111,12 +112,13 @@ package body Fat_File is
                              return F_Result is
       use Interfaces;
       use Disk_IO;
-      B_Sect    : Long_Integer := 0;
-      Format    : Natural;
-      bpb_index : Long_Integer;
-      Max_LBA   : QWord;
-      Status    : D_Status;
-      Result    : F_Result := FR_OK;
+      B_Sect      : Long_Integer := 0;
+      Format      : Natural;
+      bpb_index   : Long_Integer;
+      Max_LBA     : QWord;
+      Num_Custers : DWord;
+      Status      : D_Status;
+      Result      : F_Result := FR_OK;
    begin
       FS.FS_Type := 0;
       --  Bind the logical drive to a physical drive.
@@ -176,15 +178,29 @@ package body Fat_File is
                   Put_Line
                     ("Invalid file system cannot be processed a 32 bit LBA.");
                else
-                  FS.Fat_Size :=
-                    Long_Integer (Load_DWord (FS.Win, BPB_FatSzEx));
+                  FS.Fat_Size := Load_DWord (FS.Win, BPB_FatSzEx);
                   FS.Num_Fats := FS.Win (BPB_NumFATsEx);
                   if FS.Num_Fats > 1 then
                      Result := FR_NO_FILESYSTEM;
                      Put_Line
                        ("Invalid file system, more than one FAT.");
+                  elsif FS.Win (BPB_SecPerClusEx) / 2 = 0 then
+                     Result := FR_NO_FILESYSTEM;
+                     Put ("Invalid file system, Sectors per cluster must be ");
+                     Put_Line (" in the range 1 throug 32768");
                   else
-                     FS.Cluster_Size := FS.Win (BPB_SecPerClusEx);
+                     Num_Custers := Load_DWord (FS.Win, BPB_NumClusEx);
+                     if Num_Custers > MAX_EXFAT then
+                        Result := FR_NO_FILESYSTEM;
+                        Put_Line ("Invalid file system, too many clusters. ");
+                     else
+                        FS.Num_Fat_Entries := Long_Integer (Num_Custers + 2);
+                        FS.Volume_Base := B_Sect;
+                        FS.Data_Base := B_Sect +
+                          Load_DWord (fs.Win, BPB_DataOfsEx);
+                        FS.Fat_Base :=
+                          B_Sect + Load_DWord (fs.Win, BPB_FatOfsEx);
+                     end if;
                   end if;
                end if;
             end if;
@@ -316,6 +332,14 @@ package body Fat_File is
       return Vol;
 
    end LD2PD;
+
+   function Load_DWord (Data : Byte_Array; Ptr : Long_Integer)
+                        return Long_Integer is
+      Result : constant DWord := Load_DWord (Data, Ptr);
+   begin
+      return Long_Integer (Result);
+
+   end Load_DWord;
 
    function Load_DWord (Data : Byte_Array; Ptr : Long_Integer) return DWord is
       use Interfaces;
