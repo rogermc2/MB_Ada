@@ -79,7 +79,7 @@ package FF_Parameters is
    BPB_FatSzEx  : constant Long_Integer := 84;  --  exFAT: FAT size [sector] (DWORD)
    BPB_DataOfsEx : constant Long_Integer := 88;  --  exFAT: Data offset from top of the volume [sector] (DWORD)
    BPB_NumClusEx   : constant Long_Integer := 92;  --  exFAT: Number of clusters (DWORD)
-   BPB_RootClusEx   : constant Integer := 96;  --  exFAT: Root directory start cluster (DWORD)
+   BPB_RootClusEx   : constant Long_Integer := 96;  --  exFAT: Root directory start cluster (DWORD)
    BPB_VolIDEx  : constant Integer := 100;  --  exFAT: Volume serial number (DWORD)
    BPB_FSVerEx  : constant Long_Integer := 104;  --  exFAT: File system version (WORD)
    BPB_VolFlagEx : constant Integer := 106;  --  exFAT: Volume flags (BYTE)

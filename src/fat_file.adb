@@ -77,6 +77,18 @@ package body Fat_File is
 
    end Check_Non_VBR;
 
+   function Clust2Sec (FS : Fat_FS; Cluster : Long_Integer)
+                       return Long_Integer is
+      Clust : constant Long_Integer := Cluster - 2;
+   begin
+      if Clust < FS.Num_Fat_Entries - 2 then
+         return Clust * Long_Integer (FS.Cluster_Size) + FS.Data_Base;
+      else
+         return 0;
+      end if;
+
+   end Clust2Sec;
+
    function F_Mount (FS : in out Fat_FS; Path : String; Opt : Integer)
                      return F_Result is
       --        Routine_Name : constant String := "Fat_File.F_Mount ";
@@ -112,13 +124,14 @@ package body Fat_File is
                              return F_Result is
       use Interfaces;
       use Disk_IO;
-      B_Sect      : Long_Integer := 0;
-      Format      : Natural;
-      bpb_index   : Long_Integer;
-      Max_LBA     : QWord;
-      Num_Custers : DWord;
-      Status      : D_Status;
-      Result      : F_Result := FR_OK;
+      B_Sect       : Long_Integer := 0;
+      Format       : Natural;
+      bpb_index    : Long_Integer;
+      Max_LBA      : Long_Integer;
+      Num_Clusters : DWord;
+      Sector       : Long_Integer;
+      Status       : D_Status;
+      Result       : F_Result := FR_OK;
    begin
       FS.FS_Type := 0;
       --  Bind the logical drive to a physical drive.
@@ -171,8 +184,8 @@ package body Fat_File is
                Put_Line ("Invalid file  system sector size.");
             else
                --  Set Max_LBA to last LBA + 1 of the volume.
-               Max_LBA := Load_QWord (FS.Win, BPB_TotSecEx) +
-                 QWord (B_Sect);
+               Max_LBA := Long_Integer (Load_QWord (FS.Win, BPB_TotSecEx)) +
+                 B_Sect;
                if Max_LBA >= 16#100000000# then
                   Result := FR_NO_FILESYSTEM;
                   Put_Line
@@ -189,17 +202,34 @@ package body Fat_File is
                      Put ("Invalid file system, Sectors per cluster must be ");
                      Put_Line (" in the range 1 throug 32768");
                   else
-                     Num_Custers := Load_DWord (FS.Win, BPB_NumClusEx);
-                     if Num_Custers > MAX_EXFAT then
+                     Num_Clusters := Load_DWord (FS.Win, BPB_NumClusEx);
+                     if Num_Clusters > MAX_EXFAT then
                         Result := FR_NO_FILESYSTEM;
                         Put_Line ("Invalid file system, too many clusters. ");
                      else
-                        FS.Num_Fat_Entries := Long_Integer (Num_Custers + 2);
+                        FS.Num_Fat_Entries := Long_Integer (Num_Clusters + 2);
                         FS.Volume_Base := B_Sect;
                         FS.Data_Base := B_Sect +
                           Load_DWord (fs.Win, BPB_DataOfsEx);
                         FS.Fat_Base :=
                           B_Sect + Load_DWord (fs.Win, BPB_FatOfsEx);
+                        if Max_LBA < FS.Data_Base + Long_Integer (Num_Clusters)
+                          * Long_Integer (FS.Cluster_Size) then
+                           Result := FR_NO_FILESYSTEM;
+                           Put_Line ("Invalid file system");
+                           Put ("Volume size must not be smaller than ");
+                           Put_Line ("the required size.");
+                        else
+                           FS.Dir_Base := Load_DWord (FS.Win, BPB_RootClusEx);
+                           --  Check if the bitmap location is in assumption
+                           --  (at the first cluster).
+                           Sector := Clust2Sec (FS, FS.Dir_Base);
+                           if Move_Window (FS, Sector) /= FR_OK then
+                              null;
+                           else
+                              null;
+                           end if;
+                        end if;
                      end if;
                   end if;
                end if;
@@ -419,7 +449,7 @@ package body Fat_File is
    end Sync_Window;
 
    function Move_Window (FS : in out Fat_FS; Sector : in out Long_Integer)
-                            return F_Result is
+                         return F_Result is
       use Disk_IO;
       Result : F_Result := FR_OK;
    begin
