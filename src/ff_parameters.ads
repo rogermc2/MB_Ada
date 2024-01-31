@@ -1,5 +1,5 @@
 
-package Parameters is
+package FF_Parameters is
 
    --  Additional file attribute bits for internal use
    AM_VOL  : constant := 16#08#;  --  Volume label
@@ -137,7 +137,7 @@ package Parameters is
    FSI_Free_Count : constant Integer := 488;  --  FAT32 FSI: Number of free clusters (DWORD)
    FSI_Nxt_Free : constant Integer := 492;  --  FAT32 FSI: Last allocated cluster (DWORD)
 
-   MBR_Table  : constant Integer := 446;  --  MBR: Offset of partition table in the MBR
+   FMBR_Table  : constant Integer := 446;  --  MBR: Offset of partition table in the MBR
    SZ_PTE   : constant Integer := 16;  --  MBR: Size of a partition table entry
    PTE_Boot    : constant Integer := 0;  --  MBR PTE: Boot indicator
    PTE_StHead  : constant Integer := 1;  --  MBR PTE: Start head
@@ -150,4 +150,4 @@ package Parameters is
    PTE_StLba  : constant Integer := 8;  --  MBR PTE: Start in LBA
    PTE_SizLba  : constant Integer := 12;  --  MBR PTE: Size in LBA
 
-end Parameters;
+end FF_Parameters;

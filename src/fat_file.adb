@@ -6,14 +6,13 @@ with Ada.Characters.Handling;
 with Ada.Strings.Fixed;
 with Ada.Text_IO; use Ada.Text_IO;
 
+with FF_Parameters; use FF_Parameters;
 with Flat_File_Configuration; use Flat_File_Configuration;
 
 package body Fat_File is
 
    --  Offset of partition table in the MBR
-   MBR_Table               : constant Positive := 446;
-   BPD_Zeroed_Ex           : constant Long_Integer := 11;  --  EXFAT: MBZ field
-   --  EXFAT: Volume size (number of sectors)
+    --  EXFAT: Volume size (number of sectors)
    BPB_Total_Sector_Ex     : constant Long_Integer := 72;
    BPB_FAT_Size_Ex         : constant Long_Integer := 84;
    BPB_Num_FATs_Ex         : constant Long_Integer := 110;
@@ -27,7 +26,7 @@ package body Fat_File is
    PTE_St_Lba              : constant Long_Integer := 8;
    BS_55AA                 : constant Long_Integer := 510;  --  Signature word
 
-   Current_Vol             : Natural := 0;
+   Current_Vol             : constant Natural := 0;
    Fat_File_Sys            : array (0 .. Num_Volumes - 1) of Fat_FS;
 
    function Get_Logical_Drive_Num (Path : String) return Natural;
@@ -164,13 +163,13 @@ package body Fat_File is
             --  The following code initializes the file system object.
          elsif FS_EXFAT and then Format = 1 then
             --  Check zero filler
-            bpb_index := BPD_Zeroed_Ex;
+            bpb_index := BPB_ZeroedEx;
             while bpb_index < BPD_Zeroed_Ex + 53 and then
               FS.Win (bpb_index) = 0 loop
                bpb_index := bpb_index + 1;
             end loop;
 
-            if bpb_index < BPD_Zeroed_Ex + 53 then
+            if bpb_index < BPB_ZeroedEx + 53 then
                Result := FR_NO_FILESYSTEM;
 
             elsif Load_Word (FS.Win, BPB_FS_Ver_EX) /= 16#100# then
