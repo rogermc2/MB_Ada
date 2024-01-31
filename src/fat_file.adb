@@ -90,18 +90,21 @@ package body Fat_File is
    end Clust2Sec;
 
    function Find_Vol_A (FS           : in out Fat_FS; Max_LBA : Long_Integer;
-                  Num_Clusters : DWord) return F_Result is
+                        Num_Clusters : in out Long_Integer) return F_Result is
       use Interfaces;
-      Sector     : Long_Integer;
-      Idx        : Long_Integer;
-      FA_Size    : Long_Integer;
-      FAT_Format : Boolean;
-      Done       : Boolean;
-      Result     : F_Result := FR_OK;
+      Sector      : Long_Integer;
+      Idx         : Long_Integer;
+      FA_Size     : Long_Integer;
+      Total_Sect  : Long_Integer;
+      Num_Reserve : Long_Integer;
+      Sysect      : Long_Integer;
+      FAT_Format  : Boolean;
+      Done        : Boolean;
+      Result      : F_Result := FR_OK;
 
    begin
-      if Max_LBA < FS.Data_Base + Long_Integer (Num_Clusters)
-        * Long_Integer (FS.Cluster_Size) then
+      if Max_LBA < FS.Data_Base +
+        Num_Clusters * Long_Integer (FS.Cluster_Size) then
          Result := FR_NO_FILESYSTEM;
          Put_Line ("Invalid file system");
          Put ("Volume size must not be smaller than ");
@@ -155,6 +158,48 @@ package body Fat_File is
                   Result := FR_NO_FILESYSTEM;
                   Put_Line ("Invalid file system");
                   Put_Line ("Number of Fats must be 1 or 2");
+               else
+                  FA_Size := Long_Integer (FS.Num_Fats);
+                  FS.Cluster_Size := FS.Win (BPB_SecPerClus);
+                  if FS.Cluster_Size = 0 or else
+                    (FS.Cluster_Size and (FS.Cluster_Size - 1)) /= 0 then
+                     Result := FR_NO_FILESYSTEM;
+                     Put_Line ("Invalid file system");
+                     Put_Line ("Cluster_Size must be a power of 2");
+                  else
+                     FS.Root_Dir_Size :=
+                       Long_Integer (Load_Word (FS.Win, BPB_RootEntCnt));
+                     if (FS.Root_Dir_Size) mod Sector_Size (FS) / SZDIRE
+                       /= 0 then
+                        Result := FR_NO_FILESYSTEM;
+                        Put_Line ("Invalid file system");
+                        Put_Line ("Must be sector aligned");
+                     else
+                        Total_Sect :=
+                          Long_Integer (Load_Word (FS.Win, BPB_TotSec16));
+                        if Total_Sect = 0 then
+                           Total_Sect := Load_DWord (FS.Win, BPB_TotSec32);
+                        end if;
+
+                        Num_Reserve :=
+                          Long_Integer (Load_Word (FS.Win, BPB_RsvdSecCnt));
+                        if Num_Reserve = 0 then
+                           Result := FR_NO_FILESYSTEM;
+                           Put_Line ("Invalid file system");
+                           Put_Line ("Num_Reserve is zero.");
+                        else
+                           Sysect := Num_Reserve + FA_Size +
+                             FS.Root_Dir_Size / Sector_Size (FS) / SZDIRE;
+                           if Total_Sect < Sysect then
+                              Result := FR_NO_FILESYSTEM;
+                              Put_Line ("Invalid volume size.");
+                           else
+                              Num_Clusters := Long_Integer (Total_Sect - Sysect) /
+                                Long_Integer (FS.Cluster_Size);
+                           end if;
+                        end if;
+                     end if;
+                  end if;
                end if;
             end if;
          end if;
@@ -203,7 +248,7 @@ package body Fat_File is
       Format       : Natural;
       Idx          : Long_Integer;
       Max_LBA      : Long_Integer;
-      Num_Clusters : DWord;
+      Num_Clusters : Long_Integer;
       Status       : D_Status;
       Result       : F_Result := FR_OK;
    begin
@@ -276,7 +321,7 @@ package body Fat_File is
                      Put_Line (" in the range 1 throug 32768");
                   else
                      Num_Clusters := Load_DWord (FS.Win, BPB_NumClusEx);
-                     if Num_Clusters > MAX_EXFAT then
+                     if Num_Clusters > Long_Integer (MAX_EXFAT) then
                         Result := FR_NO_FILESYSTEM;
                         Put_Line ("Invalid file system, too many clusters. ");
                      else
