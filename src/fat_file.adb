@@ -91,10 +91,10 @@ package body Fat_File is
 
    function Find_Vol_A
      (FS           : in out Fat_FS; Max_LBA, B_Sect : Long_Integer;
-      Num_Clusters : in out Long_Integer;
-      FAT_Format   : in out FS_FAT_Format) return F_Result is
+      Num_Clusters : in out Long_Integer) return F_Result is
       use Interfaces;
       Sector      : Long_Integer;
+      FAT_Format  :FS_FAT_Format;
       Idx         : Long_Integer;
       FA_Size     : Long_Integer;
       Total_Sect  : Long_Integer;
@@ -291,7 +291,6 @@ package body Fat_File is
       use Disk_IO;
       B_Sect       : Long_Integer := 0;
       Format       : Natural;
-      FAT_Format   : FS_FAT_Format;
       Idx          : Long_Integer;
       Max_LBA      : Long_Integer;
       Num_Clusters : Long_Integer;
@@ -378,7 +377,7 @@ package body Fat_File is
                         FS.Fat_Base :=
                           B_Sect + Load_DWord (fs.Win, BPB_FatOfsEx);
                         Result := Find_Vol_A (FS, Max_LBA, B_Sect,
-                                              Num_Clusters, FAT_Format);
+                                              Num_Clusters);
                      end if;
                   end if;
                end if;
