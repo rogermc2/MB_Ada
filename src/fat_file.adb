@@ -89,6 +89,81 @@ package body Fat_File is
 
    end Clust2Sec;
 
+   function Find_Vol_A (FS           : in out Fat_FS; Max_LBA : Long_Integer;
+                  Num_Clusters : DWord) return F_Result is
+      use Interfaces;
+      Sector     : Long_Integer;
+      Idx        : Long_Integer;
+      FA_Size    : Long_Integer;
+      FAT_Format : Boolean;
+      Done       : Boolean;
+      Result     : F_Result := FR_OK;
+
+   begin
+      if Max_LBA < FS.Data_Base + Long_Integer (Num_Clusters)
+        * Long_Integer (FS.Cluster_Size) then
+         Result := FR_NO_FILESYSTEM;
+         Put_Line ("Invalid file system");
+         Put ("Volume size must not be smaller than ");
+         Put_Line ("the required size.");
+      else
+         FS.Dir_Base := Load_DWord (FS.Win, BPB_RootClusEx);
+         --  Check if the bitmap location is in assumption
+         --  (at the first cluster).
+         Sector := Clust2Sec (FS, FS.Dir_Base);
+         if Move_Window (FS, Sector) /= FR_OK then
+            Result := FR_DISK_ERR;
+            Put_Line ("Invalid file system");
+         else
+            Idx := 0;
+            Done := False;
+            while not Done and then
+              Idx < Sector_Size (FS) loop
+               Done := FS.Win (Idx) = 16#81# and then
+                 Load_DWord (FS.Win, Idx + 20) = DWord (2);
+               if not Done then
+                  Idx := Idx + SZDIRE;
+               end if;
+            end loop;
+
+            if Idx = Sector_Size (FS) then
+               Result := FR_NO_FILESYSTEM;
+               Put_Line ("Invalid file system");
+            elsif not FS_Read_Only then
+               FS.Last_Cluster := 16#FFFFFFFF#;
+               FS.Free_Cluster := 16#FFFFFFFF#;
+               FAT_Format := FS_EXFAT;  --  FAT sub-type
+            elsif Long_Integer
+              (Load_Word (FS.Win, BPB_BytsPerSec)) /=
+                Sector_Size (FS) then
+               Result := FR_NO_FILESYSTEM;
+               Put_Line ("Invalid file system");
+               Put ("BPB_BytsPerSec must be equal to the ");
+               Put_Line ("physical sector size");
+            else
+               FA_Size := Long_Integer
+                 (Load_Word (FS.Win, BPB_FATSz16));
+               if FA_Size = 0 then
+                  FA_Size :=
+                    Load_DWord (FS.Win, BPB_FATSz32);
+               end if;
+
+               FS.Fat_Size := FA_Size;
+               FS.Num_Fats := fs.Win (BPB_NumFATs);
+               if FS.Num_Fats /= 1 and then
+                 FS.Num_Fats /= 2 then
+                  Result := FR_NO_FILESYSTEM;
+                  Put_Line ("Invalid file system");
+                  Put_Line ("Number of Fats must be 1 or 2");
+               end if;
+            end if;
+         end if;
+      end if;
+
+      return Result;
+
+   end Find_Vol_A;
+
    function F_Mount (FS : in out Fat_FS; Path : String; Opt : Integer)
                      return F_Result is
       --        Routine_Name : constant String := "Fat_File.F_Mount ";
@@ -126,14 +201,10 @@ package body Fat_File is
       use Disk_IO;
       B_Sect       : Long_Integer := 0;
       Format       : Natural;
-      FAT_Format   : Boolean;
       Idx          : Long_Integer;
       Max_LBA      : Long_Integer;
       Num_Clusters : DWord;
-      Sector       : Long_Integer;
-      FA_Size      : Long_Integer;
       Status       : D_Status;
-      Done         : Boolean := False;
       Result       : F_Result := FR_OK;
    begin
       FS.FS_Type := 0;
@@ -215,65 +286,7 @@ package body Fat_File is
                           Load_DWord (fs.Win, BPB_DataOfsEx);
                         FS.Fat_Base :=
                           B_Sect + Load_DWord (fs.Win, BPB_FatOfsEx);
-                        if Max_LBA < FS.Data_Base + Long_Integer (Num_Clusters)
-                          * Long_Integer (FS.Cluster_Size) then
-                           Result := FR_NO_FILESYSTEM;
-                           Put_Line ("Invalid file system");
-                           Put ("Volume size must not be smaller than ");
-                           Put_Line ("the required size.");
-                        else
-                           FS.Dir_Base := Load_DWord (FS.Win, BPB_RootClusEx);
-                           --  Check if the bitmap location is in assumption
-                           --  (at the first cluster).
-                           Sector := Clust2Sec (FS, FS.Dir_Base);
-                           if Move_Window (FS, Sector) /= FR_OK then
-                              Result := FR_DISK_ERR;
-                              Put_Line ("Invalid file system");
-                           else
-                              Idx := 0;
-                              Done := False;
-                              while not Done and then
-                                Idx < Sector_Size (FS) loop
-                                 Done := FS.Win (Idx) = 16#81# and then
-                                   Load_DWord (FS.Win, Idx + 20) = DWord (2);
-                                 if not Done then
-                                    Idx := Idx + SZDIRE;
-                                 end if;
-                              end loop;
-
-                              if Idx = Sector_Size (FS) then
-                                 Result := FR_NO_FILESYSTEM;
-                                 Put_Line ("Invalid file system");
-                              elsif not FS_Read_Only then
-                                 FS.Last_Cluster := 16#FFFFFFFF#;
-                                 FS.Free_Cluster := 16#FFFFFFFF#;
-                                 FAT_Format := FS_EXFAT;  --  FAT sub-type
-                              elsif Long_Integer
-                                (Load_Word (FS.Win, BPB_BytsPerSec)) /=
-                                  Sector_Size (FS) then
-                                 Result := FR_NO_FILESYSTEM;
-                                 Put_Line ("Invalid file system");
-                                 Put ("BPB_BytsPerSec must be equal to the ");
-                                 Put_Line ("physical sector size");
-                              else
-                                 FA_Size := Long_Integer
-                                   (Load_Word (FS.Win, BPB_FATSz16));
-                                 if FA_Size = 0 then
-                                    FA_Size :=
-                                      Load_DWord (FS.Win, BPB_FATSz32);
-                                 end if;
-
-                                 FS.Fat_Size := FA_Size;
-                                 FS.Num_Fats := fs.Win (BPB_NumFATs);
-                                 if FS.Num_Fats /= 1 and then
-                                   FS.Num_Fats /= 2 then
-                                    Result := FR_NO_FILESYSTEM;
-                                    Put_Line ("Invalid file system");
-                                    Put_Line ("Number of Fats must be 1 or 2");
-                                 end if;
-                              end if;
-                           end if;
-                        end if;
+                        Result := Find_Vol_A (FS, Max_LBA, Num_Clusters);
                      end if;
                   end if;
                end if;
@@ -408,7 +421,7 @@ package body Fat_File is
    end LD2PD;
 
    function Load_DWord (Data : Byte_Array; Ptr : Long_Integer)
-                           return Long_Integer is
+                        return Long_Integer is
       Result : constant DWord := Load_DWord (Data, Ptr);
    begin
       return Long_Integer (Result);
@@ -493,7 +506,7 @@ package body Fat_File is
    end Sync_Window;
 
    function Move_Window (FS : in out Fat_FS; Sector : in out Long_Integer)
-                            return F_Result is
+                         return F_Result is
       use Disk_IO;
       Result : F_Result := FR_OK;
    begin
