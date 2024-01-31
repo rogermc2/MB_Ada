@@ -11,21 +11,6 @@ with Flat_File_Configuration; use Flat_File_Configuration;
 
 package body Fat_File is
 
-   --  Offset of partition table in the MBR
-    --  EXFAT: Volume size (number of sectors)
-   BPB_Total_Sector_Ex     : constant Long_Integer := 72;
-   BPB_FAT_Size_Ex         : constant Long_Integer := 84;
-   BPB_Num_FATs_Ex         : constant Long_Integer := 110;
-   BPB_Secs_Per_Cluster_Ex : constant Long_Integer := 109;
-   --  EXFAT: File system version
-   BPB_FS_Ver_EX           : constant Long_Integer := 104;
-   BPB_Byts_Per_Sector_Ex  : constant Long_Integer := 108;
-   PTE_Size                : constant Positive := 16;
-   PTE_System_ID           : constant Long_Integer := 4;
-   --  MBR PTE: Start in LBA
-   PTE_St_Lba              : constant Long_Integer := 8;
-   BS_55AA                 : constant Long_Integer := 510;  --  Signature word
-
    Current_Vol             : constant Natural := 0;
    Fat_File_Sys            : array (0 .. Num_Volumes - 1) of Fat_FS;
 
@@ -66,10 +51,10 @@ package body Fat_File is
    begin
       for idx in 0 .. 3 loop
          --  Get partition offset
-         Part_Ptr := Long_Integer (MBR_Table + idx * PTE_Size);
-         if FS.Win (Part_Ptr + PTE_System_ID) > 0 then
+         Part_Ptr := Long_Integer (MBR_Table + idx * SZ_PTE);
+         if FS.Win (Part_Ptr + PTE_System) > 0 then
             BR (idx + 1) := Long_Integer
-              (Load_DWord (FS.Win, Part_Ptr + PTE_St_Lba));
+              (Load_DWord (FS.Win, Part_Ptr + PTE_StLba));
          end if;
 
          BR_Index := LD2PD (Vol_ID);
@@ -164,7 +149,7 @@ package body Fat_File is
          elsif FS_EXFAT and then Format = 1 then
             --  Check zero filler
             bpb_index := BPB_ZeroedEx;
-            while bpb_index < BPD_Zeroed_Ex + 53 and then
+            while bpb_index < BPB_ZeroedEx + 53 and then
               FS.Win (bpb_index) = 0 loop
                bpb_index := bpb_index + 1;
             end loop;
@@ -172,19 +157,19 @@ package body Fat_File is
             if bpb_index < BPB_ZeroedEx + 53 then
                Result := FR_NO_FILESYSTEM;
 
-            elsif Load_Word (FS.Win, BPB_FS_Ver_EX) /= 16#100# then
+            elsif Load_Word (FS.Win, BPB_FSVerEx) /= 16#100# then
                Result := FR_NO_FILESYSTEM;
                Put_Line
                  ("Invalid file  system version: " &
-                    Word'Image (Load_Word (FS.Win, BPB_FS_Ver_EX)) &
+                    Word'Image (Load_Word (FS.Win, BPB_FSVerEx)) &
                     ".  Version 1.0 is required.");
-            elsif BPB_Byts_Per_Sector_Ex / 2 /= Sector_Size (FS) then
-               --  BPB_Byts_Per_Sector_Ex equal the physical sector size.
+            elsif BPB_BytsPerSecEx  / 2 /= Sector_Size (FS) then
+               --  BPB_BytsPerSecEx equal the physical sector size.
                Result := FR_NO_FILESYSTEM;
                Put_Line ("Invalid file  system sector size.");
             else
                --  Set Max_LBA to last LBA + 1 of the volume.
-               Max_LBA := Load_QWord (FS.Win, BPB_Total_Sector_Ex) +
+               Max_LBA := Load_QWord (FS.Win, BPB_TotSecEx) +
                  QWord (B_Sect);
                if Max_LBA >= 16#100000000# then
                   Result := FR_NO_FILESYSTEM;
@@ -192,14 +177,14 @@ package body Fat_File is
                     ("Invalid file system cannot be processed a 32 bit LBA.");
                else
                   FS.Fat_Size :=
-                    Long_Integer (Load_DWord (FS.Win, BPB_FAT_Size_Ex));
-                  FS.Num_Fats := FS.Win (BPB_Num_FATs_Ex);
+                    Long_Integer (Load_DWord (FS.Win, BPB_FatSzEx));
+                  FS.Num_Fats := FS.Win (BPB_NumFATsEx);
                   if FS.Num_Fats > 1 then
                      Result := FR_NO_FILESYSTEM;
                      Put_Line
                        ("Invalid file system, more than one FAT.");
                   else
-                     FS.Cluster_Size := FS.Win (BPB_Secs_Per_Cluster_Ex);
+                     FS.Cluster_Size := FS.Win (BPB_SecPerClusEx);
                   end if;
                end if;
             end if;

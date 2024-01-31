@@ -70,21 +70,21 @@ package FF_Parameters is
    BS_FilSysType32 : constant Integer := 82;  --  FAT32: File system type string (8-byte)
    BS_BootCode32   : constant Integer := 90;  --  FAT32: Boot code (420-byte)
 
-   BPB_ZeroedEx : constant Integer := 11;  --  exFAT: MBZ field (53-byte)
+   BPB_ZeroedEx : constant Long_Integer := 11;  --  exFAT: MBZ field (53-byte)
    BPB_VolOfsEx   : constant Integer := 64;  --  exFAT: Volume offset from top of the drive [sector] (QWORD)
-   BPB_TotSecEx   : constant Integer := 72;  --  exFAT: Volume size [sector] (QWORD)
+   BPB_TotSecEx   : constant Long_Integer := 72;  --  exFAT: Volume size [sector] (QWORD)
    BPB_FatOfsEx : constant Integer := 80;  --  exFAT: FAT offset from top of the volume [sector] (DWORD)
-   BPB_FatSzEx  : constant Integer := 84;  --  exFAT: FAT size [sector] (DWORD)
+   BPB_FatSzEx  : constant Long_Integer := 84;  --  exFAT: FAT size [sector] (DWORD)
    BPB_DataOfsEx : constant Integer := 88;  --  exFAT: Data offset from top of the volume [sector] (DWORD)
    BPB_NumClusEx   : constant Integer := 92;  --  exFAT: Number of clusters (DWORD)
    BPB_RootClusEx   : constant Integer := 96;  --  exFAT: Root directory start cluster (DWORD)
    BPB_VolIDEx  : constant Integer := 100;  --  exFAT: Volume serial number (DWORD)
-   BPB_FSVerEx  : constant Integer := 104;  --  exFAT: File system version (WORD)
+   BPB_FSVerEx  : constant Long_Integer := 104;  --  exFAT: File system version (WORD)
    BPB_VolFlagEx : constant Integer := 106;  --  exFAT: Volume flags (BYTE)
    BPB_ActFatEx : constant Integer := 107;  --  exFAT: Active FAT flags (BYTE)
-   BPB_BytsPerSecEx  : constant Integer := 108;  --  exFAT: Log2 of sector size in unit of byte (BYTE)
-   BPB_SecPerClusEx  : constant Integer := 109;  --  exFAT: Log2 of cluster size in unit of sector (BYTE)
-   BPB_NumFATsEx : constant Integer := 110;  --  exFAT: Number of FATs (BYTE)
+   BPB_BytsPerSecEx  : constant Long_Integer := 108;  --  exFAT: Log2 of sector size in unit of byte (BYTE)
+   BPB_SecPerClusEx  : constant Long_Integer := 109;  --  exFAT: Log2 of cluster size in unit of sector (BYTE)
+   BPB_NumFATsEx : constant Long_Integer := 110;  --  exFAT: Number of FATs (BYTE)
    BPB_DrvNumEx : constant Integer := 111;  --  exFAT: Physical drive number for int13h (BYTE)
    BPB_PercInUseEx : constant Integer := 112;  --  exFAT: Percent in use (BYTE)
    BPB_RsvdEx  : constant Integer := 113;  --  exFAT: Reserved (7-byte)
@@ -137,17 +137,17 @@ package FF_Parameters is
    FSI_Free_Count : constant Integer := 488;  --  FAT32 FSI: Number of free clusters (DWORD)
    FSI_Nxt_Free : constant Integer := 492;  --  FAT32 FSI: Last allocated cluster (DWORD)
 
-   FMBR_Table  : constant Integer := 446;  --  MBR: Offset of partition table in the MBR
+   MBR_Table  : constant Integer := 446;  --  MBR: Offset of partition table in the MBR
    SZ_PTE   : constant Integer := 16;  --  MBR: Size of a partition table entry
    PTE_Boot    : constant Integer := 0;  --  MBR PTE: Boot indicator
    PTE_StHead  : constant Integer := 1;  --  MBR PTE: Start head
    PTE_StSec  : constant Integer := 2;  --  MBR PTE: Start sector
    PTE_StCyl  : constant Integer := 3;  --  MBR PTE: Start cylinder
-   PTE_System  : constant Integer := 4;  --  MBR PTE: System ID
+   PTE_System  : constant Long_Integer := 4;  --  MBR PTE: System ID
    PTE_EdHead    : constant Integer := 5;  --  MBR PTE: End head
    PTE_EdSec    : constant Integer := 6;  --  MBR PTE: End sector
    PTE_EdCyl    : constant Integer := 7;  --  MBR PTE: End cylinder
-   PTE_StLba  : constant Integer := 8;  --  MBR PTE: Start in LBA
+   PTE_StLba  : constant Long_Integer := 8;  --  MBR PTE: Start in LBA
    PTE_SizLba  : constant Integer := 12;  --  MBR PTE: Size in LBA
 
 end FF_Parameters;
