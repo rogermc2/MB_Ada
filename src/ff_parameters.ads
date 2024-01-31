@@ -37,7 +37,7 @@ package FF_Parameters is
 
    BS_JmpBoot   : constant Integer := 0;  --  x86 jump instruction (3-byte)
    BS_OEMName  : constant Integer := 3;  --  OEM name (8-byte)
-   BPB_BytsPerSec : constant Integer := 11;  --  Sector size [byte] (WORD)
+   BPB_BytsPerSec : constant Long_Integer := 11;  --  Sector size [byte] (WORD)
    BPB_SecPerClus : constant Integer := 13;  --  Cluster size [sector] (BYTE)
    BPB_RsvdSecCnt : constant Integer := 14;  --  Size of reserved area [sector] (WORD)
    BPB_NumFATs  : constant Integer := 16;  --  Number of FATs (BYTE)
@@ -129,7 +129,7 @@ package FF_Parameters is
    XDIR_FstClus   : constant Integer := 52;  --  exFAT: First cluster of the file data (DWORD)
    XDIR_FileSize   : constant Integer := 56;  --  exFAT: File/Directory size (QWORD)
 
-   SZDIRE   : constant Integer := 32;  --  Size of a directory entry
+   SZDIRE   : constant Long_Integer := 32;  --  Size of a directory entry
    DDEM     : constant Integer := 16#E5#;  --  Deleted directory entry mark set to DIR_Name[0]
    RDDEM    : constant := 16#05#;  --  Replacement of the character collides with DDEM
    LLEF     : constant Integer := 16#40#;  --  Last long entry flag in LDIR_Ord

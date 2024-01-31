@@ -126,11 +126,13 @@ package body Fat_File is
       use Disk_IO;
       B_Sect       : Long_Integer := 0;
       Format       : Natural;
-      bpb_index    : Long_Integer;
+      FAT_Format   : Boolean;
+      Idx          : Long_Integer;
       Max_LBA      : Long_Integer;
       Num_Clusters : DWord;
       Sector       : Long_Integer;
       Status       : D_Status;
+      Done         : Boolean := False;
       Result       : F_Result := FR_OK;
    begin
       FS.FS_Type := 0;
@@ -163,13 +165,12 @@ package body Fat_File is
             --  The following code initializes the file system object.
          elsif FS_EXFAT and then Format = 1 then
             --  Check zero filler
-            bpb_index := BPB_ZeroedEx;
-            while bpb_index < BPB_ZeroedEx + 53 and then
-              FS.Win (bpb_index) = 0 loop
-               bpb_index := bpb_index + 1;
+            Idx := BPB_ZeroedEx;
+            while Idx < BPB_ZeroedEx + 53 and then FS.Win (Idx) = 0 loop
+               Idx := Idx + 1;
             end loop;
 
-            if bpb_index < BPB_ZeroedEx + 53 then
+            if Idx < BPB_ZeroedEx + 53 then
                Result := FR_NO_FILESYSTEM;
 
             elsif Load_Word (FS.Win, BPB_FSVerEx) /= 16#100# then
@@ -225,9 +226,35 @@ package body Fat_File is
                            --  (at the first cluster).
                            Sector := Clust2Sec (FS, FS.Dir_Base);
                            if Move_Window (FS, Sector) /= FR_OK then
-                              null;
+                              Result := FR_DISK_ERR;
+                              Put_Line ("Invalid file system");
                            else
-                              null;
+                              Idx := 0;
+                              Done := False;
+                              while not Done and then
+                                Idx < Sector_Size (FS) loop
+                                 Done := FS.Win (Idx) = 16#81# and then
+                                   Load_DWord (FS.Win, Idx + 20) = DWord (2);
+                                 if not Done then
+                                    Idx := Idx + SZDIRE;
+                                 end if;
+                              end loop;
+
+                              if Idx = Sector_Size (FS) then
+                                 Result := FR_NO_FILESYSTEM;
+                                 Put_Line ("Invalid file system");
+                              elsif not FS_Read_Only then
+                                 FS.Last_Cluster := 16#FFFFFFFF#;
+                                 FS.Free_Cluster := 16#FFFFFFFF#;
+                                 FAT_Format := FS_EXFAT;  --  FAT sub-type
+                              elsif Long_Integer
+                                (Load_Word (FS.Win, BPB_BytsPerSec)) /=
+                                Sector_Size (FS) then
+                                 Result := FR_NO_FILESYSTEM;
+                                 Put_Line ("Invalid file system");
+                                 Put ("BPB_BytsPerSec must be equal to the ");
+                                 Put_Line ("physical sector size");
+                              end if;
                            end if;
                         end if;
                      end if;
