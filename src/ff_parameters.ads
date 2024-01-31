@@ -27,8 +27,8 @@ package FF_Parameters is
    --  Limits and boundaries
    MAX_DIR   : constant Integer := 16#200000#;  --  Max size of FAT directory
    MAX_DIR_EX  : constant Integer := 16#10000000#;  --  Max size of exFAT directory
-   MAX_FAT12  : constant Integer := 16#FF5#;  --  Max FAT12 clusters (differs from specs, but correct for real DOS/Windows behavior)
-   MAX_FAT16  : constant Integer := 16#FFF5#;  --  Max FAT16 clusters (differs from specs, but correct for real DOS/Windows behavior)
+   MAX_FAT12  : constant Long_Integer := 16#FF5#;  --  Max FAT12 clusters (differs from specs, but correct for real DOS/Windows behavior)
+   MAX_FAT16  : constant Long_Integer := 16#FFF5#;  --  Max FAT16 clusters (differs from specs, but correct for real DOS/Windows behavior)
    MAX_FAT32 : constant := 16#0FFFFFF5#;  --  Max FAT32 clusters (not specified, practical limit)
    MAX_EXFAT  : constant DWord := 16#7FFFFFFD#;  --  Max exFAT clusters (differs from specs, implementation limit)
 
@@ -60,8 +60,8 @@ package FF_Parameters is
 
    BPB_FATSz32  : constant Long_Integer := 36;  --  FAT32: FAT size [sector] (DWORD)
    BPB_ExtFlags32 : constant Integer := 40;  --  FAT32: Extended flags (WORD)
-   BPB_FSVer32  : constant Integer := 42;  --  FAT32: File system version (WORD)
-   BPB_RootClus32 : constant Integer := 44;  --  FAT32: Root directory cluster (DWORD)
+   BPB_FSVer32  : constant Long_Integer := 42;  --  FAT32: File system version (WORD)
+   BPB_RootClus32 : constant Long_Integer := 44;  --  FAT32: Root directory cluster (DWORD)
    BPB_FSInfo32 : constant Integer := 48;  --  FAT32: Offset of FSINFO sector (WORD)
    BPB_BkBootSec32  : constant Integer :=  50;  --  FAT32: Offset of backup boot sector (WORD)
    BS_DrvNum32    : constant Integer := 64;  --  FAT32: Physical drive number for int13h (BYTE)

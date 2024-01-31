@@ -4,6 +4,8 @@ with Disk_IO;
 
 package Fat_File is
 
+   type FS_FAT_Format is (FS_FAT12, FS_FAT16, FS_FAT32, FS_EXFAT);
+
    type F_Result is (FR_OK,		--  (0) Succeeded
                      FR_DISK_ERR,	--  (1) A hard error occurred in the low level disk I/O layer
                      FR_INT_ERR,	--  (2) Assertion failed

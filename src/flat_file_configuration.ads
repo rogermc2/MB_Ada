@@ -6,7 +6,7 @@ package Flat_File_Configuration is
    Min_SS            : constant Long_Integer := 512;
    Max_SS            : constant Long_Integer := 512;
    FS_Read_Only      : constant Boolean := False;
-   FS_EXFAT          : constant Boolean := True;
+   FS_EXFAT_Support  : constant Boolean := True;
 
    --  VOLUME_STRS defines the drive ID strings for each logical drive.
    --  The number of items must be equal to Num_Volumes.

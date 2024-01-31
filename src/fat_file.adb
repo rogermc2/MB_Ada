@@ -89,8 +89,10 @@ package body Fat_File is
 
    end Clust2Sec;
 
-   function Find_Vol_A (FS           : in out Fat_FS; Max_LBA : Long_Integer;
-                        Num_Clusters : in out Long_Integer) return F_Result is
+   function Find_Vol_A
+     (FS           : in out Fat_FS; Max_LBA, B_Sect : Long_Integer;
+      Num_Clusters : in out Long_Integer;
+      FAT_Format   : in out FS_FAT_Format) return F_Result is
       use Interfaces;
       Sector      : Long_Integer;
       Idx         : Long_Integer;
@@ -98,7 +100,7 @@ package body Fat_File is
       Total_Sect  : Long_Integer;
       Num_Reserve : Long_Integer;
       Sysect      : Long_Integer;
-      FAT_Format  : Boolean;
+      Szb_Fat     : Long_Integer;
       Done        : Boolean;
       Result      : F_Result := FR_OK;
 
@@ -196,6 +198,49 @@ package body Fat_File is
                            else
                               Num_Clusters := Long_Integer (Total_Sect - Sysect) /
                                 Long_Integer (FS.Cluster_Size);
+                              if Num_Clusters = 0 then
+                                 Result := FR_NO_FILESYSTEM;
+                                 Put_Line ("Invalid Num_Clusters.");
+                              else
+                                 FAT_Format := FS_FAT32;
+                              end if;
+
+                              if Num_Clusters <= MAX_FAT12 then
+                                 FAT_Format := FS_FAT12;
+                              elsif Num_Clusters <= MAX_FAT16 then
+                                 FAT_Format := FS_FAT16;
+                              end if;
+
+                              FS.Num_Fat_Entries := Num_Clusters + 2;
+                              FS.Volume_Base := B_Sect;
+                              FS.Fat_Base := B_Sect + Num_Reserve;
+                              FS.Data_Base := B_Sect + Sysect;
+                              if FAT_Format = FS_FAT32 then
+                                 if Load_Word (FS.Win, BPB_FSVer32) /= 0 then
+                                    Result := FR_NO_FILESYSTEM;
+                                    Put_Line ("Fat32 version 0.0 is required.");
+                                 elsif fs.Root_Dir_Size /= 0 then
+                                    Result := FR_NO_FILESYSTEM;
+                                    Put_Line ("Root directory size must be 0.");
+                                 else
+                                    fs.Dir_Base :=
+                                      Load_DWord (FS.Win, BPB_RootClus32);
+                                    Szb_Fat := FS.Num_Fat_Entries;
+                                 end if;
+                              elsif fs.Root_Dir_Size = 0 then
+                                    Result := FR_NO_FILESYSTEM;
+                                 Put_Line
+                                   ("Root directory size must not be 0.");
+                              else
+                                 FS.Dir_Base := FS.Fat_Base + FA_Size;
+                                 if FAT_Format = FS_FAT16 then
+                                    Szb_Fat := 2 * FS.Num_Fat_Entries;
+                                 else
+                                    Szb_Fat := FS.Num_Fat_Entries * 3 / 2 +
+                                      Long_Integer
+                                        (DWord (FS.Num_Fat_Entries) and 1);
+                                    end if;
+                              end if;
                            end if;
                         end if;
                      end if;
@@ -210,7 +255,7 @@ package body Fat_File is
    end Find_Vol_A;
 
    function F_Mount (FS : in out Fat_FS; Path : String; Opt : Integer)
-                     return F_Result is
+                  return F_Result is
       --        Routine_Name : constant String := "Fat_File.F_Mount ";
       Vol      : constant Integer := Get_Logical_Drive_Num (Path);
       CFS      : Fat_FS (FS.Win_Size);
@@ -246,6 +291,7 @@ package body Fat_File is
       use Disk_IO;
       B_Sect       : Long_Integer := 0;
       Format       : Natural;
+      FAT_Format   : FS_FAT_Format;
       Idx          : Long_Integer;
       Max_LBA      : Long_Integer;
       Num_Clusters : Long_Integer;
@@ -280,7 +326,7 @@ package body Fat_File is
 
             --  3097 Otherwise, a FAT volume has been found (bsect).
             --  The following code initializes the file system object.
-         elsif FS_EXFAT and then Format = 1 then
+         elsif FS_EXFAT_Support and then Format = 1 then
             --  Check zero filler
             Idx := BPB_ZeroedEx;
             while Idx < BPB_ZeroedEx + 53 and then FS.Win (Idx) = 0 loop
@@ -331,7 +377,8 @@ package body Fat_File is
                           Load_DWord (fs.Win, BPB_DataOfsEx);
                         FS.Fat_Base :=
                           B_Sect + Load_DWord (fs.Win, BPB_FatOfsEx);
-                        Result := Find_Vol_A (FS, Max_LBA, Num_Clusters);
+                        Result := Find_Vol_A (FS, Max_LBA, B_Sect,
+                                              Num_Clusters, FAT_Format);
                      end if;
                   end if;
                end if;
@@ -466,7 +513,7 @@ package body Fat_File is
    end LD2PD;
 
    function Load_DWord (Data : Byte_Array; Ptr : Long_Integer)
-                        return Long_Integer is
+                     return Long_Integer is
       Result : constant DWord := Load_DWord (Data, Ptr);
    begin
       return Long_Integer (Result);
@@ -551,7 +598,7 @@ package body Fat_File is
    end Sync_Window;
 
    function Move_Window (FS : in out Fat_FS; Sector : in out Long_Integer)
-                         return F_Result is
+                      return F_Result is
       use Disk_IO;
       Result : F_Result := FR_OK;
    begin
