@@ -492,16 +492,115 @@ package body Fat_File is
 
    end Try_EXFAT;
 
+   function Try_FAT_Subtype
+     (FS           : in out Fat_FS; B_Sect : Long_Integer;
+      Num_Reserve  : Long_Integer; Num_Clusters : out Long_Integer;
+      FA_Size      : Long_Integer; Total_Sect : Long_Integer)
+      return F_Result is
+      use Interfaces;
+      Szb_Fat    : Long_Integer;
+      Sysect      : Long_Integer;
+      FAT_Format : FS_FAT_Format;
+      Result     : F_Result := FR_OK;
+   begin
+      --  ff.c 3190
+      Sysect := Num_Reserve + FA_Size +
+        FS.Root_Dir_Size / Sector_Size (FS) / SZDIRE;
+      if Total_Sect < Sysect then
+         Result := FR_NO_FILESYSTEM;
+         Put_Line ("Invalid volume size.");
+      else
+         --  ff.c 3194
+         Num_Clusters := Long_Integer (Total_Sect - Sysect) /
+           Long_Integer (FS.Cluster_Size);
+         if Num_Clusters = 0 then
+            Result := FR_NO_FILESYSTEM;
+            Put_Line ("Invalid Num_Clusters.");
+         else
+            FAT_Format := FS_FAT32;
+         end if;
+
+         --  ff.c 3198
+         if Num_Clusters <= MAX_FAT12 then
+            FAT_Format := FS_FAT12;
+         elsif Num_Clusters <= MAX_FAT16 then
+            FAT_Format := FS_FAT16;
+         end if;
+
+         --  ff.c 3204
+         FS.Num_Fat_Entries := Num_Clusters + 2;
+         FS.Volume_Base := B_Sect;
+         FS.Fat_Base := B_Sect + Num_Reserve;
+         FS.Data_Base := B_Sect + Sysect;
+         if FAT_Format = FS_FAT32 then
+            if Load_Word (FS.Win, BPB_FSVer32) /= 0 then
+               Result := FR_NO_FILESYSTEM;
+               Put_Line ("Fat32 version 0.0 is required.");
+            elsif fs.Root_Dir_Size /= 0 then
+               Result := FR_NO_FILESYSTEM;
+               Put_Line ("Root directory size must be 0.");
+            else
+               --  ff.c 3214
+               FS.Dir_Base :=
+                 Load_DWord (FS.Win, BPB_RootClus32);
+               Szb_Fat := FS.Num_Fat_Entries;
+            end if;
+
+            --  ff.c 3219
+         elsif fs.Root_Dir_Size = 0 then
+            Result := FR_NO_FILESYSTEM;
+            Put_Line
+              ("Root directory size must not be 0.");
+         else
+            --  ff.c 3221
+            FS.Dir_Base := FS.Fat_Base + FA_Size;
+            if FAT_Format = FS_FAT16 then
+               Szb_Fat := 2 * FS.Num_Fat_Entries;
+            else
+               Szb_Fat := FS.Num_Fat_Entries * 3 / 2 +
+                 Long_Integer
+                   (DWord (FS.Num_Fat_Entries) and 1);
+            end if;
+
+            --  ff.c 3225
+            if FS.Fat_Size < (Szb_Fat + Sector_Size (FS) - 1) /
+              Sector_Size (FS) then
+               Result := FR_NO_FILESYSTEM;
+               Put_Line ("BPB_FATz too small.");
+            else
+               if not FS_Read_Only then
+                  --  ff.c 3230
+                  FS.Last_Cluster := 16#FFFFFFFF#;
+                  FS.Free_Cluster := 16#FFFFFFFF#;
+                  FS.Fsi_Flag := 16#80#;
+               end if;
+
+               --  ff.c 3254
+               FS.FS_Type := FAT_Format;
+               FS_ID := FS_ID + 1;
+               FS.ID := FS_ID;
+               if Use_Long_FileName = 1 then
+                  FS.Lfn_Buffer := LFN_Buffer;
+                  if FS_EXFAT_Support then
+                     FS.Dir_Buffer := Dir_Buffer;
+                  end if;
+               end if;
+               Result := FR_OK;
+            end if;
+         end if;
+      end if;
+
+      return Result;
+
+   end Try_FAT_Subtype;
+
    function Try_Not_EXFAT
      (FS           : in out Fat_FS; B_Sect : Long_Integer;
       Num_Clusters : out Long_Integer) return F_Result is
       use Interfaces;
-      FAT_Format  : FS_FAT_Format;
       FA_Size     : Long_Integer;
       Total_Sect  : Long_Integer;
       Num_Reserve : Long_Integer;
-      Sysect      : Long_Integer;
-      Szb_Fat     : Long_Integer;
       Result      : F_Result := FR_OK;
    begin
       --  ff.c 3159
@@ -562,91 +661,9 @@ package body Fat_File is
                      Put_Line ("Num_Reserve is zero.");
                   else
                      --  ff.c 3190
-                     Sysect := Num_Reserve + FA_Size +
-                       FS.Root_Dir_Size / Sector_Size (FS) / SZDIRE;
-                     if Total_Sect < Sysect then
-                        Result := FR_NO_FILESYSTEM;
-                        Put_Line ("Invalid volume size.");
-                     else
-                        --  ff.c 3194
-                        Num_Clusters := Long_Integer (Total_Sect - Sysect) /
-                          Long_Integer (FS.Cluster_Size);
-                        if Num_Clusters = 0 then
-                           Result := FR_NO_FILESYSTEM;
-                           Put_Line ("Invalid Num_Clusters.");
-                        else
-                           FAT_Format := FS_FAT32;
-                        end if;
-
-                        --  ff.c 3198
-                        if Num_Clusters <= MAX_FAT12 then
-                           FAT_Format := FS_FAT12;
-                        elsif Num_Clusters <= MAX_FAT16 then
-                           FAT_Format := FS_FAT16;
-                        end if;
-
-                        --  ff.c 3204
-                        FS.Num_Fat_Entries := Num_Clusters + 2;
-                        FS.Volume_Base := B_Sect;
-                        FS.Fat_Base := B_Sect + Num_Reserve;
-                        FS.Data_Base := B_Sect + Sysect;
-                        if FAT_Format = FS_FAT32 then
-                           if Load_Word (FS.Win, BPB_FSVer32) /= 0 then
-                              Result := FR_NO_FILESYSTEM;
-                              Put_Line ("Fat32 version 0.0 is required.");
-                           elsif fs.Root_Dir_Size /= 0 then
-                              Result := FR_NO_FILESYSTEM;
-                              Put_Line ("Root directory size must be 0.");
-                           else
-                              --  ff.c 3214
-                              FS.Dir_Base :=
-                                Load_DWord (FS.Win, BPB_RootClus32);
-                              Szb_Fat := FS.Num_Fat_Entries;
-                           end if;
-
-                           --  ff.c 3219
-                        elsif fs.Root_Dir_Size = 0 then
-                           Result := FR_NO_FILESYSTEM;
-                           Put_Line
-                             ("Root directory size must not be 0.");
-                        else
-                           --  ff.c 3221
-                           FS.Dir_Base := FS.Fat_Base + FA_Size;
-                           if FAT_Format = FS_FAT16 then
-                              Szb_Fat := 2 * FS.Num_Fat_Entries;
-                           else
-                              Szb_Fat := FS.Num_Fat_Entries * 3 / 2 +
-                                Long_Integer
-                                  (DWord (FS.Num_Fat_Entries) and 1);
-                           end if;
-
-                           --  ff.c 3225
-                           if FS.Fat_Size < (Szb_Fat + Sector_Size (FS) - 1) /
-                             Sector_Size (FS) then
-                              Result := FR_NO_FILESYSTEM;
-                              Put_Line ("BPB_FATz too small.");
-                           else
-                              if not FS_Read_Only then
-                                 --  ff.c 3230
-                                 FS.Last_Cluster := 16#FFFFFFFF#;
-                                 FS.Free_Cluster := 16#FFFFFFFF#;
-                                 FS.Fsi_Flag := 16#80#;
-                              end if;
-
-                              --  ff.c 3254
-                              FS.FS_Type := FAT_Format;
-                              FS_ID := FS_ID + 1;
-                              FS.ID := FS_ID;
-                              if Use_Long_FileName = 1 then
-                                 FS.Lfn_Buffer := LFN_Buffer;
-                                 if FS_EXFAT_Support then
-                                    FS.Dir_Buffer := Dir_Buffer;
-                                 end if;
-                              end if;
-                              Result := FR_OK;
-                           end if;
-                        end if;
-                     end if;
+                     Result := Try_FAT_Subtype
+                       (FS, B_Sect, Num_Reserve, Num_Clusters, FA_Size,
+                        Total_Sect);
                   end if;
                end if;
             end if;
