@@ -4,7 +4,16 @@ with Disk_IO;
 
 package Fat_File is
 
-   type FS_FAT_Format is (FS_FAT12, FS_FAT16, FS_FAT32, FS_EXFAT);
+   type FS_FAT_Format is (FS_FAT_Unknown, FS_FAT12, FS_FAT16, FS_FAT32,
+                          FS_EXFAT);
+   for FS_FAT_Format use (FS_FAT_Unknown => 0, FS_FAT12 => 1, FS_FAT16 => 2,
+                          FS_FAT32 => 3, FS_EXFAT => 4);
+
+   type FS_Format_Check is (Check_FAT, Check_EXFAT, Check_Not_FAT, Check_Not_BS,
+                         Check_Disk_Error);
+   for FS_Format_Check use (Check_FAT => 0, Check_EXFAT => 1,
+                         Check_Not_FAT => 2, Check_Not_BS => 3,
+                         Check_Disk_Error => 4);
 
    type F_Result is (FR_OK,		--  (0) Succeeded
                      FR_DISK_ERR,	--  (1) A hard error occurred in the low level disk I/O layer
@@ -26,6 +35,7 @@ package Fat_File is
                      FR_NOT_ENOUGH_CORE, --  (17) LFN working buffer could not be allocated
                      FR_TOO_MANY_OPEN_FILES, --  (18) Number of open files > _FS_LOCK
                      FR_INVALID_PARAMETER);  --  (19) Given parameter is invalid
+
 subtype Win_Range is Long_Integer range 1 .. Long_Integer'Max_Size_In_Storage_Elements;
 
    type Fat_FS (Win_Size : Win_Range := 1) is record
@@ -71,7 +81,7 @@ subtype Win_Range is Long_Integer range 1 .. Long_Integer'Max_Size_In_Storage_El
                       FA_OPEN_APPEND   => Word (16#30#));
 
    function Check_File_System (FS : in out Fat_FS; Sect : in out Long_Integer)
-                               return Natural;
+                               return FS_Format_Check;
    function F_Mount (FS : in out Fat_FS; Path : String; Opt : Integer)
                      return F_Result;
    function Find_Volume (Path : String; RFS : in out Fat_FS;

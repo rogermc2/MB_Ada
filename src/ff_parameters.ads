@@ -35,7 +35,7 @@ package FF_Parameters is
    --  FatFs refers the FAT structure as simple byte array instead of structure member
    --  because the C structure is not binary compatible between different platforms
 
-   BS_JmpBoot   : constant Integer := 0;  --  x86 jump instruction (3-byte)
+   BS_JmpBoot   : constant Long_Integer := 0;  --  x86 jump instruction (3-byte)
    BS_OEMName  : constant Integer := 3;  --  OEM name (8-byte)
    BPB_BytsPerSec : constant Long_Integer := 11;  --  Sector size [byte] (WORD)
    BPB_SecPerClus : constant Long_Integer := 13;  --  Cluster size [sector] (BYTE)
