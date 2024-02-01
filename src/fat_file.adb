@@ -6,13 +6,13 @@ with Ada.Characters.Handling;
 with Ada.Strings.Fixed;
 with Ada.Text_IO; use Ada.Text_IO;
 
-with FF_Parameters; use FF_Parameters;
-with Flat_File_Configuration; use Flat_File_Configuration;
-
 package body Fat_File is
 
-   Current_Vol             : constant Natural := 0;
-   Fat_File_Sys            : array (0 .. Num_Volumes - 1) of Fat_FS;
+   Current_Vol   : constant Natural := 0;
+   FS_ID         : Natural := 0;
+   Fat_File_Sys  : array (0 .. Num_Volumes - 1) of Fat_FS;
+   LFN_Buffer    : LFN_Buff;
+   Dir_Buffer    : Dir_Buff;
 
    function Try_Not_EXFAT
      (FS           : in out Fat_FS; B_Sect : Long_Integer;
@@ -129,8 +129,8 @@ package body Fat_File is
          Result := FR_INVALID_DRIVE;
       else
          CFS := Fat_File_Sys (Vol);
-         CFS.FS_Type := 0;
-         FS.FS_Type := 0;
+         CFS.FS_Type := FS_FAT_Unknown;
+         FS.FS_Type := FS_FAT_Unknown;
          Fat_File_Sys (Vol) := FS;
          if Opt /= 1 then
             Result := FR_OK;
@@ -165,7 +165,7 @@ package body Fat_File is
          FS := Fat_File_Sys (Vol_ID);
          RFS := FS;
          Mode := Mode and (not F_READ);
-         if FS.FS_Type > 0 then
+         if FS_FAT_Format'Enum_Rep (FS.FS_Type) > 0 then
             Status := Disk_Status (FS.Drive_Typ);
             if not FS_Read_Only and then Mode /= 0 and then
               Status = STA_PROTECT then
@@ -176,7 +176,7 @@ package body Fat_File is
             end if;
          else
             --  ff.c 3053
-            FS.FS_Type := 0;
+            FS.FS_Type := FS_FAT_Unknown;
             FS.Drive_Num := LD2PD (Vol_ID);
             Status := Disk_Initialize (FS.Drive_Typ);
             if Status = STA_NOINIT then
@@ -496,7 +496,7 @@ package body Fat_File is
      (FS           : in out Fat_FS; B_Sect : Long_Integer;
       Num_Clusters : out Long_Integer) return F_Result is
       use Interfaces;
-      FAT_Format  :FS_FAT_Format;
+      FAT_Format  : FS_FAT_Format;
       FA_Size     : Long_Integer;
       Total_Sect  : Long_Integer;
       Num_Reserve : Long_Integer;
@@ -625,9 +625,25 @@ package body Fat_File is
                              Sector_Size (FS) then
                               Result := FR_NO_FILESYSTEM;
                               Put_Line ("BPB_FATz too small.");
-                           elsif not FS_Read_Only then
-                              FS.Last_Cluster := 16#FFFFFFFF#;
-                              FS.Free_Cluster := 16#FFFFFFFF#;
+                           else
+                              if not FS_Read_Only then
+                                 --  ff.c 3230
+                                 FS.Last_Cluster := 16#FFFFFFFF#;
+                                 FS.Free_Cluster := 16#FFFFFFFF#;
+                                 FS.Fsi_Flag := 16#80#;
+                              end if;
+
+                              --  ff.c 3254
+                              FS.FS_Type := FAT_Format;
+                              FS_ID := FS_ID + 1;
+                              FS.ID := FS_ID;
+                              if Use_Long_FileName = 1 then
+                                 FS.Lfn_Buffer := LFN_Buffer;
+                                 if FS_EXFAT_Support then
+                                    FS.Dir_Buffer := Dir_Buffer;
+                                 end if;
+                              end if;
+                              Result := FR_OK;
                            end if;
                         end if;
                      end if;

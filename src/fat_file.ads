@@ -1,6 +1,8 @@
 
 with Command_And_Token_Tables; use Command_And_Token_Tables;
 with Disk_IO;
+with FF_Parameters; use FF_Parameters;
+with Flat_File_Configuration; use Flat_File_Configuration;
 
 package Fat_File is
 
@@ -38,19 +40,22 @@ package Fat_File is
 
 subtype Win_Range is Long_Integer range 1 .. Long_Integer'Max_Size_In_Storage_Elements;
 
+   type LFN_Buff is array (0 .. Max_Long_FileName + 1) of Word;
+   type Dir_Buff is array (0 .. Max_Dir_Buff (Max_Long_FileName, SZDIRE)) of Byte;
+
    type Fat_FS (Win_Size : Win_Range := 1) is record
-      FS_Type             : Natural := 0;
+      FS_Type             : FS_FAT_Format := FS_FAT_Unknown;
       Drive_Num           : Natural := 0;
       Drive_Typ           : Disk_IO.Drive_Type;
       Num_Fats            : Byte := 1;
       Win_Flag            : Boolean := False;
-      Fsi_Flag            : Boolean := False;
+      Fsi_Flag            : Word := 0;
       ID                  : Natural := 0;
       Root_Dir_Size       : Long_Integer := 0;  --  n_rootdir
       Cluster_Size        : Byte := 0;
       Sector_Size         : Long_Integer := 0;
-      Lfn_Buffer          : Byte_Array (1 .. Win_Size);
-      Dir_Buffer          : Byte_Array (1 .. Win_Size);
+      Lfn_Buffer          : LFN_Buff;
+      Dir_Buffer          : Dir_Buff;
       Last_Cluster        : Long_Integer := 0;
       Free_Cluster        : Long_Integer := 0;
       Current_Directory   : Long_Integer := 0;
