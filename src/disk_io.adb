@@ -21,6 +21,12 @@ package body Disk_IO is
                              Buffer : in out String) return D_Result is
       Result : constant D_Result := Res_Not_Ready;
    begin
+      case Drv_Typ is
+         when Dev_RAM => null;
+         when Dev_MMC => null;
+         when Dev_USB => null;
+      end case;
+
       return Result;
 
    end Disk_IO_Control;
