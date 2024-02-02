@@ -32,6 +32,15 @@ package body Fat_File is
    function Try_EXFAT
      (FS      : in out Fat_FS; B_Sect : Long_Integer; Format : in out FS_FAT_Format;
       Max_LBA : out Long_Integer) return F_Result;
+   function Try_FAT
+     (FS           : in out Fat_FS; B_Sect : Long_Integer;
+      Num_Clusters : out Long_Integer; Max_LBA : out Long_Integer;
+      Format  : in out FS_FAT_Format) return F_Result;
+   function Try_FAT_Subtype
+     (FS           : in out Fat_FS; B_Sect : Long_Integer;
+      Num_Reserve  : Long_Integer; Num_Clusters : out Long_Integer;
+      FA_Size      : Long_Integer; Total_Sect : Long_Integer)
+      return F_Result;
 
    function Check_File_System (FS : in out Fat_FS; Sect : in out Long_Integer)
                                return FS_Format_Check is
@@ -423,68 +432,10 @@ package body Fat_File is
          if Max_LBA >= 16#100000000# then
             Result := FR_NO_FILESYSTEM;
             Put_Line
-              ("Invalid file system cannot be processed a 32 bit LBA.");
+              ("Invalid file system cannot be processed as a 32 bit LBA.");
          else
             --  ff.c 3116
-            FS.Fat_Size := Load_DWord (FS.Win, BPB_FatSzEx);
-            FS.Num_Fats := FS.Win (BPB_NumFATsEx);
-            if FS.Num_Fats > 1 then
-               Result := FR_NO_FILESYSTEM;
-               Put_Line
-                 ("Invalid file system, more than one FAT.");
-            elsif FS.Win (BPB_SecPerClusEx) / 2 = 0 then
-               Result := FR_NO_FILESYSTEM;
-               Put ("Invalid file system, Sectors per cluster must be ");
-               Put_Line (" in the range 1 through 32768");
-            else
-               Num_Clusters := Load_DWord (FS.Win, BPB_NumClusEx);
-               if Num_Clusters > Long_Integer (MAX_EXFAT) then
-                  Result := FR_NO_FILESYSTEM;
-                  Put_Line ("Invalid file system, too many clusters. ");
-               else
-                  --  ff.c 3128
-                  FS.Num_Fat_Entries := Long_Integer (Num_Clusters + 2);
-                  FS.Volume_Base := B_Sect;
-                  FS.Data_Base := B_Sect +
-                    Load_DWord (fs.Win, BPB_DataOfsEx);
-                  FS.Fat_Base :=
-                    B_Sect + Load_DWord (fs.Win, BPB_FatOfsEx);
-                  if Max_LBA < FS.Data_Base +
-                    Num_Clusters * Long_Integer (FS.Cluster_Size) then
-                     Result := FR_NO_FILESYSTEM;
-                     Put_Line ("Invalid file system.");
-                  else
-                     --  ff.c 3137
-                     FS.Dir_Base := Load_DWord (FS.Win, BPB_RootClusEx);
-                     Sector := Clust2Sec (FS, FS.Dir_Base);
-                     if Move_Window (FS, Sector) /= FR_OK then
-                        Result := FR_DISK_ERR;
-                        Put_Line ("Invalid file system.");
-                     else
-                        Idx := 0;
-                        Done := False;
-                        while not Done and then Idx < Sector_Size (FS) loop
-                           Done := FS.Win (Idx) = 16#81# and then
-                             Load_DWord (FS.Win, Idx + 20) =
-                             Long_Integer (2);
-                           if not Done then
-                              Idx := Idx + SZDIRE;
-                           end if;
-                        end loop;
-
-                        --  ff.c 3147
-                        if Idx = Sector_Size (FS) then
-                           Result := FR_NO_FILESYSTEM;
-                           Put_Line ("Invalid file system.");
-                        elsif not FS_Read_Only then
-                           FS.Last_Cluster :=  16#FFFFFFFF#;
-                           FS.Free_Cluster :=  16#FFFFFFFF#;
-                           Format := FS_EXFAT;
-                        end if;
-                     end if;
-                  end if;
-               end if;
-            end if;
+            Result := Try_FAT (FS, B_Sect, Num_Clusters,  Max_LBA , Format);
          end if;
       end if;
 
@@ -498,10 +449,10 @@ package body Fat_File is
       FA_Size      : Long_Integer; Total_Sect : Long_Integer)
       return F_Result is
       use Interfaces;
-      Szb_Fat    : Long_Integer;
+      Szb_Fat     : Long_Integer;
       Sysect      : Long_Integer;
-      FAT_Format : FS_FAT_Format;
-      Result     : F_Result := FR_OK;
+      FAT_Format  : FS_FAT_Format;
+      Result      : F_Result := FR_OK;
    begin
       --  ff.c 3190
       Sysect := Num_Reserve + FA_Size +
@@ -593,6 +544,81 @@ package body Fat_File is
       return Result;
 
    end Try_FAT_Subtype;
+
+   function Try_FAT
+     (FS           : in out Fat_FS; B_Sect : Long_Integer;
+      Num_Clusters : out Long_Integer; Max_LBA : out Long_Integer;
+      Format  : in out FS_FAT_Format) return F_Result is
+      use Interfaces;
+      Sector : Long_Integer;
+      Idx    : Long_Integer;
+      Done   : Boolean := False;
+      Result : F_Result := FR_OK;
+   begin
+      --  ff.c 3116
+      FS.Fat_Size := Load_DWord (FS.Win, BPB_FatSzEx);
+      FS.Num_Fats := FS.Win (BPB_NumFATsEx);
+      if FS.Num_Fats > 1 then
+         Result := FR_NO_FILESYSTEM;
+         Put_Line
+           ("Invalid file system, more than one FAT.");
+      elsif FS.Win (BPB_SecPerClusEx) / 2 = 0 then
+         Result := FR_NO_FILESYSTEM;
+         Put ("Invalid file system, Sectors per cluster must be ");
+         Put_Line (" in the range 1 through 32768");
+      else
+         Num_Clusters := Load_DWord (FS.Win, BPB_NumClusEx);
+         if Num_Clusters > Long_Integer (MAX_EXFAT) then
+            Result := FR_NO_FILESYSTEM;
+            Put_Line ("Invalid file system, too many clusters. ");
+         else
+            --  ff.c 3128
+            FS.Num_Fat_Entries := Long_Integer (Num_Clusters + 2);
+            FS.Volume_Base := B_Sect;
+            FS.Data_Base := B_Sect +
+              Load_DWord (fs.Win, BPB_DataOfsEx);
+            FS.Fat_Base :=
+              B_Sect + Load_DWord (fs.Win, BPB_FatOfsEx);
+            if Max_LBA < FS.Data_Base +
+              Num_Clusters * Long_Integer (FS.Cluster_Size) then
+               Result := FR_NO_FILESYSTEM;
+               Put_Line ("Invalid file system.");
+            else
+               --  ff.c 3137
+               FS.Dir_Base := Load_DWord (FS.Win, BPB_RootClusEx);
+               Sector := Clust2Sec (FS, FS.Dir_Base);
+               if Move_Window (FS, Sector) /= FR_OK then
+                  Result := FR_DISK_ERR;
+                  Put_Line ("Invalid file system.");
+               else
+                  Idx := 0;
+                  Done := False;
+                  while not Done and then Idx < Sector_Size (FS) loop
+                     Done := FS.Win (Idx) = 16#81# and then
+                       Load_DWord (FS.Win, Idx + 20) =
+                       Long_Integer (2);
+                     if not Done then
+                        Idx := Idx + SZDIRE;
+                     end if;
+                  end loop;
+
+                  --  ff.c 3147
+                  if Idx = Sector_Size (FS) then
+                     Result := FR_NO_FILESYSTEM;
+                     Put_Line ("Invalid file system.");
+                  elsif not FS_Read_Only then
+                     FS.Last_Cluster :=  16#FFFFFFFF#;
+                     FS.Free_Cluster :=  16#FFFFFFFF#;
+                     Format := FS_EXFAT;
+                  end if;
+               end if;
+            end if;
+         end if;
+      end if;
+
+      return Result;
+
+   end Try_FAT;
 
    function Try_Not_EXFAT
      (FS           : in out Fat_FS; B_Sect : Long_Integer;
