@@ -17,6 +17,14 @@ package body Disk_IO is
 
    end Disk_Initialize;
 
+   function Disk_IO_Control (Drv_Typ : Drive_Type; Command : Integer;
+                             Buffer : in out String) return D_Result is
+      Result : constant D_Result := Res_Not_Ready;
+   begin
+      return Result;
+
+   end Disk_IO_Control;
+
    function Disk_Read (Drv_Typ : Drive_Type; Buffer : Byte_Array;
                        Sector  : Long_Integer; Count : Natural)
                        return D_Result is

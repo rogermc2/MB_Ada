@@ -5,6 +5,7 @@ with Ada.Text_IO; use Ada.Text_IO;
 
 with Arguments;
 
+with Audio;
 with Disk_IO;
 with Fat_File;
 with Flash;
@@ -18,8 +19,22 @@ package body File_IO is
    FS : Fat_File.Fat_FS;
 
    procedure Check_SD_Card is
+      use Audio;
+      use Disk_IO;
+      use MMC_Pic32;
+      Disk_Check_Rate : Integer := 0;
+      Buffer          : String (1 .. 4);
    begin
-      null;
+      if Currently_Playing = P_Wav then
+         Check_Wave_Input;
+      elsif Disk_Check_Rate mod 4096 = 0 then
+         Disk_Check_Rate := Disk_Check_Rate + 1;
+         if SD_Card_Stat /= STA_NOINIT and then
+           Disk_IO_Control (0, MMC_Get_OCR, Buffer) then
+            null;
+         end if;
+      end if;
+
    end Check_SD_Card;
 
    procedure Config_SD_Card (Command_Line : String_Buffer) is
@@ -64,11 +79,11 @@ package body File_IO is
 
    end Config_SD_Card;
 
---     function File_Get_Character (File_Num : Positive) return Character is
---     begin
---        return Character'Val (0);
---
---     end File_Get_Character;
+   --     function File_Get_Character (File_Num : Positive) return Character is
+   --     begin
+   --        return Character'Val (0);
+   --
+   --     end File_Get_Character;
 
    procedure Init_File_IO is
    begin
@@ -81,7 +96,7 @@ package body File_IO is
       use MMC_Pic32;
       use Serial_File_IO;
       Routine_Name : constant String := "File_IO.Init_SD_Card ";
-      OK       : Boolean := Global.Bus_Speed >= 30000000;
+      OK           : Boolean := Global.Bus_Speed >= 30000000;
    begin
       if not OK then
          Put_Line ("CPU speed is to low.");
