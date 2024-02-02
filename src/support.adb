@@ -88,7 +88,7 @@ package body Support is
       Startup_Token : constant String := "MM.Startup";
       Token_Buffer  : String_Buffer;
    begin
-      Setup;
+      Setup_MM_Basic;
 
       --  298
       if Except_Cause /= Cause_MM_Startup then
@@ -302,7 +302,7 @@ package body Support is
 
    end Restart;
 
-   procedure Setup is
+   procedure Setup_MM_Basic is
    begin
       Except_Cause := Cause_Display;
       SPI_LCD.Init_Display_SPI (False);
@@ -320,7 +320,7 @@ package body Support is
       Except_Cause := Cause_Touch;
       Touch.Init_Touch;
 
-   end Setup;
+   end Setup_MM_Basic;
 
    procedure Skip_Spaces (Buffer : String_Buffer; Pos : in out Positive) is
       use String_Buffer_Package;

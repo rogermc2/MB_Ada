@@ -12,10 +12,10 @@ package Fat_File is
                           FS_FAT32 => 3, FS_EXFAT => 4);
 
    type FS_Format_Check is (Check_FAT, Check_EXFAT, Check_Not_FAT, Check_Not_BS,
-                         Check_Disk_Error);
+                            Check_Disk_Error);
    for FS_Format_Check use (Check_FAT => 0, Check_EXFAT => 1,
-                         Check_Not_FAT => 2, Check_Not_BS => 3,
-                         Check_Disk_Error => 4);
+                            Check_Not_FAT => 2, Check_Not_BS => 3,
+                            Check_Disk_Error => 4);
 
    type F_Result is (FR_OK,		--  (0) Succeeded
                      FR_DISK_ERR,	--  (1) A hard error occurred in the low level disk I/O layer
@@ -38,7 +38,7 @@ package Fat_File is
                      FR_TOO_MANY_OPEN_FILES, --  (18) Number of open files > _FS_LOCK
                      FR_INVALID_PARAMETER);  --  (19) Given parameter is invalid
 
-subtype Win_Range is Long_Integer range 1 .. Long_Integer'Max_Size_In_Storage_Elements;
+   subtype Win_Range is Long_Integer range 1 .. Long_Integer'Max_Size_In_Storage_Elements;
 
    type LFN_Buff is array (0 .. Max_Long_FileName + 1) of Word;
    type Dir_Buff is array (0 .. Max_Dir_Buff (Max_Long_FileName, SZDIRE)) of Byte;

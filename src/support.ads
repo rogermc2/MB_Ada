@@ -83,7 +83,7 @@ package Support is
                            With_Delim : Boolean := False);
    procedure Process_Commands;
    procedure Restart;
-   procedure Setup;
+   procedure Setup_MM_Basic;
    procedure Skip_Spaces (Buffer : String_Buffer; Pos : in out Positive);
    procedure Skip_Buffer_Element (Buffer : String_Buffer;
                                   Pos    : in out Positive);

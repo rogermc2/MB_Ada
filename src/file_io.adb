@@ -95,6 +95,13 @@ package body File_IO is
       null;
    end Init_File_IO;
 
+   --  InitSDCard is called by:
+   --  FileIO.c cmd_save, FileLoadProgram, fun_dir, cmd_mkdir, cmd_rmdir,
+   --           cmd_chdir, cmd_kill, cmd_seek, cmd_name, BMP_bDecode,
+   --           cmd_files, BasicFileOpen, FileGetChar, FilePutChar, FileEOF,
+   --           GetCWD.
+   --  XModem.c cmd_xmodem.
+   --  Audio.c  cmd_play.
    function Init_SD_Card return Boolean is
       use Disk_IO;
       use Fat_File;
@@ -103,6 +110,7 @@ package body File_IO is
       Routine_Name : constant String := "File_IO.Init_SD_Card ";
       OK           : Boolean := Global.Bus_Speed >= 30000000;
    begin
+      --  FileIO.c 792
       if not OK then
          Put_Line ("CPU speed is to low.");
       elsif Flash.Option.SDCARD_CS = 0 then
@@ -114,6 +122,7 @@ package body File_IO is
       elsif SD_Card_Stat = STA_NOINIT then
          OK := True;
       else
+         --  FileIO.c 807
          for index in 1 .. Max_Open_Files loop
             if File_Table (index).Com > Max_Com_Ports then
                if File_Table (index).Name /= Null_Unbounded_String then
@@ -122,6 +131,7 @@ package body File_IO is
             end if;
          end loop;
 
+         --  FileIO.c 812
          OK := F_Mount (FS, "", 1) = FR_OK;
          if not OK then
             Put_Line (Routine_Name & "SD card failed to mount.");
