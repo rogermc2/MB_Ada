@@ -1,4 +1,6 @@
 
+with Interfaces; use Interfaces;
+
 with Command_And_Token_Tables; use Command_And_Token_Tables;
 
 package Disk_IO is
@@ -6,11 +8,10 @@ package Disk_IO is
    type Drive_Type is (Dev_RAM, Dev_MMC, Dev_USB);
    type D_Result is (Res_OK, Res_Error, Res_Write_Protected,
                      Res_Not_Ready, Res_Parameter_Invalid);
-   type D_Status is (STA_NOINIT, STA_NODISK, STA_PROTECT);
 
-   --     for D_Status use (STA_NOINIT  => 1),
-   --                          STA_NODISK  => 2,
-   --                          STA_PROTECT => 4);
+   type D_Status is (STA_NOINIT, STA_NODISK, STA_PROTECT);
+   for D_Status use (STA_NOINIT => unsigned_8 (1), STA_NODISK => unsigned_8 (2),
+                     STA_PROTECT => unsigned_8 (4));
 
    CTRL_SYNC        : constant Natural := 0;  --  Complete pending write process (needed at _FS_READONLY == 0)
    GET_SECTOR_COUNT : constant Natural := 1;  --  Get media size (needed at _USE_MKFS == 1)
