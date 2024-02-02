@@ -34,7 +34,7 @@ package body Fat_File is
       Max_LBA : out Long_Integer) return F_Result;
    function Try_FAT
      (FS           : in out Fat_FS; B_Sect : Long_Integer;
-      Num_Clusters : out Long_Integer; Max_LBA : out Long_Integer;
+      Num_Clusters : out Long_Integer; Max_LBA : Long_Integer;
       Format  : in out FS_FAT_Format) return F_Result;
    function Try_FAT_Subtype
      (FS           : in out Fat_FS; B_Sect : Long_Integer;
@@ -128,23 +128,24 @@ package body Fat_File is
                      return F_Result is
       --        Routine_Name : constant String := "Fat_File.F_Mount ";
       Vol      : constant Integer := Get_Logical_Drive_Num (Path);
-      CFS      : Fat_FS (FS.Win_Size);
-      Path_Pos : Positive := 1;
+--        CFS      : Fat_FS (FS.Win_Size);
       Mode     : Word := 0;
-      Res      : F_Result;
       Result   : F_Result;
    begin
+      --  ff.c 3318
       if Vol < 0 then
          Result := FR_INVALID_DRIVE;
       else
-         CFS := Fat_File_Sys (Vol);
-         CFS.FS_Type := FS_FAT_Unknown;
+--           CFS := Fat_File_Sys (Vol);
+--           CFS.FS_Type := FS_FAT_Unknown;
          FS.FS_Type := FS_FAT_Unknown;
          Fat_File_Sys (Vol) := FS;
-         if Opt /= 1 then
-            Result := FR_OK;
+         if Opt = 1 then
+            --  Force mount the volume
+            Result := Find_Volume (Path, FS, Mode);
          else
-            Res := Find_Volume (Path, FS, Mode);
+            --  ff.c 3345 Do not mount now, it will be mounted later
+            Result := FR_OK;
          end if;
       end if;
 
@@ -152,6 +153,7 @@ package body Fat_File is
 
    end F_Mount;
 
+   --  Find_Volume finds a logical drive and checks that the volume is mounted.
    function Find_Volume (Path : String; RFS : in out Fat_FS;
                          Mode : in out Word) return F_Result is
       use Interfaces;
@@ -402,8 +404,6 @@ package body Fat_File is
       use Interfaces;
       Idx          : Long_Integer;
       Num_Clusters : Long_Integer;
-      Sector       : Long_Integer;
-      Done         : Boolean;
       Result       : F_Result := FR_OK;
    begin
       --  ff.c 3099 Check zero filler
@@ -547,7 +547,7 @@ package body Fat_File is
 
    function Try_FAT
      (FS           : in out Fat_FS; B_Sect : Long_Integer;
-      Num_Clusters : out Long_Integer; Max_LBA : out Long_Integer;
+      Num_Clusters : out Long_Integer; Max_LBA : Long_Integer;
       Format  : in out FS_FAT_Format) return F_Result is
       use Interfaces;
       Sector : Long_Integer;
