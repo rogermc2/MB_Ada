@@ -6,6 +6,7 @@ with Ada.Text_IO; use Ada.Text_IO;
 with Arguments;
 
 with Disk_IO;
+with Fat_File;
 with Flash;
 with Global;
 with MMC_Pic32;
@@ -13,6 +14,8 @@ with Serial_File_IO;
 --  with Support;
 
 package body File_IO is
+
+   FS : Fat_File.Fat_FS;
 
    procedure Check_SD_Card is
    begin
@@ -61,11 +64,11 @@ package body File_IO is
 
    end Config_SD_Card;
 
-   function File_Get_Character (File_Num : Positive) return Character is
-   begin
-      return Character'Val (0);
-
-   end File_Get_Character;
+--     function File_Get_Character (File_Num : Positive) return Character is
+--     begin
+--        return Character'Val (0);
+--
+--     end File_Get_Character;
 
    procedure Init_File_IO is
    begin
@@ -74,9 +77,10 @@ package body File_IO is
 
    function Init_SD_Card return Boolean is
       use Disk_IO;
+      use Fat_File;
       use MMC_Pic32;
       use Serial_File_IO;
-      Mount_ID : Natural;
+      Routine_Name : constant String := "File_IO.Init_SD_Card ";
       OK       : Boolean := Global.Bus_Speed >= 30000000;
    begin
       if not OK then
@@ -97,9 +101,12 @@ package body File_IO is
                end if;
             end if;
          end loop;
-      end if;
 
---        Mount_ID := Fat_File.F_Mount
+         OK := F_Mount (FS, "", 1) = FR_OK;
+         if not OK then
+            Put_Line (Routine_Name & "SD card failed to mount.");
+         end if;
+      end if;
 
       return OK;
 
