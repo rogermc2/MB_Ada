@@ -40,7 +40,14 @@ package Disk_IO is
    --  ATA/CF specific ioctl command
    ATA_GET_REV      : constant Natural := 20;  --  Get F/W revision
    ATA_GET_MODEL    : constant Natural := 21;  --  Get model name
-   ATA_GET_SN       : constant Natural := 22;
+   ATA_GET_SN       : constant Natural := 22;  --  Get serial number
+
+   --  MMC card type flags (MMC_GET_TYPE)
+   CT_MMC	    : constant Byte := 1;   --  MMC ver 3
+   CT_SD1	    : constant Byte := 2;   --  SD ver 1
+   CT_SD2	    : constant Byte := 4;   --  SD ver 2
+   CT_SDC	    : constant Byte := CT_SD1 or CT_SD2;
+   CT_BLOCK         : constant Byte := 8;    --  Block addressing
 
    function Disk_Initialize (Drv_Typ : Drive_Type) return D_Status;
    function Disk_IO_Control (Drv_Typ : Drive_Type; Command : Integer;

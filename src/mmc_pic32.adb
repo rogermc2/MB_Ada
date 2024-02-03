@@ -89,26 +89,53 @@ package body MMC_Pic32 is
    function Disk_Initialize (Drive_Num : Natural) return D_Status is
       Timer1 : Integer := 1000;
       Ty     : Byte := 0;
+      OCR    : array (0 .. 3) of Byte;
       Status : D_Status;
    begin
+      --  mmc_pic32.c 397
       if Drive_Num > 0 then
          Status := STA_NOINIT;
       elsif SD_Card_Stat = STA_NODISK then
-         --  mmc_pic32.c No card in the socket
+         --  mmc_pic32.c 400 No card in the socket
          Status := STA_NODISK;
       else
          F_Clock_Slow;
          Deselect;  --  Initialize memory card interface
       end if;
 
-      --  mmc_pic32.c 80 dummy clocks
+      --  mmc_pic32.c 404 80 dummy clocks
       for n in reverse 0 .. 10 loop
          Exchange_SPI (16#FF#);
       end loop;
 
       if Cmd0_Send = 1 then
          if Send_Command (CMD8, 16#1AA#) = 1 then
-            null;
+            for n in 0 .. 3 loop
+               --  Get trailing return value of R7 response.
+               OCR (n) := Byte (Exchange_SPI (16#FF#));
+            end loop;
+
+            if OCR (2) = 1 and then OCR (3) = 16#AA# then
+               --  mmc_pic32.c 416  The card can work at vdd range of 2.7-3.6V.
+               while Timer1 /= 0 and then
+                 Send_Command (CMD41, 16#40000000#) /= 0 loop
+                  null;
+               end loop;
+
+               if Timer1 /= 0 and then Send_Command (CMD58, 0) = 0 then
+                  for n in 0 .. 3 loop
+                     OCR (n) := Byte (Exchange_SPI (16#FF#));
+                  end loop;
+
+                  --  mmc_pic32.c 422
+                  if (OCR (0) and 16#40#) /= 0 then
+                     Ty := CT_SD2 or CT_Block;
+                  else
+                     Ty := CT_SD2;
+                  end if;
+
+               end if;
+            end if;
          end if;
       end if;
 
