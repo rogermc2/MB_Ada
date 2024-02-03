@@ -39,7 +39,7 @@ package body MMC_Pic32 is
    function Exchange_SPI (Data_Out : Byte) return Integer;
    pragma Inline (Exchange_SPI);
    procedure F_Clock_Slow;
-   function Send_Command (Command : Byte; Arg : Long_Integer) return Byte;
+   function Send_Command (Command : Byte; Arg : DWord) return Byte;
    function Wait_Ready return Boolean;
 
    function Cmd0_Send return Integer is
@@ -176,24 +176,65 @@ package body MMC_Pic32 is
 
    end Select_Card;
 
-   function Send_Command (Command : Byte; Arg : Long_Integer) return Byte is
-      Cmd    : Byte := Command;
-      Done   : Boolean := False;
-      Result : Byte;
+   function Send_Command (Command : Byte; Arg : DWord) return Byte is
+      Cmd      : Byte := Command;
+      N        : Byte := 1;
+      Done     : Boolean := False;
+      Response : Byte;
    begin
+      --  mmc_pic32.c 301
       if (Command and 16#80#) /= 0 then
          Cmd := Cmd and 16#7F#;
-         Result := Send_Command (CMD55, 0);
-         Done := Result > 1;
-      elsif Command /= CMD12 then
+         Response := Send_Command (CMD55, 0);
+         Done := Response > 1;
+      end if;
+
+      --  Select the card and wait for ready except to stop multiple block read
+      if not Done and then Command /= CMD12 then
          Deselect;
          Done := not Select_Card;
          if Done then
-            Result := 16#FF#;
+            Response := 16#FF#;
          end if;
       end if;
 
-      return Result;
+      if not Done then
+         --  mmc_pic32.c 319 Send command packet
+         --  Start + Command index
+         Exchange_SPI (16#40# or Command);
+         --  Arg [31..24]
+         Exchange_SPI (Byte (Shift_Right (Arg, 24) and 16#FF#));
+         --  Argu[23..16]
+         Exchange_SPI (Byte (Shift_Right (Arg, 16) and 16#FF#));
+         --  Argu[15..8]
+         Exchange_SPI (Byte (Shift_Right (Arg, 8) and 16#FF#));
+         Exchange_SPI (Byte (Arg and 16#FF#));
+
+         if Command = CMD0 then
+            --  Valid CRC for CMD0(0) + Stop
+            N := 16#95#;
+         elsif Command = CMD8 then
+            --  Valid CRC for CMD8(0x1AA) + Stop
+            N := 16#87#;
+         end if;
+         Exchange_SPI (N);
+
+         --  mmc_pic32.c 332 Receive command response
+         if Command = CMD12 then
+            --  Skip a stuff byte on stop to read
+            Exchange_SPI (16#FF#);
+         end if;
+
+         --  Wait for a valid response in timeout of 10 attempts
+         N := 10;
+         loop
+            Response := Byte (Exchange_SPI (16#FF#));
+            N := N - 1;
+            exit when (Response and 16#80#) = 0 or else (N = 0);
+         end loop;
+      end if;
+
+      return Response;
 
    end Send_Command;
 
