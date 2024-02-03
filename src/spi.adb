@@ -6,4 +6,9 @@ package body SPI is
       null;
    end SPI_Cs_High;
 
+   procedure SPI_Cs_Low (Pin : Integer) is
+   begin
+      null;
+   end SPI_Cs_Low;
+
 end SPI;

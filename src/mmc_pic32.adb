@@ -12,50 +12,102 @@ package body MMC_Pic32 is
 
    SPI_Speed : Positive;
 
-   function Exchange_SPI (Data_Out : Byte) return Byte;
+   procedure CS_Low;
+   procedure Deselect;
+   procedure Exchange_SPI (Data_Out : Byte);
+   function Exchange_SPI (Data_Out : Byte) return Integer;
    pragma Inline (Exchange_SPI);
    procedure F_Clock_Slow;
+
+   function Cmd0_Send return Integer is
+      Trys          : Integer := 100;
+      Response      : Integer;
+      Response_Trys : Integer := 10;
+   begin
+      loop
+         Deselect;
+         CS_Low;
+         Trys := Trys - 1;
+         Exchange_SPI (16#40#);
+         for count in 1 .. 4 loop
+            Exchange_SPI (0);
+         end loop;
+         Exchange_SPI (16#95#);
+
+         loop
+            Response := Exchange_SPI (16#FF#);
+            Response_Trys := Response_Trys -1;
+            exit when Response_Trys = 0 or else (Response = 1);
+         end loop;
+
+         exit when (Trys = 0 or else (Response = 1));
+      end loop;
+
+      return Response;
+   end ;
 
    procedure CS_High is
    begin
       SPI.SPI_Cs_High (Flash.Option.SDCARD_CS);
    end CS_High;
 
+   procedure CS_Low is
+   begin
+      SPI.SPI_Cs_Low (Flash.Option.SDCARD_CS);
+   end CS_Low;
+
    procedure Deselect is
-      Dummy : Byte;
    begin
       CS_High;
-      Dummy := Exchange_SPI (16#FF#);
+      Exchange_SPI (16#FF#);
 
    end Deselect;
 
    function Disk_Initialize (Drive_Num : Natural) return D_Status is
+      Ty     : Byte := 0;
       Status : D_Status;
    begin
       if Drive_Num > 0 then
          Status := STA_NOINIT;
       elsif SD_Card_Stat = STA_NODISK then
+         --  mmc_pic32.c No card in the socket
          Status := STA_NODISK;
       else
          F_Clock_Slow;
-         Deselect;
+         Deselect;  --  Initialize memory card interface
       end if;
+
+      --  mmc_pic32.c 80 dummy clocks
+      for n in reverse 0 .. 10 loop
+         Exchange_SPI (16#FF#);
+      end loop;
 
       return Status;
 
    end Disk_Initialize;
 
-   function Exchange_SPI (Data_Out : Byte) return Byte is
+   procedure Exchange_SPI (Data_Out : Byte) is
       use Interfaces.C;
       use P32mx470f512h;
-      Cl : Byte;
    begin
       SPI2BUF := Unsigned (Data_Out);
       while (SPI2STAT and 16#80#) = 0 loop
          null;
       end loop;
 
-      Cl := Byte (SPI2BUF);
+   end Exchange_SPI;
+
+   function Exchange_SPI (Data_Out : Byte) return Integer is
+      use Interfaces.C;
+      use P32mx470f512h;
+      Cl : Integer;
+   begin
+      SPI2BUF := Unsigned (Data_Out);
+      while (SPI2STAT and 16#80#) = 0 loop
+         null;
+      end loop;
+
+      Cl := Integer (SPI2BUF);
       return Cl;
 
    end Exchange_SPI;

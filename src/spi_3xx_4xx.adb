@@ -1,6 +1,4 @@
 
-with SPI;
-
 package body SPI_3xx_4xx is
 
    procedure SPI_Channel_Set_Brg (Channel : SPI_Channel; Brg : Natural) is
