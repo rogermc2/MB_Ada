@@ -112,9 +112,9 @@ package body File_IO is
    begin
       --  FileIO.c 792
       if not OK then
-         Put_Line ("CPU speed is to low.");
+         Put_Line (Routine_Name & "CPU speed is too low.");
       elsif Flash.Option.SDCARD_CS = 0 then
-         Put_Line ("The SD card has not been configured.");
+         Put_Line (Routine_Name & "The SD card has not been configured.");
          OK := False;
       elsif not MMC_Pic32.MDD_SDSPI_Card_Detect_State then
          Put_Line (To_String (F_Error_Message (2)));

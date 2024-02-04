@@ -25,6 +25,7 @@ package body File_IO_Handler is
       File_Count   : Natural := 0;
       P            : String_Buffer;
    begin
+      Put_Line (Routine_Name);
       Assert (Current_Line_Ptr = null, Routine_Name &
                 "null Current_Line_Ptr is invalid in a program");
       if Command_Line.Is_Empty then
@@ -34,12 +35,12 @@ package body File_IO_Handler is
       end if;
 
       if not Init_SD_Card then
-         Put_Line (To_String (File_IO.F_Error_Message (2)));
+         Put_Line (Routine_Name & To_String (File_IO.F_Error_Message (2)));
       end if;
 
       Start_Search (Dir_Search, Current_Dir, "*.gpr");
       if More_Entries (Dir_Search) then
-         Put_Line ("Directory " & Current_Dir);
+         Put_Line (Routine_Name & "Directory " & Current_Dir);
          while More_Entries (Dir_Search) and then File_Count > Max_Files loop
             Get_Next_Entry(Dir_Search, Dir);
             File_Count := File_Count + 1;
@@ -47,15 +48,15 @@ package body File_IO_Handler is
          end loop;
 
          if File_Count = 0 then
-            Put_Line ("Directory " & Current_Dir & " is empty.");
+            Put_Line (Routine_Name & "Directory " & Current_Dir & " is empty.");
          elsif File_Count > Max_Files then
             New_Line;
-            Put_Line ("Too many files to list");
+            Put_Line (Routine_Name & "Too many files to list");
          end if;
          New_Line;
 
       else
-         Put_Line ("Directory " & Current_Dir & " is empty");
+         Put_Line (Routine_Name & "Directory " & Current_Dir & " is empty");
       end if;
 
    end Files_Cmd;

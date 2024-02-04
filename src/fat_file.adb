@@ -6,6 +6,8 @@ with Ada.Characters.Handling;
 with Ada.Strings.Fixed;
 with Ada.Text_IO; use Ada.Text_IO;
 
+with MMC_Pic32;
+
 package body Fat_File is
 
    Current_Vol   : constant Natural := 0;
@@ -166,7 +168,7 @@ package body Fat_File is
       Format_Check : FS_Format_Check;
       Max_LBA      : Long_Integer := 0;
       Num_Clusters : Long_Integer := 0;
-      Status       : D_Status;
+      Status       : Disk_IO.D_Status;
       Result       : F_Result;
    begin
       --  ff.c 3025
@@ -177,7 +179,7 @@ package body Fat_File is
          RFS := FS;
          Mode := Mode and (not F_READ);
          if FS_FAT_Format'Enum_Rep (FS.FS_Type) > 0 then
-            Status := Disk_Status (FS.Drive_Typ);
+            Status := MMC_Pic32.Disk_Status (FS.Drive_Num);
             if not FS_Read_Only and then Mode /= 0 and then
               Status = STA_PROTECT then
                Result := FR_WRITE_PROTECTED;
@@ -189,11 +191,11 @@ package body Fat_File is
             --  ff.c 3053
             FS.FS_Type := FS_FAT_Unknown;
             FS.Drive_Num := LD2PD (Vol_ID);
-            Status := Disk_Initialize (FS.Drive_Typ);
+            Status := MMC_Pic32.Disk_Initialize (FS.Drive_Num);
             if Status = STA_NOINIT then
                Result := FR_NOT_READY;
             elsif not FS_Read_Only and then Mode /= 0 and then
-              Status =STA_PROTECT then
+              Status = STA_PROTECT then
                Result := FR_WRITE_PROTECTED;
             else
                --  ff.c 3073

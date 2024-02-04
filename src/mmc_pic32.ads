@@ -7,5 +7,6 @@ package MMC_Pic32 is
 
    function Disk_Initialize (Drive_Num : Natural) return D_Status;
    function MDD_SDSPI_Card_Detect_State return Boolean;
+   function Disk_Status (Drive_Num : Natural) return D_Status;
 
 end MMC_Pic32;

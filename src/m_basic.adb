@@ -130,7 +130,6 @@ package body M_Basic is
       Routine_Name     : constant String  := "M_Basic.Defined_Function ";
       S                : constant Unbounded_String :=
         Trim (To_UB_String (Global.Command_Line), Left);
-      --          Trim (Global.Command_Line, Left);
       Fun_Type         : constant Function_Type :=
         Var_Table (Var_Index).Var_Type;
       Arg_Data         : Arguments_Record;
@@ -433,8 +432,6 @@ package body M_Basic is
       No_Abort           : Boolean := True;
       Done               : Boolean := Natural (Token_Buffer.Length) = 0;
    begin
-      --        Put_Line (Routine_Name & "Token_Buffer:");
-      --        Support.Print_Buffer (Token_Buffer);
       --  225
       Next_Statement := Program_Ptr;
       Global.Command_Line := Token_Buffer;
@@ -590,7 +587,7 @@ package body M_Basic is
       use Ada.Characters.Handling;
       use Conversion;
       use Flash;
-      Routine_Name : constant String := "M_Basic.Find_Subfunctionm ";
+--        Routine_Name : constant String := "M_Basic.Find_Subfunctionm ";
       Index        : Natural := 0;
       Subfun       : Unbounded_String;
       Pos1         : Natural;
@@ -599,35 +596,30 @@ package body M_Basic is
       Not_Null     : Boolean := False;
    begin
       --  394
-      Put_Line (Routine_Name & "Token: " & Token);
+      --        Put_Line (Routine_Name & "Token: " & Token);
       while not Done and then Index < Configuration.MAXSUBFUN loop
-         --           Pos2 := Subfunctions (Index + 1);
          Not_Null := Subfunctions (Index + 1) /= null;
          if Not_Null then
             Subfun := Subfunctions (Index + 1).all;
          end if;
          Done := Pos2 = Length (Subfun);
-         --           Done := Pos2 = null;
 
          Index := Index + 1;
          if Not_Null and then not Done then
             if Fun_Type = T_NOTYPE and then
               (To_String (Subfun) = cmdSUB or To_String (Subfun) = cmdCSUB) then
-               --                (Pos2.all = cmdSUB or Pos2.all = cmdCSUB) then
                null;
-            elsif (To_String (Subfun) = cmdFUN) or (To_String (Subfun) = cmdCFUN) then
-               --              elsif (Pos2.all = cmdFUN or Pos2.all = cmdCFUN) then
+            elsif (To_String (Subfun) = cmdFUN) or else
+              (To_String (Subfun) = cmdCFUN) then
                null;
             else
                --  411
-               --                 Inc_Ptr (Pos2);
                Pos2 := Pos2 + 1;
                Skip_Spaces (Pos2);
                --  413
                if To_Upper (Token) =
                  To_Upper (To_String (Subfunctions (index).all)) then
                   Pos1 := 2;
-                  --                    Inc_Ptr (Pos2);
                   Pos2 := Pos2 + 1;
                   --  417
                   while Is_Name_Character (Token (Pos1))
@@ -755,13 +747,11 @@ package body M_Basic is
 
    function Is_Command_End (Command : String_Buffer; Pos : Positive)
                             return Boolean is
-      Routine_Name : constant String := "M_Basic.Is_Command_End ";
+--        Routine_Name : constant String := "M_Basic.Is_Command_End ";
       use String_Buffer_Package;
       Item         : constant String := Command (Pos);
       Done         : Boolean;
    begin
-      Put_Line (Routine_Name & "Item " & Item);
-      Put_Line (Routine_Name & "Pos " & Integer'Image (Pos));
       Done := Item (Pos .. Pos + 1) = "00" or else
         Item (Pos .. Pos + 1) = "ff";
       return Done;
@@ -814,7 +804,7 @@ package body M_Basic is
             if Term = cmdSUB or else Term = cmdFUN or else
               Term = cmdCFUN or else Term = cmdCSUB then
                Assert (Num_Funcs <= Configuration.MAXSUBFUN,
-                  Routine_Name & "Too many subroutines and functions");
+                       Routine_Name & "Too many subroutines and functions");
                Subfunctions (Num_Funcs) := Prog_Memory (Prog_Pos)'access;
                Num_Funcs := Num_Funcs + 1;
                Prog_Pos := Prog_Pos + 1;

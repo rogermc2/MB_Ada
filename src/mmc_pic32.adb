@@ -143,6 +143,16 @@ package body MMC_Pic32 is
 
    end Disk_Initialize;
 
+   function Disk_Status (Drive_Num : Natural) return D_Status is
+   begin
+      if Drive_Num = 0 then
+         return SD_Card_Stat;
+      else
+         return STA_NOINIT;
+      end if;
+
+   end Disk_Status;
+
    procedure Exchange_SPI (Data_Out : Byte) is
       use Interfaces.C;
       use P32mx470f512h;
