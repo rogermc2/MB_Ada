@@ -14,4 +14,11 @@ package body External is
 
    end Check_Pin;
 
+   function Pin_Read (Pin : Integer; Action : Unsigned_16) return Integer is
+      Result : Integer := 0;
+   begin
+      return Result;
+
+   end Pin_Read;
+
 end External;

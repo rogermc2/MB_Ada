@@ -1,9 +1,11 @@
 
 package IO_Ports is
 
-   Max_Nbr_Ports : constant Positive := 100;
-   Has_64_Pins   : constant Boolean := True;
-   Has_100_Pins  : constant Boolean := False;
+   Max_Nbr_Ports     : constant Positive := 100;
+   Num_Pins_64_Chip  : constant Positive := 64;
+   Num_Pins_100_Chip : constant Positive := 100;
+   Has_64_Pins       : constant Boolean := True;
+   Has_100_Pins      : constant Boolean := False;
 
    function Console_Rx_Pin return Positive;
    function Console_Tx_Pin return Positive;

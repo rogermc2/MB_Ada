@@ -40,5 +40,6 @@ package External is
 
    procedure Check_Pin (Pin : Integer; Action : Unsigned_16);
    function Check_Pin (Pin : Integer; Action : Unsigned_16) return Integer;
+   function Pin_Read (Pin : Integer; Action : Unsigned_16) return Integer;
 
 end External;
