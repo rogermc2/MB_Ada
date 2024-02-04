@@ -3189,13 +3189,13 @@ package P32mx470f512h is
      Convention => C, 
      External_Name => "SPI2STATINV";
 
-   SPI2BUF : aliased unsigned  -- p32mx470f512.h:1263
-     with Import => True, 
-     Convention => C, 
+   SPI2BUF : aliased unsigned with  -- p32mx470f512.h:1263
+     Import => True, 
+     Convention => C,
      External_Name => "SPI2BUF";
 
-   SPI2BRG : aliased unsigned  -- p32mx470f512.h:1264
-     with Import => True, 
+   SPI2BRG : aliased unsigned with  -- p32mx470f512.h:1264
+     Import => True, 
      Convention => C, 
      External_Name => "SPI2BRG";
 

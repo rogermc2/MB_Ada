@@ -39,7 +39,7 @@
 //extern "C" {
 //#endif
 
-extern volatile unsigned int        WDTCON __attribute__((section("sfrs")));
+extern volatile unsigned int WDTCON;
 typedef union {
   struct {
     unsigned WDTCLR:1;
@@ -68,11 +68,11 @@ typedef union {
     unsigned w:32;
   };
 } __WDTCONbits_t;
-extern volatile __WDTCONbits_t WDTCONbits __asm__ ("WDTCON") __attribute__((section("sfrs")));
-extern volatile unsigned int        WDTCONCLR __attribute__((section("sfrs")));
-extern volatile unsigned int        WDTCONSET __attribute__((section("sfrs")));
-extern volatile unsigned int        WDTCONINV __attribute__((section("sfrs")));
-extern volatile unsigned int        RTCCON __attribute__((section("sfrs")));
+extern volatile __WDTCONbits_t WDTCONbits __asm__ ("WDTCON");
+extern volatile unsigned int        WDTCONCLR;
+extern volatile unsigned int        WDTCONSET;
+extern volatile unsigned int        WDTCONINV;
+extern volatile unsigned int        RTCCON;
 typedef union {
   struct {
     unsigned RTCOE:1;
@@ -1232,7 +1232,7 @@ extern volatile __SPI2CONbits_t SPI2CONbits __asm__ ("SPI2CON") __attribute__((s
 extern volatile unsigned int        SPI2CONCLR __attribute__((section("sfrs")));
 extern volatile unsigned int        SPI2CONSET __attribute__((section("sfrs")));
 extern volatile unsigned int        SPI2CONINV __attribute__((section("sfrs")));
-extern volatile unsigned int        SPI2STAT __attribute__((section("sfrs")));
+unsigned int  SPI2STAT;
 typedef union {
   struct {
     unsigned SPIRBF:1;
@@ -1260,7 +1260,7 @@ extern volatile __SPI2STATbits_t SPI2STATbits __asm__ ("SPI2STAT") __attribute__
 extern volatile unsigned int SPI2STATCLR __attribute__((section("sfrs")));
 extern volatile unsigned int SPI2STATSET __attribute__((section("sfrs")));
 extern volatile unsigned int SPI2STATINV __attribute__((section("sfrs")));
-extern volatile unsigned int SPI2BUF __attribute__((section("sfrs")));
+unsigned int SPI2BUF;
 extern volatile unsigned int SPI2BRG __attribute__((section("sfrs")));
 extern volatile unsigned int SPI2BRGCLR __attribute__((section("sfrs")));
 extern volatile unsigned int SPI2BRGSET __attribute__((section("sfrs")));
