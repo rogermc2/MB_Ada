@@ -117,7 +117,7 @@ package body File_IO is
          Put_Line (Routine_Name & "The SD card has not been configured.");
          OK := False;
       elsif not MMC_Pic32.MDD_SDSPI_Card_Detect_State then
-         Put_Line (To_String (F_Error_Message (2)));
+         Put_Line (Routine_Name & To_String (F_Error_Message (2)));
          OK := False;
       elsif SD_Card_Stat = STA_NOINIT then
          OK := True;

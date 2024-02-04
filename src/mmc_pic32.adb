@@ -2,6 +2,8 @@
 with Interfaces; use Interfaces;
 with Interfaces.C;
 
+with Ada.Text_IO; use Ada.Text_IO;
+
 with Command_And_Token_Tables; use Command_And_Token_Tables;
 with Flash;
 with Global;
@@ -188,8 +190,11 @@ package body MMC_Pic32 is
    end F_Clock_Slow;
 
    function MDD_SDSPI_Card_Detect_State return Boolean is
+      Routine_Name : constant String :=
+        "MMC_Pic32.MDD_SDSPI_Card_Detect_State ";
       OK : constant Boolean := Flash.Option.SD_CD = 0;
    begin
+      Put_Line (Routine_Name & "OK: " & Boolean'Image (OK));
       --        if not OK and then Flash.Option.SD_CD > 0 then
       --           OK := not Pin_Read (Flash.Option.SD_CD);
       --        else

@@ -18,7 +18,7 @@ package body File_IO_Handler is
    procedure Files_Cmd is
       use Conversion;
       use String_Buffer_Package;
-      Routine_Name : constant String := "File_IO_Handler.Files_Cmd";
+      Routine_Name : constant String := "File_IO_Handler.Files_Cmd ";
       Current_Dir  : constant String := Current_Directory;
       Dir          : Directory_Entry_Type;
       Dir_Search   : Search_Type;
