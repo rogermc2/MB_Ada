@@ -3132,7 +3132,7 @@ package P32mx470f512h is
    SPI2STAT : aliased unsigned  -- p32mx470f512.h:1235
      with Import => True, 
      Convention => C, 
-     External_Name => "_SPI2STAT";
+     External_Name => "SPI2STAT";
 
    type uu_SPI2STATbits_t_struct1066 is record
       SPIRBF   : Extensions.Unsigned_1;  -- p32mx470f512.h:1238
@@ -3192,7 +3192,7 @@ package P32mx470f512h is
    SPI2BUF : aliased unsigned  -- p32mx470f512.h:1263
      with Import => True, 
      Convention => C, 
-     External_Name => "_SPI2BUF";
+     External_Name => "SPI2BUF";
 
    SPI2BRG : aliased unsigned  -- p32mx470f512.h:1264
      with Import => True, 
