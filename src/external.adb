@@ -1,4 +1,7 @@
 
+with IO_Ports.Tables;
+with Misc_MX470;
+
 package body External is
 
    procedure Check_Pin (Pin : Integer; Action : Unsigned_16) is
@@ -20,5 +23,13 @@ package body External is
       return Result;
 
    end Pin_Read;
+
+   procedure Pin_Set_Bit (Pin : Integer; Offset : Unsigned_16) is
+      use IO_Ports.Tables;
+   begin
+      Misc_MX470.Pin_Def (Pin).Port :=
+        Port_Addresses (2 * Misc_MX470.Pin_Def (Pin).Bit_Number);
+
+   end Pin_Set_Bit;
 
 end External;
