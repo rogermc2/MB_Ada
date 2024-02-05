@@ -5,6 +5,15 @@ package IO_Ports_Tables is
 
    type Port_Addresses is (Addr_Port_A, Addr_Port_B, Addr_Port_C, Addr_Port_D,
                            Addr_Port_E, Addr_Port_F, Addr_Port_G, Addr_Null);
+   for Port_Addresses use (Addr_Port_A => Unsigned_32 (16#BF886020#),
+                           Addr_Port_B => Unsigned_32 (16#BF886120#),
+                           Addr_Port_C => Unsigned_32 (16#BF886220#),
+                           Addr_Port_D => Unsigned_32 (16#BF886320#),
+                           Addr_Port_E => Unsigned_32 (16#BF886420#),
+                           Addr_Port_F => Unsigned_32 (16#BF886520#),
+                           Addr_Port_G => Unsigned_32 (16#BF886620#),
+                           Addr_Null   => Unsigned_32 (16#FFFFFFFF#));
+
    type Pin_Modes is (Pin_Unused, Pin_Analog_in, Pin_Digital_In,
                       Pin_Counting, Pin_Digital_Out, DI_Or_DO, AI_Or_DI_Or_Do,
                       Pin_Do_Not_Reset);
