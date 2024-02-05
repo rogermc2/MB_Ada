@@ -1,7 +1,7 @@
 
 with Interfaces;  use Interfaces;
 
-package IO_Ports_Tables is
+package IO_Ports.Tables is
 
    type Port_Addresses is (Addr_Port_A, Addr_Port_B, Addr_Port_C, Addr_Port_D,
                            Addr_Port_E, Addr_Port_F, Addr_Port_G, Addr_Null);
@@ -26,16 +26,18 @@ package IO_Ports_Tables is
                       AI_Or_DI_Or_Do => Unsigned_8 (22),
                       Pin_Do_Not_Reset => Unsigned_8 (32));
 
-   type Pin_Definitions is record
+   type Pin_Definition_Data is record
       Port           : Port_Addresses;
       Bit_Number     : Natural := 0;
       Mode           : Pin_Modes := Pin_Unused;
-      Analog_Channel : Natural := 0;
+      Analog_Channel : Integer := -1;
    end record;
+
+   type Pin_Definitions is array (1 .. 64) of Pin_Definition_Data;
 
    function  U_Val (Mode : Pin_Modes) return Unsigned_8;
 
-   Pin_Def_Table : array (1 .. 64) of Pin_Definitions :=
+   Pin_Def_Table : Pin_Definitions :=
    --      ((Addr_Null,  0, UNUSED, 0),     --  pin 0
      ((Addr_Port_E,  5, AI_Or_DI_Or_Do, 22), --  pin 1
       (Addr_Port_E,  6, AI_Or_DI_Or_Do, 23), --  pin 2
@@ -98,8 +100,8 @@ package IO_Ports_Tables is
       (Addr_Port_F,  1, DI_Or_DO, -1),        --  pin 59
       (Addr_Port_E,  0, DI_Or_DO, -1),        --  pin 60
       (Addr_Port_E,  1, DI_Or_DO, -1),        --  pin 61
-      (Addr_Port_E,  2, AI_Or_DI_Or_DO, 20), --  pin 62
+      (Addr_Port_E,  2, AI_Or_DI_Or_DO, 20),  --  pin 62
       (Addr_Port_E,  3, DI_Or_DO, -1),        --  pin 63
       (Addr_Port_E,  4, AI_Or_DI_Or_DO, 21)); --  pin 64
 
-end IO_Ports_Tables;
+end IO_Ports.Tables;

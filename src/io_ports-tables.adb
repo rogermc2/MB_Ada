@@ -1,5 +1,5 @@
 
-package body IO_Ports_Tables is
+package body IO_Ports.Tables is
 
    function U_Val (Mode : Pin_Modes) return Unsigned_8 is
    begin
@@ -7,4 +7,4 @@ package body IO_Ports_Tables is
 
    end U_Val;
 
-end IO_Ports_Tables;
+end IO_Ports.Tables;
