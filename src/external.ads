@@ -80,7 +80,7 @@ package External is
    Ext_Current_Config : array (1 .. IO_Ports.Max_Nbr_Ports) of Integer;
 
    procedure Check_Pin (Pin : Integer; Action : Unsigned_16);
-   function Check_Pin (Pin : Integer; Action : Unsigned_16) return Integer;
+   function Check_Pin (Pin : Integer; Action : Unsigned_16) return Boolean;
    function Pin_Read (Pin : Integer; Action : Unsigned_16) return Integer;
    procedure Pin_Set_Bit (Pin : Integer; Offset : Unsigned_32);
 
