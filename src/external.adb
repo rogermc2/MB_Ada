@@ -1,7 +1,6 @@
 
 with System.Storage_Elements;
 
-with IO_Ports.Tables;
 with Misc_MX470;
 
 package body External is
@@ -29,7 +28,6 @@ package body External is
    --  Pin_Set_Bit sets or clears a bit in the pin's port register
    procedure Pin_Set_Bit (Pin : Integer; Offset : Unsigned_32) is
       use System.Storage_Elements;
-      use IO_Ports.Tables;
       Port_Address : constant System.Address :=
         To_Address (Integer_Address (Misc_MX470.Pin_Def (Pin).Port + Offset));
       Reg : Unsigned_32;
