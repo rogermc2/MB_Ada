@@ -23,19 +23,22 @@ package body SPI_LCD is
    procedure SPI_Cs_High (Pin : Integer) is
       use Interfaces;
       use External;
-      Result : Unsigned_32;
+      Data : Unsigned_32;
    begin
       --  Wait for all writes to complete
       while (SPI_Stat and 16#80#) = 0 loop
          null;
       end loop;
 
+      --  Empty the receiver fifo buffer.
       while not ((SPI_Stat and 16#20#) = 0) loop
-         Result := SPI_Buff;
+         Data := SPI_Buff;
       end loop;
 
+      --  Clear the overflow bit
       SPI_Stat_Clr := 16#40#;
       if Pin > 0 then
+         --  Set CS high
          Pin_Set_Bit (Pin, Unsigned_32 (LATSET));
       end if;
 

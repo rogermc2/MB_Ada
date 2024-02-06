@@ -52,10 +52,11 @@ package body External is
    end Check_Pin;
    pragma Warnings (On);
 
-   function Pin_Read (Pin : Integer; Action : Unsigned_16) return Integer is
-      Result : Integer := 0;
+   function Pin_Read (Pin : Integer) return Integer is
+      use IO_Ports.Tables;
    begin
-      return Result;
+      return Integer (Shift_Right (Pin_Def_Table (Pin).Port,
+                          Pin_Def_Table (Pin).Bit_Number mod 2));
 
    end Pin_Read;
 

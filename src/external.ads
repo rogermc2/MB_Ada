@@ -81,7 +81,7 @@ package External is
 
    procedure Check_Pin (Pin : Integer; Action : Unsigned_16);
    function Check_Pin (Pin : Integer; Action : Unsigned_16) return Boolean;
-   function Pin_Read (Pin : Integer; Action : Unsigned_16) return Integer;
+   function Pin_Read (Pin : Integer) return Integer;
    procedure Pin_Set_Bit (Pin : Integer; Offset : Unsigned_32);
 
 end External;
