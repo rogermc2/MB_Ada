@@ -8,9 +8,9 @@ with Ada.Containers.Indefinite_Vectors;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 
 with Command_And_Token_Functions; use Command_And_Token_Functions;
---  with Command_Handler;
---  with File_IO_Handler; use File_IO_Handler;
---  with Option_Handler; use Option_Handler;
+with Command_Handler;
+with File_IO_Handler; use File_IO_Handler;
+with Option_Handler; use Option_Handler;
 
 package Command_And_Token_Tables is
 
@@ -21,9 +21,6 @@ package Command_And_Token_Tables is
    package AAC_Functions is new
      System.Address_To_Access_Conversions (Float);
 
---     subtype Token_Cursor is String_Buffer_Package.Cursor;
---     type Token_Pointer is access String;
-
    type Modular is mod 2**32;
 
    subtype US_Long_Integer is Long_Integer range 0 .. 2**31 - 1;
@@ -32,11 +29,10 @@ package Command_And_Token_Tables is
    subtype Word is Unsigned_16;
    subtype DWord is Unsigned_32;
    subtype QWord is Unsigned_64;
---     type Byte_Ptr is access Byte;
+
    type Byte_Array is array (Long_Integer range <>) of Byte;
 
    subtype Function_Type is Unsigned_16;
---     subtype Function_Type_Ptr is System.Address;
 
    T_NOTYPE  : constant Function_Type := 0;
    T_NBR     : constant Function_Type := 1;
@@ -80,8 +76,7 @@ package Command_And_Token_Tables is
    Token_Table   : array (1 .. Token_Table_Size) of Command_Table_Item;
 
    op_invalid    : constant Access_Procedure := Null;
-   fun_acos      : constant Access_Procedure := Null;
---     fun_acos      : constant Access_Procedure :=  F_Cos_Ptr;
+   fun_acos      : constant Access_Procedure :=  F_Cos_Ptr;
    fun_abs       : constant Access_Procedure := Null;
    fun_asc       : constant Access_Procedure := Null;
    fun_asin      : constant Access_Procedure := Null;
@@ -89,8 +84,7 @@ package Command_And_Token_Tables is
    fun_bin       : constant Access_Procedure := Null;
    fun_chr       : constant Access_Procedure := Null;
    fun_cint      : constant Access_Procedure := Null;
-   fun_cos       : constant Access_Procedure := Null;
---     fun_cos       : constant Access_Procedure :=  F_Cos_Ptr;
+   fun_cos       : constant Access_Procedure :=  F_Cos_Ptr;
    fun_deg       : constant Access_Procedure := Null;
    fun_errno     : constant Access_Procedure := Null;
    fun_errmsg    : constant Access_Procedure := Null;
@@ -128,8 +122,7 @@ package Command_And_Token_Tables is
 
    cmd_null           : constant Access_Procedure := Null;
    cmd_autosave       : constant Access_Procedure := Null;
-   cmd_option         : constant Access_Procedure := Null;
---     cmd_option         : constant Access_Procedure := Option_Cmd'Access;
+   cmd_option         : constant Access_Procedure := Option_Cmd'Access;
    cmd_pause          : constant Access_Procedure := Null;
    cmd_timer          : constant Access_Procedure := Null;
    cmd_date           : constant Access_Procedure := Null;
@@ -161,8 +154,8 @@ package Command_And_Token_Tables is
    cmd_input          : constant Access_Procedure := Null;
    cmd_let            : constant Access_Procedure := Null;
    cmd_lineinput      : constant Access_Procedure := Null;
-   cmd_list           : constant Access_Procedure := Null;
---       Command_Handler.List_Cmd'Access;
+   cmd_list           : constant Access_Procedure :=
+     Command_Handler.List_Cmd'Access;
    cmd_loop           : constant Access_Procedure := Null;
    cmd_new            : constant Access_Procedure := Null;
    cmd_next           : constant Access_Procedure := Null;
@@ -187,8 +180,7 @@ package Command_And_Token_Tables is
    cmd_chdir          : constant Access_Procedure := Null;
    cmd_kill           : constant Access_Procedure := Null;
    cmd_seek           : constant Access_Procedure := Null;
-   cmd_files          : constant Access_Procedure := Null;
---     cmd_files          : constant Access_Procedure :=  Files_Cmd'Access;
+   cmd_files          : constant Access_Procedure :=  Files_Cmd'Access;
    cmd_name           : constant Access_Procedure := Null;
 
    function Get_Input_Buffer return String;

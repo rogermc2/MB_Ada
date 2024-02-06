@@ -1,24 +1,24 @@
 
-with System.Storage_Elements;
+--  with System.Storage_Elements;
 
 with Interfaces;
 
 with External;
 
 package body SPI_LCD is
-   use System.Storage_Elements;
+--     use System.Storage_Elements;
 
-   Buff_Address     : constant System.Address := To_Address (16#F805A10#);
+--     Buff_Address     : constant System.Address := To_Address (16#F805A10#);
    SPI_Buff         : Interfaces.Unsigned_32;
-   for SPI_Buff'Address use Buff_Address;
+--     for SPI_Buff'Address use Buff_Address;
 
-   Stat_Address     : constant System.Address := To_Address (16#F805820#);
+--     Stat_Address     : constant System.Address := To_Address (16#F805820#);
    SPI_Stat         : Interfaces.Unsigned_32 := 0;
-   for SPI_Stat'Address use Stat_Address;
+--     for SPI_Stat'Address use Stat_Address;
 
-   Stat_Clr_Address : constant System.Address := To_Address (16#F805A14#);
+--     Stat_Clr_Address : constant System.Address := To_Address (16#F805A14#);
    SPI_Stat_Clr     : Interfaces.Unsigned_32 := 0;
-   for SPI_Stat_Clr'Address use Stat_Clr_Address;
+--     for SPI_Stat_Clr'Address use Stat_Clr_Address;
 
    procedure SPI_Cs_High (Pin : Integer) is
       use Interfaces;
