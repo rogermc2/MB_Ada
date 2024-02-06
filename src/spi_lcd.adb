@@ -1,6 +1,8 @@
 
 with Interfaces;
 
+with External;
+
 package body SPI_LCD is
 
    SPI_Buff     : Interfaces.Unsigned_32 :=
@@ -12,6 +14,7 @@ package body SPI_LCD is
 
    procedure SPI_Cs_High (Pin : Integer) is
       use Interfaces;
+      use External;
       Result : Unsigned_32;
    begin
       --  Wait for all writes to complete
@@ -25,7 +28,7 @@ package body SPI_LCD is
 
       SPI_Stat_Clr := 16#40#;
       if Pin > 0 then
-         Pin_Set_Bit (LAT_Set);
+         Pin_Set_Bit (Pin, Unsigned_32 (LATSET));
       end if;
 
    end SPI_Cs_High;

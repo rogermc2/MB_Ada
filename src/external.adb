@@ -1,13 +1,28 @@
 
 with System.Storage_Elements;
 
+with Ada.Text_IO; use Ada.Text_IO;
+
+with IO_Ports.Tables;
 with Misc_MX470;
 
 package body External is
 
    procedure Check_Pin (Pin : Integer; Action : Unsigned_16) is
+      use IO_Ports;
+      use IO_Ports.Tables;
+      Routine_Name : constant String := "External.Check_Pin ";
    begin
-      null;
+      if (Action and CP_NOABORT) = 0 and then
+        ((Has_64_Pins and (Pin = 15 or else Pin = 16)) or else
+         (Has_100_Pins and (Pin = 24 or else Pin = 25))) then
+         Put_Line (Routine_Name & "Pin " & Integer'Image (Pin) &
+                     " unavailable. It is used by the ICSP.");
+      elsif (Pin < 1 or else Pin > Num_Pins) or else
+      (Pin_Def_Table (Pin).Mode = Pin_Unused) or else
+      (HAS_USB and then (Pin = 1 or else Pin = 2)) then
+         null;
+     end if;
 
    end Check_Pin;
 
