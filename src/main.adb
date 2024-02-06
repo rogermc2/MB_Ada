@@ -1,5 +1,6 @@
 
 with Interfaces.C;
+
 with Ada.Text_IO; use Ada.Text_IO;
 
 with P32mx470f512h;
@@ -8,8 +9,6 @@ with Support; use Support;
 procedure Main is
    use Interfaces.C;
    Program_Name    : constant String := "Main ";
-   Basic_Running   : Boolean := True;
-   Error_In_Prompt : Boolean := False;
 begin
    Initialize;
 
