@@ -12583,6 +12583,7 @@ package P32mx470f512h is
      with Convention => C_Pass_By_Copy,
      Pack => True,
      Alignment => 4;
+   
    type uu_ANSELBbits_t_struct2132 is record
       w : aliased unsigned;  -- p32mx470f512.h:4846
    end record
@@ -12643,10 +12644,12 @@ package P32mx470f512h is
      with Convention => C_Pass_By_Copy,
      Pack => True,
      Alignment => 4;
+   
    type uu_TRISBbits_t_struct2138 is record
       w : aliased unsigned;  -- p32mx470f512.h:4874
    end record
      with Convention => C_Pass_By_Copy;
+   
    type uu_TRISBbits_t (discr : unsigned := 0) is record
       case discr is
          when 0 => anon7204 : aliased uu_TRISBbits_t_struct2137;  -- p32mx470f512.h:4872
@@ -12703,10 +12706,12 @@ package P32mx470f512h is
      with Convention => C_Pass_By_Copy,
      Pack => True,
      Alignment => 4;
+   
    type uu_PORTBbits_t_struct2144 is record
       w : aliased unsigned;  -- p32mx470f512.h:4902
    end record
      with Convention => C_Pass_By_Copy;
+   
    type uu_PORTBbits_t (discr : unsigned := 0) is record
       case discr is
          when 0 => anon7234 : aliased uu_PORTBbits_t_struct2143;  -- p32mx470f512.h:4900

@@ -6,7 +6,7 @@ package Configuration is
    Bus_Speed         : Positive := 30000000;
 
 --  The main clock frequency for the chip at bootup, it can be changed by the CPU command
- CLOCKFREQ        : Long_Integer := 100000000;  --  This is set in in Configuration Bits.h
+ CLOCKFREQ        : Integer := 100000000;  --  This is set in in Configuration Bits.h
 
  DEFAULT_CONSOLE  : Natural := 0;      --  0 = SERIAL, 1 = USB
  CONSOLE_BAUDRATE : Natural := 38400;  --  only applies to the serial console
