@@ -1,5 +1,5 @@
 
---  with System.Storage_Elements;
+with System.Storage_Elements;
 
 with Ada.Text_IO; use Ada.Text_IO;
 
@@ -37,6 +37,14 @@ package body External is
                Put_Line (Routine_Name & "Pin " & Integer'Image (Pin) &
                            " is in use.");
             end if;
+         elsif
+           (Action and CP_IGNORE_RESERVED) = 0 and then
+           Ext_Current_Config (Pin) = EXT_COM_RESERVED then
+            OK := (Action and CP_NOABORT) /= 0;
+            if not OK then
+               Put_Line (Routine_Name & "Pin " & Integer'Image (Pin) &
+                           " is in use.");
+            end if;
          end if;
       end if;
 
@@ -56,17 +64,17 @@ package body External is
       use IO_Ports.Tables;
    begin
       return Integer (Shift_Right (Pin_Def_Table (Pin).Port,
-                          Pin_Def_Table (Pin).Bit_Number mod 2));
+                      Pin_Def_Table (Pin).Bit_Number mod 2));
 
    end Pin_Read;
 
    --  Pin_Set_Bit sets or clears a bit in the pin's port register
    procedure Pin_Set_Bit (Pin : Integer; Offset : Unsigned_32) is
---        use System.Storage_Elements;
---        Port_Address : constant System.Address :=
---          To_Address (Integer_Address (Misc_MX470.Pin_Def (Pin).Port + Offset));
+      use System.Storage_Elements;
+      Port_Address : constant System.Address :=
+        To_Address (Integer_Address (Misc_MX470.Pin_Def (Pin).Port + Offset));
       Reg          : Unsigned_32;
---        for Reg'Address use Port_Address;
+      --        for Reg'Address use Port_Address;
    begin
       Reg := Unsigned_32 (2 * Misc_MX470.Pin_Def (Pin).Bit_Number);
 
