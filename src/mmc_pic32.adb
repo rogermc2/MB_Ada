@@ -5,11 +5,13 @@ with Interfaces.C;
 with Ada.Text_IO; use Ada.Text_IO;
 
 with Command_And_Token_Tables; use Command_And_Token_Tables;
+with External;
 with Flash;
 with Global;
 with P32mx470f512h;
 with SPI;
 with SPI_3xx_4xx;
+with Timers;
 
 package body MMC_Pic32 is
 
@@ -89,7 +91,6 @@ package body MMC_Pic32 is
    end Deselect;
 
    function Disk_Initialize (Drive_Num : Natural) return D_Status is
-      Timer1 : Integer := 1000;
       Ty     : Byte := 0;
       OCR    : array (0 .. 3) of Byte;
       Status : D_Status;
@@ -111,6 +112,7 @@ package body MMC_Pic32 is
       end loop;
 
       if Cmd0_Send = 1 then
+         Timers.Timer1 := 1000;
          if Send_Command (CMD8, 16#1AA#) = 1 then
             for n in 0 .. 3 loop
                --  Get trailing return value of R7 response.
@@ -119,12 +121,12 @@ package body MMC_Pic32 is
 
             if OCR (2) = 1 and then OCR (3) = 16#AA# then
                --  mmc_pic32.c 416  The card can work at vdd range of 2.7-3.6V.
-               while Timer1 /= 0 and then
+               while Timers.Timer1 /= 0 and then
                  Send_Command (CMD41, 16#40000000#) /= 0 loop
                   null;
                end loop;
 
-               if Timer1 /= 0 and then Send_Command (CMD58, 0) = 0 then
+               if Timers.Timer1 > 0 and then Send_Command (CMD58, 0) = 0 then
                   for n in 0 .. 3 loop
                      OCR (n) := Byte (Exchange_SPI (16#FF#));
                   end loop;
@@ -192,14 +194,14 @@ package body MMC_Pic32 is
    function MDD_SDSPI_Card_Detect_State return Boolean is
       Routine_Name : constant String :=
         "MMC_Pic32.MDD_SDSPI_Card_Detect_State ";
-      OK : constant Boolean := Flash.Option.SD_CD = 0;
+      OK           : Boolean := Flash.Option.SD_CD = 0;
    begin
       Put_Line (Routine_Name & "OK: " & Boolean'Image (OK));
-      --        if not OK and then Flash.Option.SD_CD > 0 then
-      --           OK := not Pin_Read (Flash.Option.SD_CD);
-      --        else
-      --           OK := Pin_Read (-Flash.Option.SD_CD);
-      --        end if;
+      if not OK and then Flash.Option.SD_CD > 0 then
+         OK := External.Pin_Read (Flash.Option.SD_CD) = 0;
+      else
+         OK := External.Pin_Read (-Flash.Option.SD_CD) /= 0;
+      end if;
 
       return OK;
 
@@ -281,9 +283,10 @@ package body MMC_Pic32 is
    end Send_Command;
 
    function Wait_Ready return Boolean is
-      D      : Byte;
-      Timer2 : Natural := 500;
+      use Timers;
+      D : Byte;
    begin
+      Timer2 := 500;
       loop
          D := Byte (Exchange_SPI (16#FF#));
          delay (0.000005);
