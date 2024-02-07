@@ -17,14 +17,15 @@ package body External is
    begin
       if Configuration.Debug_Mode then
          OK := (Action and CP_NOABORT) /= 0 and then
-        ((Has_64_Pins and (Pin = 15 or else Pin = 16)) or else
-           (Has_100_Pins and (Pin = 24 or else Pin = 25)));
+           ((Has_64_Pins and (Pin = 15 or else Pin = 16)) or else
+              (Has_100_Pins and (Pin = 24 or else Pin = 25)));
+         if not OK then
+            Put_Line (Routine_Name & "Pin " & Integer'Image (Pin) &
+                        " unavailable. It is used by the ICSP.");
+         end if;
       end if;
 
-      if not OK then
-         Put_Line (Routine_Name & "Pin " & Integer'Image (Pin) &
-                     " unavailable. It is used by the ICSP.");
-      elsif (Pin < 1 or else Pin > Num_Pins) or else
+      if (Pin < 1 or else Pin > Num_Pins) or else
         (Pin_Def_Table (Pin).Mode = Pin_Unused) or else
         (HAS_USB and then (Pin = 1 or else Pin = 2)) then
          OK := (Action and CP_NOABORT) /= 0;
