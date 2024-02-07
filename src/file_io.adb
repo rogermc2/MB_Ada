@@ -7,7 +7,9 @@ with Ada.Text_IO; use Ada.Text_IO;
 with Arguments;
 
 with Audio;
+with Commands;
 with Disk_IO;
+with External;
 with Fat_File;
 with Flash;
 with Global;
@@ -49,7 +51,6 @@ package body File_IO is
       Args         : String_Buffer := Command_Line;
       Arg_Data     : Arguments_Record;
       Arg_Val      : Integer := 0;
-      --        Pin_Check    : Integer;
    begin
       --  File_IO 107
       Args.Delete_First;
@@ -66,19 +67,22 @@ package body File_IO is
       --  File_IO 113
       Flash.Option.SD_CD := 0;
       Flash.Option.SD_WP := 0;
-      --        Pin_Check := External.Check_Pin (Arg_1_Val, Commands.Option_Error_Check);
+      External.Check_Pin (Integer'Value (Arg_Data.Arg_Buffer (1)),
+                          Commands.Option_Error_Check);
       --  File_IO 115
       Flash.Option.SDCARD_CS := Arg_Val;
 
       if Arg_Data.Arg_C > 2 then
          Arg_Val := Integer'Value (Arg_Data.Arg_Buffer (Arg_Data.Arg_V (3)));
-         --        Pin_Check := External.Check_Pin (abs (Arg_3_Val), Commands.Option_Error_Check);
+         External.Check_Pin(abs (Integer'Value (Arg_Data.Arg_Buffer (3))),
+                            Commands.Option_Error_Check);
          Flash.Option.SD_CD := Arg_Val;
       end if;
 
       if Arg_Data.Arg_C = 5 then
          Arg_Val := Integer'Value (Arg_Data.Arg_Buffer (Arg_Data.Arg_V (5)));
-         --        Pin_Check := External.Check_Pin (abs (Arg_3_Val), Commands.Option_Error_Check);
+         External.Check_Pin (abs (Integer'Value (Arg_Data.Arg_Buffer (5))),
+                             Commands.Option_Error_Check);
          Flash.Option.SD_WP := Arg_Val;
       end if;
 
