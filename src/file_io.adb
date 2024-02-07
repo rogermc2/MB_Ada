@@ -8,11 +8,11 @@ with Arguments;
 
 with Audio;
 with Commands;
+with Configuration;
 with Disk_IO;
 with External;
 with Fat_File;
 with Flash;
-with Global;
 with MMC_Pic32;
 with Serial_File_IO;
 --  with Support;
@@ -112,7 +112,7 @@ package body File_IO is
       use MMC_Pic32;
       use Serial_File_IO;
       Routine_Name : constant String := "File_IO.Init_SD_Card ";
-      OK           : Boolean := Global.Bus_Speed >= 30000000;
+      OK           : Boolean := Configuration.Bus_Speed >= 30000000;
    begin
       --  FileIO.c 792
       if not OK then

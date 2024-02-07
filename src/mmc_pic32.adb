@@ -5,6 +5,7 @@ with Interfaces.C;
 with Ada.Text_IO; use Ada.Text_IO;
 
 with Command_And_Token_Tables; use Command_And_Token_Tables;
+with Configuration;
 with External;
 with Flash;
 with Global;
@@ -188,7 +189,7 @@ package body MMC_Pic32 is
    begin
       SPI_Speed := 100000;
       SPI_Channel_Set_Brg (SPI_Channel_2,
-                           SPI_Brg_Value (Global.Bus_Speed, SPI_Speed));
+                           SPI_Brg_Value (Configuration.Bus_Speed, SPI_Speed));
    end F_Clock_Slow;
 
    function MDD_SDSPI_Card_Detect_State return Boolean is

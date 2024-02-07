@@ -9,9 +9,6 @@ with Exceptions;
 
 package Global is
 
-   Debug_Mode        : Boolean := False;
-   Bus_Speed         : Positive := 30000000;
-   Console_Baud_Rate : Positive := 38400;
    F_Arg_1           : Float := 0.0;
    F_Arg_2           : Float := 0.0;
    F_Return          : Float := 0.0;

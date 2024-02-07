@@ -3,7 +3,7 @@ with System.Storage_Elements;
 
 with Ada.Text_IO; use Ada.Text_IO;
 
-with Global;
+with Configuration;
 with IO_Ports.Tables;
 with Misc_MX470;
 
@@ -15,7 +15,7 @@ package body External is
       Routine_Name : constant String := "External.Check_Pin ";
       OK           : Boolean := True;
    begin
-      if Global.Debug_Mode then
+      if Configuration.Debug_Mode then
          OK := (Action and CP_NOABORT) /= 0 and then
         ((Has_64_Pins and (Pin = 15 or else Pin = 16)) or else
            (Has_100_Pins and (Pin = 24 or else Pin = 25)));

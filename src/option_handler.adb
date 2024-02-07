@@ -9,6 +9,7 @@ with Ada.Text_IO; use Ada.Text_IO;
 with Arguments;
 with Commands;
 with Command_And_Token_Tables; use Command_And_Token_Tables;
+with Configuration;
 with Console;
 with Draw;
 with Evaluation; use Evaluation;
@@ -52,16 +53,14 @@ package body Option_Handler is
    function Do_Baud_Rate (Command_Line : String_Buffer) return Boolean is
       use String_Buffer_Package;
 --        TP    : constant Natural := Check_String (Command_Line, "BAUDRATE");
---        Found : constant Boolean := TP > 0;
       Found : constant Boolean :=
         Check_String (Element (Command_Line, 1), "BAUDRATE");
       Arg   : Unbounded_String;
    begin
       if Found then
---           Arg := Get_Arg (Command_Line, TP)
          Arg := To_Unbounded_String (Element (Command_Line, 2));
          Flash.Option.Baud_Rate :=
-           Get_Int (Arg, 100, Global.Bus_Speed / 130);
+           Get_Int (Arg, 100, Configuration.Bus_Speed / 130);
          Flash.Save_Options;
          Console.Init_Serial_Console;
       end if;
