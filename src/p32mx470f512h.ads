@@ -15860,6 +15860,10 @@ package P32mx470f512h is
    OC2CON_ON_POSITION : constant Unsigned := 16#F#;
    OC2CON_ON_MASK     : constant Unsigned := 16#8000#;
    OC2CON_ON_LENGTH   : constant Unsigned := 1;
+   
+   OC4CON_ON_POSITION : constant Unsigned := 16#F#;
+   OC4CON_ON_MASK     : constant Unsigned := 16#8000#;
+   OC4CON_ON_LENGTH   : constant Unsigned := 1;
 
 end P32mx470f512h;
 

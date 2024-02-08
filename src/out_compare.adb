@@ -14,4 +14,14 @@ package body Out_Compare is
 
    end Close_OC1;
 
+   procedure Close_OC4 is
+      use Int_3xx_4xx_Legacy;
+      use P32mx470f512h;
+   begin
+      mOC4_Int_Enable (0);
+      mOC4_Clear_Int_Flag;
+      OC4CONCLR := OC4Con_On_Mask;
+
+   end Close_OC4;
+
 end Out_Compare;

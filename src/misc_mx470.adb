@@ -84,7 +84,7 @@ package body Misc_MX470 is
       PWM_CH1_CLOSE;
       PWM_CH2_CLOSE;
       PWM_CH3_CLOSE;  --  nor the output compare (PWM)
-      CloseOC4;
+      Close_OC4;
       PWM_CH4_CLOSE;
       PWM_CH5_CLOSE;
 
