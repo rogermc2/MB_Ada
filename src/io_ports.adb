@@ -6,6 +6,41 @@ package body IO_Ports is
    Num_Pins_64_Chip  : constant Positive := 64;
    Num_Pins_100_Chip : constant Positive := 100;
 
+   procedure Com1_En_PPS_Close is
+      use PPS;
+   begin
+         PPS_Output ("4", "RPB14", Character'Image (ASCII.NUL));
+
+   end Com1_En_PPS_Close;
+
+   procedure Com1_Tx_PPS_Close is
+      use PPS;
+   begin
+         PPS_Output ("2", "RPB1", Character'Image (ASCII.NUL));
+
+   end Com1_Tx_PPS_Close;
+
+   procedure Com2_Tx_PPS_Close is
+      use PPS;
+   begin
+         PPS_Output ("1", "RPB5", Character'Image (ASCII.NUL));
+
+   end Com2_Tx_PPS_Close;
+
+   procedure Com3_Tx_PPS_Close is
+      use PPS;
+   begin
+         PPS_Output ("3", "RPB0", Character'Image (ASCII.NUL));
+
+   end Com3_Tx_PPS_Close;
+
+   procedure Com4_Tx_PPS_Close is
+      use PPS;
+   begin
+         PPS_Output ("2", "RPF0", Character'Image (ASCII.NUL));
+
+   end Com4_Tx_PPS_Close;
+
    function Console_Rx_Pin return Positive is
    begin
       --  This is UART1

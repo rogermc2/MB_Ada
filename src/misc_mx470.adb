@@ -90,7 +90,7 @@ package body Misc_MX470 is
       PWM_CH4_CLOSE;
       PWM_CH5_CLOSE;
 
-      --   lear all UARTs (again not reset by the watchdog)
+      --   Clear all UARTs (again not reset by the watchdog)
     UART_Enable (UART1, UART_ENABLE_FLAGS (UART_DISABLE or UART_PERIPHERAL));
     COM4_TX_PPS_CLOSE;
     UART_Enable (UART2, UART_ENABLE_FLAGS (UART_DISABLE or UART_PERIPHERAL));

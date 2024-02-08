@@ -1,12 +1,13 @@
 
 package body UART is
 
-   UART_Registers : array (unsigned range 1 .. 6) of UART_Reg;
+   UART_Registers : array (Integer range 1 .. 6) of UART_Reg;
 
    function "or" (L, R : UART_Enable_Mode) return UART_Enable_Mode is
+      Or_Val : constant Unsigned_8 := UART_Enable_Mode'Enum_Rep (L) or
+        UART_Enable_Mode'Enum_Rep (R);
    begin
-      return UART_Enable_Mode'Enum_Val (UART_Enable_Mode'Enum_Rep (L) or
-        UART_Enable_Mode'Enum_Rep (R));
+      return UART_Enable_Mode'Enum_Val (Or_Val);
 
    end "or";
 

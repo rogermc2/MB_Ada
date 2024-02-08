@@ -26,6 +26,11 @@ package IO_Ports is
    Has_64_Pins   : constant Boolean := True;
    Has_100_Pins  : constant Boolean := False;
 
+   procedure Com1_En_PPS_Close;
+   procedure Com1_Tx_PPS_Close;
+   procedure Com2_Tx_PPS_Close;
+   procedure Com3_Tx_PPS_Close;
+   procedure Com4_Tx_PPS_Close;
    function Console_Rx_Pin return Positive;
    function Console_Tx_Pin return Positive;
    function Num_Pins return Positive;
