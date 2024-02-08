@@ -29,5 +29,12 @@ package IO_Ports is
    function Console_Rx_Pin return Positive;
    function Console_Tx_Pin return Positive;
    function Num_Pins return Positive;
+   procedure PWM_Ch1_Close;
+   procedure PWM_Ch2_Close;
+   procedure PWM_Ch3_Close;
+   procedure PWM_Ch4_Close;
+   procedure PWM_Ch5_Close;
+   procedure SPI_PPS_Close;
+   procedure SPI2_PPS_Close;
 
 end IO_Ports;

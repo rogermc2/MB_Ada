@@ -1,6 +1,12 @@
 
 package body SPI_3xx_4xx is
 
+   procedure Close_SPI_Channel (Channel : SPI_Channel) is
+   begin
+      null;
+
+   end Close_SPI_Channel;
+
    procedure SPI_Channel_Set_Brg (Channel : SPI_Channel; Brg : Natural) is
    begin
       null;

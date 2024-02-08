@@ -1,17 +1,23 @@
 
 with Interfaces; use Interfaces;
 
+with Configuration;
 with IO_Ports; use IO_Ports;
 with M_Misc;
 with MM_System;
+with Out_Compare;
 with P32mx470f512h;
 with Ports;
+with SPI_3xx_4xx;
 
 package body Misc_MX470 is
 
    procedure  Init_Processor is
+      use Configuration;
       use MM_System;
+      use Out_Compare;
       use P32mx470f512h;
+      use SPI_3xx_4xx;
    begin
       --  initial setup of the I/O ports, default all pins to digital input
       --        if not Has_64_Pins then
@@ -66,13 +72,15 @@ package body Misc_MX470 is
       CNPDGCLR := 16#ffffffff#;
 
       Ports.mJTAG_Port_Enable (False);                                --  turn off jtag
-      BusSpeed := SYSTEMConfig (M_Misc.Clock_Speed, SYS_CFG_ALL);  --  set wait states, bus speed, etc for the best performance
+      Bus_Speed := SYSTEM_Config (M_Misc.Clock_Speed, SYS_CFG_ALL);  --  set wait states, bus speed, etc for the best performance
 
-      SpiChnClose (SPI_CHANNEL1);
+--        SpiChnClose (SPI_CHANNEL1);
+      Close_SPI_Channel (SPI_CHANNEL_1);
       SPI_PPS_CLOSE;     --  SPI is not reset by the watchdog
-      SpiChnClose (SPI_CHANNEL2);
+--        SpiChnClose (SPI_CHANNEL2);
+      Close_SPI_Channel (SPI_CHANNEL_2);
       SPI2_PPS_CLOSE;    --  SPI is not reset by the watchdog
-      CloseOC1;
+      Close_OC1;
       PWM_CH1_CLOSE;
       PWM_CH2_CLOSE;
       PWM_CH3_CLOSE;  --  nor the output compare (PWM)
