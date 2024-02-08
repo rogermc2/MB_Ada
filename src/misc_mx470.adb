@@ -9,6 +9,7 @@ with Out_Compare;
 with P32mx470f512h;
 with Ports;
 with SPI_3xx_4xx;
+with UART;
 
 package body Misc_MX470 is
 
@@ -18,6 +19,7 @@ package body Misc_MX470 is
       use Out_Compare;
       use P32mx470f512h;
       use SPI_3xx_4xx;
+      use UART;
    begin
       --  initial setup of the I/O ports, default all pins to digital input
       --        if not Has_64_Pins then
@@ -88,6 +90,16 @@ package body Misc_MX470 is
       PWM_CH4_CLOSE;
       PWM_CH5_CLOSE;
 
+      --   lear all UARTs (again not reset by the watchdog)
+    UART_Enable (UART1, UART_ENABLE_FLAGS (UART_DISABLE or UART_PERIPHERAL));
+    COM4_TX_PPS_CLOSE;
+    UART_Enable (UART2, UART_ENABLE_FLAGS (UART_DISABLE or UART_PERIPHERAL));
+    COM1_TX_PPS_CLOSE;
+    COM1_EN_PPS_CLOSE;
+    UART_Enable (UART3, UART_ENABLE_FLAGS (UART_DISABLE or UART_PERIPHERAL));
+    COM2_TX_PPS_CLOSE;
+    UART_Enable (UART4, UART_ENABLE_FLAGS (UART_DISABLE or UART_PERIPHERAL));
+    COM3_TX_PPS_CLOSE;
    end Init_Processor;
 
 end Misc_MX470;
