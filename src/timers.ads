@@ -9,4 +9,6 @@ package Timers is
    Timer1          : Natural := 0;
    Timer2          : Natural := 0;
 
+   procedure Init_Timers;
+
 end Timers;

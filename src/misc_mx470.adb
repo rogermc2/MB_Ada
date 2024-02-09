@@ -1,7 +1,11 @@
 
 with Interfaces; use Interfaces;
 
+with Ada.Containers;
+
 with Configuration;
+with Flash;
+with GUI;
 with IO_Ports; use IO_Ports;
 with M_Misc;
 with MM_System;
@@ -14,12 +18,18 @@ with UART;
 package body Misc_MX470 is
 
    procedure  Init_Processor is
+      use Ada.Containers;
       use Configuration;
       use MM_System;
       use Out_Compare;
       use P32mx470f512h;
       use SPI_3xx_4xx;
       use UART;
+      use GUI;
+      use GUI_Controls_Package;
+      Control_Data : S_Ctrl_Data;
+      Controls     : Controls_Vector :=
+        To_Vector (Control_Data, Count_Type (Flash.Option.Max_Controls));
    begin
       --  initial setup of the I/O ports, default all pins to digital input
       --        if not Has_64_Pins then
@@ -76,10 +86,10 @@ package body Misc_MX470 is
       Ports.mJTAG_Port_Enable (False);                                --  turn off jtag
       Bus_Speed := SYSTEM_Config (M_Misc.Clock_Speed, SYS_CFG_ALL);  --  set wait states, bus speed, etc for the best performance
 
---        SpiChnClose (SPI_CHANNEL1);
+      --        SpiChnClose (SPI_CHANNEL1);
       Close_SPI_Channel (SPI_CHANNEL_1);
       SPI_PPS_CLOSE;     --  SPI is not reset by the watchdog
---        SpiChnClose (SPI_CHANNEL2);
+      --        SpiChnClose (SPI_CHANNEL2);
       Close_SPI_Channel (SPI_CHANNEL_2);
       SPI2_PPS_CLOSE;    --  SPI is not reset by the watchdog
       Close_OC1;
@@ -91,15 +101,27 @@ package body Misc_MX470 is
       PWM_CH5_CLOSE;
 
       --   Clear all UARTs (again not reset by the watchdog)
-    UART_Enable (UART1, UART_ENABLE_FLAGS (UART_DISABLE or UART_PERIPHERAL));
-    COM4_TX_PPS_CLOSE;
-    UART_Enable (UART2, UART_ENABLE_FLAGS (UART_DISABLE or UART_PERIPHERAL));
-    COM1_TX_PPS_CLOSE;
-    COM1_EN_PPS_CLOSE;
-    UART_Enable (UART3, UART_ENABLE_FLAGS (UART_DISABLE or UART_PERIPHERAL));
-    COM2_TX_PPS_CLOSE;
-    UART_Enable (UART4, UART_ENABLE_FLAGS (UART_DISABLE or UART_PERIPHERAL));
-    COM3_TX_PPS_CLOSE;
+      UART_Enable (UART1, UART_ENABLE_FLAGS (UART_DISABLE or UART_PERIPHERAL));
+      COM4_TX_PPS_CLOSE;
+      UART_Enable (UART2, UART_ENABLE_FLAGS (UART_DISABLE or UART_PERIPHERAL));
+      COM1_TX_PPS_CLOSE;
+      COM1_EN_PPS_CLOSE;
+      UART_Enable (UART3, UART_ENABLE_FLAGS (UART_DISABLE or UART_PERIPHERAL));
+      COM2_TX_PPS_CLOSE;
+      UART_Enable (UART4, UART_ENABLE_FLAGS (UART_DISABLE or UART_PERIPHERAL));
+      COM3_TX_PPS_CLOSE;
+
+      Flash.Load_Options;
+
+      --  Set the base of the usable memory
+      --      RAMBase = (void *)MRoundUp((unsigned int)&_splim + (Option.MaxCtrls * sizeof(struct s_ctrl)));
+
+      --  Setup a pointer to the base of the GUI controls table
+      --      Ctrl = (struct s_ctrl *)&_splim;
+
+--        INTEnableSystemMultiVectoredInt();      // allow vectored interrupts
+
+      init
    end Init_Processor;
 
 end Misc_MX470;
