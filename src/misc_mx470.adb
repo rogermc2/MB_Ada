@@ -121,7 +121,6 @@ package body Misc_MX470 is
 
 --        INTEnableSystemMultiVectoredInt();      // allow vectored interrupts
 
-      init
    end Init_Processor;
 
 end Misc_MX470;
