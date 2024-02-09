@@ -5,6 +5,11 @@ with Command_And_Token_Tables; use Command_And_Token_Tables;
 
 package Memory is
 
+   Mem_Size       : constant Positive := 126 * 1024;
+   Page_Size      : constant Positive := 256;
+   Page_Bits      : constant Positive := 2;
+   Pages_Per_Word : constant Positive := 8 * unsigned'Size / Page_Bits;
+
    --  In the PIC32 the following four variables are set by the linker:
    Stack                  : unsigned;  --  virtual address of the top of stack
    Splim                  : unsigned;  --  virtual address of top of heap

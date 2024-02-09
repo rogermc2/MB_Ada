@@ -66,6 +66,11 @@ package body External is
    end Check_Pin;
    pragma Warnings (On);
 
+   procedure Init_Ext_IO is
+   begin
+      null;
+   end Init_Ext_IO;
+
    function Pin_Read (Pin : Integer) return Integer is
       use IO_Ports.Tables;
    begin

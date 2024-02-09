@@ -1,6 +1,9 @@
 
 package body Memory is
 
+   Memory_Map : array (1 .. Mem_Size / Page_Size / Pages_Per_Word)
+     of unsigned;
+
    procedure Clear_Temp_Memory is
    begin
       null;
@@ -13,5 +16,13 @@ package body Memory is
       return Bytes;
 
    end Get_Temp_Memory;
+
+   procedure Init_Heap is
+   begin
+      for index in 1 .. Mem_Size loop
+         Memory_Map (index) := 0;
+      end loop;
+
+   end Init_Heap;
 
 end Memory;
