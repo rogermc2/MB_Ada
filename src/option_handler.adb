@@ -268,7 +268,6 @@ package body Option_Handler is
       use String_Buffer_Package;
       Routine_Name : constant String := "Option_Handler.Option_Cmd ";
       Subfunction  : constant String := Command_Line (1);
---        TP           : Natural;
       Arg          : Unbounded_String;
       Done         : Boolean := False;
    begin

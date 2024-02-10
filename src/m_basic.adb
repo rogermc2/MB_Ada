@@ -37,8 +37,8 @@ package body M_Basic is
 
    procedure Clear_Runtime;
    procedure Inc_Ptr (Pos : in out Subfunction_Ptr);
-   function Is_Command_End (Command : String_Buffer; Pos : Positive)
-                            return Boolean;
+   --     function Is_Command_End (Command : String_Buffer; Pos : Positive)
+   --                              return Boolean;
    procedure User_Defined_Subfunction
      (Command      : Unbounded_String; TP : Positive;
       Sub_Line_Ptr : Subfunction_Ptr);
@@ -497,7 +497,7 @@ package body M_Basic is
             Done := not No_Abort and Interupt_Check /= 0;
          end if;
       end if;
-      --  276
+      Put_Line (Routine_Name & "done");
 
    end Execute_Command;
 
@@ -510,56 +510,54 @@ package body M_Basic is
       Save_Local_Index : Natural         := 0;
       Program_Ptr      : Positive        := 1;
       Item_Ptr         : Positive        := 1;
-      Done             : Boolean         := Integer (Token_Buffer.Length) = 0;
+      --        Done             : Boolean         := Integer (Token_Buffer.Length) = 0;
    begin
-      if not Done then
-         --  194
-         while not Done and then
-           Program_Ptr <= Integer (Token_Buffer.Length) loop
-            Item := To_Unbounded_String (Token_Buffer (Program_Ptr));
-            Item_Ptr := 1;
-            if Element (Item, Item_Ptr) = '0' then
-               --  Step over the 0 indicating the start of a new element'
-               Delete (Item, Item_Ptr, Item_Ptr);
-            end if;
+      --        if not Done then
+      --  194
+      --           while not Done and then
+      while Program_Ptr < Integer (Token_Buffer.Length) loop
+         Item := To_Unbounded_String (Token_Buffer (Program_Ptr));
+         Item_Ptr := 1;
+         if Element (Item, Item_Ptr) = '0' then
+            --  Step over the 0 indicating the start of a new element'
+            Delete (Item, Item_Ptr, Item_Ptr);
+         end if;
 
-            if Element (Item, Item_Ptr) =
-              Element (To_Unbounded_String
-                       (Integer'Image (T_NEWLINE)), 1) then
-               Item_Ptr := Item_Ptr + 1;
-            end if;
+         if Element (Item, Item_Ptr) = Element
+           (To_Unbounded_String (Integer'Image (T_NEWLINE)), 1) then
+            Item_Ptr := Item_Ptr + 1;
+         end if;
 
-            --  217
-            if Element (Item, Item_Ptr) =
-              Element (Trim (To_Unbounded_String
-                       (Integer'Image (T_LINENBR)), Left), 1) then
-               Item_Ptr := Item_Ptr + 3;
-            end if;
+         --  217
+         if Element (Item, Item_Ptr) = Element (Trim (To_Unbounded_String
+                                                (Integer'Image (T_LINENBR)), Left), 1) then
+            Item_Ptr := Item_Ptr + 3;
+         end if;
 
+         Skip_Spaces (Item, Item_Ptr);
+         if Element (Item, 1) =
+           Element (Trim (To_Unbounded_String
+                    (Integer'Image (T_LABEL)), Left), 1) then
+            --  skip over the label
+            Item_Ptr := Item_Ptr +
+              Character'Pos (Element (Item, Item_Ptr)) + 2;
             Skip_Spaces (Item, Item_Ptr);
-            if Element (Item, 1) =
-              Element (Trim (To_Unbounded_String
-                       (Integer'Image (T_LABEL)), Left), 1) then
-               --  skip over the label
-               Item_Ptr := Item_Ptr +
-                 Character'Pos (Element (Item, Item_Ptr)) + 2;
-               Skip_Spaces (Item, Item_Ptr);
-            end if;
+         end if;
 
-            --  225
-            if Program_Ptr <= Positive (Token_Buffer.Length) then
-               Execute_Command (Token_Buffer, Program_Ptr, Save_Local_Index);
-            end if;
+         --  225
+         if Program_Ptr <= Positive (Token_Buffer.Length) then
+            Execute_Command (Token_Buffer, Program_Ptr, Save_Local_Index);
+         end if;
 
-            --  279
-            Done := Is_Command_End (Token_Buffer, Program_Ptr);
-            if not Done then
-               Program_Ptr := Program_Ptr + 1;
-            end if;
-         end loop;
-      else
-         Put_Line (Routine_Name & "Buffer is empty");
-      end if;
+         --  279
+         --              Done := Is_Command_End (Token_Buffer, Program_Ptr);
+         --              if not Done then
+         Program_Ptr := Program_Ptr + 1;
+         --              end if;
+      end loop;
+      --        else
+      --           Put_Line (Routine_Name & "Buffer is empty");
+      --        end if;
 
    exception
       when Constraint_Error =>
@@ -587,7 +585,7 @@ package body M_Basic is
       use Ada.Characters.Handling;
       use Conversion;
       use Flash;
---        Routine_Name : constant String := "M_Basic.Find_Subfunctionm ";
+      --        Routine_Name : constant String := "M_Basic.Find_Subfunctionm ";
       Index        : Natural := 0;
       Subfun       : Unbounded_String;
       Pos1         : Natural;
@@ -745,18 +743,18 @@ package body M_Basic is
       Pos := To_Pointer (Sys_A);
    end Inc_Ptr;
 
-   function Is_Command_End (Command : String_Buffer; Pos : Positive)
-                            return Boolean is
---        Routine_Name : constant String := "M_Basic.Is_Command_End ";
-      use String_Buffer_Package;
-      Item         : constant String := Command (Pos);
-      Done         : Boolean;
-   begin
-      Done := Item (Pos .. Pos + 1) = "00" or else
-        Item (Pos .. Pos + 1) = "ff";
-      return Done;
-
-   end Is_Command_End;
+   --     function Is_Command_End (Command : String_Buffer; Pos : Positive)
+   --                              return Boolean is
+   --        Routine_Name : constant String := "M_Basic.Is_Command_End ";
+   --        use String_Buffer_Package;
+   --        Item         : constant String := Command (Pos);
+   --        Done         : Boolean;
+   --     begin
+   --        Done := Item (Pos .. Pos + 1) = "00" or else
+   --          Item (Pos .. Pos + 1) = "ff";
+   --        return Done;
+   --
+   --     end Is_Command_End;
 
    --     function Is_Command_End (Command : Unbounded_String; Pos : in out Positive)
    --                              return Boolean is

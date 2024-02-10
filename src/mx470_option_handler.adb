@@ -1,7 +1,7 @@
 
 with Interfaces;
 
---  with Ada.Exceptions;
+with Ada.Containers;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Ada.Text_IO; use Ada.Text_IO;
 
@@ -24,7 +24,7 @@ with Support;
 package body MX470_Option_Handler is
 
    Restart_Exception : Exception;
-   UIOTGSTAT : Interfaces.Unsigned_16 := 0;
+   UIOTGSTAT : constant Interfaces.Unsigned_16 := 0;
 
    procedure Save_And_Reset;
 
@@ -302,11 +302,15 @@ package body MX470_Option_Handler is
    end Do_RTC;
 
    function Do_SD_Card (Command_Line : String_Buffer) return Boolean is
+      use Ada.Containers;
       use String_Buffer_Package;
+      Routine_Name : constant String := "MXX470_Option_Handler.Do_SD_Card ";
       Found : constant Boolean :=
         Check_String (Element (Command_Line, 1), "SDCARD");
    begin
-      if Found then
+      Put_Line (Routine_Name & "Command_Line");
+      Support.Print_Buffer (Command_Line);
+      if Found and then Length (Command_Line) > 1 then
          if Check_String (Element (Command_Line, 2), "DISABLE") then
             Flash.Option.SDCARD_CS := 0;
             Flash.Option.SD_CD := 0;
@@ -327,7 +331,7 @@ package body MX470_Option_Handler is
    function Other_Options return Boolean is
       use Global;
       use String_Buffer_Package;
-      Routine_Name : constant String := "MX470_Option_Handler.Other_Options ";
+--        Routine_Name : constant String := "MX470_Option_Handler.Other_Options ";
       Subfunction  : String_Buffer := Command_Line;
       Result       : Boolean := False;
    begin
@@ -341,7 +345,6 @@ package body MX470_Option_Handler is
         Do_Console (Command_Line) or else
         Do_RTC (Command_Line) or else
         Do_List (Command_Line);
-      Put_Line (Routine_Name & "Done");
 
       return Result;
 
