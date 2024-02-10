@@ -3,7 +3,7 @@ package Configuration is
 
    Debug_Mode        : Boolean := False;
    Simulation_Mode   : Boolean := True;
-   Bus_Speed         : Positive := 30000000;
+   Bus_Speed         : Natural := 30000000;
 
 --  The main clock frequency for the chip at bootup, it can be changed by the CPU command
  CLOCKFREQ        : Integer := 100000000;  --  This is set in in Configuration Bits.h

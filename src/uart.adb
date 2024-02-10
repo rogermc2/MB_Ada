@@ -7,6 +7,7 @@ package body UART is
       Or_Val : constant Unsigned_8 := UART_Enable_Mode'Enum_Rep (L) or
         UART_Enable_Mode'Enum_Rep (R);
    begin
+
       return UART_Enable_Mode'Enum_Val (Or_Val);
 
    end "or";
@@ -24,6 +25,7 @@ package body UART is
             UART_Registers (UART_Module'Enum_Rep (ID)).Mode.Reg := 1;
          when UART_Tx =>
             UART_Registers (UART_Module'Enum_Rep (ID)).Mode.Reg := 1;
+         when others => null;
       end case;
 
    end UART_Enable;

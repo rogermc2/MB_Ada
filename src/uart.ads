@@ -7,13 +7,19 @@ package UART is
                          UART3 => unsigned_8 (2), UART4 => unsigned_8 (3),
                          UART5 => unsigned_8 (4), UART6 => unsigned_8 (5));
 
-   type UART_Enable_Mode is (UART_Disable, UART_Peripheral,
-                             UART_Rx, UART_Tx, UART_Enable);
-   for UART_Enable_Mode use (UART_Disable => unsigned_8 (0),
-                            UART_Peripheral => unsigned_8 (1),
-                            UART_Rx => unsigned_8 (2),
-                            UART_Tx => unsigned_8 (4),
-                            UART_Enable => unsigned_8 (16#80#));
+   type UART_Enable_Mode is (UART_Disable, UART_Peripheral, UART_Rx, UART_Tx,
+                             UART_Enable, UART_Enable_or_UART_Peripheral,
+                            UART_Enable_or_UART_Rx, UART_Enable_or_UART_Tx);
+   for UART_Enable_Mode use
+     (UART_Disable => unsigned_8 (0),
+      UART_Peripheral => unsigned_8 (1),
+      UART_Rx => unsigned_8 (2),
+      UART_Tx => unsigned_8 (4),
+      UART_Enable => unsigned_8 (16#80#),
+      UART_Enable_or_UART_Peripheral => unsigned_8 (16#81#),
+      UART_Enable_or_UART_Rx => unsigned_8 (16#82#),
+      UART_Enable_or_UART_Tx => unsigned_8 (16#84#));
+
    type Register_Set is record
       Reg   : unsigned_8 := 0;
       Clear : unsigned_8 := 0;
