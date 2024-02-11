@@ -1,5 +1,6 @@
 
-with  Interfaces.C;
+with Interfaces.C;
+with Interfaces.C.Extensions;
 
 with P32mx470f512h; use P32mx470f512h;
 
@@ -11,13 +12,15 @@ package body Int_3xx_4xx_Legacy is
 
    end mINT0_Clear_Int_Flag;
 
-   function mINT0_Get_Int_Flag return Unsigned_16 is
+   function mINT0_Get_Int_Flag return Boolean is
+      use Interfaces.C.Extensions;
    begin
-      return IFS0bits.INT0IF;
+
+      return IFS0bits.anon5420.INT0IF = 1;
 
    end mINT0_Get_Int_Flag;
 
-   function mINT0_Get_Int_Enable return Unsigned_16 is
+      function mINT0_Get_Int_Enable return Unsigned_16 is
    begin
       return IEC0bits.INT0IE;
 

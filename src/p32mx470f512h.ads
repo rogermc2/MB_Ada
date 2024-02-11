@@ -8081,6 +8081,7 @@ package P32mx470f512h is
       w : aliased unsigned;  -- p32mx470f512.h:3226
    end record
      with Convention => C_Pass_By_Copy;
+
    type uu_IFS0bits_t (discr : unsigned := 0) is record
       case discr is
          when 0 => anon5420 : aliased uu_IFS0bits_t_struct1704;  -- p32mx470f512.h:3224
@@ -15887,25 +15888,25 @@ package P32mx470f512h is
    IFS0_INT4IF_LENGTH   : constant Unsigned := 1;
 
    --  p32mx470f512.h:12797
-IEC0_T4IE_POSITION      : constant Unsigned := 16#13#;
-IEC0_T4IE_MASK          : constant Unsigned := 16#80000#;
-IEC0_T4IE_LENGTH        : constant Unsigned := 1;
+   IEC0_T4IE_POSITION      : constant Unsigned := 16#13#;
+   IEC0_T4IE_MASK          : constant Unsigned := 16#80000#;
+   IEC0_T4IE_LENGTH        : constant Unsigned := 1;
 
-IEC0_IC4EIE_POSITION    : constant Unsigned := 16#14#;
-IEC0_IC4EIE_MASK        : constant Unsigned := 16#100000#;
-IEC0_IC4EIE_LENGTH      : constant Unsigned := 1;
+   IEC0_IC4EIE_POSITION    : constant Unsigned := 16#14#;
+   IEC0_IC4EIE_MASK        : constant Unsigned := 16#100000#;
+   IEC0_IC4EIE_LENGTH      : constant Unsigned := 1;
 
-IEC0_IC4IE_POSITION     : constant Unsigned := 16#15#;
-IEC0_IC4IE_MASK         : constant Unsigned := 16#200000#;
-IEC0_IC4IE_LENGTH       : constant Unsigned := 1;
+   IEC0_IC4IE_POSITION     : constant Unsigned := 16#15#;
+   IEC0_IC4IE_MASK         : constant Unsigned := 16#200000#;
+   IEC0_IC4IE_LENGTH       : constant Unsigned := 1;
 
-IEC0_OC4IE_POSITION     : constant Unsigned := 16#16#;
-IEC0_OC4IE_MASK         : constant Unsigned := 16#400000#;
-IEC0_OC4IE_LENGTH       : constant Unsigned := 1;
+   IEC0_OC4IE_POSITION     : constant Unsigned := 16#16#;
+   IEC0_OC4IE_MASK         : constant Unsigned := 16#400000#;
+   IEC0_OC4IE_LENGTH       : constant Unsigned := 1;
 
-IEC0_INT4IE_POSITION    : constant Unsigned := 16#17#;
-IEC0_INT4IE_MASK        : constant Unsigned := 16#800000#;
-IEC0_INT4IE_LENGTH      : constant Unsigned := 1;
+   IEC0_INT4IE_POSITION    : constant Unsigned := 16#17#;
+   IEC0_INT4IE_MASK        : constant Unsigned := 16#800000#;
+   IEC0_INT4IE_LENGTH      : constant Unsigned := 1;
 
    --  p32mx470f512.h:13165
    IPC4_T4IS_POSITION : constant Unsigned := 0;
@@ -15923,5 +15924,9 @@ IEC0_INT4IE_LENGTH      : constant Unsigned := 1;
    IPC4_IC4IP_POSITION : constant Unsigned := 16#0000000A#;
    IPC4_IC4IP_MASK     : constant Unsigned := 16#00001C00#;
    IPC4_IC4IP_LENGTH   : constant Unsigned := 3;
+
+   IFS0_INT0IF_POSITION : constant Unsigned := 3;
+   IFS0_INT0IF_MASK     : constant Unsigned := 8;
+   IFS0_INT0IF_LENGTH   : constant Unsigned := 1;
 
 end P32mx470f512h;
