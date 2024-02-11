@@ -81,7 +81,7 @@ package body External is
 
    end Ext_Config;
 
-   procedure Init_Ext_IO is
+   procedure Init_Ext_IO (Config, Option : Natural) is
    begin
       for index in 1 .. IO_Ports.Num_Pins loop
          if Check_Pin (index, CP_NOABORT) then
