@@ -22,4 +22,7 @@ OUT_FN_PPS1_OC1         : constant Unsigned_32 := 5;  --  RPn tied to OC1
 --                                                6  -   RESERVED
 OUT_FN_PPS1_C2OUT       : constant Unsigned_32 := 7;  --  RPn tied to C2OUT
 
+   procedure PPS_Input (Group : Natural; Pin, Func : String);
+   procedure PPS_Output (Group : Natural; Pin, Func : String);
+
 end PPS;
