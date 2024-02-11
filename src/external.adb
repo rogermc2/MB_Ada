@@ -75,7 +75,7 @@ package body External is
 
          --  otherwise make sure that interrupts are disabled in case we are
          --  changing from an interrupt input
-      elsif Pin = INT1PIN then
+      elsif Pin = IO_Ports.INT1PIN then
          null;
       end if;
 
