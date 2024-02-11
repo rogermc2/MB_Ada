@@ -11479,9 +11479,9 @@ volatile __DEVCFG0bits_t DEVCFG0bits __asm__ ("DEVCFG0");
 /* #define _IEC0_CS1IE_MASK                         0x00000004 */
 /* #define _IEC0_CS1IE_LENGTH                       0x00000001 */
 
-/* #define _IEC0_INT0IE_POSITION                    0x00000003 */
-/* #define _IEC0_INT0IE_MASK                        0x00000008 */
-/* #define _IEC0_INT0IE_LENGTH                      0x00000001 */
+#define _IEC0_INT0IE_POSITION                    0x00000003
+#define _IEC0_INT0IE_MASK                        0x00000008
+#define _IEC0_INT0IE_LENGTH                      0x00000001
 
 /* #define _IEC0_T1IE_POSITION                      0x00000004 */
 /* #define _IEC0_T1IE_MASK                          0x00000010 */

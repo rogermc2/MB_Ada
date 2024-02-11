@@ -15925,6 +15925,10 @@ package P32mx470f512h is
    IPC4_IC4IP_MASK     : constant Unsigned := 16#00001C00#;
    IPC4_IC4IP_LENGTH   : constant Unsigned := 3;
 
+   IEC0_T1IE_POSITION   : constant Unsigned := 4;
+   IEC0_T1IE_MASK       : constant Unsigned := 16#00000010#;
+   IEC0_T1IE_LENGTH     : constant Unsigned := 1;
+
    IFS0_INT0IF_POSITION : constant Unsigned := 3;
    IFS0_INT0IF_MASK     : constant Unsigned := 8;
    IFS0_INT0IF_LENGTH   : constant Unsigned := 1;
