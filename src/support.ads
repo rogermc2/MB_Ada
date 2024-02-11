@@ -76,6 +76,7 @@ package Support is
    procedure Copy_Slice (Buffer : in out String_Buffer;
                          Pos1   : in out Positive; Pos2 : Positive);
    procedure Do_PIN;
+   procedure Dynamic_Equation;
    procedure Execute_MM_Basic;
    procedure Initialize;
    function Is_Integer (Term : String) return Boolean;
