@@ -87,7 +87,6 @@ package body Support is
       type Variable_Array is array (Natural range <>) of Integer;
       Variables : Variable_Array (1 .. 100); -- Example size
 
-      --  Function to convert string to integer
       function To_Integer(Str : String) return Integer is
       begin
          return Integer'Value(Str);
@@ -97,17 +96,16 @@ package body Support is
             return 0; -- Or handle error as needed
       end To_Integer;
 
-      --  Function to perform the equation
-      procedure Perform_Equation(Source_Index, Target_Index : Natural) is
+      procedure Perform_Equation (Source_Index, Target_Index : Natural) is
       begin
-         Variables(Target_Index) := Variables(Source_Index);
+         Variables (Target_Index) := Variables (Source_Index);
       end Perform_Equation;
 
       Var_16_Index : constant Natural := 16;
       Var_21_Index : constant Natural := 21;
    begin
       --  Assigning a value to Var_16
-      Variables(Var_16_Index) := 42;
+      Variables (Var_16_Index) := 42;
 
       --  Performing the equation Var_21 := Var_16
       Perform_Equation (Var_16_Index, Var_21_Index);

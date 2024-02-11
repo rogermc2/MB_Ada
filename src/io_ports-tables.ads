@@ -1,6 +1,4 @@
 
-with Interfaces;  use Interfaces;
-
 package IO_Ports.Tables is
 
    Addr_Port_A : constant Unsigned_32 := Unsigned_32 (16#BF886020#);

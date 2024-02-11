@@ -62,6 +62,68 @@ package body IO_Ports is
 
    end Console_Tx_Pin;
 
+   --  Define the counting pin numbers.
+   --  INT1PIN refers to the PIC32 external interrupt #1.
+   function INT1PIN return Positive is
+   begin
+      if Has_100_Pins then
+         return 76;
+      else
+         return 49;
+      end if;
+
+      end INT1PIN;
+
+--  INT1PIN_OPEN        PPSInput(4, INT1, RPD1)
+--  INT1PIN_CLOSE       PPSInput(4, INT1, NULL)
+   function INT1Pin_Close return Positive is
+   begin
+      return PPS_Input (4, INT1, 0);
+
+      end INT1Pin_Close;
+
+   function INT1Pin_Open return Positive is
+   begin
+      return PPS_Input (4, INT1, RPD1);
+
+   end INT1Pin_Open;
+
+   function INT2PIN return Positive is
+   begin
+      if Has_100_Pins then
+         return 81;
+      else
+         return 52;
+      end if;
+
+      end INT2PIN;
+--  INT2PIN_OPEN        PPSInput(3, INT2, RPD4)
+--  INT2PIN_CLOSE       PPSInput(3, INT2, NULL)
+
+   function INT3PIN return Positive is
+   begin
+      if Has_100_Pins then
+         return 34;
+      else
+         return 23;
+      end if;
+
+   end INT3PIN;
+
+--  INT3PIN_OPEN        PPSInput(1, INT3, RPB10)
+--  INT3PIN_CLOSE       PPSInput(1, INT3, NULL)
+
+   function INT4PIN return Positive is
+   begin
+      if Has_100_Pins then
+         return 78;
+      else
+         return 51;
+      end if;
+
+      end INT4PIN;
+--  INT4PIN_OPEN        PPSInput(2, INT4, RPD3)
+--  INT4PIN_CLOSE       PPSInput(2, INT4, NULL)
    function Num_Pins return Positive is
    begin
       if Has_100_Pins then

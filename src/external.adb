@@ -9,6 +9,23 @@ with Misc_MX470;
 
 package body External is
 
+   --  Define the counting pin numbers.
+   --  INT1PIN refers to the PIC32 external interrupt #1.
+function INT1PIN             (HAS_100PINS ? 76 : 49)
+INT1PIN_OPEN        PPSInput(4, INT1, RPD1)
+INT1PIN_CLOSE       PPSInput(4, INT1, NULL)
+
+INT2PIN             (HAS_100PINS ? 81 : 52)
+INT2PIN_OPEN        PPSInput(3, INT2, RPD4)
+INT2PIN_CLOSE       PPSInput(3, INT2, NULL)
+
+INT3PIN             (HAS_100PINS ? 34 : 23)
+INT3PIN_OPEN        PPSInput(1, INT3, RPB10)
+INT3PIN_CLOSE       PPSInput(1, INT3, NULL)
+
+INT4PIN             (HAS_100PINS ? 78 : 51)
+INT4PIN_OPEN        PPSInput(2, INT4, RPD3)
+INT4PIN_CLOSE       PPSInput(2, INT4, NULL)
    function Check_Pin (Pin : Integer; Action : Unsigned_16) return Boolean is
       use IO_Ports;
       use IO_Ports.Tables;
@@ -66,9 +83,29 @@ package body External is
    end Check_Pin;
    pragma Warnings (On);
 
+ procedure Ext_Config (Pin, Config, Option : Natural) is
+   begin
+      Check_Pin (Pin,CP_IGNORE_INUSE or CP_IGNORE_RESERVED);
+
+      if Config >= EXT_COM_RESERVED then
+         Ext_Current_Config (Pin) := Config;
+
+         --  otherwise make sure that interrupts are disabled in case we are
+         --  changing from an interrupt input
+      elsif Pin = INT1PIN then
+         null;
+      end if;
+
+   end Ext_Config;
+
    procedure Init_Ext_IO is
    begin
-      null;
+      for index in 1 .. IO_Ports.Num_Pins loop
+         if Check_Pin (index, CP_NOABORT) then
+            Ext_Config (index, Config, Option);
+         end if;
+      end loop;
+
    end Init_Ext_IO;
 
    function Pin_Read (Pin : Integer) return Integer is
