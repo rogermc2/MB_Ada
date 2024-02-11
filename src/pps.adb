@@ -4,8 +4,6 @@ with Ada.Containers.Formal_Ordered_Maps;
 package body PPS is
 
    type String4 is new String (1 .. 4);
-   package Pin_Map is new
-     Ada.Containers.Formal_Ordered_Maps (Positive, String4);
 
    type Channels_Array is array (Natural range <>) of Integer;
    Groups : Channels_Array (1 .. 5);

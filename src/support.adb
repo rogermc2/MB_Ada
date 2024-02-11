@@ -83,37 +83,6 @@ package body Support is
       null;
    end Do_PIN;
 
-   procedure Dynamic_Equation is
-      type Variable_Array is array (Natural range <>) of Integer;
-      Variables : Variable_Array (1 .. 100); -- Example size
-
-      function To_Integer(Str : String) return Integer is
-      begin
-         return Integer'Value(Str);
-
-      exception
-         when others =>
-            return 0; -- Or handle error as needed
-      end To_Integer;
-
-      procedure Perform_Equation (Source_Index, Target_Index : Natural) is
-      begin
-         Variables (Target_Index) := Variables (Source_Index);
-      end Perform_Equation;
-
-      Var_16_Index : constant Natural := 16;
-      Var_21_Index : constant Natural := 21;
-   begin
-      --  Assigning a value to Var_16
-      Variables (Var_16_Index) := 42;
-
-      --  Performing the equation Var_21 := Var_16
-      Perform_Equation (Var_16_Index, Var_21_Index);
-
-      Put_Line("Value of Var_21: " & Integer'Image(Variables(Var_21_Index)));
-
-   end Dynamic_Equation;
-
    procedure Execute_MM_Basic is
       Routine_Name  : constant String := "Support.Execute_MM_Basic ";
       Startup_Token : constant String := "MM.Startup";
