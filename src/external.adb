@@ -73,8 +73,8 @@ package body External is
       if Config >= EXT_COM_RESERVED then
          Ext_Current_Config (Pin) := Config;
 
-         --  otherwise make sure that interrupts are disabled in case we are
-         --  changing from an interrupt input
+         --  925 otherwise make sure that interrupts are disabled in case we
+         --  are changing from an interrupt input
       elsif Pin = IO_Ports.INT1PIN then
          null;
       end if;
