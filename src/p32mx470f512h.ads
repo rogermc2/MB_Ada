@@ -15992,20 +15992,20 @@ package P32mx470f512h is
    IEC0_INT4IE_LENGTH      : Unsigned;
    pragma Import (C, IEC0_INT4IE_LENGTH, "_IEC0_INT4IE_LENGTH");
 
-   --  p32mx470f512.h:11798
-   IPC0_INT0IS_POSITION         : Unsigned;
+   --  p32mx470f512.h:11794
+IPC0_INT0IS_POSITION        : Unsigned;
    pragma Import (C, IPC0_INT0IS_POSITION, "_IPC0_INT0IS_POSITION");
-   IPC0_INT0IS_MASK             : Unsigned;
+IPC0_INT0IS_MASK        : Unsigned;
    pragma Import (C, IPC0_INT0IS_MASK, "_IPC0_INT0IS_MASK");
-   IPC0_INT0IS_LENGTH           : Unsigned;
+   IPC0_INT0IS_LENGTH        : Unsigned;
    pragma Import (C, IPC0_INT0IS_LENGTH, "_IPC0_INT0IS_LENGTH");
 
    --  p32mx470f512.h:11798
-   IPC0_INT0IP_POSITION    : Unsigned;
+   IPC0_INT0IP_POSITION         : Unsigned;
    pragma Import (C, IPC0_INT0IP_POSITION, "_IPC0_INT0IP_POSITION");
-   IPC0_INT0IP_MASK        : Unsigned;
+   IPC0_INT0IP_MASK             : Unsigned;
    pragma Import (C, IPC0_INT0IP_MASK, "_IPC0_INT0IP_MASK");
-   IPC0_INT0IP_LENGTH      : Unsigned;
+   IPC0_INT0IP_LENGTH           : Unsigned;
    pragma Import (C, IPC0_INT0IP_LENGTH, "_IPC0_INT0IP_LENGTH");
 
    --  p32mx470f512.h:11918
