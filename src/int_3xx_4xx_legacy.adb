@@ -67,21 +67,21 @@ package body Int_3xx_4xx_Legacy is
 
    end mINT0_Get_Int_SubPriority;
 
-   procedure mINT0_SetEdgeMode (Mode : Interfaces.Unsigned_16) is
+   procedure mINT0_Set_Edge_Mode (Mode : Interfaces.Unsigned_16) is
       use Interfaces;
       use Interfaces.C;
    begin
       INTCONCLR := 2 * INTCON_INT0EP_POSITION;
-      INTCONSET :=unsigned
+      INTCONSET := unsigned
         (Shift_Left (Mode, Natural (INTCON_INT0EP_POSITION)));
 
-   end mINT0_SetEdgeMode;
+   end mINT0_Set_Edge_Mode;
 
-   function mINT0_GetEdgeMode return Interfaces.Unsigned_16 is
+   function mINT0_Get_Edge_Mode return Interfaces.Unsigned_16 is
    begin
       return Interfaces.Unsigned_16 (INTCONbits.anon5362.INT0EP);
 
-   end mINT0_GetEdgeMode;
+   end mINT0_Get_Edge_Mode;
 
    procedure mOC1_Clear_Int_Flag is
    begin
@@ -96,14 +96,22 @@ package body Int_3xx_4xx_Legacy is
    end mOC4_Clear_Int_Flag;
 
    procedure mOC1_Int_Enable (Enable : Interfaces.Unsigned_32) is
+      use Interfaces;
+      use Interfaces.C;
    begin
-      null;
+        IEC0CLR := IEC0_OC1IE_MASK;
+      IEC1SET := unsigned
+        (Shift_Left (Enable, Natural (IEC0_OC1IE_POSITION)));
 
    end mOC1_Int_Enable;
 
    procedure mOC4_Int_Enable (Enable : Interfaces.Unsigned_32) is
+      use Interfaces;
+      use Interfaces.C;
    begin
-      null;
+        IEC0CLR := IEC0_OC4IE_MASK;
+      IEC0SET := unsigned
+        (Shift_Left (Enable, Natural (IEC0_OC4IE_POSITION)));
 
    end mOC4_Int_Enable;
 
