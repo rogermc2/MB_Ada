@@ -15858,7 +15858,8 @@ package P32mx470f512h is
    --  Base Addresses for Peripherals
 
    --  p32mx470f512.h:7066
-   OC4CON_ON_POSITION : constant Unsigned := 16#F#;
+   OC4CON_ON_POSITION : Unsigned;
+   pragma Import (C, OC4CON_ON_POSITION, "_OC4CON_ON_POSITION");
    OC4CON_ON_MASK     : constant Unsigned := 16#8000#;
    OC4CON_ON_LENGTH   : constant Unsigned := 1;
 

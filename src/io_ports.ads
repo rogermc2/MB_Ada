@@ -38,6 +38,8 @@ package IO_Ports is
    function INT2PIN return Positive;
    function INT3PIN return Positive;
    function INT4PIN return Positive;
+   procedure INT1Pin_Close;
+   procedure INT1Pin_Open;
    procedure PWM_Ch1_Close;
    procedure PWM_Ch2_Close;
    procedure PWM_Ch3_Close;

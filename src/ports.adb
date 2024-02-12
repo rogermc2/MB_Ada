@@ -1,9 +1,11 @@
 
 with P32mx470f512h; use P32mx470f512h;
+with Int_3xx_4xx_Legacy;
 
 package body Ports is
 
    procedure Config_INT0 (Config : Unsigned_16) is
+      use Int_3xx_4xx_Legacy;
    begin
       mINT0_Clear_Int_Flag;
       mINT0_Set_Int_Priority (Config and 7);

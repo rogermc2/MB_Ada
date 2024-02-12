@@ -25,14 +25,14 @@ package body Int_3xx_4xx_Legacy is
 
    end mINT0_Get_Int_Enable;
 
-   procedure mINT0_Int_Enable (Enable : Positive) is
+   procedure mINT0_Int_Enable (Enable : Unsigned_16) is
    begin
       IEC0CLR := IEC0_INT0IE_MASK;
-      IEC0SET := Shift_Left (enable, IEC0_INT0IE_POSITION);
+      IEC0SET := Shift_Left (Enable, IEC0_INT0IE_POSITION);
 
    end mINT0_Int_Enable;
 
-   procedure mINT0_Set_Int_Priority (Priority : Natural) is
+   procedure mINT0_Set_Int_Priority (Priority : Unsigned_16) is
    begin
       IPC0CLR := IPC0_INT0IP_MASK;
       IPC0SET := Shift_Left (Priority, IPC0_INT0IP_POSITION);

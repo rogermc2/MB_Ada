@@ -6,8 +6,8 @@ package Int_3xx_4xx_Legacy is
    procedure mINT0_Clear_Int_Flag;
    function mINT0_Get_Int_Flag return Boolean;
    function mINT0_Get_Int_Enable return Boolean;
-   procedure mINT0_Int_Enable (Enable : Positive);
-   procedure mINT0_Set_Int_Priority (Priority : Natural);
+   procedure mINT0_Int_Enable (Enable : Unsigned_16);
+   procedure mINT0_Set_Int_Priority (Priority : Unsigned_16);
    function mINT0_Get_Int_Priority  return Unsigned_16;
    procedure mINT0_Set_Int_SubPriority (Subpriority : Unsigned_16);
    function mINT0_Get_Int_SubPriority return Unsigned_16;

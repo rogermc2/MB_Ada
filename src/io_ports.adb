@@ -9,35 +9,35 @@ package body IO_Ports is
    procedure Com1_En_PPS_Close is
       use PPS;
    begin
-         PPS_Output ("4", "RPB14", Character'Image (ASCII.NUL));
+         PPS_Output (4, "RPB14", Character'Image (ASCII.NUL));
 
    end Com1_En_PPS_Close;
 
    procedure Com1_Tx_PPS_Close is
       use PPS;
    begin
-         PPS_Output ("2", "RPB1", Character'Image (ASCII.NUL));
+         PPS_Output (2, "RPB1", Character'Image (ASCII.NUL));
 
    end Com1_Tx_PPS_Close;
 
    procedure Com2_Tx_PPS_Close is
       use PPS;
    begin
-         PPS_Output ("1", "RPB5", Character'Image (ASCII.NUL));
+         PPS_Output (1, "RPB5", Character'Image (ASCII.NUL));
 
    end Com2_Tx_PPS_Close;
 
    procedure Com3_Tx_PPS_Close is
       use PPS;
    begin
-         PPS_Output ("3", "RPB0", Character'Image (ASCII.NUL));
+         PPS_Output (3, "RPB0", Character'Image (ASCII.NUL));
 
    end Com3_Tx_PPS_Close;
 
    procedure Com4_Tx_PPS_Close is
       use PPS;
    begin
-         PPS_Output ("2", "RPF0", Character'Image (ASCII.NUL));
+         PPS_Output (2, "RPF0", Character'Image (ASCII.NUL));
 
    end Com4_Tx_PPS_Close;
 
@@ -76,15 +76,15 @@ package body IO_Ports is
 
 --  INT1PIN_OPEN        PPSInput(4, INT1, RPD1)
 --  INT1PIN_CLOSE       PPSInput(4, INT1, NULL)
-   function INT1Pin_Close return Positive is
+   procedure INT1Pin_Close is
    begin
-      return PPS_Input (4, INT1, 0);
+      PPS.PPS_Input (4, "INT1", Character'Image (ASCII.NUL));
 
       end INT1Pin_Close;
 
-   function INT1Pin_Open return Positive is
+   procedure INT1Pin_Open is
    begin
-      return PPS_Input (4, INT1, RPD1);
+      PPS.PPS_Input (4, "INT1", "RPD1");
 
    end INT1Pin_Open;
 
@@ -137,42 +137,42 @@ package body IO_Ports is
    procedure PWM_Ch1_Close is
       use PPS;
    begin
-         PPS_Output ("4", "RPB0", Character'Image (ASCII.NUL));
+         PPS_Output (4, "RPB0", Character'Image (ASCII.NUL));
 
    end PWM_Ch1_Close;
 
    procedure PWM_Ch2_Close is
       use PPS;
    begin
-         PPS_Output ("2", "RPB1", Character'Image (ASCII.NUL));
+         PPS_Output (2, "RPB1", Character'Image (ASCII.NUL));
 
    end PWM_Ch2_Close;
 
    procedure PWM_Ch3_Close is
       use PPS;
    begin
-         PPS_Output ("3", "RPB2", Character'Image (ASCII.NUL));
+         PPS_Output (3, "RPB2", Character'Image (ASCII.NUL));
 
    end PWM_Ch3_Close;
 
    procedure PWM_Ch4_Close is
       use PPS;
    begin
-         PPS_Output ("1", "RPB15", Character'Image (ASCII.NUL));
+         PPS_Output (1, "RPB15", Character'Image (ASCII.NUL));
 
    end PWM_Ch4_Close;
 
    procedure PWM_Ch5_Close is
       use PPS;
    begin
-         PPS_Output ("3", "RPB13", Character'Image (ASCII.NUL));
+         PPS_Output (3, "RPB13", Character'Image (ASCII.NUL));
 
    end PWM_Ch5_Close;
 
    procedure SPI_PPS_Close is
       use PPS;
    begin
-         PPS_Output ("4", "RPG9", Character'Image (ASCII.NUL));
+         PPS_Output (4, "RPG9", Character'Image (ASCII.NUL));
 
    end SPI_PPS_Close;
 
@@ -180,9 +180,9 @@ package body IO_Ports is
       use PPS;
    begin
       if Has_100_Pins then
-         PPS_Output ("1", "RPG8", Character'Image (ASCII.NUL));
+         PPS_Output (1, "RPG8", Character'Image (ASCII.NUL));
       else
-         PPS_Output ("2", "RPG8", Character'Image (ASCII.NUL));
+         PPS_Output (2, "RPG8", Character'Image (ASCII.NUL));
          end if;
 
    end SPI2_PPS_Close;
