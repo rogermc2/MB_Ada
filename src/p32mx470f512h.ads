@@ -2,7 +2,6 @@
 --  sudo gcc -c -fdump-ada-spec -C p32mx470f512.h
 
 pragma Ada_2012;
---  pragma Style_Checks (Off);
 pragma Warnings ("U");
 
 with Interfaces.C; use Interfaces.C;
@@ -15929,12 +15928,20 @@ package P32mx470f512h is
    IFS0_INT0IF_LENGTH      : Unsigned;
    pragma Import (C, IFS0_INT0IF_LENGTH, "_IFS0_INT0IF_LENGTH");
 
+   --  p32mx470f512.h:11481
+   IEC0_INT0IE_POSITION    : Unsigned;
+   pragma Import (C, IEC0_INT0IE_POSITION, "_IEC0_INT0IE_POSITION");
+   IEC0_INT0IE_MASK        : Unsigned;
+   pragma Import (C, IEC0_INT0IE_MASK, "_IEC0_INT0IE_MASK");
+   IEC0_INT0IE_LENGTH      : Unsigned;
+   pragma Import (C, IEC0_INT0IE_LENGTH, "_IEC0_INT0IE_LENGTH");
+
    --  p32mx470f512.h:11486
-   IEC0_T1IE_POSITION   : Unsigned;
+   IEC0_T1IE_POSITION         : Unsigned;
    pragma Import (C, IEC0_T1IE_POSITION, "_IEC0_T1IE_POSITION");
-   IEC0_T1IE_MASK       : Unsigned;
+   IEC0_T1IE_MASK             : Unsigned;
    pragma Import (C, IEC0_T1IE_MASK, "_IIEC0_T1IE_MASK");
-   IEC0_T1IE_LENGTH     : Unsigned;
+   IEC0_T1IE_LENGTH           : Unsigned;
    pragma Import (C, IEC0_T1IE_LENGTH, "_IEC0_T1IE_LENGTH");
 
    --  p32mx470f512.h:11550
@@ -15969,12 +15976,20 @@ package P32mx470f512h is
    IEC0_INT4IE_LENGTH      : Unsigned;
    pragma Import (C, IEC0_INT4IE_LENGTH, "_IEC0_INT4IE_LENGTH");
 
+   --  p32mx470f512.h:11798
+   IPC0_INT0IP_POSITION    : Unsigned;
+   pragma Import (C, IPC0_INT0IP_POSITION, "_IPC0_INT0IP_POSITION");
+   IPC0_INT0IP_MASK        : Unsigned;
+   pragma Import (C, IPC0_INT0IP_MASK, "_IPC0_INT0IP_MASK");
+   IPC0_INT0IP_LENGTH      : Unsigned;
+   pragma Import (C, IPC0_INT0IP_LENGTH, "_IPC0_INT0IP_LENGTH");
+
    --  p32mx470f512.h:11918
-   IPC4_T4IP_POSITION : Unsigned;
+   IPC4_T4IP_POSITION           : Unsigned;
    pragma Import (C, IPC4_T4IP_POSITION, "_IPC4_T4IP_POSITION");
-   IPC4_T4IP_MASK     : Unsigned;
+   IPC4_T4IP_MASK               : Unsigned;
    pragma Import (C, IPC4_T4IP_MASK, "_IPC4_T4IP_MASK");
-   IPC4_T4IP_LENGTH   : Unsigned;
+   IPC4_T4IP_LENGTH             : Unsigned;
    pragma Import (C, IPC4_T4IP_LENGTH, "_IPC4_T4IP_LENGTH");
 
    --  p32mx470f512.h:11922

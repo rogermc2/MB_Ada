@@ -25,46 +25,55 @@ package body Int_3xx_4xx_Legacy is
 
    end mINT0_Get_Int_Enable;
 
-   procedure mINT0_Int_Enable (Enable : Unsigned_16) is
+   procedure mINT0_Int_Enable (Enable : Interfaces.Unsigned_16) is
+      use Interfaces;
+      use Interfaces.C;
    begin
       IEC0CLR := IEC0_INT0IE_MASK;
-      IEC0SET := Shift_Left (Enable, IEC0_INT0IE_POSITION);
+      IEC0SET := unsigned (Shift_Left
+                           (Enable, Natural (IEC0_INT0IE_POSITION)));
 
    end mINT0_Int_Enable;
 
-   procedure mINT0_Set_Int_Priority (Priority : Unsigned_16) is
+   procedure mINT0_Set_Int_Priority (Priority : Interfaces.Unsigned_16) is
+      use Interfaces;
+      use Interfaces.C;
    begin
       IPC0CLR := IPC0_INT0IP_MASK;
-      IPC0SET := Shift_Left (Priority, IPC0_INT0IP_POSITION);
+      IPC0SET := unsigned
+        (Shift_Left (Priority, Natural (IPC0_INT0IP_POSITION)));
 
    end mINT0_Set_Int_Priority;
 
-   function mINT0_Get_Int_Priority  return Unsigned_16 is
+   function mINT0_Get_Int_Priority return Natural is
    begin
-      return IPC0bits.INT0IP;
+      return Natural (IPC0bits.anon5619.INT0IP);
+
    end mINT0_Get_Int_Priority;
 
-   procedure mINT0_Set_Int_SubPriority (Subpriority : Unsigned_16) is
+   procedure mINT0_Set_Int_SubPriority (Subpriority : Interfaces.Unsigned_16) is
+      use Interfaces;
    begin
       IPC0CLR := IPC0_INT0IS_MASK;
       IPC0SET := Shift_Left (Subpriority, IPC0_INT0IS_POSITION);
 
    end mINT0_Set_Int_SubPriority;
 
-   function mINT0_Get_Int_SubPriority return Unsigned_16 is
+   function mINT0_Get_Int_SubPriority return Interfaces.Unsigned_16 is
    begin
       return IPC0bits.INT0IS;
 
    end mINT0_Get_Int_SubPriority;
 
-   procedure mINT0_SetEdgeMode (Mode : Unsigned_16) is
+   procedure mINT0_SetEdgeMode (Mode : Interfaces.Unsigned_16) is
+      use Interfaces;
    begin
       INTCONCLR := 2 * INTCON_INT0EP_POSITION;
       INTCONSET := Shift_Left (Mode, INTCON_INT0EP_POSITION);
 
    end mINT0_SetEdgeMode;
 
-   function mINT0_GetEdgeMode return Unsigned_16 is
+   function mINT0_GetEdgeMode return Interfaces.Unsigned_16 is
    begin
       return INTCONbits.INT0EP;
 

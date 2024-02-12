@@ -74,8 +74,6 @@ package body IO_Ports is
 
       end INT1PIN;
 
---  INT1PIN_OPEN        PPSInput(4, INT1, RPD1)
---  INT1PIN_CLOSE       PPSInput(4, INT1, NULL)
    procedure INT1Pin_Close is
    begin
       PPS.PPS_Input (4, "INT1", Character'Image (ASCII.NUL));
@@ -97,8 +95,6 @@ package body IO_Ports is
       end if;
 
       end INT2PIN;
---  INT2PIN_OPEN        PPSInput(3, INT2, RPD4)
---  INT2PIN_CLOSE       PPSInput(3, INT2, NULL)
 
    function INT3PIN return Positive is
    begin
@@ -110,9 +106,6 @@ package body IO_Ports is
 
    end INT3PIN;
 
---  INT3PIN_OPEN        PPSInput(1, INT3, RPB10)
---  INT3PIN_CLOSE       PPSInput(1, INT3, NULL)
-
    function INT4PIN return Positive is
    begin
       if Has_100_Pins then
@@ -121,9 +114,8 @@ package body IO_Ports is
          return 51;
       end if;
 
-      end INT4PIN;
---  INT4PIN_OPEN        PPSInput(2, INT4, RPD3)
---  INT4PIN_CLOSE       PPSInput(2, INT4, NULL)
+   end INT4PIN;
+
    function Num_Pins return Positive is
    begin
       if Has_100_Pins then

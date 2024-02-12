@@ -11795,9 +11795,9 @@ volatile __DEVCFG0bits_t DEVCFG0bits __asm__ ("DEVCFG0");
 /* #define _IPC0_INT0IS_MASK                        0x03000000 */
 /* #define _IPC0_INT0IS_LENGTH                      0x00000002 */
 
-/* #define _IPC0_INT0IP_POSITION                    0x0000001A */
-/* #define _IPC0_INT0IP_MASK                        0x1C000000 */
-/* #define _IPC0_INT0IP_LENGTH                      0x00000003 */
+#define _IPC0_INT0IP_POSITION                    0x0000001A
+#define _IPC0_INT0IP_MASK                        0x1C000000
+#define _IPC0_INT0IP_LENGTH                      0x00000003
 
 /* #define _IPC0_w_POSITION                         0x00000000 */
 /* #define _IPC0_w_MASK                             0xFFFFFFFF */
