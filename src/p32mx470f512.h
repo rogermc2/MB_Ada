@@ -7063,9 +7063,9 @@ volatile __DEVCFG0bits_t DEVCFG0bits __asm__ ("DEVCFG0");
 /* #define _OC4CON_SIDL_MASK                        0x00002000 */
 /* #define _OC4CON_SIDL_LENGTH                      0x00000001 */
 
-/* #define _OC4CON_ON_POSITION                      0x0000000F */
-/* #define _OC4CON_ON_MASK                          0x00008000 */
-/* #define _OC4CON_ON_LENGTH                        0x00000001 */
+#define _OC4CON_ON_POSITION                      0x0000000F
+#define _OC4CON_ON_MASK                          0x00008000
+#define _OC4CON_ON_LENGTH                        0x00000001
 
 /* #define _OC4CON_OCM0_POSITION                    0x00000000 */
 /* #define _OC4CON_OCM0_MASK                        0x00000001 */
@@ -11247,21 +11247,21 @@ volatile __DEVCFG0bits_t DEVCFG0bits __asm__ ("DEVCFG0");
 /* #define _IFS0_T4IF_MASK                          0x00080000 */
 /* #define _IFS0_T4IF_LENGTH                        0x00000001 */
 
-/* #define _IFS0_IC4EIF_POSITION                    0x00000014 */
-/* #define _IFS0_IC4EIF_MASK                        0x00100000 */
-/* #define _IFS0_IC4EIF_LENGTH                      0x00000001 */
+#define _IFS0_IC4EIF_POSITION                    0x00000014
+#define _IFS0_IC4EIF_MASK                        0x00100000
+#define _IFS0_IC4EIF_LENGTH                      0x00000001
 
-/* #define _IFS0_IC4IF_POSITION                     0x00000015 */
-/* #define _IFS0_IC4IF_MASK                         0x00200000 */
-/* #define _IFS0_IC4IF_LENGTH                       0x00000001 */
+#define _IFS0_IC4IF_POSITION                     0x00000015
+#define _IFS0_IC4IF_MASK                         0x00200000
+#define _IFS0_IC4IF_LENGTH                       0x00000001
 
-/* #define _IFS0_OC4IF_POSITION                     0x00000016 */
-/* #define _IFS0_OC4IF_MASK                         0x00400000 */
-/* #define _IFS0_OC4IF_LENGTH                       0x00000001 */
+#define _IFS0_OC4IF_POSITION                     0x00000016
+#define _IFS0_OC4IF_MASK                         0x00400000
+#define _IFS0_OC4IF_LENGTH                       0x00000001
 
-/* #define _IFS0_INT4IF_POSITION                    0x00000017 */
-/* #define _IFS0_INT4IF_MASK                        0x00800000 */
-/* #define _IFS0_INT4IF_LENGTH                      0x00000001 */
+#define _IFS0_INT4IF_POSITION                    0x00000017
+#define _IFS0_INT4IF_MASK                        0x00800000
+#define _IFS0_INT4IF_LENGTH                      0x00000001
 
 /* #define _IFS0_T5IF_POSITION                      0x00000018 */
 /* #define _IFS0_T5IF_MASK                          0x01000000 */
@@ -11483,9 +11483,9 @@ volatile __DEVCFG0bits_t DEVCFG0bits __asm__ ("DEVCFG0");
 #define _IEC0_INT0IE_MASK                        0x00000008
 #define _IEC0_INT0IE_LENGTH                      0x00000001
 
-/* #define _IEC0_T1IE_POSITION                      0x00000004 */
-/* #define _IEC0_T1IE_MASK                          0x00000010 */
-/* #define _IEC0_T1IE_LENGTH                        0x00000001 */
+#define _IEC0_T1IE_POSITION                      0x00000004
+#define _IEC0_T1IE_MASK                          0x00000010
+#define _IEC0_T1IE_LENGTH                        0x00000001
 
 /* #define _IEC0_IC1EIE_POSITION                    0x00000005 */
 /* #define _IEC0_IC1EIE_MASK                        0x00000020 */
@@ -11547,17 +11547,17 @@ volatile __DEVCFG0bits_t DEVCFG0bits __asm__ ("DEVCFG0");
 /* #define _IEC0_T4IE_MASK                          0x00080000 */
 /* #define _IEC0_T4IE_LENGTH                        0x00000001 */
 
-/* #define _IEC0_IC4EIE_POSITION                    0x00000014 */
-/* #define _IEC0_IC4EIE_MASK                        0x00100000 */
-/* #define _IEC0_IC4EIE_LENGTH                      0x00000001 */
+#define _IEC0_IC4EIE_POSITION                    0x00000014
+#define _IEC0_IC4EIE_MASK                        0x00100000
+#define _IEC0_IC4EIE_LENGTH                      0x00000001
 
-/* #define _IEC0_IC4IE_POSITION                     0x00000015 */
-/* #define _IEC0_IC4IE_MASK                         0x00200000 */
-/* #define _IEC0_IC4IE_LENGTH                       0x00000001 */
+#define _IEC0_IC4IE_POSITION                     0x00000015
+#define _IEC0_IC4IE_MASK                         0x00200000
+#define _IEC0_IC4IE_LENGTH                       0x00000001
 
-/* #define _IEC0_OC4IE_POSITION                     0x00000016 */
-/* #define _IEC0_OC4IE_MASK                         0x00400000 */
-/* #define _IEC0_OC4IE_LENGTH                       0x00000001 */
+#define _IEC0_OC4IE_POSITION                     0x00000016
+#define _IEC0_OC4IE_MASK                         0x00400000
+#define _IEC0_OC4IE_LENGTH                       0x00000001
 
 /* #define _IEC0_INT4IE_POSITION                    0x00000017 */
 /* #define _IEC0_INT4IE_MASK                        0x00800000 */
