@@ -15860,92 +15860,145 @@ package P32mx470f512h is
    --  p32mx470f512.h:7066
    OC4CON_ON_POSITION : Unsigned;
    pragma Import (C, OC4CON_ON_POSITION, "_OC4CON_ON_POSITION");
-   OC4CON_ON_MASK     : constant Unsigned := 16#8000#;
-   OC4CON_ON_LENGTH   : constant Unsigned := 1;
+   OC4CON_ON_MASK     : Unsigned;
+   pragma Import (C, OC4CON_ON_MASK, "_OC4CON_ON_MASK");
+   OC4CON_ON_LENGTH   : Unsigned;
+   pragma Import (C, OC4CON_ON_LENGTH, "_OC4CON_ON_LENGTH");
 
    --  p32mx470f512.h:8289
-   OC2CON_ON_POSITION : constant Unsigned := 16#F#;
-   OC2CON_ON_MASK     : constant Unsigned := 16#8000#;
-   OC2CON_ON_LENGTH   : constant Unsigned := 1;
+   OC2CON_ON_POSITION : Unsigned;
+   pragma Import (C, OC2CON_ON_POSITION, "_OC2CON_ON_POSITION");
+   OC2CON_ON_MASK     : Unsigned;
+   pragma Import (C, OC2CON_ON_MASK, "_OC2CON_ON_MASK");
+   OC2CON_ON_LENGTH   : Unsigned;
+   pragma Import (C, OC2CON_ON_LENGTH, "_OC2CON_ON_LENGTH");
 
    --  p32mx470f512.h:11250
-   IFS0_IC4EIF_POSITION : constant Unsigned := 16#14#;
-   IFS0_IC4EIF_MASK     : constant Unsigned := 16#100000#;
-   IFS0_IC4EIF_LENGTH   : constant Unsigned := 1;
+   IFS0_IC4EIF_POSITION : Unsigned;
+   pragma Import (C, IFS0_IC4EIF_POSITION, "_IFS0_IC4EIF_POSITION");
+   IFS0_IC4EIF_MASK     : Unsigned;
+   pragma Import (C, IFS0_IC4EIF_MASK, "_IFS0_IC4EIF_MASK");
+   IFS0_IC4EIF_LENGTH   : Unsigned;
+   pragma Import (C, IFS0_IC4EIF_LENGTH, "_IFS0_IC4EIF_LENGTH");
 
    --  p32mx470f512.h:11254
-   IFS0_IC4IF_POSITION  : constant Unsigned := 16#15#;
-   IFS0_IC4IF_MASK      : constant Unsigned := 16#200000#;
-   IFS0_IC4IF_LENGTH    : constant Unsigned := 1;
+   IFS0_IC4IF_POSITION  : constant Unsigned;
+   pragma Import (C, IFS0_IC4IF_POSITION, "_IFS0_IC4IF_POSITION");
+   IFS0_IC4IF_MASK      : constant Unsigned;
+   pragma Import (C, IFS0_IC4IF_MASK, "_IFS0_IC4IF_MASK");
+   IFS0_IC4IF_LENGTH    : constant Unsigned;
+   pragma Import (C, IFS0_IC4IF_LENGTH, "_IFS0_IC4IF_LENGTH");
 
    --  p32mx470f512.h:11258
-   IFS0_OC4IF_POSITION  : constant Unsigned := 16#16#;
-   IFS0_OC4IF_MASK      : constant Unsigned := 16#400000#;
-   IFS0_OC4IF_LENGTH    : constant Unsigned := 1;
+   IFS0_OC4IF_POSITION  : constant unsigned;
+   pragma Import (C, IFS0_OC4IF_POSITION, "_IFS0_OC4IF_POSITION");
+   IFS0_OC4IF_MASK      : constant Unsigned;
+   pragma Import (C, IFS0_OC4IF_MASK, "_IFS0_OC4IF_MASK");
+   IFS0_OC4IF_LENGTH    : constant Unsigned;
+   pragma Import (C, IFS0_OC4IF_LENGTH, "_IFS0_OC4IF_LENGTH");
 
    --  p32mx470f512.h:11262
-   IFS0_INT4IF_POSITION : constant Unsigned := 16#17#;
-   IFS0_INT4IF_MASK     : constant Unsigned := 16#800000#;
-   IFS0_INT4IF_LENGTH   : constant Unsigned := 1;
+   IFS0_INT4IF_POSITION : Unsigned;
+   pragma Import (C, IFS0_INT4IF_POSITION, "_IFS0_INT4IF_POSITION");
+   IFS0_INT4IF_MASK     : Unsigned;
+   pragma Import (C, IFS0_INT4IF_MASK, "_IFS0_INT4IF_MASK");
+   IFS0_INT4IF_LENGTH   : Unsigned;
+   pragma Import (C, IFS0_INT4IF_LENGTH, "_IFS0_INT4IF_LENGTH");
 
    --  p32mx470f512.h:12497
-   IFS0_T4IF_POSITION   : constant Unsigned :=  16#13#;
-   IFS0_T4IF_MASK       : constant Unsigned := 16#80000#;
-   IFS0_T4IF_LENGTH     : constant Unsigned := 1;
+   IFS0_T4IF_POSITION   : Unsigned;
+   pragma Import (C, IFS0_T4IF_POSITION, "_IFS0_T4IF_POSITION");
+   IFS0_T4IF_MASK       : Unsigned;
+   pragma Import (C, IFS0_T4IF_MASK, "_IFS0_T4IF_MASK");
+   IFS0_T4IF_LENGTH     : Unsigned;
+   pragma Import (C, IFS0_T4IF_LENGTH, "_IFS0_T4IF_LENGTH");
 
    --  p32mx470f512.h:12797
-   IEC0_T4IE_POSITION      : constant Unsigned := 16#13#;
-   IEC0_T4IE_MASK          : constant Unsigned := 16#80000#;
-   IEC0_T4IE_LENGTH        : constant Unsigned := 1;
+   IEC0_T4IE_POSITION      : Unsigned;
+   pragma Import (C, IEC0_T4IE_POSITION, "_IEC0_T4IE_POSITION");
+   IEC0_T4IE_MASK          : Unsigned;
+   pragma Import (C, IEC0_T4IE_MASK, "_IIEC0_T4IE_MASK");
+   IEC0_T4IE_LENGTH        : Unsigned;
+   pragma Import (C, IEC0_T4IE_LENGTH, "_IEC0_T4IE_LENGTH");
 
    --  p32mx470f512.h:11182
-   IFS0_INT0IF_POSITION : constant Unsigned := 3;
-   IFS0_INT0IF_MASK     : constant Unsigned := 8;
-   IFS0_INT0IF_LENGTH      : constant Unsigned := 1;
+   IFS0_INT0IF_POSITION    : Unsigned;
+   pragma Import (C, IFS0_INT0IF_POSITION, "_IFS0_INT0IF_POSITION");
+   IFS0_INT0IF_MASK        : Unsigned;
+   pragma Import (C, IFS0_INT0IF_MASK, "_IFS0_INT0IF_MASK");
+   IFS0_INT0IF_LENGTH      : Unsigned;
+   pragma Import (C, IFS0_INT0IF_LENGTH, "_IFS0_INT0IF_LENGTH");
 
    --  p32mx470f512.h:11486
-   IEC0_T1IE_POSITION   : constant Unsigned := 4;
-   IEC0_T1IE_MASK       : constant Unsigned := 16#00000010#;
-   IEC0_T1IE_LENGTH     : constant Unsigned := 1;
+   IEC0_T1IE_POSITION   : Unsigned;
+   pragma Import (C, IEC0_T1IE_POSITION, "_IEC0_T1IE_POSITION");
+   IEC0_T1IE_MASK       : Unsigned;
+   pragma Import (C, IEC0_T1IE_MASK, "_IIEC0_T1IE_MASK");
+   IEC0_T1IE_LENGTH     : Unsigned;
+   pragma Import (C, IEC0_T1IE_LENGTH, "_IEC0_T1IE_LENGTH");
 
    --  p32mx470f512.h:11550
-   IEC0_IC4EIE_POSITION    : constant Unsigned := 16#14#;
-   IEC0_IC4EIE_MASK        : constant Unsigned := 16#100000#;
-   IEC0_IC4EIE_LENGTH      : constant Unsigned := 1;
+   IEC0_IC4EIE_POSITION    : Unsigned;
+   pragma Import (C, IEC0_IC4EIE_POSITION, "_IEC0_IC4EIE_POSITION");
+   IEC0_IC4EIE_MASK        : Unsigned;
+   pragma Import (C, IEC0_IC4EIE_MASK, "_IEC0_IC4EIE_MASK");
+   IEC0_IC4EIE_LENGTH      : Unsigned;
+   pragma Import (C, IEC0_IC4EIE_LENGTH, "_IEC0_IC4EIE_LENGTH");
 
    --  p32mx470f512.h:11554
-   IEC0_IC4IE_POSITION     : constant Unsigned := 16#15#;
-   IEC0_IC4IE_MASK         : constant Unsigned := 16#200000#;
-   IEC0_IC4IE_LENGTH       : constant Unsigned := 1;
+   IEC0_IC4IE_POSITION     : Unsigned;
+   pragma Import (C, IEC0_IC4IE_POSITION, "_IEC0_IC4IE_POSITION");
+   IEC0_IC4IE_MASK         : Unsigned;
+   pragma Import (C, IEC0_IC4IE_MASK, "_IEC0_IC4IE_MASK");
+   IEC0_IC4IE_LENGTH       : Unsigned;
+   pragma Import (C, IEC0_IC4IE_LENGTH, "_IEC0_IC4IE_LENGTH");
 
    --  p32mx470f512.h:11558
-   IEC0_OC4IE_POSITION     : constant Unsigned := 16#16#;
-   IEC0_OC4IE_MASK         : constant Unsigned := 16#400000#;
-   IEC0_OC4IE_LENGTH       : constant Unsigned := 1;
+   IEC0_OC4IE_POSITION     : Unsigned;
+   pragma Import (C, IEC0_OC4IE_POSITION, "_IEC0_OC4IE_POSITION");
+   IEC0_OC4IE_MASK         : Unsigned;
+   pragma Import (C, IEC0_OC4IE_MASK, "_IEC0_OC4IE_MASK");
+   IEC0_OC4IE_LENGTH       : Unsigned;
+   pragma Import (C, IEC0_OC4IE_LENGTH, "_IEC0_OC4IE_LENGTH");
 
    --  p32mx470f512.h:11562
-   IEC0_INT4IE_POSITION    : constant Unsigned := 16#17#;
-   IEC0_INT4IE_MASK        : constant Unsigned := 16#800000#;
-   IEC0_INT4IE_LENGTH      : constant Unsigned := 1;
+   IEC0_INT4IE_POSITION    : Unsigned;
+   pragma Import (C, IEC0_INT4IE_POSITION, "_IEC0_INT4IE_POSITION");
+   IEC0_INT4IE_MASK        : Unsigned;
+   pragma Import (C, IEC0_INT4IE_MASK, "_IEC0_INT4IE_MASK");
+   IEC0_INT4IE_LENGTH      : Unsigned;
+   pragma Import (C, IEC0_INT4IE_LENGTH, "_IEC0_INT4IE_LENGTH");
 
    --  p32mx470f512.h:11918
-   IPC4_T4IP_POSITION : constant Unsigned := 2;
-   IPC4_T4IP_MASK     : constant Unsigned := 16#0000001C#;
-   IPC4_T4IP_LENGTH   : constant Unsigned := 3;
+   IPC4_T4IP_POSITION : Unsigned;
+   pragma Import (C, IPC4_T4IP_POSITION, "_IPC4_T4IP_POSITION");
+   IPC4_T4IP_MASK     : Unsigned;
+   pragma Import (C, IPC4_T4IP_MASK, "_IPC4_T4IP_MASK");
+   IPC4_T4IP_LENGTH   : Unsigned;
+   pragma Import (C, IPC4_T4IP_LENGTH, "_IPC4_T4IP_LENGTH");
 
    --  p32mx470f512.h:11922
-   IPC4_IC4IS_POSITION : constant Unsigned := 8;
-   IPC4_IC4IS_MASK     : constant Unsigned := 16#00000300#;
-   IPC4_IC4IS_LENGTH   : constant Unsigned := 2;
+   IPC4_IC4IS_POSITION : Unsigned;
+   pragma Import (C, IPC4_IC4IS_POSITION, "_IPC4_IC4IS_POSITION");
+   IPC4_IC4IS_MASK     : Unsigned;
+   pragma Import (C, IPC4_IC4IS_MASK, "_IPC4_IC4IS_MASK");
+   IPC4_IC4IS_LENGTH   : Unsigned;
+   pragma Import (C, IPC4_IC4IS_LENGTH, "_IPC4_IC4IS_LENGTH");
 
    --  p32mx470f512.h:11926
-   IPC4_IC4IP_POSITION : constant Unsigned := 16#0000000A#;
-   IPC4_IC4IP_MASK     : constant Unsigned := 16#00001C00#;
-   IPC4_IC4IP_LENGTH   : constant Unsigned := 3;
+   IPC4_IC4IP_POSITION : Unsigned;
+   pragma Import (C, IPC4_IC4IP_POSITION, "_IPC4_IC4IP_POSITION");
+   IPC4_IC4IP_MASK     : Unsigned;
+   pragma Import (C, IPC4_IC4IP_MASK, "_IPC4_IC4IP_MASK");
+   IPC4_IC4IP_LENGTH   : Unsigned ;
+   pragma Import (C, IPC4_IC4IP_LENGTH, "_IPC4_IC4IP_LENGTH");
 
    --  p32mx470f512.h:13165
-   IPC4_T4IS_POSITION : constant Unsigned := 0;
-   IPC4_T4IS_MASK     : constant Unsigned := 3;
-   IPC4_T4IS_LENGTH   : constant Unsigned := 2;
+   IPC4_T4IS_POSITION : Unsigned;
+   pragma Import (C, IPC4_T4IS_POSITION, "_IPC4_T4IS_POSITION");
+   IPC4_T4IS_MASK     : Unsigned;
+   pragma Import (C, IPC4_T4IS_MASK, "_IPC4_T4IS_MASK");
+   IPC4_T4IS_LENGTH   : Unsigned;
+   pragma Import (C, IPC4_T4IS_LENGTH, "_IPC4_T4IS_LENGTH");
 
 end P32mx470f512h;
