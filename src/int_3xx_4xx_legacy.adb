@@ -53,29 +53,33 @@ package body Int_3xx_4xx_Legacy is
 
    procedure mINT0_Set_Int_SubPriority (Subpriority : Interfaces.Unsigned_16) is
       use Interfaces;
+      use Interfaces.C;
    begin
       IPC0CLR := IPC0_INT0IS_MASK;
-      IPC0SET := Shift_Left (Subpriority, IPC0_INT0IS_POSITION);
+      IPC0SET := unsigned
+        (Shift_Left (Subpriority, Natural (IPC0_INT0IS_POSITION)));
 
    end mINT0_Set_Int_SubPriority;
 
    function mINT0_Get_Int_SubPriority return Interfaces.Unsigned_16 is
    begin
-      return IPC0bits.INT0IS;
+      return Interfaces.Unsigned_16 (IPC0bits.anon5619.INT0IS);
 
    end mINT0_Get_Int_SubPriority;
 
    procedure mINT0_SetEdgeMode (Mode : Interfaces.Unsigned_16) is
       use Interfaces;
+      use Interfaces.C;
    begin
       INTCONCLR := 2 * INTCON_INT0EP_POSITION;
-      INTCONSET := Shift_Left (Mode, INTCON_INT0EP_POSITION);
+      INTCONSET :=unsigned
+        (Shift_Left (Mode, Natural (INTCON_INT0EP_POSITION)));
 
    end mINT0_SetEdgeMode;
 
    function mINT0_GetEdgeMode return Interfaces.Unsigned_16 is
    begin
-      return INTCONbits.INT0EP;
+      return Interfaces.Unsigned_16 (INTCONbits.anon5362.INT0EP);
 
    end mINT0_GetEdgeMode;
 
@@ -91,13 +95,13 @@ package body Int_3xx_4xx_Legacy is
 
    end mOC4_Clear_Int_Flag;
 
-   procedure mOC1_Int_Enable (Enable : Unsigned_32) is
+   procedure mOC1_Int_Enable (Enable : Interfaces.Unsigned_32) is
    begin
       null;
 
    end mOC1_Int_Enable;
 
-   procedure mOC4_Int_Enable (Enable : Unsigned_32) is
+   procedure mOC4_Int_Enable (Enable : Interfaces.Unsigned_32) is
    begin
       null;
 
@@ -118,10 +122,11 @@ package body Int_3xx_4xx_Legacy is
    end mT4_Int_Enable;
 
    procedure mT4_Set_Int_Priority (Priority : Natural) is
+      use Interfaces;
       use Interfaces.C;
    begin
-      IPC4CLR :=
-        unsigned (Shift_Left (Unsigned_32 (IPC4_T4IP_Position), Priority));
+      IPC4CLR := unsigned
+        (Shift_Left (Interfaces.Unsigned_32 (IPC4_T4IP_Position), Priority));
 
    end mT4_Set_Int_Priority;
 

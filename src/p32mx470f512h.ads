@@ -15872,6 +15872,14 @@ package P32mx470f512h is
    OC2CON_ON_LENGTH   : Unsigned;
    pragma Import (C, OC2CON_ON_LENGTH, "_OC2CON_ON_LENGTH");
 
+   --  p32mx470f512.h:11126
+   INTCON_INT0EP_POSITION : Unsigned;
+   pragma Import (C, INTCON_INT0EP_POSITION, "_INTCON_INT0EP_POSITION");
+   INTCON_INT0EP_MASK     : Unsigned;
+   pragma Import (C, INTCON_INT0EP_MASK, "_INTCON_INT0EP_MASK");
+   INTCON_INT0EP_LENGTH   : Unsigned;
+   pragma Import (C, INTCON_INT0EP_LENGTH, "_INTCON_INT0EP_LENGTH");
+
    --  p32mx470f512.h:11250
    IFS0_IC4EIF_POSITION : Unsigned;
    pragma Import (C, IFS0_IC4EIF_POSITION, "_IFS0_IC4EIF_POSITION");
@@ -15975,6 +15983,14 @@ package P32mx470f512h is
    pragma Import (C, IEC0_INT4IE_MASK, "_IEC0_INT4IE_MASK");
    IEC0_INT4IE_LENGTH      : Unsigned;
    pragma Import (C, IEC0_INT4IE_LENGTH, "_IEC0_INT4IE_LENGTH");
+
+   --  p32mx470f512.h:11798
+   IPC0_INT0IS_POSITION         : Unsigned;
+   pragma Import (C, IPC0_INT0IS_POSITION, "_IPC0_INT0IS_POSITION");
+   IPC0_INT0IS_MASK             : Unsigned;
+   pragma Import (C, IPC0_INT0IS_MASK, "_IPC0_INT0IS_MASK");
+   IPC0_INT0IS_LENGTH           : Unsigned;
+   pragma Import (C, IPC0_INT0IS_LENGTH, "_IPC0_INT0IS_LENGTH");
 
    --  p32mx470f512.h:11798
    IPC0_INT0IP_POSITION    : Unsigned;
