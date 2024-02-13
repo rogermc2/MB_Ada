@@ -15,14 +15,13 @@ package M_Basic is
    subtype Program_Ptr is Conversion.Object_Pointer;
    subtype Subfunction_Ptr is Conversion.Object_Pointer;
 
-   package Char_Ptrs is new Interfaces.C.Pointers
+   package Character_Ptrs is new Interfaces.C.Pointers
      (Index              => Interfaces.C.size_t,
       Element            => Interfaces.C.char,
       Element_Array      => Interfaces.C.char_array,
       Default_Terminator => Interfaces.C.nul);
 
---     use type Char_Ptrs.Pointer;
-   subtype Char_Ptr is Char_Ptrs.Pointer;
+   subtype Character_Ptr is Character_Ptrs.Pointer;
 
    MAXLINENBR       : constant integer := 65001;
 
