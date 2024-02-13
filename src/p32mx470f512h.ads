@@ -7258,7 +7258,7 @@ package P32mx470f512h is
    REFCLKIRbits : aliased uu_REFCLKIRbits_t  -- p32mx470f512.h:2954
      with Export => True,
      Convention => C,
-     External_Name => "REFCLKIR";
+     External_Name => "REFCLKIRbits";
 
    RPB0R : aliased unsigned  -- p32mx470f512.h:2955
      with Export => True,
@@ -7275,7 +7275,7 @@ package P32mx470f512h is
    RPB0Rbits : aliased uu_RPB0Rbits_t  -- p32mx470f512.h:2959
      with Export => True,
      Convention => C,
-     External_Name => "RPB0R";
+     External_Name => "RPB0Rbits";
 
    RPB1R : aliased unsigned  -- p32mx470f512.h:2960
      with Export => True,
@@ -7292,7 +7292,7 @@ package P32mx470f512h is
    RPB1Rbits : aliased uu_RPB1Rbits_t  -- p32mx470f512.h:2964
      with Export => True,
      Convention => C,
-     External_Name => "RPB1R";
+     External_Name => "RPB1Rbits";
 
    RPB2R : aliased unsigned  -- p32mx470f512.h:2965
      with Export => True,
@@ -12468,7 +12468,7 @@ package P32mx470f512h is
    U1EP13bits : aliased uu_U1EP13bits_t  -- p32mx470f512.h:4797
      with Export => True,
      Convention => C,
-     External_Name => "U1EP13";
+     External_Name => "U1EP13bits";
 
    U1EP13CLR : aliased unsigned  -- p32mx470f512.h:4798
      with Export => True,
@@ -13231,7 +13231,7 @@ package P32mx470f512h is
    TRISCbits : aliased uu_TRISCbits_t  -- p32mx470f512.h:5123
      with Export => True,
      Convention => C,
-     External_Name => "TRISC";
+     External_Name => "TRISCbits";
 
    TRISCCLR : aliased unsigned  -- p32mx470f512.h:5124
      with Export => True,
@@ -13476,7 +13476,7 @@ package P32mx470f512h is
    CNPDCbits : aliased uu_CNPDCbits_t  -- p32mx470f512.h:5208
      with Export => True,
      Convention => C,
-     External_Name => "CNPDC";
+     External_Name => "CNPDCbits";
 
    CNPDCCLR : aliased unsigned  -- p32mx470f512.h:5209
      with Export => True,
@@ -13524,7 +13524,7 @@ package P32mx470f512h is
    CNCONCbits : aliased uu_CNCONCbits_t  -- p32mx470f512.h:5224
      with Export => True,
      Convention => C,
-     External_Name => "CNCONC";
+     External_Name => "CNCONCbits";
 
    CNCONCCLR : aliased unsigned  -- p32mx470f512.h:5225
      with Export => True,
@@ -13950,7 +13950,7 @@ package P32mx470f512h is
    CNPUDbits : aliased uu_CNPUDbits_t  -- p32mx470f512.h:5394
      with Export => True,
      Convention => C,
-     External_Name => "CNPUD";
+     External_Name => "CNPUDbits";
 
    CNPUDCLR : aliased unsigned  -- p32mx470f512.h:5395
      with Export => True,
@@ -14006,7 +14006,7 @@ package P32mx470f512h is
    CNPDDbits : aliased uu_CNPDDbits_t  -- p32mx470f512.h:5418
      with Export => True,
      Convention => C,
-     External_Name => "CNPDD";
+     External_Name => "CNPDDbits";
 
    CNPDDCLR : aliased unsigned  -- p32mx470f512.h:5419
      with Export => True,
@@ -14054,7 +14054,7 @@ package P32mx470f512h is
    CNCONDbits : aliased uu_CNCONDbits_t  -- p32mx470f512.h:5434
      with Export => True,
      Convention => C,
-     External_Name => "CNCOND";
+     External_Name => "CNCONDbits";
 
    CNCONDCLR : aliased unsigned  -- p32mx470f512.h:5435
      with Export => True,
@@ -14110,7 +14110,7 @@ package P32mx470f512h is
    CNENDbits : aliased uu_CNENDbits_t  -- p32mx470f512.h:5458
      with Export => True,
      Convention => C,
-     External_Name => "CNEND";
+     External_Name => "CNENDbits";
 
    CNENDCLR : aliased unsigned  -- p32mx470f512.h:5459
      with Export => True,
@@ -14166,7 +14166,7 @@ package P32mx470f512h is
    CNSTATDbits : aliased uu_CNSTATDbits_t  -- p32mx470f512.h:5482
      with Export => True,
      Convention => C,
-     External_Name => "CNSTATD";
+     External_Name => "CNSTATDbits";
 
    CNSTATDCLR : aliased unsigned  -- p32mx470f512.h:5483
      with Export => True,
@@ -14217,7 +14217,7 @@ package P32mx470f512h is
    ANSELEbits : aliased uu_ANSELEbits_t  -- p32mx470f512.h:5501
      with Export => True,
      Convention => C,
-     External_Name => "ANSELE";
+     External_Name => "ANSELEbits";
 
    ANSELECLR : aliased unsigned  -- p32mx470f512.h:5502
      with Export => True,
@@ -14269,7 +14269,7 @@ package P32mx470f512h is
    TRISEbits : aliased uu_TRISEbits_t  -- p32mx470f512.h:5521
      with Export => True,
      Convention => C,
-     External_Name => "TRISE";
+     External_Name => "TRISEbits";
 
    TRISECLR : aliased unsigned  -- p32mx470f512.h:5522
      with Export => True,
@@ -14321,7 +14321,7 @@ package P32mx470f512h is
    PORTEbits : aliased uu_PORTEbits_t  -- p32mx470f512.h:5541
      with Export => True,
      Convention => C,
-     External_Name => "PORTE";
+     External_Name => "PORTEbits";
 
    PORTECLR : aliased unsigned  -- p32mx470f512.h:5542
      with Export => True,
@@ -14373,7 +14373,7 @@ package P32mx470f512h is
    LATEbits : aliased uu_LATEbits_t  -- p32mx470f512.h:5561
      with Export => True,
      Convention => C,
-     External_Name => "LATE";
+     External_Name => "LATEbits";
 
    LATECLR : aliased unsigned  -- p32mx470f512.h:5562
      with Export => True,
@@ -14425,7 +14425,7 @@ package P32mx470f512h is
    ODCEbits : aliased uu_ODCEbits_t  -- p32mx470f512.h:5581
      with Export => True,
      Convention => C,
-     External_Name => "ODCE";
+     External_Name => "ODCEbits";
 
    ODCECLR : aliased unsigned  -- p32mx470f512.h:5582
      with Export => True,
@@ -14477,7 +14477,7 @@ package P32mx470f512h is
    CNPUEbits : aliased uu_CNPUEbits_t  -- p32mx470f512.h:5601
      with Export => True,
      Convention => C,
-     External_Name => "CNPUE";
+     External_Name => "CNPUEbits";
 
    CNPUECLR : aliased unsigned  -- p32mx470f512.h:5602
      with Export => True,
@@ -14529,7 +14529,7 @@ package P32mx470f512h is
    CNPDEbits : aliased uu_CNPDEbits_t  -- p32mx470f512.h:5621
      with Export => True,
      Convention => C,
-     External_Name => "CNPDE";
+     External_Name => "CNPDEbits";
 
    CNPDECLR : aliased unsigned  -- p32mx470f512.h:5622
      with Export => True,
@@ -14577,7 +14577,7 @@ package P32mx470f512h is
    CNCONEbits : aliased uu_CNCONEbits_t  -- p32mx470f512.h:5637
      with Export => True,
      Convention => C,
-     External_Name => "CNCONE";
+     External_Name => "CNCONEbits";
 
    CNCONECLR : aliased unsigned  -- p32mx470f512.h:5638
      with Export => True,
@@ -14629,7 +14629,7 @@ package P32mx470f512h is
    CNENEbits : aliased uu_CNENEbits_t  -- p32mx470f512.h:5657
      with Export => True,
      Convention => C,
-     External_Name => "CNENE";
+     External_Name => "CNENEbits";
 
    CNENECLR : aliased unsigned  -- p32mx470f512.h:5658
      with Export => True,
@@ -14681,7 +14681,7 @@ package P32mx470f512h is
    CNSTATEbits : aliased uu_CNSTATEbits_t  -- p32mx470f512.h:5677
      with Export => True,
      Convention => C,
-     External_Name => "CNSTATE";
+     External_Name => "CNSTATEbits";
 
    CNSTATECLR : aliased unsigned  -- p32mx470f512.h:5678
      with Export => True,
@@ -14711,7 +14711,7 @@ package P32mx470f512h is
    ANSELFbits : aliased uu_ANSELFbits_t  -- p32mx470f512.h:5685
      with Export => True,
      Convention => C,
-     External_Name => "ANSELF";
+     External_Name => "ANSELFbits";
 
    ANSELFCLR : aliased unsigned  -- p32mx470f512.h:5686
      with Export => True,
@@ -14761,7 +14761,7 @@ package P32mx470f512h is
    TRISFbits : aliased uu_TRISFbits_t  -- p32mx470f512.h:5703
      with Export => True,
      Convention => C,
-     External_Name => "TRISF";
+     External_Name => "TRISFbits";
 
    TRISFCLR : aliased unsigned  -- p32mx470f512.h:5704
      with Export => True,
@@ -14811,7 +14811,7 @@ package P32mx470f512h is
    PORTFbits : aliased uu_PORTFbits_t  -- p32mx470f512.h:5721
      with Export => True,
      Convention => C,
-     External_Name => "PORTF";
+     External_Name => "PORTFbits";
 
    PORTFCLR : aliased unsigned  -- p32mx470f512.h:5722
      with Export => True,
@@ -14861,7 +14861,7 @@ package P32mx470f512h is
    LATFbits : aliased uu_LATFbits_t  -- p32mx470f512.h:5739
      with Export => True,
      Convention => C,
-     External_Name => "LATF";
+     External_Name => "LATFbits";
 
    LATFCLR : aliased unsigned  -- p32mx470f512.h:5740
      with Export => True,
@@ -15109,7 +15109,7 @@ package P32mx470f512h is
    CNENFbits : aliased uu_CNENFbits_t  -- p32mx470f512.h:5827
      with Export => True,
      Convention => C,
-     External_Name => "CNENF";
+     External_Name => "CNENFbits";
 
    CNENFCLR : aliased unsigned  -- p32mx470f512.h:5828
      with Export => True,
@@ -15159,7 +15159,7 @@ package P32mx470f512h is
    CNSTATFbits : aliased uu_CNSTATFbits_t  -- p32mx470f512.h:5845
      with Export => True,
      Convention => C,
-     External_Name => "CNSTATF";
+     External_Name => "CNSTATFbits";
 
    CNSTATFCLR : aliased unsigned  -- p32mx470f512.h:5846
      with Export => True,
@@ -15889,19 +15889,19 @@ package P32mx470f512h is
    pragma Export (C, IFS0_IC4EIF_LENGTH, "_IFS0_IC4EIF_LENGTH");
 
    --  p32mx470f512.h:11254
-   IFS0_IC4IF_POSITION  : constant Unsigned;
+   IFS0_IC4IF_POSITION  : Unsigned;
    pragma Export (C, IFS0_IC4IF_POSITION, "_IFS0_IC4IF_POSITION");
-   IFS0_IC4IF_MASK      : constant Unsigned;
+   IFS0_IC4IF_MASK      : Unsigned;
    pragma Export (C, IFS0_IC4IF_MASK, "_IFS0_IC4IF_MASK");
-   IFS0_IC4IF_LENGTH    : constant Unsigned;
+   IFS0_IC4IF_LENGTH    : Unsigned;
    pragma Export (C, IFS0_IC4IF_LENGTH, "_IFS0_IC4IF_LENGTH");
 
    --  p32mx470f512.h:11258
-   IFS0_OC4IF_POSITION  : constant unsigned;
+   IFS0_OC4IF_POSITION  : unsigned;
    pragma Export (C, IFS0_OC4IF_POSITION, "_IFS0_OC4IF_POSITION");
-   IFS0_OC4IF_MASK      : constant Unsigned;
+   IFS0_OC4IF_MASK      : Unsigned;
    pragma Export (C, IFS0_OC4IF_MASK, "_IFS0_OC4IF_MASK");
-   IFS0_OC4IF_LENGTH    : constant Unsigned;
+   IFS0_OC4IF_LENGTH    : Unsigned;
    pragma Export (C, IFS0_OC4IF_LENGTH, "_IFS0_OC4IF_LENGTH");
 
    --  p32mx470f512.h:11262
