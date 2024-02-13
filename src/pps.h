@@ -1,16 +1,16 @@
 #if !defined(__PPS_H)
 #define      __PPS_H
 
-#include "xc.h"
+/* #include "xc.h" */
 
 /*
 Example Code:
 
-/* ********************* Assign UART 2 signals onto pins using PPS ***********************************
-    PPSInput(2,U2RX, RPA9);  //Assign U2RX to pin RPA09
-    PPSInput(3,U2CTS,RPC3);  //Assign U2CTS to pin RPC3
-    PPSOutput(4,RPC4,U2TX);   //Assign U2TX to pin RPC4
-    PPSOutput(1,RPB15,U2RTS); //Assign U2RTS to pin RPB15
+/* ************** Assign UART 2 signals onto pins using PPS ********************
+    PPSInput(2,U2RX, RPA9);  Assign U2RX to pin RPA09
+    PPSInput(3,U2CTS,RPC3);  Assign U2CTS to pin RPC3
+    PPSOutput(4,RPC4,U2TX);   Assign U2TX to pin RPC4
+    PPSOutput(1,RPB15,U2RTS); Assign U2RTS to pin RPB15
 
  */
 

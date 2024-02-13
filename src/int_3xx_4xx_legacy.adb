@@ -30,8 +30,8 @@ package body Int_3xx_4xx_Legacy is
       use Interfaces.C;
    begin
       IEC0CLR := IEC0_INT0IE_MASK;
-      IEC0SET := unsigned (Shift_Left
-                           (Enable, Natural (IEC0_INT0IE_POSITION)));
+      IEC0SET := unsigned
+        (Shift_Left (Enable, Natural (IEC0_INT0IE_POSITION)));
 
    end mINT0_Int_Enable;
 

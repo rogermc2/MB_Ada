@@ -1,7 +1,7 @@
 
 with Interfaces; use Interfaces;
 
-package PPS is
+package PPS_A is
  --  Output Pin Group 1
 PPS_OUTPUT_BASE_ADDRESS : constant Unsigned_32 := 0;   --  RPA0R
 OUT_PIN_PPS1_RPA0       : constant Unsigned_32 := 0;   --  RPA0Rbits.RPA0R
@@ -25,4 +25,4 @@ OUT_FN_PPS1_C2OUT       : constant Unsigned_32 := 7;  --  RPn tied to C2OUT
    procedure PPS_Input (Group : Natural; Pin, Func : String);
    procedure PPS_Output (Group : Natural; Pin, Func : String);
 
-end PPS;
+end PPS_A;

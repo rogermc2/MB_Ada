@@ -43,7 +43,7 @@ package P32mx470f512h is
    --  -------------------------------------------------------------------------
 
    WDTCON : aliased unsigned  -- p32mx470f512.h:42
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "WDTCON";
 
@@ -105,27 +105,27 @@ package P32mx470f512h is
      Unchecked_Union => True;  -- p32mx470f512.h:70
 
    WDTCONbits : aliased uu_WDTCONbits_t  -- p32mx470f512.h:71
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "WDTCON";
+     External_Name => "WDTCONbits";
 
    WDTCONCLR : aliased unsigned  -- p32mx470f512.h:72
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "WDTCONCLR";
 
    WDTCONSET : aliased unsigned  -- p32mx470f512.h:73
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "WDTCONSET";
 
    WDTCONINV : aliased unsigned  -- p32mx470f512.h:74
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "WDTCONINV";
 
    RTCCON : aliased unsigned  -- p32mx470f512.h:75
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "RTCCON";
 
@@ -161,27 +161,27 @@ package P32mx470f512h is
      Unchecked_Union => True;  -- p32mx470f512.h:94
 
    RTCCONbits : aliased uu_RTCCONbits_t  -- p32mx470f512.h:95
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "RTCCON";
+     External_Name => "RTCCONbits";
 
    RTCCONCLR : aliased unsigned  -- p32mx470f512.h:96
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "RTCCONCLR";
 
    RTCCONSET : aliased unsigned  -- p32mx470f512.h:97
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "RTCCONSET";
 
    RTCCONINV : aliased unsigned  -- p32mx470f512.h:98
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "RTCCONINV";
 
    RTCALRM : aliased unsigned  -- p32mx470f512.h:99
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "RTCALRM";
 
@@ -211,27 +211,27 @@ package P32mx470f512h is
      Unchecked_Union => True;  -- p32mx470f512.h:112
 
    RTCALRMbits : aliased uu_RTCALRMbits_t  -- p32mx470f512.h:113
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "RTCALRM";
+     External_Name => "RTCALRMbits";
 
    RTCALRMCLR : aliased unsigned  -- p32mx470f512.h:114
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "RTCALRMCLR";
 
    RTCALRMSET : aliased unsigned  -- p32mx470f512.h:115
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "RTCALRMSET";
 
    RTCALRMINV : aliased unsigned  -- p32mx470f512.h:116
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "RTCALRMINV";
 
    RTCTIME : aliased unsigned  -- p32mx470f512.h:117
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "RTCTIME";
 
@@ -262,27 +262,27 @@ package P32mx470f512h is
      Unchecked_Union => True;  -- p32mx470f512.h:131
 
    RTCTIMEbits : aliased uu_RTCTIMEbits_t  -- p32mx470f512.h:132
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "RTCTIME";
+     External_Name => "RTCTIMEbits";
 
    RTCTIMECLR : aliased unsigned  -- p32mx470f512.h:133
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "RTCTIMECLR";
 
    RTCTIMESET : aliased unsigned  -- p32mx470f512.h:134
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "RTCTIMESET";
 
    RTCTIMEINV : aliased unsigned  -- p32mx470f512.h:135
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "RTCTIMEINV";
 
    RTCDATE : aliased unsigned  -- p32mx470f512.h:136
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "RTCDATE";
 
@@ -314,27 +314,27 @@ package P32mx470f512h is
      Unchecked_Union => True;  -- p32mx470f512.h:151
 
    RTCDATEbits : aliased uu_RTCDATEbits_t  -- p32mx470f512.h:152
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "RTCDATE";
+     External_Name => "RTCDATEbits";
 
    RTCDATECLR : aliased unsigned  -- p32mx470f512.h:153
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "RTCDATECLR";
 
    RTCDATESET : aliased unsigned  -- p32mx470f512.h:154
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "RTCDATESET";
 
    RTCDATEINV : aliased unsigned  -- p32mx470f512.h:155
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "RTCDATEINV";
 
    ALRMTIME : aliased unsigned  -- p32mx470f512.h:156
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "ALRMTIME";
 
@@ -365,27 +365,27 @@ package P32mx470f512h is
      Unchecked_Union => True;  -- p32mx470f512.h:170
 
    ALRMTIMEbits : aliased uu_ALRMTIMEbits_t  -- p32mx470f512.h:171
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "ALRMTIME";
+     External_Name => "ALRMTIMEbits";
 
    ALRMTIMECLR : aliased unsigned  -- p32mx470f512.h:172
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "ALRMTIMECLR";
 
    ALRMTIMESET : aliased unsigned  -- p32mx470f512.h:173
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "ALRMTIMESET";
 
    ALRMTIMEINV : aliased unsigned  -- p32mx470f512.h:174
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "ALRMTIMEINV";
 
    ALRMDATE : aliased unsigned  -- p32mx470f512.h:175
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "ALRMDATE";
 
@@ -415,27 +415,27 @@ package P32mx470f512h is
      Unchecked_Union => True;  -- p32mx470f512.h:188
 
    ALRMDATEbits : aliased uu_ALRMDATEbits_t  -- p32mx470f512.h:189
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "ALRMDATE";
+     External_Name => "ALRMDATEbits";
 
    ALRMDATECLR : aliased unsigned  -- p32mx470f512.h:190
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "ALRMDATECLR";
 
    ALRMDATESET : aliased unsigned  -- p32mx470f512.h:191
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "ALRMDATESET";
 
    ALRMDATEINV : aliased unsigned  -- p32mx470f512.h:192
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "ALRMDATEINV";
 
    T1CON : aliased unsigned  -- p32mx470f512.h:193
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "T1CON";
 
@@ -491,67 +491,67 @@ package P32mx470f512h is
      Unchecked_Union => True;  -- p32mx470f512.h:224
 
    T1CONbits : aliased uu_T1CONbits_t  -- p32mx470f512.h:225
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "T1CON";
+     External_Name => "T1CONbits";
 
    T1CONCLR : aliased unsigned  -- p32mx470f512.h:226
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "T1CONCLR";
 
    T1CONSET : aliased unsigned  -- p32mx470f512.h:227
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "T1CONSET";
 
    T1CONINV : aliased unsigned  -- p32mx470f512.h:228
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "T1CONINV";
 
    TMR1 : aliased unsigned  -- p32mx470f512.h:229
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "TMR1";
 
    TMR1CLR : aliased unsigned  -- p32mx470f512.h:230
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "TMR1CLR";
 
    TMR1SET : aliased unsigned  -- p32mx470f512.h:231
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "TMR1SET";
 
    TMR1INV : aliased unsigned  -- p32mx470f512.h:232
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "TMR1INV";
 
    PR1 : aliased unsigned  -- p32mx470f512.h:233
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "PR1";
 
    PR1CLR : aliased unsigned  -- p32mx470f512.h:234
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "PR1CLR";
 
    PR1SET : aliased unsigned  -- p32mx470f512.h:235
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "PR1SET";
 
    PR1INV : aliased unsigned  -- p32mx470f512.h:236
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "PR1INV";
 
    T2CON : aliased unsigned  -- p32mx470f512.h:237
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "T2CON";
 
@@ -605,67 +605,67 @@ package P32mx470f512h is
      Unchecked_Union => True;  -- p32mx470f512.h:266
 
    T2CONbits : aliased uu_T2CONbits_t  -- p32mx470f512.h:267
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "T2CON";
+     External_Name => "T2CONbits";
 
    T2CONCLR : aliased unsigned  -- p32mx470f512.h:268
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "T2CONCLR";
 
    T2CONSET : aliased unsigned  -- p32mx470f512.h:269
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "T2CONSET";
 
    T2CONINV : aliased unsigned  -- p32mx470f512.h:270
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "T2CONINV";
 
    TMR2 : aliased unsigned  -- p32mx470f512.h:271
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "TMR2";
 
    TMR2CLR : aliased unsigned  -- p32mx470f512.h:272
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "TMR2CLR";
 
    TMR2SET : aliased unsigned  -- p32mx470f512.h:273
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "TMR2SET";
 
    TMR2INV : aliased unsigned  -- p32mx470f512.h:274
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "TMR2INV";
 
    PR2 : aliased unsigned  -- p32mx470f512.h:275
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "PR2";
 
    PR2CLR : aliased unsigned  -- p32mx470f512.h:276
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "PR2CLR";
 
    PR2SET : aliased unsigned  -- p32mx470f512.h:277
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "PR2SET";
 
    PR2INV : aliased unsigned  -- p32mx470f512.h:278
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "PR2INV";
 
    T3CON : aliased unsigned  -- p32mx470f512.h:279
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "T3CON";
 
@@ -719,67 +719,67 @@ package P32mx470f512h is
      Unchecked_Union => True;  -- p32mx470f512.h:308
 
    T3CONbits : aliased uu_T3CONbits_t  -- p32mx470f512.h:309
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "T3CON";
+     External_Name => "T3CONbits";
 
    T3CONCLR : aliased unsigned  -- p32mx470f512.h:310
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "T3CONCLR";
 
    T3CONSET : aliased unsigned  -- p32mx470f512.h:311
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "T3CONSET";
 
    T3CONINV : aliased unsigned  -- p32mx470f512.h:312
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "T3CONINV";
 
    TMR3 : aliased unsigned  -- p32mx470f512.h:313
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "TMR3";
 
    TMR3CLR : aliased unsigned  -- p32mx470f512.h:314
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "TMR3CLR";
 
    TMR3SET : aliased unsigned  -- p32mx470f512.h:315
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "TMR3SET";
 
    TMR3INV : aliased unsigned  -- p32mx470f512.h:316
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "TMR3INV";
 
    PR3 : aliased unsigned  -- p32mx470f512.h:317
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "PR3";
 
    PR3CLR : aliased unsigned  -- p32mx470f512.h:318
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "PR3CLR";
 
    PR3SET : aliased unsigned  -- p32mx470f512.h:319
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "PR3SET";
 
    PR3INV : aliased unsigned  -- p32mx470f512.h:320
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "PR3INV";
 
    T4CON : aliased unsigned  -- p32mx470f512.h:321
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "T4CON";
 
@@ -833,67 +833,67 @@ package P32mx470f512h is
      Unchecked_Union => True;  -- p32mx470f512.h:350
 
    T4CONbits : aliased uu_T4CONbits_t  -- p32mx470f512.h:351
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "T4CON";
+     External_Name => "T4CONbits";
 
    T4CONCLR : aliased unsigned  -- p32mx470f512.h:352
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "T4CONCLR";
 
    T4CONSET : aliased unsigned  -- p32mx470f512.h:353
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "T4CONSET";
 
    T4CONINV : aliased unsigned  -- p32mx470f512.h:354
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "T4CONINV";
 
    TMR4 : aliased unsigned  -- p32mx470f512.h:355
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "TMR4";
 
    TMR4CLR : aliased unsigned  -- p32mx470f512.h:356
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "TMR4CLR";
 
    TMR4SET : aliased unsigned  -- p32mx470f512.h:357
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "TMR4SET";
 
    TMR4INV : aliased unsigned  -- p32mx470f512.h:358
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "TMR4INV";
 
    PR4 : aliased unsigned  -- p32mx470f512.h:359
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "PR4";
 
    PR4CLR : aliased unsigned  -- p32mx470f512.h:360
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "PR4CLR";
 
    PR4SET : aliased unsigned  -- p32mx470f512.h:361
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "PR4SET";
 
    PR4INV : aliased unsigned  -- p32mx470f512.h:362
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "PR4INV";
 
    T5CON : aliased unsigned  -- p32mx470f512.h:363
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "T5CON";
 
@@ -947,67 +947,67 @@ package P32mx470f512h is
      Unchecked_Union => True;  -- p32mx470f512.h:392
 
    T5CONbits : aliased uu_T5CONbits_t  -- p32mx470f512.h:393
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "T5CON";
+     External_Name => "T5CONbits";
 
    T5CONCLR : aliased unsigned  -- p32mx470f512.h:394
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "T5CONCLR";
 
    T5CONSET : aliased unsigned  -- p32mx470f512.h:395
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "T5CONSET";
 
    T5CONINV : aliased unsigned  -- p32mx470f512.h:396
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "T5CONINV";
 
    TMR5 : aliased unsigned  -- p32mx470f512.h:397
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "TMR5";
 
    TMR5CLR : aliased unsigned  -- p32mx470f512.h:398
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "TMR5CLR";
 
    TMR5SET : aliased unsigned  -- p32mx470f512.h:399
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "TMR5SET";
 
    TMR5INV : aliased unsigned  -- p32mx470f512.h:400
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "TMR5INV";
 
    PR5 : aliased unsigned  -- p32mx470f512.h:401
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "PR5";
 
    PR5CLR : aliased unsigned  -- p32mx470f512.h:402
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "PR5CLR";
 
    PR5SET : aliased unsigned  -- p32mx470f512.h:403
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "PR5SET";
 
    PR5INV : aliased unsigned  -- p32mx470f512.h:404
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "PR5INV";
 
    IC1CON : aliased unsigned  -- p32mx470f512.h:405
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "IC1CON";
 
@@ -1062,32 +1062,32 @@ package P32mx470f512h is
      Unchecked_Union => True;  -- p32mx470f512.h:435
 
    IC1CONbits : aliased uu_IC1CONbits_t  -- p32mx470f512.h:436
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "IC1CON";
+     External_Name => "IC1CONbits";
 
    IC1CONCLR : aliased unsigned  -- p32mx470f512.h:437
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "IC1CONCLR";
 
    IC1CONSET : aliased unsigned  -- p32mx470f512.h:438
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "IC1CONSET";
 
    IC1CONINV : aliased unsigned  -- p32mx470f512.h:439
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "IC1CONINV";
 
    IC1BUF : aliased unsigned  -- p32mx470f512.h:440
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "IC1BUF";
 
    IC2CON : aliased unsigned  -- p32mx470f512.h:441
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "IC2CON";
 
@@ -1142,32 +1142,32 @@ package P32mx470f512h is
      Unchecked_Union => True;  -- p32mx470f512.h:471
 
    IC2CONbits : aliased uu_IC2CONbits_t  -- p32mx470f512.h:472
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "IC2CON";
+     External_Name => "IC2CONbits";
 
    IC2CONCLR : aliased unsigned  -- p32mx470f512.h:473
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "IC2CONCLR";
 
    IC2CONSET : aliased unsigned  -- p32mx470f512.h:474
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "IC2CONSET";
 
    IC2CONINV : aliased unsigned  -- p32mx470f512.h:475
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "IC2CONINV";
 
    IC2BUF : aliased unsigned  -- p32mx470f512.h:476
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "IC2BUF";
 
    IC3CON : aliased unsigned  -- p32mx470f512.h:477
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "IC3CON";
 
@@ -1222,32 +1222,32 @@ package P32mx470f512h is
      Unchecked_Union => True;  -- p32mx470f512.h:507
 
    IC3CONbits : aliased uu_IC3CONbits_t  -- p32mx470f512.h:508
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "IC3CON";
+     External_Name => "IC3CONbits";
 
    IC3CONCLR : aliased unsigned  -- p32mx470f512.h:509
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "IC3CONCLR";
 
    IC3CONSET : aliased unsigned  -- p32mx470f512.h:510
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "IC3CONSET";
 
    IC3CONINV : aliased unsigned  -- p32mx470f512.h:511
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "IC3CONINV";
 
    IC3BUF : aliased unsigned  -- p32mx470f512.h:512
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "IC3BUF";
 
    IC4CON : aliased unsigned  -- p32mx470f512.h:513
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "IC4CON";
 
@@ -1302,32 +1302,32 @@ package P32mx470f512h is
      Unchecked_Union => True;  -- p32mx470f512.h:543
 
    IC4CONbits : aliased uu_IC4CONbits_t  -- p32mx470f512.h:544
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "IC4CON";
+     External_Name => "IC4CONbits";
 
    IC4CONCLR : aliased unsigned  -- p32mx470f512.h:545
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "IC4CONCLR";
 
    IC4CONSET : aliased unsigned  -- p32mx470f512.h:546
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "IC4CONSET";
 
    IC4CONINV : aliased unsigned  -- p32mx470f512.h:547
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "IC4CONINV";
 
    IC4BUF : aliased unsigned  -- p32mx470f512.h:548
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "IC4BUF";
 
    IC5CON : aliased unsigned  -- p32mx470f512.h:549
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "IC5CON";
 
@@ -1382,32 +1382,32 @@ package P32mx470f512h is
      Unchecked_Union => True;  -- p32mx470f512.h:579
 
    IC5CONbits : aliased uu_IC5CONbits_t  -- p32mx470f512.h:580
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "IC5CON";
+     External_Name => "IC5CONbits";
 
    IC5CONCLR : aliased unsigned  -- p32mx470f512.h:581
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "IC5CONCLR";
 
    IC5CONSET : aliased unsigned  -- p32mx470f512.h:582
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "IC5CONSET";
 
    IC5CONINV : aliased unsigned  -- p32mx470f512.h:583
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "IC5CONINV";
 
    IC5BUF : aliased unsigned  -- p32mx470f512.h:584
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "IC5BUF";
 
    OC1CON : aliased unsigned  -- p32mx470f512.h:585
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "OC1CON";
 
@@ -1456,67 +1456,67 @@ package P32mx470f512h is
      Unchecked_Union => True;  -- p32mx470f512.h:609
 
    OC1CONbits : aliased uu_OC1CONbits_t  -- p32mx470f512.h:610
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "OC1CON";
+     External_Name => "OC1CONbits";
 
    OC1CONCLR : aliased unsigned  -- p32mx470f512.h:611
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "OC1CONCLR";
 
    OC1CONSET : aliased unsigned  -- p32mx470f512.h:612
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "OC1CONSET";
 
    OC1CONINV : aliased unsigned  -- p32mx470f512.h:613
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "OC1CONINV";
 
    OC1R : aliased unsigned  -- p32mx470f512.h:614
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "OC1R";
 
    OC1RCLR : aliased unsigned  -- p32mx470f512.h:615
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "OC1RCLR";
 
    OC1RSET : aliased unsigned  -- p32mx470f512.h:616
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "OC1RSET";
 
    OC1RINV : aliased unsigned  -- p32mx470f512.h:617
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "OC1RINV";
 
    OC1RS : aliased unsigned  -- p32mx470f512.h:618
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "OC1RS";
 
    OC1RSCLR : aliased unsigned  -- p32mx470f512.h:619
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "OC1RSCLR";
 
    OC1RSSET : aliased unsigned  -- p32mx470f512.h:620
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "OC1RSSET";
 
    OC1RSINV : aliased unsigned  -- p32mx470f512.h:621
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "OC1RSINV";
 
    OC2CON : aliased unsigned  -- p32mx470f512.h:622
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "OC2CON";
 
@@ -1565,67 +1565,67 @@ package P32mx470f512h is
      Unchecked_Union => True;  -- p32mx470f512.h:646
 
    OC2CONbits : aliased uu_OC2CONbits_t  -- p32mx470f512.h:647
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "OC2CON";
+     External_Name => "OC2CONbits";
 
    OC2CONCLR : aliased unsigned  -- p32mx470f512.h:648
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "OC2CONCLR";
 
    OC2CONSET : aliased unsigned  -- p32mx470f512.h:649
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "OC2CONSET";
 
    OC2CONINV : aliased unsigned  -- p32mx470f512.h:650
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "OC2CONINV";
 
    OC2R : aliased unsigned  -- p32mx470f512.h:651
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "OC2R";
 
    OC2RCLR : aliased unsigned  -- p32mx470f512.h:652
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "OC2RCLR";
 
    OC2RSET : aliased unsigned  -- p32mx470f512.h:653
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "OC2RSET";
 
    OC2RINV : aliased unsigned  -- p32mx470f512.h:654
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "OC2RINV";
 
    OC2RS : aliased unsigned  -- p32mx470f512.h:655
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "OC2RS";
 
    OC2RSCLR : aliased unsigned  -- p32mx470f512.h:656
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "OC2RSCLR";
 
    OC2RSSET : aliased unsigned  -- p32mx470f512.h:657
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "OC2RSSET";
 
    OC2RSINV : aliased unsigned  -- p32mx470f512.h:658
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "OC2RSINV";
 
    OC3CON : aliased unsigned  -- p32mx470f512.h:659
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "OC3CON";
 
@@ -1674,67 +1674,67 @@ package P32mx470f512h is
      Unchecked_Union => True;  -- p32mx470f512.h:683
 
    OC3CONbits : aliased uu_OC3CONbits_t  -- p32mx470f512.h:684
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "OC3CON";
+     External_Name => "OC3CONbits";
 
    OC3CONCLR : aliased unsigned  -- p32mx470f512.h:685
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "OC3CONCLR";
 
    OC3CONSET : aliased unsigned  -- p32mx470f512.h:686
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "OC3CONSET";
 
    OC3CONINV : aliased unsigned  -- p32mx470f512.h:687
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "OC3CONINV";
 
    OC3R : aliased unsigned  -- p32mx470f512.h:688
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "OC3R";
 
    OC3RCLR : aliased unsigned  -- p32mx470f512.h:689
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "OC3RCLR";
 
    OC3RSET : aliased unsigned  -- p32mx470f512.h:690
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "OC3RSET";
 
    OC3RINV : aliased unsigned  -- p32mx470f512.h:691
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "OC3RINV";
 
    OC3RS : aliased unsigned  -- p32mx470f512.h:692
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "OC3RS";
 
    OC3RSCLR : aliased unsigned  -- p32mx470f512.h:693
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "OC3RSCLR";
 
    OC3RSSET : aliased unsigned  -- p32mx470f512.h:694
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "OC3RSSET";
 
    OC3RSINV : aliased unsigned  -- p32mx470f512.h:695
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "OC3RSINV";
 
    OC4CON : aliased unsigned  -- p32mx470f512.h:696
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "OC4CON";
 
@@ -1783,67 +1783,67 @@ package P32mx470f512h is
      Unchecked_Union => True;  -- p32mx470f512.h:720
 
    OC4CONbits : aliased uu_OC4CONbits_t  -- p32mx470f512.h:721
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "OC4CON";
+     External_Name => "OC4CONbits";
 
    OC4CONCLR : aliased unsigned  -- p32mx470f512.h:722
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "OC4CONCLR";
 
    OC4CONSET : aliased unsigned  -- p32mx470f512.h:723
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "OC4CONSET";
 
    OC4CONINV : aliased unsigned  -- p32mx470f512.h:724
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "OC4CONINV";
 
    OC4R : aliased unsigned  -- p32mx470f512.h:725
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "OC4R";
 
    OC4RCLR : aliased unsigned  -- p32mx470f512.h:726
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "OC4RCLR";
 
    OC4RSET : aliased unsigned  -- p32mx470f512.h:727
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "OC4RSET";
 
    OC4RINV : aliased unsigned  -- p32mx470f512.h:728
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "OC4RINV";
 
    OC4RS : aliased unsigned  -- p32mx470f512.h:729
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "OC4RS";
 
    OC4RSCLR : aliased unsigned  -- p32mx470f512.h:730
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "OC4RSCLR";
 
    OC4RSSET : aliased unsigned  -- p32mx470f512.h:731
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "OC4RSSET";
 
    OC4RSINV : aliased unsigned  -- p32mx470f512.h:732
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "OC4RSINV";
 
    OC5CON : aliased unsigned  -- p32mx470f512.h:733
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "OC5CON";
 
@@ -1892,67 +1892,67 @@ package P32mx470f512h is
      Unchecked_Union => True;  -- p32mx470f512.h:757
 
    OC5CONbits : aliased uu_OC5CONbits_t  -- p32mx470f512.h:758
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "OC5CON";
+     External_Name => "OC5CONbits";
 
    OC5CONCLR : aliased unsigned  -- p32mx470f512.h:759
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "OC5CONCLR";
 
    OC5CONSET : aliased unsigned  -- p32mx470f512.h:760
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "OC5CONSET";
 
    OC5CONINV : aliased unsigned  -- p32mx470f512.h:761
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "OC5CONINV";
 
    OC5R : aliased unsigned  -- p32mx470f512.h:762
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "OC5R";
 
    OC5RCLR : aliased unsigned  -- p32mx470f512.h:763
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "OC5RCLR";
 
    OC5RSET : aliased unsigned  -- p32mx470f512.h:764
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "OC5RSET";
 
    OC5RINV : aliased unsigned  -- p32mx470f512.h:765
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "OC5RINV";
 
    OC5RS : aliased unsigned  -- p32mx470f512.h:766
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "OC5RS";
 
    OC5RSCLR : aliased unsigned  -- p32mx470f512.h:767
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "OC5RSCLR";
 
    OC5RSSET : aliased unsigned  -- p32mx470f512.h:768
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "OC5RSSET";
 
    OC5RSINV : aliased unsigned  -- p32mx470f512.h:769
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "OC5RSINV";
 
    I2C1111CON : aliased unsigned  -- p32mx470f512.h:770
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "I2C1111CON";
 
@@ -2004,12 +2004,12 @@ package P32mx470f512h is
      Unchecked_Union => True;  -- p32mx470f512.h:801
 
    I2C1111CONbits : aliased uu_I2C1111CONbits_t  -- p32mx470f512.h:802
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "I2C1111CON";
+     External_Name => "I2C1111CONbits";
 
    I2C1CON : aliased unsigned  -- p32mx470f512.h:803
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "I2C1CON";
 
@@ -2061,42 +2061,42 @@ package P32mx470f512h is
      Unchecked_Union => True;  -- p32mx470f512.h:834
 
    I2C1CONbits : aliased uu_I2C1CONbits_t  -- p32mx470f512.h:835
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "I2C1CON";
+     External_Name => "I2C1CONbits";
 
    I2C1111CONCLR : aliased unsigned  -- p32mx470f512.h:836
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "I2C1111CONCLR";
 
    I2C1CONCLR : aliased unsigned  -- p32mx470f512.h:837
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "I2C1CONCLR";
 
    I2C1111CONSET : aliased unsigned  -- p32mx470f512.h:838
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "I2C1111CONSET";
 
    I2C1CONSET : aliased unsigned  -- p32mx470f512.h:839
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "I2C1CONSET";
 
    I2C1111CONINV : aliased unsigned  -- p32mx470f512.h:840
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "I2C1111CONINV";
 
    I2C1CONINV : aliased unsigned  -- p32mx470f512.h:841
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "I2C1CONINV";
 
    I2C1111STAT : aliased unsigned  -- p32mx470f512.h:842
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "I2C1111STAT";
 
@@ -2142,12 +2142,12 @@ package P32mx470f512h is
      Unchecked_Union => True;  -- p32mx470f512.h:867
 
    I2C1111STATbits : aliased uu_I2C1111STATbits_t  -- p32mx470f512.h:868
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "I2C1111STAT";
+     External_Name => "I2C1111STATbits";
 
    I2C1STAT : aliased unsigned  -- p32mx470f512.h:869
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "I2C1STAT";
 
@@ -2193,212 +2193,212 @@ package P32mx470f512h is
      Unchecked_Union => True;  -- p32mx470f512.h:894
 
    I2C1STATbits : aliased uu_I2C1STATbits_t  -- p32mx470f512.h:895
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "I2C1STAT";
+     External_Name => "I2C1STATbits";
 
    I2C1111STATCLR : aliased unsigned  -- p32mx470f512.h:896
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "I2C1111STATCLR";
 
    I2C1STATCLR : aliased unsigned  -- p32mx470f512.h:897
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "I2C1STATCLR";
 
    I2C1111STATSET : aliased unsigned  -- p32mx470f512.h:898
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "I2C1111STATSET";
 
    I2C1STATSET : aliased unsigned  -- p32mx470f512.h:899
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "I2C1STATSET";
 
    I2C1111STATINV : aliased unsigned  -- p32mx470f512.h:900
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "I2C1111STATINV";
 
    I2C1STATINV : aliased unsigned  -- p32mx470f512.h:901
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "I2C1STATINV";
 
    I2C1111ADD : aliased unsigned  -- p32mx470f512.h:902
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "I2C1111ADD";
 
    I2C1ADD : aliased unsigned  -- p32mx470f512.h:903
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "I2C1ADD";
 
    I2C1111ADDCLR : aliased unsigned  -- p32mx470f512.h:904
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "I2C1111ADDCLR";
 
    I2C1ADDCLR : aliased unsigned  -- p32mx470f512.h:905
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "I2C1ADDCLR";
 
    I2C1111ADDSET : aliased unsigned  -- p32mx470f512.h:906
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "I2C1111ADDSET";
 
    I2C1ADDSET : aliased unsigned  -- p32mx470f512.h:907
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "I2C1ADDSET";
 
    I2C1111ADDINV : aliased unsigned  -- p32mx470f512.h:908
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "I2C1111ADDINV";
 
    I2C1ADDINV : aliased unsigned  -- p32mx470f512.h:909
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "I2C1ADDINV";
 
    I2C1111MSK : aliased unsigned  -- p32mx470f512.h:910
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "I2C1111MSK";
 
    I2C1MSK : aliased unsigned  -- p32mx470f512.h:911
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "I2C1MSK";
 
    I2C1111MSKCLR : aliased unsigned  -- p32mx470f512.h:912
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "I2C1111MSKCLR";
 
    I2C1MSKCLR : aliased unsigned  -- p32mx470f512.h:913
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "I2C1MSKCLR";
 
    I2C1111MSKSET : aliased unsigned  -- p32mx470f512.h:914
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "I2C1111MSKSET";
 
    I2C1MSKSET : aliased unsigned  -- p32mx470f512.h:915
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "I2C1MSKSET";
 
    I2C1111MSKINV : aliased unsigned  -- p32mx470f512.h:916
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "I2C1111MSKINV";
 
    I2C1MSKINV : aliased unsigned  -- p32mx470f512.h:917
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "I2C1MSKINV";
 
    I2C1111BRG : aliased unsigned  -- p32mx470f512.h:918
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "I2C1111BRG";
 
    I2C1BRG : aliased unsigned  -- p32mx470f512.h:919
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "I2C1BRG";
 
    I2C1111BRGCLR : aliased unsigned  -- p32mx470f512.h:920
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "I2C1111BRGCLR";
 
    I2C1BRGCLR : aliased unsigned  -- p32mx470f512.h:921
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "I2C1BRGCLR";
 
    I2C1111BRGSET : aliased unsigned  -- p32mx470f512.h:922
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "I2C1111BRGSET";
 
    I2C1BRGSET : aliased unsigned  -- p32mx470f512.h:923
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "I2C1BRGSET";
 
    I2C1111BRGINV : aliased unsigned  -- p32mx470f512.h:924
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "I2C1111BRGINV";
 
    I2C1BRGINV : aliased unsigned  -- p32mx470f512.h:925
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "I2C1BRGINV";
 
    I2C1111TRN : aliased unsigned  -- p32mx470f512.h:926
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "I2C1111TRN";
 
    I2C1TRN : aliased unsigned  -- p32mx470f512.h:927
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "I2C1TRN";
 
    I2C1111TRNCLR : aliased unsigned  -- p32mx470f512.h:928
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "I2C1111TRNCLR";
 
    I2C1TRNCLR : aliased unsigned  -- p32mx470f512.h:929
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "I2C1TRNCLR";
 
    I2C1111TRNSET : aliased unsigned  -- p32mx470f512.h:930
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "I2C1111TRNSET";
 
    I2C1TRNSET : aliased unsigned  -- p32mx470f512.h:931
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "I2C1TRNSET";
 
    I2C1111TRNINV : aliased unsigned  -- p32mx470f512.h:932
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "I2C1111TRNINV";
 
    I2C1TRNINV : aliased unsigned  -- p32mx470f512.h:933
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "I2C1TRNINV";
 
    I2C1111RCV : aliased unsigned  -- p32mx470f512.h:934
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "I2C1111RCV";
 
    I2C1RCV : aliased unsigned  -- p32mx470f512.h:935
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "I2C1RCV";
 
    I2C2CON : aliased unsigned  -- p32mx470f512.h:936
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "I2C2CON";
 
@@ -2450,12 +2450,12 @@ package P32mx470f512h is
      Unchecked_Union => True;  -- p32mx470f512.h:967
 
    I2C2CONbits : aliased uu_I2C2CONbits_t  -- p32mx470f512.h:968
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "I2C2CON";
+     External_Name => "I2C2CONbits";
 
    I2CABCON : aliased unsigned  -- p32mx470f512.h:969
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "I2CABCON";
 
@@ -2507,42 +2507,42 @@ package P32mx470f512h is
      Unchecked_Union => True;  -- p32mx470f512.h:1000
 
    I2CABCONbits : aliased uu_I2CABCONbits_t  -- p32mx470f512.h:1001
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "I2CABCON";
+     External_Name => "I2CABCONbits";
 
    I2C2CONCLR : aliased unsigned  -- p32mx470f512.h:1002
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "I2C2CONCLR";
 
    I2CABCONCLR : aliased unsigned  -- p32mx470f512.h:1003
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "I2CABCONCLR";
 
    I2C2CONSET : aliased unsigned  -- p32mx470f512.h:1004
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "I2C2CONSET";
 
    I2CABCONSET : aliased unsigned  -- p32mx470f512.h:1005
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "I2CABCONSET";
 
    I2C2CONINV : aliased unsigned  -- p32mx470f512.h:1006
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "I2C2CONINV";
 
    I2CABCONINV : aliased unsigned  -- p32mx470f512.h:1007
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "I2CABCONINV";
 
    I2C2STAT : aliased unsigned  -- p32mx470f512.h:1008
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "I2C2STAT";
 
@@ -2588,12 +2588,12 @@ package P32mx470f512h is
      Unchecked_Union => True;  -- p32mx470f512.h:1033
 
    I2C2STATbits : aliased uu_I2C2STATbits_t  -- p32mx470f512.h:1034
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "I2C2STAT";
+     External_Name => "I2C2STATbits";
 
    I2CABSTAT : aliased unsigned  -- p32mx470f512.h:1035
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "I2CABSTAT";
 
@@ -2639,212 +2639,212 @@ package P32mx470f512h is
      Unchecked_Union => True;  -- p32mx470f512.h:1060
 
    I2CABSTATbits : aliased uu_I2CABSTATbits_t  -- p32mx470f512.h:1061
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "I2CABSTAT";
+     External_Name => "I2CABSTATbits";
 
    I2C2STATCLR : aliased unsigned  -- p32mx470f512.h:1062
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "I2C2STATCLR";
 
    I2CABSTATCLR : aliased unsigned  -- p32mx470f512.h:1063
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "I2CABSTATCLR";
 
    I2C2STATSET : aliased unsigned  -- p32mx470f512.h:1064
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "I2C2STATSET";
 
    I2CABSTATSET : aliased unsigned  -- p32mx470f512.h:1065
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "I2CABSTATSET";
 
    I2C2STATINV : aliased unsigned  -- p32mx470f512.h:1066
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "I2C2STATINV";
 
    I2CABSTATINV : aliased unsigned  -- p32mx470f512.h:1067
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "I2CABSTATINV";
 
    I2C2ADD : aliased unsigned  -- p32mx470f512.h:1068
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "I2C2ADD";
 
    I2CABADD : aliased unsigned  -- p32mx470f512.h:1069
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "I2CABADD";
 
    I2C2ADDCLR : aliased unsigned  -- p32mx470f512.h:1070
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "I2C2ADDCLR";
 
    I2CABADDCLR : aliased unsigned  -- p32mx470f512.h:1071
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "I2CABADDCLR";
 
    I2C2ADDSET : aliased unsigned  -- p32mx470f512.h:1072
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "I2C2ADDSET";
 
    I2CABADDSET : aliased unsigned  -- p32mx470f512.h:1073
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "I2CABADDSET";
 
    I2C2ADDINV : aliased unsigned  -- p32mx470f512.h:1074
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "I2C2ADDINV";
 
    I2CABADDINV : aliased unsigned  -- p32mx470f512.h:1075
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "I2CABADDINV";
 
    I2C2MSK : aliased unsigned  -- p32mx470f512.h:1076
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "I2C2MSK";
 
    I2CABMSK : aliased unsigned  -- p32mx470f512.h:1077
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "I2CABMSK";
 
    I2C2MSKCLR : aliased unsigned  -- p32mx470f512.h:1078
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "I2C2MSKCLR";
 
    I2CABMSKCLR : aliased unsigned  -- p32mx470f512.h:1079
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "I2CABMSKCLR";
 
    I2C2MSKSET : aliased unsigned  -- p32mx470f512.h:1080
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "I2C2MSKSET";
 
    I2CABMSKSET : aliased unsigned  -- p32mx470f512.h:1081
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "I2CABMSKSET";
 
    I2C2MSKINV : aliased unsigned  -- p32mx470f512.h:1082
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "I2C2MSKINV";
 
    I2CABMSKINV : aliased unsigned  -- p32mx470f512.h:1083
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "I2CABMSKINV";
 
    I2C2BRG : aliased unsigned  -- p32mx470f512.h:1084
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "I2C2BRG";
 
    I2CABBRG : aliased unsigned  -- p32mx470f512.h:1085
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "I2CABBRG";
 
    I2C2BRGCLR : aliased unsigned  -- p32mx470f512.h:1086
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "I2C2BRGCLR";
 
    I2CABBRGCLR : aliased unsigned  -- p32mx470f512.h:1087
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "I2CABBRGCLR";
 
    I2C2BRGSET : aliased unsigned  -- p32mx470f512.h:1088
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "I2C2BRGSET";
 
    I2CABBRGSET : aliased unsigned  -- p32mx470f512.h:1089
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "I2CABBRGSET";
 
    I2C2BRGINV : aliased unsigned  -- p32mx470f512.h:1090
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "I2C2BRGINV";
 
    I2CABBRGINV : aliased unsigned  -- p32mx470f512.h:1091
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "I2CABBRGINV";
 
    I2C2TRN : aliased unsigned  -- p32mx470f512.h:1092
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "I2C2TRN";
 
    I2CABTRN : aliased unsigned  -- p32mx470f512.h:1093
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "I2CABTRN";
 
    I2C2TRNCLR : aliased unsigned  -- p32mx470f512.h:1094
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "I2C2TRNCLR";
 
    I2CABTRNCLR : aliased unsigned  -- p32mx470f512.h:1095
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "I2CABTRNCLR";
 
    I2C2TRNSET : aliased unsigned  -- p32mx470f512.h:1096
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "I2C2TRNSET";
 
    I2CABTRNSET : aliased unsigned  -- p32mx470f512.h:1097
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "I2CABTRNSET";
 
    I2C2TRNINV : aliased unsigned  -- p32mx470f512.h:1098
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "I2C2TRNINV";
 
    I2CABTRNINV : aliased unsigned  -- p32mx470f512.h:1099
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "I2CABTRNINV";
 
    I2C2RCV : aliased unsigned  -- p32mx470f512.h:1100
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "I2C2RCV";
 
    I2CABRCV : aliased unsigned  -- p32mx470f512.h:1101
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "I2CABRCV";
 
    SPI1CON : aliased unsigned  -- p32mx470f512.h:1102
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "SPI1CON";
 
@@ -2892,27 +2892,27 @@ package P32mx470f512h is
      Unchecked_Union => True;  -- p32mx470f512.h:1133
 
    SPI1CONbits : aliased uu_SPI1CONbits_t  -- p32mx470f512.h:1134
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "SPI1CON";
+     External_Name => "SPI1CONbits";
 
    SPI1CONCLR : aliased unsigned  -- p32mx470f512.h:1135
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "SPI1CONCLR";
 
    SPI1CONSET : aliased unsigned  -- p32mx470f512.h:1136
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "SPI1CONSET";
 
    SPI1CONINV : aliased unsigned  -- p32mx470f512.h:1137
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "SPI1CONINV";
 
    SPI1STAT : aliased unsigned  -- p32mx470f512.h:1138
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "SPI1STAT";
 
@@ -2952,52 +2952,52 @@ package P32mx470f512h is
      Unchecked_Union => True;  -- p32mx470f512.h:1161
 
    SPI1STATbits : aliased uu_SPI1STATbits_t  -- p32mx470f512.h:1162
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "SPI1STAT";
+     External_Name => "SPI1STATbits";
 
    SPI1STATCLR : aliased unsigned  -- p32mx470f512.h:1163
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "SPI1STATCLR";
 
    SPI1STATSET : aliased unsigned  -- p32mx470f512.h:1164
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "SPI1STATSET";
 
    SPI1STATINV : aliased unsigned  -- p32mx470f512.h:1165
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "SPI1STATINV";
 
    SPI1BUF : aliased unsigned  -- p32mx470f512.h:1166
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "SPI1BUF";
 
    SPI1BRG : aliased unsigned  -- p32mx470f512.h:1167
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "SPI1BRG";
 
    SPI1BRGCLR : aliased unsigned  -- p32mx470f512.h:1168
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "SPI1BRGCLR";
 
    SPI1BRGSET : aliased unsigned  -- p32mx470f512.h:1169
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "SPI1BRGSET";
 
    SPI1BRGINV : aliased unsigned  -- p32mx470f512.h:1170
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "SPI1BRGINV";
 
    SPI1CON2 : aliased unsigned  -- p32mx470f512.h:1171
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "SPI1CON2";
 
@@ -3041,27 +3041,27 @@ package P32mx470f512h is
      Unchecked_Union => True;  -- p32mx470f512.h:1194
 
    SPI1CON2bits : aliased uu_SPI1CON2bits_t  -- p32mx470f512.h:1195
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "SPI1CON2";
+     External_Name => "SPI1CON2bits";
 
    SPI1CON2CLR : aliased unsigned  -- p32mx470f512.h:1196
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "SPI1CON2CLR";
 
    SPI1CON2SET : aliased unsigned  -- p32mx470f512.h:1197
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "SPI1CON2SET";
 
    SPI1CON2INV : aliased unsigned  -- p32mx470f512.h:1198
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "SPI1CON2INV";
 
    SPI2CON : aliased unsigned  -- p32mx470f512.h:1199
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "SPI2CON";
 
@@ -3109,27 +3109,27 @@ package P32mx470f512h is
      Unchecked_Union => True;  -- p32mx470f512.h:1230
 
    SPI2CONbits : aliased uu_SPI2CONbits_t  -- p32mx470f512.h:1231
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "SPI2CON";
+     External_Name => "SPI2CONbits";
 
    SPI2CONCLR : aliased unsigned  -- p32mx470f512.h:1232
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "SPI2CONCLR";
 
    SPI2CONSET : aliased unsigned  -- p32mx470f512.h:1233
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "SPI2CONSET";
 
    SPI2CONINV : aliased unsigned  -- p32mx470f512.h:1234
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "SPI2CONINV";
 
    SPI2STAT : aliased unsigned  -- p32mx470f512.h:1235
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "SPI2STAT";
 
@@ -3169,52 +3169,52 @@ package P32mx470f512h is
      Unchecked_Union => True;  -- p32mx470f512.h:1258
 
    SPI2STATbits : aliased uu_SPI2STATbits_t  -- p32mx470f512.h:1259
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "SPI2STAT";
+     External_Name => "SPI2STATbits";
 
    SPI2STATCLR : aliased unsigned  -- p32mx470f512.h:1260
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "SPI2STATCLR";
 
    SPI2STATSET : aliased unsigned  -- p32mx470f512.h:1261
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "SPI2STATSET";
 
    SPI2STATINV : aliased unsigned  -- p32mx470f512.h:1262
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "SPI2STATINV";
 
    SPI2BUF : aliased unsigned with  -- p32mx470f512.h:1263
-     Import => True,
+     Export => True,
      Convention => C,
      External_Name => "SPI2BUF";
 
    SPI2BRG : aliased unsigned with  -- p32mx470f512.h:1264
-     Import => True,
+     Export => True,
      Convention => C,
      External_Name => "SPI2BRG";
 
    SPI2BRGCLR : aliased unsigned  -- p32mx470f512.h:1265
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "SPI2BRGCLR";
 
    SPI2BRGSET : aliased unsigned  -- p32mx470f512.h:1266
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "SPI2BRGSET";
 
    SPI2BRGINV : aliased unsigned  -- p32mx470f512.h:1267
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "SPI2BRGINV";
 
    SPI2CON2 : aliased unsigned  -- p32mx470f512.h:1268
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "SPI2CON2";
 
@@ -3258,27 +3258,27 @@ package P32mx470f512h is
      Unchecked_Union => True;  -- p32mx470f512.h:1291
 
    SPI2CON2bits : aliased uu_SPI2CON2bits_t  -- p32mx470f512.h:1292
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "SPI2CON2";
+     External_Name => "SPI2CON2bits";
 
    SPI2CON2CLR : aliased unsigned  -- p32mx470f512.h:1293
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "SPI2CON2CLR";
 
    SPI2CON2SET : aliased unsigned  -- p32mx470f512.h:1294
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "SPI2CON2SET";
 
    SPI2CON2INV : aliased unsigned  -- p32mx470f512.h:1295
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "SPI2CON2INV";
 
    U1MODE : aliased unsigned  -- p32mx470f512.h:1296
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "U1MODE";
 
@@ -3338,12 +3338,12 @@ package P32mx470f512h is
      Unchecked_Union => True;  -- p32mx470f512.h:1331
 
    U1MODEbits : aliased uu_U1MODEbits_t  -- p32mx470f512.h:1332
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "U1MODE";
+     External_Name => "U1MODEbits";
 
    UDCMODE : aliased unsigned  -- p32mx470f512.h:1333
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "UDCMODE";
 
@@ -3403,42 +3403,42 @@ package P32mx470f512h is
      Unchecked_Union => True;  -- p32mx470f512.h:1368
 
    UDCMODEbits : aliased uu_UDCMODEbits_t  -- p32mx470f512.h:1369
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "UDCMODE";
+     External_Name => "UDCMODEbits";
 
    U1MODECLR : aliased unsigned  -- p32mx470f512.h:1370
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "U1MODECLR";
 
    UDCMODECLR : aliased unsigned  -- p32mx470f512.h:1371
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "UDCMODECLR";
 
    U1MODESET : aliased unsigned  -- p32mx470f512.h:1372
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "U1MODESET";
 
    UDCMODESET : aliased unsigned  -- p32mx470f512.h:1373
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "UDCMODESET";
 
    U1MODEINV : aliased unsigned  -- p32mx470f512.h:1374
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "U1MODEINV";
 
    UDCMODEINV : aliased unsigned  -- p32mx470f512.h:1375
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "UDCMODEINV";
 
    U1STA : aliased unsigned  -- p32mx470f512.h:1376
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "U1STA";
 
@@ -3498,12 +3498,12 @@ package P32mx470f512h is
      Unchecked_Union => True;  -- p32mx470f512.h:1411
 
    U1STAbits : aliased uu_U1STAbits_t  -- p32mx470f512.h:1412
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "U1STA";
+     External_Name => "U1STAbits";
 
    UDCSTA : aliased unsigned  -- p32mx470f512.h:1413
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "UDCSTA";
 
@@ -3563,102 +3563,102 @@ package P32mx470f512h is
      Unchecked_Union => True;  -- p32mx470f512.h:1448
 
    UDCSTAbits : aliased uu_UDCSTAbits_t  -- p32mx470f512.h:1449
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "UDCSTA";
+     External_Name => "UDCSTAbits";
 
    U1STACLR : aliased unsigned  -- p32mx470f512.h:1450
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "U1STACLR";
 
    UDCSTACLR : aliased unsigned  -- p32mx470f512.h:1451
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "UDCSTACLR";
 
    U1STASET : aliased unsigned  -- p32mx470f512.h:1452
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "U1STASET";
 
    UDCSTASET : aliased unsigned  -- p32mx470f512.h:1453
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "UDCSTASET";
 
    U1STAINV : aliased unsigned  -- p32mx470f512.h:1454
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "U1STAINV";
 
    UDCSTAINV : aliased unsigned  -- p32mx470f512.h:1455
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "UDCSTAINV";
 
    U1TXREG : aliased unsigned  -- p32mx470f512.h:1456
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "U1TXREG";
 
    UDCTXREG : aliased unsigned  -- p32mx470f512.h:1457
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "UDCTXREG";
 
    U1RXREG : aliased unsigned  -- p32mx470f512.h:1458
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "U1RXREG";
 
    UDCRXREG : aliased unsigned  -- p32mx470f512.h:1459
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "UDCRXREG";
 
    U1BRG : aliased unsigned  -- p32mx470f512.h:1460
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "U1BRG";
 
    UDCBRG : aliased unsigned  -- p32mx470f512.h:1461
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "UDCBRG";
 
    U1BRGCLR : aliased unsigned  -- p32mx470f512.h:1462
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "U1BRGCLR";
 
    UDCBRGCLR : aliased unsigned  -- p32mx470f512.h:1463
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "UDCBRGCLR";
 
    U1BRGSET : aliased unsigned  -- p32mx470f512.h:1464
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "U1BRGSET";
 
    UDCBRGSET : aliased unsigned  -- p32mx470f512.h:1465
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "UDCBRGSET";
 
    U1BRGINV : aliased unsigned  -- p32mx470f512.h:1466
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "U1BRGINV";
 
    UDCBRGINV : aliased unsigned  -- p32mx470f512.h:1467
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "UDCBRGINV";
 
    U2MODE : aliased unsigned  -- p32mx470f512.h:1468
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "U2MODE";
 
@@ -3718,12 +3718,12 @@ package P32mx470f512h is
      Unchecked_Union => True;  -- p32mx470f512.h:1503
 
    U2MODEbits : aliased uu_U2MODEbits_t  -- p32mx470f512.h:1504
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "U2MODE";
+     External_Name => "U2MODEbits";
 
    U8932MODE : aliased unsigned  -- p32mx470f512.h:1505
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "U8932MODE";
 
@@ -3783,42 +3783,42 @@ package P32mx470f512h is
      Unchecked_Union => True;  -- p32mx470f512.h:1540
 
    U8932MODEbits : aliased uu_U8932MODEbits_t  -- p32mx470f512.h:1541
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "U8932MODE";
+     External_Name => "U8932MODEbits";
 
    U2MODECLR : aliased unsigned  -- p32mx470f512.h:1542
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "U2MODECLR";
 
    U8932MODECLR : aliased unsigned  -- p32mx470f512.h:1543
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "U8932MODECLR";
 
    U2MODESET : aliased unsigned  -- p32mx470f512.h:1544
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "U2MODESET";
 
    U8932MODESET : aliased unsigned  -- p32mx470f512.h:1545
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "U8932MODESET";
 
    U2MODEINV : aliased unsigned  -- p32mx470f512.h:1546
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "U2MODEINV";
 
    U8932MODEINV : aliased unsigned  -- p32mx470f512.h:1547
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "U8932MODEINV";
 
    U2STA : aliased unsigned  -- p32mx470f512.h:1548
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "U2STA";
 
@@ -3878,12 +3878,12 @@ package P32mx470f512h is
      Unchecked_Union => True;  -- p32mx470f512.h:1583
 
    U2STAbits : aliased uu_U2STAbits_t  -- p32mx470f512.h:1584
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "U2STA";
+     External_Name => "U2STAbits";
 
    U8932STA : aliased unsigned  -- p32mx470f512.h:1585
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "U8932STA";
 
@@ -3943,102 +3943,102 @@ package P32mx470f512h is
      Unchecked_Union => True;  -- p32mx470f512.h:1620
 
    U8932STAbits : aliased uu_U8932STAbits_t  -- p32mx470f512.h:1621
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "U8932STA";
+     External_Name => "U8932STAbits";
 
    U2STACLR : aliased unsigned  -- p32mx470f512.h:1622
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "U2STACLR";
 
    U8932STACLR : aliased unsigned  -- p32mx470f512.h:1623
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "U8932STACLR";
 
    U2STASET : aliased unsigned  -- p32mx470f512.h:1624
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "U2STASET";
 
    U8932STASET : aliased unsigned  -- p32mx470f512.h:1625
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "U8932STASET";
 
    U2STAINV : aliased unsigned  -- p32mx470f512.h:1626
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "U2STAINV";
 
    U8932STAINV : aliased unsigned  -- p32mx470f512.h:1627
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "U8932STAINV";
 
    U2TXREG : aliased unsigned  -- p32mx470f512.h:1628
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "U2TXREG";
 
    U8932TXREG : aliased unsigned  -- p32mx470f512.h:1629
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "U8932TXREG";
 
    U2RXREG : aliased unsigned  -- p32mx470f512.h:1630
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "U2RXREG";
 
    U8932RXREG : aliased unsigned  -- p32mx470f512.h:1631
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "U8932RXREG";
 
    U2BRG : aliased unsigned  -- p32mx470f512.h:1632
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "U2BRG";
 
    U8932BRG : aliased unsigned  -- p32mx470f512.h:1633
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "U8932BRG";
 
    U2BRGCLR : aliased unsigned  -- p32mx470f512.h:1634
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "U2BRGCLR";
 
    U8932BRGCLR : aliased unsigned  -- p32mx470f512.h:1635
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "U8932BRGCLR";
 
    U2BRGSET : aliased unsigned  -- p32mx470f512.h:1636
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "U2BRGSET";
 
    U8932BRGSET : aliased unsigned  -- p32mx470f512.h:1637
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "U8932BRGSET";
 
    U2BRGINV : aliased unsigned  -- p32mx470f512.h:1638
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "U2BRGINV";
 
    U8932BRGINV : aliased unsigned  -- p32mx470f512.h:1639
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "U8932BRGINV";
 
    U39MODE : aliased unsigned  -- p32mx470f512.h:1640
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "U39MODE";
 
@@ -4098,12 +4098,12 @@ package P32mx470f512h is
      Unchecked_Union => True;  -- p32mx470f512.h:1675
 
    U39MODEbits : aliased uu_U39MODEbits_t  -- p32mx470f512.h:1676
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "U39MODE";
+     External_Name => "U39MODEbits";
 
    U3MODE : aliased unsigned  -- p32mx470f512.h:1677
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "U3MODE";
 
@@ -4163,42 +4163,42 @@ package P32mx470f512h is
      Unchecked_Union => True;  -- p32mx470f512.h:1712
 
    U3MODEbits : aliased uu_U3MODEbits_t  -- p32mx470f512.h:1713
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "U3MODE";
+     External_Name => "U3MODEbits";
 
    U39MODECLR : aliased unsigned  -- p32mx470f512.h:1714
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "U39MODECLR";
 
    U3MODECLR : aliased unsigned  -- p32mx470f512.h:1715
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "U3MODECLR";
 
    U39MODESET : aliased unsigned  -- p32mx470f512.h:1716
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "U39MODESET";
 
    U3MODESET : aliased unsigned  -- p32mx470f512.h:1717
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "U3MODESET";
 
    U39MODEINV : aliased unsigned  -- p32mx470f512.h:1718
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "U39MODEINV";
 
    U3MODEINV : aliased unsigned  -- p32mx470f512.h:1719
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "U3MODEINV";
 
    U39STA : aliased unsigned  -- p32mx470f512.h:1720
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "U39STA";
 
@@ -4258,12 +4258,12 @@ package P32mx470f512h is
      Unchecked_Union => True;  -- p32mx470f512.h:1755
 
    U39STAbits : aliased uu_U39STAbits_t  -- p32mx470f512.h:1756
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "U39STA";
+     External_Name => "U39STAbits";
 
    U3STA : aliased unsigned  -- p32mx470f512.h:1757
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "U3STA";
 
@@ -4323,102 +4323,102 @@ package P32mx470f512h is
      Unchecked_Union => True;  -- p32mx470f512.h:1792
 
    U3STAbits : aliased uu_U3STAbits_t  -- p32mx470f512.h:1793
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "U3STA";
+     External_Name => "U3STAbits";
 
    U39STACLR : aliased unsigned  -- p32mx470f512.h:1794
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "U39STACLR";
 
    U3STACLR : aliased unsigned  -- p32mx470f512.h:1795
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "U3STACLR";
 
    U39STASET : aliased unsigned  -- p32mx470f512.h:1796
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "U39STASET";
 
    U3STASET : aliased unsigned  -- p32mx470f512.h:1797
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "U3STASET";
 
    U39STAINV : aliased unsigned  -- p32mx470f512.h:1798
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "U39STAINV";
 
    U3STAINV : aliased unsigned  -- p32mx470f512.h:1799
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "U3STAINV";
 
    U39TXREG : aliased unsigned  -- p32mx470f512.h:1800
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "U39TXREG";
 
    U3TXREG : aliased unsigned  -- p32mx470f512.h:1801
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "U3TXREG";
 
    U39RXREG : aliased unsigned  -- p32mx470f512.h:1802
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "U39RXREG";
 
    U3RXREG : aliased unsigned  -- p32mx470f512.h:1803
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "U3RXREG";
 
    U39BRG : aliased unsigned  -- p32mx470f512.h:1804
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "U39BRG";
 
    U3BRG : aliased unsigned  -- p32mx470f512.h:1805
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "U3BRG";
 
    U39BRGCLR : aliased unsigned  -- p32mx470f512.h:1806
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "U39BRGCLR";
 
    U3BRGCLR : aliased unsigned  -- p32mx470f512.h:1807
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "U3BRGCLR";
 
    U39BRGSET : aliased unsigned  -- p32mx470f512.h:1808
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "U39BRGSET";
 
    U3BRGSET : aliased unsigned  -- p32mx470f512.h:1809
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "U3BRGSET";
 
    U39BRGINV : aliased unsigned  -- p32mx470f512.h:1810
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "U39BRGINV";
 
    U3BRGINV : aliased unsigned  -- p32mx470f512.h:1811
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "U3BRGINV";
 
    U4MODE : aliased unsigned  -- p32mx470f512.h:1812
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "U4MODE";
 
@@ -4478,12 +4478,12 @@ package P32mx470f512h is
      Unchecked_Union => True;  -- p32mx470f512.h:1847
 
    U4MODEbits : aliased uu_U4MODEbits_t  -- p32mx470f512.h:1848
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "U4MODE";
+     External_Name => "U4MODEbits";
 
    UodMODE : aliased unsigned  -- p32mx470f512.h:1849
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "UodMODE";
 
@@ -4543,42 +4543,42 @@ package P32mx470f512h is
      Unchecked_Union => True;  -- p32mx470f512.h:1884
 
    UodMODEbits : aliased uu_UodMODEbits_t  -- p32mx470f512.h:1885
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "UodMODE";
+     External_Name => "UodMODEbits";
 
    U4MODECLR : aliased unsigned  -- p32mx470f512.h:1886
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "U4MODECLR";
 
    UodMODECLR : aliased unsigned  -- p32mx470f512.h:1887
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "UodMODECLR";
 
    U4MODESET : aliased unsigned  -- p32mx470f512.h:1888
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "U4MODESET";
 
    UodMODESET : aliased unsigned  -- p32mx470f512.h:1889
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "UodMODESET";
 
    U4MODEINV : aliased unsigned  -- p32mx470f512.h:1890
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "U4MODEINV";
 
    UodMODEINV : aliased unsigned  -- p32mx470f512.h:1891
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "UodMODEINV";
 
    U4STA : aliased unsigned  -- p32mx470f512.h:1892
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "U4STA";
 
@@ -4638,12 +4638,12 @@ package P32mx470f512h is
      Unchecked_Union => True;  -- p32mx470f512.h:1927
 
    U4STAbits : aliased uu_U4STAbits_t  -- p32mx470f512.h:1928
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "U4STA";
+     External_Name => "U4STAbits";
 
    UodSTA : aliased unsigned  -- p32mx470f512.h:1929
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "UodSTA";
 
@@ -4703,102 +4703,102 @@ package P32mx470f512h is
      Unchecked_Union => True;  -- p32mx470f512.h:1964
 
    UodSTAbits : aliased uu_UodSTAbits_t  -- p32mx470f512.h:1965
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "UodSTA";
+     External_Name => "UodSTAbits";
 
    U4STACLR : aliased unsigned  -- p32mx470f512.h:1966
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "U4STACLR";
 
    UodSTACLR : aliased unsigned  -- p32mx470f512.h:1967
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "UodSTACLR";
 
    U4STASET : aliased unsigned  -- p32mx470f512.h:1968
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "U4STASET";
 
    UodSTASET : aliased unsigned  -- p32mx470f512.h:1969
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "UodSTASET";
 
    U4STAINV : aliased unsigned  -- p32mx470f512.h:1970
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "U4STAINV";
 
    UodSTAINV : aliased unsigned  -- p32mx470f512.h:1971
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "UodSTAINV";
 
    U4TXREG : aliased unsigned  -- p32mx470f512.h:1972
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "U4TXREG";
 
    UodTXREG : aliased unsigned  -- p32mx470f512.h:1973
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "UodTXREG";
 
    U4RXREG : aliased unsigned  -- p32mx470f512.h:1974
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "U4RXREG";
 
    UodRXREG : aliased unsigned  -- p32mx470f512.h:1975
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "UodRXREG";
 
    U4BRG : aliased unsigned  -- p32mx470f512.h:1976
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "U4BRG";
 
    UodBRG : aliased unsigned  -- p32mx470f512.h:1977
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "UodBRG";
 
    U4BRGCLR : aliased unsigned  -- p32mx470f512.h:1978
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "U4BRGCLR";
 
    UodBRGCLR : aliased unsigned  -- p32mx470f512.h:1979
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "UodBRGCLR";
 
    U4BRGSET : aliased unsigned  -- p32mx470f512.h:1980
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "U4BRGSET";
 
    UodBRGSET : aliased unsigned  -- p32mx470f512.h:1981
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "UodBRGSET";
 
    U4BRGINV : aliased unsigned  -- p32mx470f512.h:1982
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "U4BRGINV";
 
    UodBRGINV : aliased unsigned  -- p32mx470f512.h:1983
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "UodBRGINV";
 
    PMCON : aliased unsigned  -- p32mx470f512.h:1984
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "PMCON";
 
@@ -4858,27 +4858,27 @@ package P32mx470f512h is
      Unchecked_Union => True;  -- p32mx470f512.h:2019
 
    PMCONbits : aliased uu_PMCONbits_t  -- p32mx470f512.h:2020
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "PMCON";
+     External_Name => "PMCONbits";
 
    PMCONCLR : aliased unsigned  -- p32mx470f512.h:2021
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "PMCONCLR";
 
    PMCONSET : aliased unsigned  -- p32mx470f512.h:2022
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "PMCONSET";
 
    PMCONINV : aliased unsigned  -- p32mx470f512.h:2023
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "PMCONINV";
 
    PMMODE : aliased unsigned  -- p32mx470f512.h:2024
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "PMMODE";
 
@@ -4931,27 +4931,27 @@ package P32mx470f512h is
      Unchecked_Union => True;  -- p32mx470f512.h:2056
 
    PMMODEbits : aliased uu_PMMODEbits_t  -- p32mx470f512.h:2057
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "PMMODE";
+     External_Name => "PMMODEbits";
 
    PMMODECLR : aliased unsigned  -- p32mx470f512.h:2058
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "PMMODECLR";
 
    PMMODESET : aliased unsigned  -- p32mx470f512.h:2059
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "PMMODESET";
 
    PMMODEINV : aliased unsigned  -- p32mx470f512.h:2060
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "PMMODEINV";
 
    PMADDR : aliased unsigned  -- p32mx470f512.h:2061
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "PMADDR";
 
@@ -4993,27 +4993,27 @@ package P32mx470f512h is
      Unchecked_Union => True;  -- p32mx470f512.h:2078
 
    PMADDRbits : aliased uu_PMADDRbits_t  -- p32mx470f512.h:2079
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "PMADDR";
+     External_Name => "PMADDRbits";
 
    PMADDRCLR : aliased unsigned  -- p32mx470f512.h:2080
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "PMADDRCLR";
 
    PMADDRSET : aliased unsigned  -- p32mx470f512.h:2081
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "PMADDRSET";
 
    PMADDRINV : aliased unsigned  -- p32mx470f512.h:2082
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "PMADDRINV";
 
    PMDOUT : aliased unsigned  -- p32mx470f512.h:2083
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "PMDOUT";
 
@@ -5036,27 +5036,27 @@ package P32mx470f512h is
      Unchecked_Union => True;  -- p32mx470f512.h:2091
 
    PMDOUTbits : aliased uu_PMDOUTbits_t  -- p32mx470f512.h:2092
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "PMDOUT";
+     External_Name => "PMDOUTbits";
 
    PMDOUTCLR : aliased unsigned  -- p32mx470f512.h:2093
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "PMDOUTCLR";
 
    PMDOUTSET : aliased unsigned  -- p32mx470f512.h:2094
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "PMDOUTSET";
 
    PMDOUTINV : aliased unsigned  -- p32mx470f512.h:2095
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "PMDOUTINV";
 
    PMDIN : aliased unsigned  -- p32mx470f512.h:2096
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "PMDIN";
 
@@ -5081,27 +5081,27 @@ package P32mx470f512h is
      Unchecked_Union => True;  -- p32mx470f512.h:2104
 
    PMDINbits : aliased uu_PMDINbits_t  -- p32mx470f512.h:2105
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "PMDIN";
+     External_Name => "PMDINbits";
 
    PMDINCLR : aliased unsigned  -- p32mx470f512.h:2106
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "PMDINCLR";
 
    PMDINSET : aliased unsigned  -- p32mx470f512.h:2107
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "PMDINSET";
 
    PMDININV : aliased unsigned  -- p32mx470f512.h:2108
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "PMDININV";
 
    PMAEN : aliased unsigned  -- p32mx470f512.h:2109
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "PMAEN";
 
@@ -5146,27 +5146,27 @@ package P32mx470f512h is
      Unchecked_Union => True;  -- p32mx470f512.h:2135
 
    PMAENbits : aliased uu_PMAENbits_t  -- p32mx470f512.h:2136
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "PMAEN";
+     External_Name => "PMAENbits";
 
    PMAENCLR : aliased unsigned  -- p32mx470f512.h:2137
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "PMAENCLR";
 
    PMAENSET : aliased unsigned  -- p32mx470f512.h:2138
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "PMAENSET";
 
    PMAENINV : aliased unsigned  -- p32mx470f512.h:2139
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "PMAENINV";
 
    PMSTAT : aliased unsigned  -- p32mx470f512.h:2140
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "PMSTAT";
 
@@ -5204,27 +5204,27 @@ package P32mx470f512h is
      Unchecked_Union => True;  -- p32mx470f512.h:2161
 
    PMSTATbits : aliased uu_PMSTATbits_t  -- p32mx470f512.h:2162
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "PMSTAT";
+     External_Name => "PMSTATbits";
 
    PMSTATCLR : aliased unsigned  -- p32mx470f512.h:2163
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "PMSTATCLR";
 
    PMSTATSET : aliased unsigned  -- p32mx470f512.h:2164
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "PMSTATSET";
 
    PMSTATINV : aliased unsigned  -- p32mx470f512.h:2165
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "PMSTATINV";
 
    AD1CON1 : aliased unsigned  -- p32mx470f512.h:2166
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "AD1CON1";
 
@@ -5282,27 +5282,27 @@ package P32mx470f512h is
      Unchecked_Union => True;  -- p32mx470f512.h:2199
 
    AD1CON1bits : aliased uu_AD1CON1bits_t  -- p32mx470f512.h:2200
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "AD1CON1";
+     External_Name => "AD1CON1bits";
 
    AD1CON1CLR : aliased unsigned  -- p32mx470f512.h:2201
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "AD1CON1CLR";
 
    AD1CON1SET : aliased unsigned  -- p32mx470f512.h:2202
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "AD1CON1SET";
 
    AD1CON1INV : aliased unsigned  -- p32mx470f512.h:2203
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "AD1CON1INV";
 
    AD1CON2 : aliased unsigned  -- p32mx470f512.h:2204
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "AD1CON2";
 
@@ -5351,27 +5351,27 @@ package P32mx470f512h is
      Unchecked_Union => True;  -- p32mx470f512.h:2232
 
    AD1CON2bits : aliased uu_AD1CON2bits_t  -- p32mx470f512.h:2233
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "AD1CON2";
+     External_Name => "AD1CON2bits";
 
    AD1CON2CLR : aliased unsigned  -- p32mx470f512.h:2234
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "AD1CON2CLR";
 
    AD1CON2SET : aliased unsigned  -- p32mx470f512.h:2235
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "AD1CON2SET";
 
    AD1CON2INV : aliased unsigned  -- p32mx470f512.h:2236
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "AD1CON2INV";
 
    AD1CON3 : aliased unsigned  -- p32mx470f512.h:2237
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "AD1CON3";
 
@@ -5418,27 +5418,27 @@ package P32mx470f512h is
      Unchecked_Union => True;  -- p32mx470f512.h:2263
 
    AD1CON3bits : aliased uu_AD1CON3bits_t  -- p32mx470f512.h:2264
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "AD1CON3";
+     External_Name => "AD1CON3bits";
 
    AD1CON3CLR : aliased unsigned  -- p32mx470f512.h:2265
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "AD1CON3CLR";
 
    AD1CON3SET : aliased unsigned  -- p32mx470f512.h:2266
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "AD1CON3SET";
 
    AD1CON3INV : aliased unsigned  -- p32mx470f512.h:2267
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "AD1CON3INV";
 
    AD1CHS : aliased unsigned  -- p32mx470f512.h:2268
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "AD1CHS";
 
@@ -5485,27 +5485,27 @@ package P32mx470f512h is
      Unchecked_Union => True;  -- p32mx470f512.h:2294
 
    AD1CHSbits : aliased uu_AD1CHSbits_t  -- p32mx470f512.h:2295
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "AD1CHS";
+     External_Name => "AD1CHSbits";
 
    AD1CHSCLR : aliased unsigned  -- p32mx470f512.h:2296
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "AD1CHSCLR";
 
    AD1CHSSET : aliased unsigned  -- p32mx470f512.h:2297
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "AD1CHSSET";
 
    AD1CHSINV : aliased unsigned  -- p32mx470f512.h:2298
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "AD1CHSINV";
 
    AD1CSSL : aliased unsigned  -- p32mx470f512.h:2299
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "AD1CSSL";
 
@@ -5567,107 +5567,107 @@ package P32mx470f512h is
      Unchecked_Union => True;  -- p32mx470f512.h:2340
 
    AD1CSSLbits : aliased uu_AD1CSSLbits_t  -- p32mx470f512.h:2341
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "AD1CSSL";
+     External_Name => "AD1CSSLbits";
 
    AD1CSSLCLR : aliased unsigned  -- p32mx470f512.h:2342
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "AD1CSSLCLR";
 
    AD1CSSLSET : aliased unsigned  -- p32mx470f512.h:2343
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "AD1CSSLSET";
 
    AD1CSSLINV : aliased unsigned  -- p32mx470f512.h:2344
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "AD1CSSLINV";
 
    ADC1BUF0 : aliased unsigned  -- p32mx470f512.h:2345
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "ADC1BUF0";
 
    ADC1BUF1 : aliased unsigned  -- p32mx470f512.h:2346
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "ADC1BUF1";
 
    ADC1BUF2 : aliased unsigned  -- p32mx470f512.h:2347
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "ADC1BUF2";
 
    ADC1BUF3 : aliased unsigned  -- p32mx470f512.h:2348
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "ADC1BUF3";
 
    ADC1BUF4 : aliased unsigned  -- p32mx470f512.h:2349
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "ADC1BUF4";
 
    ADC1BUF5 : aliased unsigned  -- p32mx470f512.h:2350
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "ADC1BUF5";
 
    ADC1BUF6 : aliased unsigned  -- p32mx470f512.h:2351
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "ADC1BUF6";
 
    ADC1BUF7 : aliased unsigned  -- p32mx470f512.h:2352
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "ADC1BUF7";
 
    ADC1BUF8 : aliased unsigned  -- p32mx470f512.h:2353
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "ADC1BUF8";
 
    ADC1BUF9 : aliased unsigned  -- p32mx470f512.h:2354
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "ADC1BUF9";
 
    ADC1BUFA : aliased unsigned  -- p32mx470f512.h:2355
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "ADC1BUFA";
 
    ADC1BUFB : aliased unsigned  -- p32mx470f512.h:2356
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "ADC1BUFB";
 
    ADC1BUFC : aliased unsigned  -- p32mx470f512.h:2357
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "ADC1BUFC";
 
    ADC1BUFD : aliased unsigned  -- p32mx470f512.h:2358
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "ADC1BUFD";
 
    ADC1BUFE : aliased unsigned  -- p32mx470f512.h:2359
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "ADC1BUFE";
 
    ADC1BUFF : aliased unsigned  -- p32mx470f512.h:2360
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "ADC1BUFF";
 
    CVRCON : aliased unsigned  -- p32mx470f512.h:2361
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "CVRCON";
 
@@ -5713,27 +5713,27 @@ package P32mx470f512h is
      Unchecked_Union => True;  -- p32mx470f512.h:2386
 
    CVRCONbits : aliased uu_CVRCONbits_t  -- p32mx470f512.h:2387
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "CVRCON";
+     External_Name => "CVRCONbits";
 
    CVRCONCLR : aliased unsigned  -- p32mx470f512.h:2388
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "CVRCONCLR";
 
    CVRCONSET : aliased unsigned  -- p32mx470f512.h:2389
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "CVRCONSET";
 
    CVRCONINV : aliased unsigned  -- p32mx470f512.h:2390
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "CVRCONINV";
 
    CM1CON : aliased unsigned  -- p32mx470f512.h:2391
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "CM1CON";
 
@@ -5779,27 +5779,27 @@ package P32mx470f512h is
      Unchecked_Union => True;  -- p32mx470f512.h:2416
 
    CM1CONbits : aliased uu_CM1CONbits_t  -- p32mx470f512.h:2417
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "CM1CON";
+     External_Name => "CM1CONbits";
 
    CM1CONCLR : aliased unsigned  -- p32mx470f512.h:2418
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "CM1CONCLR";
 
    CM1CONSET : aliased unsigned  -- p32mx470f512.h:2419
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "CM1CONSET";
 
    CM1CONINV : aliased unsigned  -- p32mx470f512.h:2420
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "CM1CONINV";
 
    CM2CON : aliased unsigned  -- p32mx470f512.h:2421
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "CM2CON";
 
@@ -5845,27 +5845,27 @@ package P32mx470f512h is
      Unchecked_Union => True;  -- p32mx470f512.h:2446
 
    CM2CONbits : aliased uu_CM2CONbits_t  -- p32mx470f512.h:2447
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "CM2CON";
+     External_Name => "CM2CONbits";
 
    CM2CONCLR : aliased unsigned  -- p32mx470f512.h:2448
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "CM2CONCLR";
 
    CM2CONSET : aliased unsigned  -- p32mx470f512.h:2449
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "CM2CONSET";
 
    CM2CONINV : aliased unsigned  -- p32mx470f512.h:2450
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "CM2CONINV";
 
    CMSTAT : aliased unsigned  -- p32mx470f512.h:2451
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "CMSTAT";
 
@@ -5897,27 +5897,27 @@ package P32mx470f512h is
      Unchecked_Union => True;  -- p32mx470f512.h:2466
 
    CMSTATbits : aliased uu_CMSTATbits_t  -- p32mx470f512.h:2467
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "CMSTAT";
+     External_Name => "CMSTATbits";
 
    CMSTATCLR : aliased unsigned  -- p32mx470f512.h:2468
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "CMSTATCLR";
 
    CMSTATSET : aliased unsigned  -- p32mx470f512.h:2469
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "CMSTATSET";
 
    CMSTATINV : aliased unsigned  -- p32mx470f512.h:2470
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "CMSTATINV";
 
    CTMUCON : aliased unsigned  -- p32mx470f512.h:2471
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "CTMUCON";
 
@@ -5960,27 +5960,27 @@ package P32mx470f512h is
      Unchecked_Union => True;  -- p32mx470f512.h:2497
 
    CTMUCONbits : aliased uu_CTMUCONbits_t  -- p32mx470f512.h:2498
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "CTMUCON";
+     External_Name => "CTMUCONbits";
 
    CTMUCONCLR : aliased unsigned  -- p32mx470f512.h:2499
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "CTMUCONCLR";
 
    CTMUCONSET : aliased unsigned  -- p32mx470f512.h:2500
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "CTMUCONSET";
 
    CTMUCONINV : aliased unsigned  -- p32mx470f512.h:2501
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "CTMUCONINV";
 
    OSCCON : aliased unsigned  -- p32mx470f512.h:2502
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "OSCCON";
 
@@ -6050,27 +6050,27 @@ package P32mx470f512h is
      Unchecked_Union => True;  -- p32mx470f512.h:2551
 
    OSCCONbits : aliased uu_OSCCONbits_t  -- p32mx470f512.h:2552
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "OSCCON";
+     External_Name => "OSCCONbits";
 
    OSCCONCLR : aliased unsigned  -- p32mx470f512.h:2553
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "OSCCONCLR";
 
    OSCCONSET : aliased unsigned  -- p32mx470f512.h:2554
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "OSCCONSET";
 
    OSCCONINV : aliased unsigned  -- p32mx470f512.h:2555
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "OSCCONINV";
 
    OSCTUN : aliased unsigned  -- p32mx470f512.h:2556
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "OSCTUN";
 
@@ -6107,27 +6107,27 @@ package P32mx470f512h is
      Unchecked_Union => True;  -- p32mx470f512.h:2572
 
    OSCTUNbits : aliased uu_OSCTUNbits_t  -- p32mx470f512.h:2573
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "OSCTUN";
+     External_Name => "OSCTUNbits";
 
    OSCTUNCLR : aliased unsigned  -- p32mx470f512.h:2574
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "OSCTUNCLR";
 
    OSCTUNSET : aliased unsigned  -- p32mx470f512.h:2575
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "OSCTUNSET";
 
    OSCTUNINV : aliased unsigned  -- p32mx470f512.h:2576
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "OSCTUNINV";
 
    REFOCON : aliased unsigned  -- p32mx470f512.h:2577
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "REFOCON";
 
@@ -6162,27 +6162,27 @@ package P32mx470f512h is
      Unchecked_Union => True;  -- p32mx470f512.h:2595
 
    REFOCONbits : aliased uu_REFOCONbits_t  -- p32mx470f512.h:2596
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "REFOCON";
+     External_Name => "REFOCONbits";
 
    REFOCONCLR : aliased unsigned  -- p32mx470f512.h:2597
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "REFOCONCLR";
 
    REFOCONSET : aliased unsigned  -- p32mx470f512.h:2598
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "REFOCONSET";
 
    REFOCONINV : aliased unsigned  -- p32mx470f512.h:2599
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "REFOCONINV";
 
    REFOTRIM : aliased unsigned  -- p32mx470f512.h:2600
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "REFOTRIM";
 
@@ -6208,27 +6208,27 @@ package P32mx470f512h is
      Unchecked_Union => True;  -- p32mx470f512.h:2609
 
    REFOTRIMbits : aliased uu_REFOTRIMbits_t  -- p32mx470f512.h:2610
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "REFOTRIM";
+     External_Name => "REFOTRIMbits";
 
    REFOTRIMCLR : aliased unsigned  -- p32mx470f512.h:2611
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "REFOTRIMCLR";
 
    REFOTRIMSET : aliased unsigned  -- p32mx470f512.h:2612
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "REFOTRIMSET";
 
    REFOTRIMINV : aliased unsigned  -- p32mx470f512.h:2613
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "REFOTRIMINV";
 
    CFGCON : aliased unsigned  -- p32mx470f512.h:2614
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "CFGCON";
 
@@ -6246,12 +6246,12 @@ package P32mx470f512h is
      Alignment => 4;  -- p32mx470f512.h:2623
 
    CFGCONbits : aliased uu_CFGCONbits_t  -- p32mx470f512.h:2624
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "CFGCON";
+     External_Name => "CFGCONbits";
 
    DDPCON : aliased unsigned  -- p32mx470f512.h:2625
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "DDPCON";
 
@@ -6269,12 +6269,12 @@ package P32mx470f512h is
      Alignment => 4;  -- p32mx470f512.h:2634
 
    DDPCONbits : aliased uu_DDPCONbits_t  -- p32mx470f512.h:2635
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "DDPCON";
+     External_Name => "DDPCONbits";
 
    DEVID : aliased unsigned  -- p32mx470f512.h:2636
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "DEVID";
 
@@ -6287,32 +6287,32 @@ package P32mx470f512h is
      Alignment => 4;  -- p32mx470f512.h:2640
 
    DEVIDbits : aliased uu_DEVIDbits_t  -- p32mx470f512.h:2641
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "DEVID";
+     External_Name => "DEVIDbits";
 
    SYSKEY : aliased unsigned  -- p32mx470f512.h:2642
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "SYSKEY";
 
    SYSKEYCLR : aliased unsigned  -- p32mx470f512.h:2643
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "SYSKEYCLR";
 
    SYSKEYSET : aliased unsigned  -- p32mx470f512.h:2644
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "SYSKEYSET";
 
    SYSKEYINV : aliased unsigned  -- p32mx470f512.h:2645
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "SYSKEYINV";
 
    PMD1 : aliased unsigned  -- p32mx470f512.h:2646
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "PMD1";
 
@@ -6328,27 +6328,27 @@ package P32mx470f512h is
      Alignment => 4;  -- p32mx470f512.h:2653
 
    PMD1bits : aliased uu_PMD1bits_t  -- p32mx470f512.h:2654
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "PMD1";
+     External_Name => "PMD1bits";
 
    PMD1CLR : aliased unsigned  -- p32mx470f512.h:2655
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "PMD1CLR";
 
    PMD1SET : aliased unsigned  -- p32mx470f512.h:2656
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "PMD1SET";
 
    PMD1INV : aliased unsigned  -- p32mx470f512.h:2657
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "PMD1INV";
 
    PMD2 : aliased unsigned  -- p32mx470f512.h:2658
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "PMD2";
 
@@ -6361,27 +6361,27 @@ package P32mx470f512h is
      Alignment => 4;  -- p32mx470f512.h:2662
 
    PMD2bits : aliased uu_PMD2bits_t  -- p32mx470f512.h:2663
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "PMD2";
+     External_Name => "PMD2bits";
 
    PMD2CLR : aliased unsigned  -- p32mx470f512.h:2664
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "PMD2CLR";
 
    PMD2SET : aliased unsigned  -- p32mx470f512.h:2665
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "PMD2SET";
 
    PMD2INV : aliased unsigned  -- p32mx470f512.h:2666
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "PMD2INV";
 
    PMD3 : aliased unsigned  -- p32mx470f512.h:2667
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "PMD3";
 
@@ -6403,27 +6403,27 @@ package P32mx470f512h is
      Alignment => 4;  -- p32mx470f512.h:2680
 
    PMD3bits : aliased uu_PMD3bits_t  -- p32mx470f512.h:2681
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "PMD3";
+     External_Name => "PMD3bits";
 
    PMD3CLR : aliased unsigned  -- p32mx470f512.h:2682
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "PMD3CLR";
 
    PMD3SET : aliased unsigned  -- p32mx470f512.h:2683
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "PMD3SET";
 
    PMD3INV : aliased unsigned  -- p32mx470f512.h:2684
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "PMD3INV";
 
    PMD4 : aliased unsigned  -- p32mx470f512.h:2685
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "PMD4";
 
@@ -6439,27 +6439,27 @@ package P32mx470f512h is
      Alignment => 4;  -- p32mx470f512.h:2692
 
    PMD4bits : aliased uu_PMD4bits_t  -- p32mx470f512.h:2693
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "PMD4";
+     External_Name => "PMD4bits";
 
    PMD4CLR : aliased unsigned  -- p32mx470f512.h:2694
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "PMD4CLR";
 
    PMD4SET : aliased unsigned  -- p32mx470f512.h:2695
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "PMD4SET";
 
    PMD4INV : aliased unsigned  -- p32mx470f512.h:2696
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "PMD4INV";
 
    PMD5 : aliased unsigned  -- p32mx470f512.h:2697
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "PMD5";
 
@@ -6482,27 +6482,27 @@ package P32mx470f512h is
      Alignment => 4;  -- p32mx470f512.h:2711
 
    PMD5bits : aliased uu_PMD5bits_t  -- p32mx470f512.h:2712
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "PMD5";
+     External_Name => "PMD5bits";
 
    PMD5CLR : aliased unsigned  -- p32mx470f512.h:2713
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "PMD5CLR";
 
    PMD5SET : aliased unsigned  -- p32mx470f512.h:2714
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "PMD5SET";
 
    PMD5INV : aliased unsigned  -- p32mx470f512.h:2715
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "PMD5INV";
 
    PMD6 : aliased unsigned  -- p32mx470f512.h:2716
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "PMD6";
 
@@ -6517,27 +6517,27 @@ package P32mx470f512h is
      Alignment => 4;  -- p32mx470f512.h:2722
 
    PMD6bits : aliased uu_PMD6bits_t  -- p32mx470f512.h:2723
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "PMD6";
+     External_Name => "PMD6bits";
 
    PMD6CLR : aliased unsigned  -- p32mx470f512.h:2724
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "PMD6CLR";
 
    PMD6SET : aliased unsigned  -- p32mx470f512.h:2725
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "PMD6SET";
 
    PMD6INV : aliased unsigned  -- p32mx470f512.h:2726
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "PMD6INV";
 
    NVMCON : aliased unsigned  -- p32mx470f512.h:2727
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "NVMCON";
 
@@ -6595,62 +6595,62 @@ package P32mx470f512h is
      Unchecked_Union => True;  -- p32mx470f512.h:2756
 
    NVMCONbits : aliased uu_NVMCONbits_t  -- p32mx470f512.h:2757
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "NVMCON";
+     External_Name => "NVMCONbits";
 
    NVMCONCLR : aliased unsigned  -- p32mx470f512.h:2758
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "NVMCONCLR";
 
    NVMCONSET : aliased unsigned  -- p32mx470f512.h:2759
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "NVMCONSET";
 
    NVMCONINV : aliased unsigned  -- p32mx470f512.h:2760
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "NVMCONINV";
 
    NVMKEY : aliased unsigned  -- p32mx470f512.h:2761
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "NVMKEY";
 
    NVMADDR : aliased unsigned  -- p32mx470f512.h:2762
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "NVMADDR";
 
    NVMADDRCLR : aliased unsigned  -- p32mx470f512.h:2763
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "NVMADDRCLR";
 
    NVMADDRSET : aliased unsigned  -- p32mx470f512.h:2764
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "NVMADDRSET";
 
    NVMADDRINV : aliased unsigned  -- p32mx470f512.h:2765
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "NVMADDRINV";
 
    NVMDATA : aliased unsigned  -- p32mx470f512.h:2766
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "NVMDATA";
 
    NVMSRCADDR : aliased unsigned  -- p32mx470f512.h:2767
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "NVMSRCADDR";
 
    RCON : aliased unsigned;  -- p32mx470f512.h:2768
-   --       with Import => True,
+   --       with Export => True,
    --       Convention => C,
    --       External_Name => "RCON";
 
@@ -6686,27 +6686,27 @@ package P32mx470f512h is
      Unchecked_Union => True;  -- p32mx470f512.h:2787
 
    RCONbits : aliased uu_RCONbits_t  -- p32mx470f512.h:2788
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "RCON";
 
    RCONCLR : aliased unsigned  -- p32mx470f512.h:2789
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "RCONCLR";
 
    RCONSET : aliased unsigned  -- p32mx470f512.h:2790
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "RCONSET";
 
    RCONINV : aliased unsigned  -- p32mx470f512.h:2791
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "RCONINV";
 
    RSWRST : aliased unsigned  -- p32mx470f512.h:2792
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "RSWRST";
 
@@ -6731,27 +6731,27 @@ package P32mx470f512h is
      Unchecked_Union => True;  -- p32mx470f512.h:2800
 
    RSWRSTbits : aliased uu_RSWRSTbits_t  -- p32mx470f512.h:2801
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "RSWRST";
+     External_Name => "RSWRSTbits";
 
    RSWRSTCLR : aliased unsigned  -- p32mx470f512.h:2802
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "RSWRSTCLR";
 
    RSWRSTSET : aliased unsigned  -- p32mx470f512.h:2803
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "RSWRSTSET";
 
    RSWRSTINV : aliased unsigned  -- p32mx470f512.h:2804
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "RSWRSTINV";
 
    INT1R : aliased unsigned  -- p32mx470f512.h:2805
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "INT1R";
 
@@ -6763,12 +6763,12 @@ package P32mx470f512h is
      Alignment => 4;  -- p32mx470f512.h:2808
 
    INT1Rbits : aliased uu_INT1Rbits_t  -- p32mx470f512.h:2809
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "INT1R";
+     External_Name => "INT1Rbits";
 
    INT2R : aliased unsigned  -- p32mx470f512.h:2810
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "INT2R";
 
@@ -6780,12 +6780,12 @@ package P32mx470f512h is
      Alignment => 4;  -- p32mx470f512.h:2813
 
    INT2Rbits : aliased uu_INT2Rbits_t  -- p32mx470f512.h:2814
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "INT2R";
+     External_Name => "INT2Rbits";
 
    INT3R : aliased unsigned  -- p32mx470f512.h:2815
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "INT3R";
 
@@ -6797,12 +6797,12 @@ package P32mx470f512h is
      Alignment => 4;  -- p32mx470f512.h:2818
 
    INT3Rbits : aliased uu_INT3Rbits_t  -- p32mx470f512.h:2819
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "INT3R";
+     External_Name => "INT3Rbits";
 
    INT4R : aliased unsigned  -- p32mx470f512.h:2820
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "INT4R";
 
@@ -6814,12 +6814,12 @@ package P32mx470f512h is
      Alignment => 4;  -- p32mx470f512.h:2823
 
    INT4Rbits : aliased uu_INT4Rbits_t  -- p32mx470f512.h:2824
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "INT4R";
+     External_Name => "INT4Rbits";
 
    T2CKR : aliased unsigned  -- p32mx470f512.h:2825
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "T2CKR";
 
@@ -6831,12 +6831,12 @@ package P32mx470f512h is
      Alignment => 4;  -- p32mx470f512.h:2828
 
    T2CKRbits : aliased uu_T2CKRbits_t  -- p32mx470f512.h:2829
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "T2CKR";
+     External_Name => "T2CKRbits";
 
    T3CKR : aliased unsigned  -- p32mx470f512.h:2830
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "T3CKR";
 
@@ -6848,12 +6848,12 @@ package P32mx470f512h is
      Alignment => 4;  -- p32mx470f512.h:2833
 
    T3CKRbits : aliased uu_T3CKRbits_t  -- p32mx470f512.h:2834
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "T3CKR";
+     External_Name => "T3CKRbits";
 
    T4CKR : aliased unsigned  -- p32mx470f512.h:2835
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "T4CKR";
 
@@ -6865,12 +6865,12 @@ package P32mx470f512h is
      Alignment => 4;  -- p32mx470f512.h:2838
 
    T4CKRbits : aliased uu_T4CKRbits_t  -- p32mx470f512.h:2839
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "T4CKR";
+     External_Name => "T4CKRbits";
 
    T5CKR : aliased unsigned  -- p32mx470f512.h:2840
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "T5CKR";
 
@@ -6882,12 +6882,12 @@ package P32mx470f512h is
      Alignment => 4;  -- p32mx470f512.h:2843
 
    T5CKRbits : aliased uu_T5CKRbits_t  -- p32mx470f512.h:2844
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "T5CKR";
+     External_Name => "T5CKRbits";
 
    IC1R : aliased unsigned  -- p32mx470f512.h:2845
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "IC1R";
 
@@ -6899,12 +6899,12 @@ package P32mx470f512h is
      Alignment => 4;  -- p32mx470f512.h:2848
 
    IC1Rbits : aliased uu_IC1Rbits_t  -- p32mx470f512.h:2849
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "IC1R";
+     External_Name => "IC1Rbits";
 
    IC2R : aliased unsigned  -- p32mx470f512.h:2850
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "IC2R";
 
@@ -6916,12 +6916,12 @@ package P32mx470f512h is
      Alignment => 4;  -- p32mx470f512.h:2853
 
    IC2Rbits : aliased uu_IC2Rbits_t  -- p32mx470f512.h:2854
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "IC2R";
+     External_Name => "IC2Rbits";
 
    IC3R : aliased unsigned  -- p32mx470f512.h:2855
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "IC3R";
 
@@ -6933,12 +6933,12 @@ package P32mx470f512h is
      Alignment => 4;  -- p32mx470f512.h:2858
 
    IC3Rbits : aliased uu_IC3Rbits_t  -- p32mx470f512.h:2859
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "IC3R";
+     External_Name => "IC3Rbits";
 
    IC4R : aliased unsigned  -- p32mx470f512.h:2860
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "IC4R";
 
@@ -6950,12 +6950,12 @@ package P32mx470f512h is
      Alignment => 4;  -- p32mx470f512.h:2863
 
    IC4Rbits : aliased uu_IC4Rbits_t  -- p32mx470f512.h:2864
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "IC4R";
+     External_Name => "IC4Rbits";
 
    IC5R : aliased unsigned  -- p32mx470f512.h:2865
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "IC5R";
 
@@ -6967,12 +6967,12 @@ package P32mx470f512h is
      Alignment => 4;  -- p32mx470f512.h:2868
 
    IC5Rbits : aliased uu_IC5Rbits_t  -- p32mx470f512.h:2869
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "IC5R";
+     External_Name => "IC5Rbits";
 
    OCFAR : aliased unsigned  -- p32mx470f512.h:2870
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "OCFAR";
 
@@ -6984,12 +6984,12 @@ package P32mx470f512h is
      Alignment => 4;  -- p32mx470f512.h:2873
 
    OCFARbits : aliased uu_OCFARbits_t  -- p32mx470f512.h:2874
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "OCFAR";
+     External_Name => "OCFARbits";
 
    OCFBR : aliased unsigned  -- p32mx470f512.h:2875
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "OCFBR";
 
@@ -7001,12 +7001,12 @@ package P32mx470f512h is
      Alignment => 4;  -- p32mx470f512.h:2878
 
    OCFBRbits : aliased uu_OCFBRbits_t  -- p32mx470f512.h:2879
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "OCFBR";
+     External_Name => "OCFBRbits";
 
    U1RXR : aliased unsigned  -- p32mx470f512.h:2880
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "U1RXR";
 
@@ -7018,12 +7018,12 @@ package P32mx470f512h is
      Alignment => 4;  -- p32mx470f512.h:2883
 
    U1RXRbits : aliased uu_U1RXRbits_t  -- p32mx470f512.h:2884
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "U1RXR";
+     External_Name => "U1RXRbits";
 
    U1CTSR : aliased unsigned  -- p32mx470f512.h:2885
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "U1CTSR";
 
@@ -7035,12 +7035,12 @@ package P32mx470f512h is
      Alignment => 4;  -- p32mx470f512.h:2888
 
    U1CTSRbits : aliased uu_U1CTSRbits_t  -- p32mx470f512.h:2889
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "U1CTSR";
+     External_Name => "U1CTSRbits";
 
    U2RXR : aliased unsigned  -- p32mx470f512.h:2890
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "U2RXR";
 
@@ -7052,12 +7052,12 @@ package P32mx470f512h is
      Alignment => 4;  -- p32mx470f512.h:2893
 
    U2RXRbits : aliased uu_U2RXRbits_t  -- p32mx470f512.h:2894
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "U2RXR";
+     External_Name => "U2RXRbits";
 
    U2CTSR : aliased unsigned  -- p32mx470f512.h:2895
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "U2CTSR";
 
@@ -7069,12 +7069,12 @@ package P32mx470f512h is
      Alignment => 4;  -- p32mx470f512.h:2898
 
    U2CTSRbits : aliased uu_U2CTSRbits_t  -- p32mx470f512.h:2899
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "U2CTSR";
+     External_Name => "U2CTSRbits";
 
    U3RXR : aliased unsigned  -- p32mx470f512.h:2900
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "U3RXR";
 
@@ -7086,12 +7086,12 @@ package P32mx470f512h is
      Alignment => 4;  -- p32mx470f512.h:2903
 
    U3RXRbits : aliased uu_U3RXRbits_t  -- p32mx470f512.h:2904
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "U3RXR";
+     External_Name => "U3RXRbits";
 
    U3CTSR : aliased unsigned  -- p32mx470f512.h:2905
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "U3CTSR";
 
@@ -7103,12 +7103,12 @@ package P32mx470f512h is
      Alignment => 4;  -- p32mx470f512.h:2908
 
    U3CTSRbits : aliased uu_U3CTSRbits_t  -- p32mx470f512.h:2909
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "U3CTSR";
+     External_Name => "U3CTSRbits";
 
    U4RXR : aliased unsigned  -- p32mx470f512.h:2910
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "U4RXR";
 
@@ -7120,12 +7120,12 @@ package P32mx470f512h is
      Alignment => 4;  -- p32mx470f512.h:2913
 
    U4RXRbits : aliased uu_U4RXRbits_t  -- p32mx470f512.h:2914
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "U4RXR";
+     External_Name => "U4RXRbits";
 
    U4CTSR : aliased unsigned  -- p32mx470f512.h:2915
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "U4CTSR";
 
@@ -7137,12 +7137,12 @@ package P32mx470f512h is
      Alignment => 4;  -- p32mx470f512.h:2918
 
    U4CTSRbits : aliased uu_U4CTSRbits_t  -- p32mx470f512.h:2919
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "U4CTSR";
+     External_Name => "U4CTSRbits";
 
    U5RXR : aliased unsigned  -- p32mx470f512.h:2920
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "U5RXR";
 
@@ -7154,12 +7154,12 @@ package P32mx470f512h is
      Alignment => 4;  -- p32mx470f512.h:2923
 
    U5RXRbits : aliased uu_U5RXRbits_t  -- p32mx470f512.h:2924
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "U5RXR";
+     External_Name => "U5RXRbits";
 
    U5CTSR : aliased unsigned  -- p32mx470f512.h:2925
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "U5CTSR";
 
@@ -7171,12 +7171,12 @@ package P32mx470f512h is
      Alignment => 4;  -- p32mx470f512.h:2928
 
    U5CTSRbits : aliased uu_U5CTSRbits_t  -- p32mx470f512.h:2929
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "U5CTSR";
+     External_Name => "U5CTSRbits";
 
    SDI1R : aliased unsigned  -- p32mx470f512.h:2930
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "SDI1R";
 
@@ -7188,12 +7188,12 @@ package P32mx470f512h is
      Alignment => 4;  -- p32mx470f512.h:2933
 
    SDI1Rbits : aliased uu_SDI1Rbits_t  -- p32mx470f512.h:2934
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "SDI1R";
+     External_Name => "SDI1Rbits";
 
    SS1R : aliased unsigned  -- p32mx470f512.h:2935
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "SS1R";
 
@@ -7205,12 +7205,12 @@ package P32mx470f512h is
      Alignment => 4;  -- p32mx470f512.h:2938
 
    SS1Rbits : aliased uu_SS1Rbits_t  -- p32mx470f512.h:2939
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "SS1R";
+     External_Name => "SS1Rbits";
 
    SDI2R : aliased unsigned  -- p32mx470f512.h:2940
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "SDI2R";
 
@@ -7222,12 +7222,12 @@ package P32mx470f512h is
      Alignment => 4;  -- p32mx470f512.h:2943
 
    SDI2Rbits : aliased uu_SDI2Rbits_t  -- p32mx470f512.h:2944
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "SDI2R";
+     External_Name => "SDI2Rbits";
 
    SS2R : aliased unsigned  -- p32mx470f512.h:2945
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "SS2R";
 
@@ -7239,12 +7239,12 @@ package P32mx470f512h is
      Alignment => 4;  -- p32mx470f512.h:2948
 
    SS2Rbits : aliased uu_SS2Rbits_t  -- p32mx470f512.h:2949
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "SS2R";
+     External_Name => "SS2Rbits";
 
    REFCLKIR : aliased unsigned  -- p32mx470f512.h:2950
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "REFCLKIR";
 
@@ -7256,12 +7256,12 @@ package P32mx470f512h is
      Alignment => 4;  -- p32mx470f512.h:2953
 
    REFCLKIRbits : aliased uu_REFCLKIRbits_t  -- p32mx470f512.h:2954
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "REFCLKIR";
 
    RPB0R : aliased unsigned  -- p32mx470f512.h:2955
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "RPB0R";
 
@@ -7273,12 +7273,12 @@ package P32mx470f512h is
      Alignment => 4;  -- p32mx470f512.h:2958
 
    RPB0Rbits : aliased uu_RPB0Rbits_t  -- p32mx470f512.h:2959
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "RPB0R";
 
    RPB1R : aliased unsigned  -- p32mx470f512.h:2960
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "RPB1R";
 
@@ -7290,12 +7290,12 @@ package P32mx470f512h is
      Alignment => 4;  -- p32mx470f512.h:2963
 
    RPB1Rbits : aliased uu_RPB1Rbits_t  -- p32mx470f512.h:2964
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "RPB1R";
 
    RPB2R : aliased unsigned  -- p32mx470f512.h:2965
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "RPB2R";
 
@@ -7307,12 +7307,12 @@ package P32mx470f512h is
      Alignment => 4;  -- p32mx470f512.h:2968
 
    RPB2Rbits : aliased uu_RPB2Rbits_t  -- p32mx470f512.h:2969
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "RPB2R";
+     External_Name => "RPB2Rbits";
 
    RPB3R : aliased unsigned  -- p32mx470f512.h:2970
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "RPB3R";
 
@@ -7324,12 +7324,12 @@ package P32mx470f512h is
      Alignment => 4;  -- p32mx470f512.h:2973
 
    RPB3Rbits : aliased uu_RPB3Rbits_t  -- p32mx470f512.h:2974
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "RPB3R";
+     External_Name => "RPB3Rbits";
 
    RPB5R : aliased unsigned  -- p32mx470f512.h:2975
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "RPB5R";
 
@@ -7341,12 +7341,12 @@ package P32mx470f512h is
      Alignment => 4;  -- p32mx470f512.h:2978
 
    RPB5Rbits : aliased uu_RPB5Rbits_t  -- p32mx470f512.h:2979
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "RPB5R";
+     External_Name => "RPB5Rbits";
 
    RPB6R : aliased unsigned  -- p32mx470f512.h:2980
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "RPB6R";
 
@@ -7358,12 +7358,12 @@ package P32mx470f512h is
      Alignment => 4;  -- p32mx470f512.h:2983
 
    RPB6Rbits : aliased uu_RPB6Rbits_t  -- p32mx470f512.h:2984
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "RPB6R";
+     External_Name => "RPB6Rbits";
 
    RPB7R : aliased unsigned  -- p32mx470f512.h:2985
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "RPB7R";
 
@@ -7375,12 +7375,12 @@ package P32mx470f512h is
      Alignment => 4;  -- p32mx470f512.h:2988
 
    RPB7Rbits : aliased uu_RPB7Rbits_t  -- p32mx470f512.h:2989
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "RPB7R";
+     External_Name => "RPB7Rbits";
 
    RPB8R : aliased unsigned  -- p32mx470f512.h:2990
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "RPB8R";
 
@@ -7392,12 +7392,12 @@ package P32mx470f512h is
      Alignment => 4;  -- p32mx470f512.h:2993
 
    RPB8Rbits : aliased uu_RPB8Rbits_t  -- p32mx470f512.h:2994
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "RPB8R";
+     External_Name => "RPB8Rbits";
 
    RPB9R : aliased unsigned  -- p32mx470f512.h:2995
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "RPB9R";
 
@@ -7409,12 +7409,12 @@ package P32mx470f512h is
      Alignment => 4;  -- p32mx470f512.h:2998
 
    RPB9Rbits : aliased uu_RPB9Rbits_t  -- p32mx470f512.h:2999
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "RPB9R";
+     External_Name => "RPB9Rbits";
 
    RPB10R : aliased unsigned  -- p32mx470f512.h:3000
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "RPB10R";
 
@@ -7426,12 +7426,12 @@ package P32mx470f512h is
      Alignment => 4;  -- p32mx470f512.h:3003
 
    RPB10Rbits : aliased uu_RPB10Rbits_t  -- p32mx470f512.h:3004
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "RPB10R";
+     External_Name => "RPB10Rbits";
 
    RPB14R : aliased unsigned  -- p32mx470f512.h:3005
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "RPB14R";
 
@@ -7443,12 +7443,12 @@ package P32mx470f512h is
      Alignment => 4;  -- p32mx470f512.h:3008
 
    RPB14Rbits : aliased uu_RPB14Rbits_t  -- p32mx470f512.h:3009
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "RPB14R";
+     External_Name => "RPB14Rbits";
 
    RPB15R : aliased unsigned  -- p32mx470f512.h:3010
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "RPB15R";
 
@@ -7460,12 +7460,12 @@ package P32mx470f512h is
      Alignment => 4;  -- p32mx470f512.h:3013
 
    RPB15Rbits : aliased uu_RPB15Rbits_t  -- p32mx470f512.h:3014
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "RPB15R";
+     External_Name => "RPB15Rbits";
 
    RPD0R : aliased unsigned  -- p32mx470f512.h:3015
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "RPD0R";
 
@@ -7477,12 +7477,12 @@ package P32mx470f512h is
      Alignment => 4;  -- p32mx470f512.h:3018
 
    RPD0Rbits : aliased uu_RPD0Rbits_t  -- p32mx470f512.h:3019
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "RPD0R";
+     External_Name => "RPD0Rbits";
 
    RPD1R : aliased unsigned  -- p32mx470f512.h:3020
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "RPD1R";
 
@@ -7494,12 +7494,12 @@ package P32mx470f512h is
      Alignment => 4;  -- p32mx470f512.h:3023
 
    RPD1Rbits : aliased uu_RPD1Rbits_t  -- p32mx470f512.h:3024
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "RPD1R";
+     External_Name => "RPD1Rbits";
 
    RPD2R : aliased unsigned  -- p32mx470f512.h:3025
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "RPD2R";
 
@@ -7511,12 +7511,12 @@ package P32mx470f512h is
      Alignment => 4;  -- p32mx470f512.h:3028
 
    RPD2Rbits : aliased uu_RPD2Rbits_t  -- p32mx470f512.h:3029
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "RPD2R";
+     External_Name => "RPD2Rbits";
 
    RPD3R : aliased unsigned  -- p32mx470f512.h:3030
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "RPD3R";
 
@@ -7528,12 +7528,12 @@ package P32mx470f512h is
      Alignment => 4;  -- p32mx470f512.h:3033
 
    RPD3Rbits : aliased uu_RPD3Rbits_t  -- p32mx470f512.h:3034
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "RPD3R";
+     External_Name => "RPD3Rbits";
 
    RPD4R : aliased unsigned  -- p32mx470f512.h:3035
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "RPD4R";
 
@@ -7545,12 +7545,12 @@ package P32mx470f512h is
      Alignment => 4;  -- p32mx470f512.h:3038
 
    RPD4Rbits : aliased uu_RPD4Rbits_t  -- p32mx470f512.h:3039
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "RPD4R";
+     External_Name => "RPD4Rbits";
 
    RPD5R : aliased unsigned  -- p32mx470f512.h:3040
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "RPD5R";
 
@@ -7562,12 +7562,12 @@ package P32mx470f512h is
      Alignment => 4;  -- p32mx470f512.h:3043
 
    RPD5Rbits : aliased uu_RPD5Rbits_t  -- p32mx470f512.h:3044
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "RPD5R";
+     External_Name => "RPD5Rbits";
 
    RPD8R : aliased unsigned  -- p32mx470f512.h:3045
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "RPD8R";
 
@@ -7579,12 +7579,12 @@ package P32mx470f512h is
      Alignment => 4;  -- p32mx470f512.h:3048
 
    RPD8Rbits : aliased uu_RPD8Rbits_t  -- p32mx470f512.h:3049
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "RPD8R";
+     External_Name => "RPD8Rbits";
 
    RPD9R : aliased unsigned  -- p32mx470f512.h:3050
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "RPD9R";
 
@@ -7596,12 +7596,12 @@ package P32mx470f512h is
      Alignment => 4;  -- p32mx470f512.h:3053
 
    RPD9Rbits : aliased uu_RPD9Rbits_t  -- p32mx470f512.h:3054
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "RPD9R";
+     External_Name => "RPD9Rbits";
 
    RPD10R : aliased unsigned  -- p32mx470f512.h:3055
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "RPD10R";
 
@@ -7613,12 +7613,12 @@ package P32mx470f512h is
      Alignment => 4;  -- p32mx470f512.h:3058
 
    RPD10Rbits : aliased uu_RPD10Rbits_t  -- p32mx470f512.h:3059
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "RPD10R";
+     External_Name => "RPD10Rbits";
 
    RPD11R : aliased unsigned  -- p32mx470f512.h:3060
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "RPD11R";
 
@@ -7630,12 +7630,12 @@ package P32mx470f512h is
      Alignment => 4;  -- p32mx470f512.h:3063
 
    RPD11Rbits : aliased uu_RPD11Rbits_t  -- p32mx470f512.h:3064
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "RPD11R";
+     External_Name => "RPD11Rbits";
 
    RPD12R : aliased unsigned  -- p32mx470f512.h:3065
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "RPD12R";
 
@@ -7647,12 +7647,12 @@ package P32mx470f512h is
      Alignment => 4;  -- p32mx470f512.h:3068
 
    RPD12Rbits : aliased uu_RPD12Rbits_t  -- p32mx470f512.h:3069
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "RPD12R";
+     External_Name => "RPD12Rbits";
 
    RPD14R : aliased unsigned  -- p32mx470f512.h:3070
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "RPD14R";
 
@@ -7664,12 +7664,12 @@ package P32mx470f512h is
      Alignment => 4;  -- p32mx470f512.h:3073
 
    RPD14Rbits : aliased uu_RPD14Rbits_t  -- p32mx470f512.h:3074
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "RPD14R";
+     External_Name => "RPD14Rbits";
 
    RPD15R : aliased unsigned  -- p32mx470f512.h:3075
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "RPD15R";
 
@@ -7681,12 +7681,12 @@ package P32mx470f512h is
      Alignment => 4;  -- p32mx470f512.h:3078
 
    RPD15Rbits : aliased uu_RPD15Rbits_t  -- p32mx470f512.h:3079
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "RPD15R";
+     External_Name => "RPD15Rbits";
 
    RPE3R : aliased unsigned  -- p32mx470f512.h:3080
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "RPE3R";
 
@@ -7698,12 +7698,12 @@ package P32mx470f512h is
      Alignment => 4;  -- p32mx470f512.h:3083
 
    RPE3Rbits : aliased uu_RPE3Rbits_t  -- p32mx470f512.h:3084
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "RPE3R";
+     External_Name => "RPE3Rbits";
 
    RPE5R : aliased unsigned  -- p32mx470f512.h:3085
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "RPE5R";
 
@@ -7715,12 +7715,12 @@ package P32mx470f512h is
      Alignment => 4;  -- p32mx470f512.h:3088
 
    RPE5Rbits : aliased uu_RPE5Rbits_t  -- p32mx470f512.h:3089
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "RPE5R";
+     External_Name => "RPE5Rbits";
 
    RPE8R : aliased unsigned  -- p32mx470f512.h:3090
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "RPE8R";
 
@@ -7732,12 +7732,12 @@ package P32mx470f512h is
      Alignment => 4;  -- p32mx470f512.h:3093
 
    RPE8Rbits : aliased uu_RPE8Rbits_t  -- p32mx470f512.h:3094
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "RPE8R";
+     External_Name => "RPE8Rbits";
 
    RPE9R : aliased unsigned  -- p32mx470f512.h:3095
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "RPE9R";
 
@@ -7749,12 +7749,12 @@ package P32mx470f512h is
      Alignment => 4;  -- p32mx470f512.h:3098
 
    RPE9Rbits : aliased uu_RPE9Rbits_t  -- p32mx470f512.h:3099
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "RPE9R";
+     External_Name => "RPE9Rbits";
 
    RPF0R : aliased unsigned  -- p32mx470f512.h:3100
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "RPF0R";
 
@@ -7766,12 +7766,12 @@ package P32mx470f512h is
      Alignment => 4;  -- p32mx470f512.h:3103
 
    RPF0Rbits : aliased uu_RPF0Rbits_t  -- p32mx470f512.h:3104
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "RPF0R";
+     External_Name => "RPF0Rbits";
 
    RPF1R : aliased unsigned  -- p32mx470f512.h:3105
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "RPF1R";
 
@@ -7783,12 +7783,12 @@ package P32mx470f512h is
      Alignment => 4;  -- p32mx470f512.h:3108
 
    RPF1Rbits : aliased uu_RPF1Rbits_t  -- p32mx470f512.h:3109
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "RPF1R";
+     External_Name => "RPF1Rbits";
 
    RPF2R : aliased unsigned  -- p32mx470f512.h:3110
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "RPF2R";
 
@@ -7800,12 +7800,12 @@ package P32mx470f512h is
      Alignment => 4;  -- p32mx470f512.h:3113
 
    RPF2Rbits : aliased uu_RPF2Rbits_t  -- p32mx470f512.h:3114
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "RPF2R";
+     External_Name => "RPF2Rbits";
 
    RPF3R : aliased unsigned  -- p32mx470f512.h:3115
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "RPF3R";
 
@@ -7817,12 +7817,12 @@ package P32mx470f512h is
      Alignment => 4;  -- p32mx470f512.h:3118
 
    RPF3Rbits : aliased uu_RPF3Rbits_t  -- p32mx470f512.h:3119
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "RPF3R";
+     External_Name => "RPF3Rbits";
 
    RPF4R : aliased unsigned  -- p32mx470f512.h:3120
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "RPF4R";
 
@@ -7834,12 +7834,12 @@ package P32mx470f512h is
      Alignment => 4;  -- p32mx470f512.h:3123
 
    RPF4Rbits : aliased uu_RPF4Rbits_t  -- p32mx470f512.h:3124
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "RPF4R";
+     External_Name => "RPF4Rbits";
 
    RPF5R : aliased unsigned  -- p32mx470f512.h:3125
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "RPF5R";
 
@@ -7851,12 +7851,12 @@ package P32mx470f512h is
      Alignment => 4;  -- p32mx470f512.h:3128
 
    RPF5Rbits : aliased uu_RPF5Rbits_t  -- p32mx470f512.h:3129
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "RPF5R";
+     External_Name => "RPF5Rbits";
 
    RPF6R : aliased unsigned  -- p32mx470f512.h:3130
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "RPF6R";
 
@@ -7868,12 +7868,12 @@ package P32mx470f512h is
      Alignment => 4;  -- p32mx470f512.h:3133
 
    RPF6Rbits : aliased uu_RPF6Rbits_t  -- p32mx470f512.h:3134
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "RPF6R";
+     External_Name => "RPF6Rbits";
 
    RPG6R : aliased unsigned  -- p32mx470f512.h:3135
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "RPG6R";
 
@@ -7885,12 +7885,12 @@ package P32mx470f512h is
      Alignment => 4;  -- p32mx470f512.h:3138
 
    RPG6Rbits : aliased uu_RPG6Rbits_t  -- p32mx470f512.h:3139
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "RPG6R";
+     External_Name => "RPG6Rbits";
 
    RPG7R : aliased unsigned  -- p32mx470f512.h:3140
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "RPG7R";
 
@@ -7902,12 +7902,12 @@ package P32mx470f512h is
      Alignment => 4;  -- p32mx470f512.h:3143
 
    RPG7Rbits : aliased uu_RPG7Rbits_t  -- p32mx470f512.h:3144
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "RPG7R";
+     External_Name => "RPG7Rbits";
 
    RPG8R : aliased unsigned  -- p32mx470f512.h:3145
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "RPG8R";
 
@@ -7919,12 +7919,12 @@ package P32mx470f512h is
      Alignment => 4;  -- p32mx470f512.h:3148
 
    RPG8Rbits : aliased uu_RPG8Rbits_t  -- p32mx470f512.h:3149
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "RPG8R";
+     External_Name => "RPG8Rbits";
 
    RPG9R : aliased unsigned  -- p32mx470f512.h:3150
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "RPG9R";
 
@@ -7936,12 +7936,12 @@ package P32mx470f512h is
      Alignment => 4;  -- p32mx470f512.h:3153
 
    RPG9Rbits : aliased uu_RPG9Rbits_t  -- p32mx470f512.h:3154
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "RPG9R";
+     External_Name => "RPG9Rbits";
 
    INTCON : aliased unsigned  -- p32mx470f512.h:3155
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "INTCON";
 
@@ -7976,27 +7976,27 @@ package P32mx470f512h is
      Unchecked_Union => True;  -- p32mx470f512.h:3173
 
    INTCONbits : aliased uu_INTCONbits_t  -- p32mx470f512.h:3174
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "INTCON";
+     External_Name => "INTCONbits";
 
    INTCONCLR : aliased unsigned  -- p32mx470f512.h:3175
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "INTCONCLR";
 
    INTCONSET : aliased unsigned  -- p32mx470f512.h:3176
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "INTCONSET";
 
    INTCONINV : aliased unsigned  -- p32mx470f512.h:3177
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "INTCONINV";
 
    INTSTAT : aliased unsigned  -- p32mx470f512.h:3178
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "INTSTAT";
 
@@ -8010,32 +8010,32 @@ package P32mx470f512h is
      Alignment => 4;  -- p32mx470f512.h:3183
 
    INTSTATbits : aliased uu_INTSTATbits_t  -- p32mx470f512.h:3184
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "INTSTAT";
+     External_Name => "INTSTATbits";
 
    IPTMR : aliased unsigned  -- p32mx470f512.h:3185
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "IPTMR";
 
    IPTMRCLR : aliased unsigned  -- p32mx470f512.h:3186
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "IPTMRCLR";
 
    IPTMRSET : aliased unsigned  -- p32mx470f512.h:3187
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "IPTMRSET";
 
    IPTMRINV : aliased unsigned  -- p32mx470f512.h:3188
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "IPTMRINV";
 
    IFS0 : aliased unsigned  -- p32mx470f512.h:3189
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "IFS0";
 
@@ -8092,27 +8092,27 @@ package P32mx470f512h is
      Unchecked_Union => True;  -- p32mx470f512.h:3228
 
    IFS0bits : aliased uu_IFS0bits_t  -- p32mx470f512.h:3229
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "IFS0";
+     External_Name => "IFS0bits";
 
    IFS0CLR : aliased unsigned  -- p32mx470f512.h:3230
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "IFS0CLR";
 
    IFS0SET : aliased unsigned  -- p32mx470f512.h:3231
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "IFS0SET";
 
    IFS0INV : aliased unsigned  -- p32mx470f512.h:3232
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "IFS0INV";
 
    IFS1 : aliased unsigned  -- p32mx470f512.h:3233
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "IFS1";
 
@@ -8168,27 +8168,27 @@ package P32mx470f512h is
      Unchecked_Union => True;  -- p32mx470f512.h:3272
 
    IFS1bits : aliased uu_IFS1bits_t  -- p32mx470f512.h:3273
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "IFS1";
+     External_Name => "IFS1bits";
 
    IFS1CLR : aliased unsigned  -- p32mx470f512.h:3274
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "IFS1CLR";
 
    IFS1SET : aliased unsigned  -- p32mx470f512.h:3275
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "IFS1SET";
 
    IFS1INV : aliased unsigned  -- p32mx470f512.h:3276
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "IFS1INV";
 
    IFS2 : aliased unsigned  -- p32mx470f512.h:3277
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "IFS2";
 
@@ -8209,27 +8209,27 @@ package P32mx470f512h is
      Alignment => 4;  -- p32mx470f512.h:3289
 
    IFS2bits : aliased uu_IFS2bits_t  -- p32mx470f512.h:3290
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "IFS2";
+     External_Name => "IFS2bits";
 
    IFS2CLR : aliased unsigned  -- p32mx470f512.h:3291
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "IFS2CLR";
 
    IFS2SET : aliased unsigned  -- p32mx470f512.h:3292
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "IFS2SET";
 
    IFS2INV : aliased unsigned  -- p32mx470f512.h:3293
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "IFS2INV";
 
    IEC0 : aliased unsigned  -- p32mx470f512.h:3294
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "IEC0";
 
@@ -8285,27 +8285,27 @@ package P32mx470f512h is
      Unchecked_Union => True;  -- p32mx470f512.h:3333
 
    IEC0bits : aliased uu_IEC0bits_t  -- p32mx470f512.h:3334
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "IEC0";
+     External_Name => "IEC0bits";
 
    IEC0CLR : aliased unsigned  -- p32mx470f512.h:3335
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "IEC0CLR";
 
    IEC0SET : aliased unsigned  -- p32mx470f512.h:3336
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "IEC0SET";
 
    IEC0INV : aliased unsigned  -- p32mx470f512.h:3337
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "IEC0INV";
 
    IEC1 : aliased unsigned  -- p32mx470f512.h:3338
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "IEC1";
 
@@ -8361,27 +8361,27 @@ package P32mx470f512h is
      Unchecked_Union => True;  -- p32mx470f512.h:3377
 
    IEC1bits : aliased uu_IEC1bits_t  -- p32mx470f512.h:3378
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "IEC1";
+     External_Name => "IEC1bits";
 
    IEC1CLR : aliased unsigned  -- p32mx470f512.h:3379
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "IEC1CLR";
 
    IEC1SET : aliased unsigned  -- p32mx470f512.h:3380
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "IEC1SET";
 
    IEC1INV : aliased unsigned  -- p32mx470f512.h:3381
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "IEC1INV";
 
    IEC2 : aliased unsigned  -- p32mx470f512.h:3382
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "IEC2";
 
@@ -8402,27 +8402,27 @@ package P32mx470f512h is
      Alignment => 4;  -- p32mx470f512.h:3394
 
    IEC2bits : aliased uu_IEC2bits_t  -- p32mx470f512.h:3395
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "IEC2";
+     External_Name => "IEC2bits";
 
    IEC2CLR : aliased unsigned  -- p32mx470f512.h:3396
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "IEC2CLR";
 
    IEC2SET : aliased unsigned  -- p32mx470f512.h:3397
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "IEC2SET";
 
    IEC2INV : aliased unsigned  -- p32mx470f512.h:3398
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "IEC2INV";
 
    IPC0 : aliased unsigned  -- p32mx470f512.h:3399
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "IPC0";
 
@@ -8457,27 +8457,27 @@ package P32mx470f512h is
      Unchecked_Union => True;  -- p32mx470f512.h:3417
 
    IPC0bits : aliased uu_IPC0bits_t  -- p32mx470f512.h:3418
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "IPC0";
+     External_Name => "IPC0bits";
 
    IPC0CLR : aliased unsigned  -- p32mx470f512.h:3419
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "IPC0CLR";
 
    IPC0SET : aliased unsigned  -- p32mx470f512.h:3420
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "IPC0SET";
 
    IPC0INV : aliased unsigned  -- p32mx470f512.h:3421
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "IPC0INV";
 
    IPC1 : aliased unsigned  -- p32mx470f512.h:3422
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "IPC1";
 
@@ -8512,27 +8512,27 @@ package P32mx470f512h is
      Unchecked_Union => True;  -- p32mx470f512.h:3440
 
    IPC1bits : aliased uu_IPC1bits_t  -- p32mx470f512.h:3441
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "IPC1";
+     External_Name => "IPC1bits";
 
    IPC1CLR : aliased unsigned  -- p32mx470f512.h:3442
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "IPC1CLR";
 
    IPC1SET : aliased unsigned  -- p32mx470f512.h:3443
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "IPC1SET";
 
    IPC1INV : aliased unsigned  -- p32mx470f512.h:3444
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "IPC1INV";
 
    IPC2 : aliased unsigned  -- p32mx470f512.h:3445
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "IPC2";
 
@@ -8567,27 +8567,27 @@ package P32mx470f512h is
      Unchecked_Union => True;  -- p32mx470f512.h:3463
 
    IPC2bits : aliased uu_IPC2bits_t  -- p32mx470f512.h:3464
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "IPC2";
+     External_Name => "IPC2bits";
 
    IPC2CLR : aliased unsigned  -- p32mx470f512.h:3465
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "IPC2CLR";
 
    IPC2SET : aliased unsigned  -- p32mx470f512.h:3466
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "IPC2SET";
 
    IPC2INV : aliased unsigned  -- p32mx470f512.h:3467
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "IPC2INV";
 
    IPC3 : aliased unsigned  -- p32mx470f512.h:3468
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "IPC3";
 
@@ -8622,27 +8622,27 @@ package P32mx470f512h is
      Unchecked_Union => True;  -- p32mx470f512.h:3486
 
    IPC3bits : aliased uu_IPC3bits_t  -- p32mx470f512.h:3487
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "IPC3";
+     External_Name => "IPC3bits";
 
    IPC3CLR : aliased unsigned  -- p32mx470f512.h:3488
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "IPC3CLR";
 
    IPC3SET : aliased unsigned  -- p32mx470f512.h:3489
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "IPC3SET";
 
    IPC3INV : aliased unsigned  -- p32mx470f512.h:3490
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "IPC3INV";
 
    IPC4 : aliased unsigned  -- p32mx470f512.h:3491
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "IPC4";
 
@@ -8677,27 +8677,27 @@ package P32mx470f512h is
      Unchecked_Union => True;  -- p32mx470f512.h:3509
 
    IPC4bits : aliased uu_IPC4bits_t  -- p32mx470f512.h:3510
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "IPC4";
+     External_Name => "IPC4bits";
 
    IPC4CLR : aliased unsigned  -- p32mx470f512.h:3511
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "IPC4CLR";
 
    IPC4SET : aliased unsigned  -- p32mx470f512.h:3512
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "IPC4SET";
 
    IPC4INV : aliased unsigned  -- p32mx470f512.h:3513
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "IPC4INV";
 
    IPC5 : aliased unsigned  -- p32mx470f512.h:3514
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "IPC5";
 
@@ -8732,27 +8732,27 @@ package P32mx470f512h is
      Unchecked_Union => True;  -- p32mx470f512.h:3532
 
    IPC5bits : aliased uu_IPC5bits_t  -- p32mx470f512.h:3533
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "IPC5";
+     External_Name => "IPC5bits";
 
    IPC5CLR : aliased unsigned  -- p32mx470f512.h:3534
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "IPC5CLR";
 
    IPC5SET : aliased unsigned  -- p32mx470f512.h:3535
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "IPC5SET";
 
    IPC5INV : aliased unsigned  -- p32mx470f512.h:3536
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "IPC5INV";
 
    IPC6 : aliased unsigned  -- p32mx470f512.h:3537
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "IPC6";
 
@@ -8787,27 +8787,27 @@ package P32mx470f512h is
      Unchecked_Union => True;  -- p32mx470f512.h:3555
 
    IPC6bits : aliased uu_IPC6bits_t  -- p32mx470f512.h:3556
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "IPC6";
+     External_Name => "IPC6bits";
 
    IPC6CLR : aliased unsigned  -- p32mx470f512.h:3557
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "IPC6CLR";
 
    IPC6SET : aliased unsigned  -- p32mx470f512.h:3558
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "IPC6SET";
 
    IPC6INV : aliased unsigned  -- p32mx470f512.h:3559
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "IPC6INV";
 
    IPC7 : aliased unsigned  -- p32mx470f512.h:3560
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "IPC7";
 
@@ -8842,27 +8842,27 @@ package P32mx470f512h is
      Unchecked_Union => True;  -- p32mx470f512.h:3578
 
    IPC7bits : aliased uu_IPC7bits_t  -- p32mx470f512.h:3579
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "IPC7";
+     External_Name => "IPC7bits";
 
    IPC7CLR : aliased unsigned  -- p32mx470f512.h:3580
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "IPC7CLR";
 
    IPC7SET : aliased unsigned  -- p32mx470f512.h:3581
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "IPC7SET";
 
    IPC7INV : aliased unsigned  -- p32mx470f512.h:3582
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "IPC7INV";
 
    IPC8 : aliased unsigned  -- p32mx470f512.h:3583
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "IPC8";
 
@@ -8897,27 +8897,27 @@ package P32mx470f512h is
      Unchecked_Union => True;  -- p32mx470f512.h:3601
 
    IPC8bits : aliased uu_IPC8bits_t  -- p32mx470f512.h:3602
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "IPC8";
+     External_Name => "IPC8bits";
 
    IPC8CLR : aliased unsigned  -- p32mx470f512.h:3603
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "IPC8CLR";
 
    IPC8SET : aliased unsigned  -- p32mx470f512.h:3604
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "IPC8SET";
 
    IPC8INV : aliased unsigned  -- p32mx470f512.h:3605
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "IPC8INV";
 
    IPC9 : aliased unsigned  -- p32mx470f512.h:3606
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "IPC9";
 
@@ -8952,27 +8952,27 @@ package P32mx470f512h is
      Unchecked_Union => True;  -- p32mx470f512.h:3624
 
    IPC9bits : aliased uu_IPC9bits_t  -- p32mx470f512.h:3625
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "IPC9";
+     External_Name => "IPC9bits";
 
    IPC9CLR : aliased unsigned  -- p32mx470f512.h:3626
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "IPC9CLR";
 
    IPC9SET : aliased unsigned  -- p32mx470f512.h:3627
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "IPC9SET";
 
    IPC9INV : aliased unsigned  -- p32mx470f512.h:3628
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "IPC9INV";
 
    IPC10 : aliased unsigned  -- p32mx470f512.h:3629
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "IPC10";
 
@@ -9005,27 +9005,27 @@ package P32mx470f512h is
      Unchecked_Union => True;  -- p32mx470f512.h:3645
 
    IPC10bits : aliased uu_IPC10bits_t  -- p32mx470f512.h:3646
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "IPC10";
+     External_Name => "IPC10bits";
 
    IPC10CLR : aliased unsigned  -- p32mx470f512.h:3647
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "IPC10CLR";
 
    IPC10SET : aliased unsigned  -- p32mx470f512.h:3648
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "IPC10SET";
 
    IPC10INV : aliased unsigned  -- p32mx470f512.h:3649
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "IPC10INV";
 
    IPC11 : aliased unsigned  -- p32mx470f512.h:3650
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "IPC11";
 
@@ -9054,27 +9054,27 @@ package P32mx470f512h is
      Unchecked_Union => True;  -- p32mx470f512.h:3662
 
    IPC11bits : aliased uu_IPC11bits_t  -- p32mx470f512.h:3663
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "IPC11";
+     External_Name => "IPC11bits";
 
    IPC11CLR : aliased unsigned  -- p32mx470f512.h:3664
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "IPC11CLR";
 
    IPC11SET : aliased unsigned  -- p32mx470f512.h:3665
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "IPC11SET";
 
    IPC11INV : aliased unsigned  -- p32mx470f512.h:3666
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "IPC11INV";
 
    BMXCON : aliased unsigned  -- p32mx470f512.h:3667
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "BMXCON";
 
@@ -9109,122 +9109,122 @@ package P32mx470f512h is
      Unchecked_Union => True;  -- p32mx470f512.h:3685
 
    BMXCONbits : aliased uu_BMXCONbits_t  -- p32mx470f512.h:3686
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "BMXCON";
+     External_Name => "BMXCONbits";
 
    BMXCONCLR : aliased unsigned  -- p32mx470f512.h:3687
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "BMXCONCLR";
 
    BMXCONSET : aliased unsigned  -- p32mx470f512.h:3688
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "BMXCONSET";
 
    BMXCONINV : aliased unsigned  -- p32mx470f512.h:3689
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "BMXCONINV";
 
    BMXDKPBA : aliased unsigned  -- p32mx470f512.h:3690
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "BMXDKPBA";
 
    BMXDKPBACLR : aliased unsigned  -- p32mx470f512.h:3691
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "BMXDKPBACLR";
 
    BMXDKPBASET : aliased unsigned  -- p32mx470f512.h:3692
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "BMXDKPBASET";
 
    BMXDKPBAINV : aliased unsigned  -- p32mx470f512.h:3693
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "BMXDKPBAINV";
 
    BMXDUDBA : aliased unsigned  -- p32mx470f512.h:3694
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "BMXDUDBA";
 
    BMXDUDBACLR : aliased unsigned  -- p32mx470f512.h:3695
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "BMXDUDBACLR";
 
    BMXDUDBASET : aliased unsigned  -- p32mx470f512.h:3696
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "BMXDUDBASET";
 
    BMXDUDBAINV : aliased unsigned  -- p32mx470f512.h:3697
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "BMXDUDBAINV";
 
    BMXDUPBA : aliased unsigned  -- p32mx470f512.h:3698
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "BMXDUPBA";
 
    BMXDUPBACLR : aliased unsigned  -- p32mx470f512.h:3699
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "BMXDUPBACLR";
 
    BMXDUPBASET : aliased unsigned  -- p32mx470f512.h:3700
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "BMXDUPBASET";
 
    BMXDUPBAINV : aliased unsigned  -- p32mx470f512.h:3701
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "BMXDUPBAINV";
 
    BMXDRMSZ : aliased unsigned  -- p32mx470f512.h:3702
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "BMXDRMSZ";
 
    BMXPUPBA : aliased unsigned  -- p32mx470f512.h:3703
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "BMXPUPBA";
 
    BMXPUPBACLR : aliased unsigned  -- p32mx470f512.h:3704
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "BMXPUPBACLR";
 
    BMXPUPBASET : aliased unsigned  -- p32mx470f512.h:3705
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "BMXPUPBASET";
 
    BMXPUPBAINV : aliased unsigned  -- p32mx470f512.h:3706
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "BMXPUPBAINV";
 
    BMXPFMSZ : aliased unsigned  -- p32mx470f512.h:3707
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "BMXPFMSZ";
 
    BMXBOOTSZ : aliased unsigned  -- p32mx470f512.h:3708
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "BMXBOOTSZ";
 
    DMACON : aliased unsigned  -- p32mx470f512.h:3709
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "DMACON";
 
@@ -9253,27 +9253,27 @@ package P32mx470f512h is
      Unchecked_Union => True;  -- p32mx470f512.h:3721
 
    DMACONbits : aliased uu_DMACONbits_t  -- p32mx470f512.h:3722
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "DMACON";
+     External_Name => "DMACONbits";
 
    DMACONCLR : aliased unsigned  -- p32mx470f512.h:3723
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "DMACONCLR";
 
    DMACONSET : aliased unsigned  -- p32mx470f512.h:3724
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "DMACONSET";
 
    DMACONINV : aliased unsigned  -- p32mx470f512.h:3725
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "DMACONINV";
 
    DMASTAT : aliased unsigned  -- p32mx470f512.h:3726
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "DMASTAT";
 
@@ -9299,47 +9299,47 @@ package P32mx470f512h is
      Unchecked_Union => True;  -- p32mx470f512.h:3735
 
    DMASTATbits : aliased uu_DMASTATbits_t  -- p32mx470f512.h:3736
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "DMASTAT";
+     External_Name => "DMASTATbits";
 
    DMASTATCLR : aliased unsigned  -- p32mx470f512.h:3737
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "DMASTATCLR";
 
    DMASTATSET : aliased unsigned  -- p32mx470f512.h:3738
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "DMASTATSET";
 
    DMASTATINV : aliased unsigned  -- p32mx470f512.h:3739
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "DMASTATINV";
 
    DMAADDR : aliased unsigned  -- p32mx470f512.h:3740
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "DMAADDR";
 
    DMAADDRCLR : aliased unsigned  -- p32mx470f512.h:3741
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "DMAADDRCLR";
 
    DMAADDRSET : aliased unsigned  -- p32mx470f512.h:3742
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "DMAADDRSET";
 
    DMAADDRINV : aliased unsigned  -- p32mx470f512.h:3743
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "DMAADDRINV";
 
    DCRCCON : aliased unsigned  -- p32mx470f512.h:3744
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "DCRCCON";
 
@@ -9374,67 +9374,67 @@ package P32mx470f512h is
      Unchecked_Union => True;  -- p32mx470f512.h:3762
 
    DCRCCONbits : aliased uu_DCRCCONbits_t  -- p32mx470f512.h:3763
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "DCRCCON";
+     External_Name => "DCRCCONbits";
 
    DCRCCONCLR : aliased unsigned  -- p32mx470f512.h:3764
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "DCRCCONCLR";
 
    DCRCCONSET : aliased unsigned  -- p32mx470f512.h:3765
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "DCRCCONSET";
 
    DCRCCONINV : aliased unsigned  -- p32mx470f512.h:3766
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "DCRCCONINV";
 
    DCRCDATA : aliased unsigned  -- p32mx470f512.h:3767
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "DCRCDATA";
 
    DCRCDATACLR : aliased unsigned  -- p32mx470f512.h:3768
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "DCRCDATACLR";
 
    DCRCDATASET : aliased unsigned  -- p32mx470f512.h:3769
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "DCRCDATASET";
 
    DCRCDATAINV : aliased unsigned  -- p32mx470f512.h:3770
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "DCRCDATAINV";
 
    DCRCXOR : aliased unsigned  -- p32mx470f512.h:3771
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "DCRCXOR";
 
    DCRCXORCLR : aliased unsigned  -- p32mx470f512.h:3772
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "DCRCXORCLR";
 
    DCRCXORSET : aliased unsigned  -- p32mx470f512.h:3773
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "DCRCXORSET";
 
    DCRCXORINV : aliased unsigned  -- p32mx470f512.h:3774
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "DCRCXORINV";
 
    DCH0CON : aliased unsigned  -- p32mx470f512.h:3775
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "DCH0CON";
 
@@ -9468,27 +9468,27 @@ package P32mx470f512h is
      Unchecked_Union => True;  -- p32mx470f512.h:3792
 
    DCH0CONbits : aliased uu_DCH0CONbits_t  -- p32mx470f512.h:3793
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "DCH0CON";
+     External_Name => "DCH0CONbits";
 
    DCH0CONCLR : aliased unsigned  -- p32mx470f512.h:3794
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "DCH0CONCLR";
 
    DCH0CONSET : aliased unsigned  -- p32mx470f512.h:3795
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "DCH0CONSET";
 
    DCH0CONINV : aliased unsigned  -- p32mx470f512.h:3796
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "DCH0CONINV";
 
    DCH0ECON : aliased unsigned  -- p32mx470f512.h:3797
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "DCH0ECON";
 
@@ -9520,27 +9520,27 @@ package P32mx470f512h is
      Unchecked_Union => True;  -- p32mx470f512.h:3812
 
    DCH0ECONbits : aliased uu_DCH0ECONbits_t  -- p32mx470f512.h:3813
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "DCH0ECON";
+     External_Name => "DCH0ECONbits";
 
    DCH0ECONCLR : aliased unsigned  -- p32mx470f512.h:3814
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "DCH0ECONCLR";
 
    DCH0ECONSET : aliased unsigned  -- p32mx470f512.h:3815
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "DCH0ECONSET";
 
    DCH0ECONINV : aliased unsigned  -- p32mx470f512.h:3816
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "DCH0ECONINV";
 
    DCH0INT : aliased unsigned  -- p32mx470f512.h:3817
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "DCH0INT";
 
@@ -9581,207 +9581,207 @@ package P32mx470f512h is
      Unchecked_Union => True;  -- p32mx470f512.h:3841
 
    DCH0INTbits : aliased uu_DCH0INTbits_t  -- p32mx470f512.h:3842
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "DCH0INT";
+     External_Name => "DCH0INTbits";
 
    DCH0INTCLR : aliased unsigned  -- p32mx470f512.h:3843
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "DCH0INTCLR";
 
    DCH0INTSET : aliased unsigned  -- p32mx470f512.h:3844
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "DCH0INTSET";
 
    DCH0INTINV : aliased unsigned  -- p32mx470f512.h:3845
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "DCH0INTINV";
 
    DCH0SSA : aliased unsigned  -- p32mx470f512.h:3846
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "DCH0SSA";
 
    DCH0SSACLR : aliased unsigned  -- p32mx470f512.h:3847
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "DCH0SSACLR";
 
    DCH0SSASET : aliased unsigned  -- p32mx470f512.h:3848
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "DCH0SSASET";
 
    DCH0SSAINV : aliased unsigned  -- p32mx470f512.h:3849
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "DCH0SSAINV";
 
    DCH0DSA : aliased unsigned  -- p32mx470f512.h:3850
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "DCH0DSA";
 
    DCH0DSACLR : aliased unsigned  -- p32mx470f512.h:3851
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "DCH0DSACLR";
 
    DCH0DSASET : aliased unsigned  -- p32mx470f512.h:3852
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "DCH0DSASET";
 
    DCH0DSAINV : aliased unsigned  -- p32mx470f512.h:3853
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "DCH0DSAINV";
 
    DCH0SSIZ : aliased unsigned  -- p32mx470f512.h:3854
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "DCH0SSIZ";
 
    DCH0SSIZCLR : aliased unsigned  -- p32mx470f512.h:3855
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "DCH0SSIZCLR";
 
    DCH0SSIZSET : aliased unsigned  -- p32mx470f512.h:3856
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "DCH0SSIZSET";
 
    DCH0SSIZINV : aliased unsigned  -- p32mx470f512.h:3857
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "DCH0SSIZINV";
 
    DCH0DSIZ : aliased unsigned  -- p32mx470f512.h:3858
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "DCH0DSIZ";
 
    DCH0DSIZCLR : aliased unsigned  -- p32mx470f512.h:3859
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "DCH0DSIZCLR";
 
    DCH0DSIZSET : aliased unsigned  -- p32mx470f512.h:3860
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "DCH0DSIZSET";
 
    DCH0DSIZINV : aliased unsigned  -- p32mx470f512.h:3861
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "DCH0DSIZINV";
 
    DCH0SPTR : aliased unsigned  -- p32mx470f512.h:3862
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "DCH0SPTR";
 
    DCH0SPTRCLR : aliased unsigned  -- p32mx470f512.h:3863
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "DCH0SPTRCLR";
 
    DCH0SPTRSET : aliased unsigned  -- p32mx470f512.h:3864
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "DCH0SPTRSET";
 
    DCH0SPTRINV : aliased unsigned  -- p32mx470f512.h:3865
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "DCH0SPTRINV";
 
    DCH0DPTR : aliased unsigned  -- p32mx470f512.h:3866
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "DCH0DPTR";
 
    DCH0DPTRCLR : aliased unsigned  -- p32mx470f512.h:3867
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "DCH0DPTRCLR";
 
    DCH0DPTRSET : aliased unsigned  -- p32mx470f512.h:3868
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "DCH0DPTRSET";
 
    DCH0DPTRINV : aliased unsigned  -- p32mx470f512.h:3869
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "DCH0DPTRINV";
 
    DCH0CSIZ : aliased unsigned  -- p32mx470f512.h:3870
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "DCH0CSIZ";
 
    DCH0CSIZCLR : aliased unsigned  -- p32mx470f512.h:3871
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "DCH0CSIZCLR";
 
    DCH0CSIZSET : aliased unsigned  -- p32mx470f512.h:3872
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "DCH0CSIZSET";
 
    DCH0CSIZINV : aliased unsigned  -- p32mx470f512.h:3873
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "DCH0CSIZINV";
 
    DCH0CPTR : aliased unsigned  -- p32mx470f512.h:3874
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "DCH0CPTR";
 
    DCH0CPTRCLR : aliased unsigned  -- p32mx470f512.h:3875
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "DCH0CPTRCLR";
 
    DCH0CPTRSET : aliased unsigned  -- p32mx470f512.h:3876
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "DCH0CPTRSET";
 
    DCH0CPTRINV : aliased unsigned  -- p32mx470f512.h:3877
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "DCH0CPTRINV";
 
    DCH0DAT : aliased unsigned  -- p32mx470f512.h:3878
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "DCH0DAT";
 
    DCH0DATCLR : aliased unsigned  -- p32mx470f512.h:3879
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "DCH0DATCLR";
 
    DCH0DATSET : aliased unsigned  -- p32mx470f512.h:3880
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "DCH0DATSET";
 
    DCH0DATINV : aliased unsigned  -- p32mx470f512.h:3881
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "DCH0DATINV";
 
    DCH1CON : aliased unsigned  -- p32mx470f512.h:3882
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "DCH1CON";
 
@@ -9815,27 +9815,27 @@ package P32mx470f512h is
      Unchecked_Union => True;  -- p32mx470f512.h:3899
 
    DCH1CONbits : aliased uu_DCH1CONbits_t  -- p32mx470f512.h:3900
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "DCH1CON";
+     External_Name => "DCH1CONbits";
 
    DCH1CONCLR : aliased unsigned  -- p32mx470f512.h:3901
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "DCH1CONCLR";
 
    DCH1CONSET : aliased unsigned  -- p32mx470f512.h:3902
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "DCH1CONSET";
 
    DCH1CONINV : aliased unsigned  -- p32mx470f512.h:3903
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "DCH1CONINV";
 
    DCH1ECON : aliased unsigned  -- p32mx470f512.h:3904
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "DCH1ECON";
 
@@ -9867,27 +9867,27 @@ package P32mx470f512h is
      Unchecked_Union => True;  -- p32mx470f512.h:3919
 
    DCH1ECONbits : aliased uu_DCH1ECONbits_t  -- p32mx470f512.h:3920
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "DCH1ECON";
+     External_Name => "DCH1ECONbits";
 
    DCH1ECONCLR : aliased unsigned  -- p32mx470f512.h:3921
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "DCH1ECONCLR";
 
    DCH1ECONSET : aliased unsigned  -- p32mx470f512.h:3922
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "DCH1ECONSET";
 
    DCH1ECONINV : aliased unsigned  -- p32mx470f512.h:3923
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "DCH1ECONINV";
 
    DCH1INT : aliased unsigned  -- p32mx470f512.h:3924
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "DCH1INT";
 
@@ -9928,207 +9928,207 @@ package P32mx470f512h is
      Unchecked_Union => True;  -- p32mx470f512.h:3948
 
    DCH1INTbits : aliased uu_DCH1INTbits_t  -- p32mx470f512.h:3949
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "DCH1INT";
+     External_Name => "DCH1INTbits";
 
    DCH1INTCLR : aliased unsigned  -- p32mx470f512.h:3950
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "DCH1INTCLR";
 
    DCH1INTSET : aliased unsigned  -- p32mx470f512.h:3951
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "DCH1INTSET";
 
    DCH1INTINV : aliased unsigned  -- p32mx470f512.h:3952
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "DCH1INTINV";
 
    DCH1SSA : aliased unsigned  -- p32mx470f512.h:3953
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "DCH1SSA";
 
    DCH1SSACLR : aliased unsigned  -- p32mx470f512.h:3954
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "DCH1SSACLR";
 
    DCH1SSASET : aliased unsigned  -- p32mx470f512.h:3955
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "DCH1SSASET";
 
    DCH1SSAINV : aliased unsigned  -- p32mx470f512.h:3956
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "DCH1SSAINV";
 
    DCH1DSA : aliased unsigned  -- p32mx470f512.h:3957
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "DCH1DSA";
 
    DCH1DSACLR : aliased unsigned  -- p32mx470f512.h:3958
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "DCH1DSACLR";
 
    DCH1DSASET : aliased unsigned  -- p32mx470f512.h:3959
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "DCH1DSASET";
 
    DCH1DSAINV : aliased unsigned  -- p32mx470f512.h:3960
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "DCH1DSAINV";
 
    DCH1SSIZ : aliased unsigned  -- p32mx470f512.h:3961
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "DCH1SSIZ";
 
    DCH1SSIZCLR : aliased unsigned  -- p32mx470f512.h:3962
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "DCH1SSIZCLR";
 
    DCH1SSIZSET : aliased unsigned  -- p32mx470f512.h:3963
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "DCH1SSIZSET";
 
    DCH1SSIZINV : aliased unsigned  -- p32mx470f512.h:3964
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "DCH1SSIZINV";
 
    DCH1DSIZ : aliased unsigned  -- p32mx470f512.h:3965
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "DCH1DSIZ";
 
    DCH1DSIZCLR : aliased unsigned  -- p32mx470f512.h:3966
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "DCH1DSIZCLR";
 
    DCH1DSIZSET : aliased unsigned  -- p32mx470f512.h:3967
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "DCH1DSIZSET";
 
    DCH1DSIZINV : aliased unsigned  -- p32mx470f512.h:3968
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "DCH1DSIZINV";
 
    DCH1SPTR : aliased unsigned  -- p32mx470f512.h:3969
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "DCH1SPTR";
 
    DCH1SPTRCLR : aliased unsigned  -- p32mx470f512.h:3970
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "DCH1SPTRCLR";
 
    DCH1SPTRSET : aliased unsigned  -- p32mx470f512.h:3971
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "DCH1SPTRSET";
 
    DCH1SPTRINV : aliased unsigned  -- p32mx470f512.h:3972
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "DCH1SPTRINV";
 
    DCH1DPTR : aliased unsigned  -- p32mx470f512.h:3973
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "DCH1DPTR";
 
    DCH1DPTRCLR : aliased unsigned  -- p32mx470f512.h:3974
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "DCH1DPTRCLR";
 
    DCH1DPTRSET : aliased unsigned  -- p32mx470f512.h:3975
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "DCH1DPTRSET";
 
    DCH1DPTRINV : aliased unsigned  -- p32mx470f512.h:3976
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "DCH1DPTRINV";
 
    DCH1CSIZ : aliased unsigned  -- p32mx470f512.h:3977
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "DCH1CSIZ";
 
    DCH1CSIZCLR : aliased unsigned  -- p32mx470f512.h:3978
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "DCH1CSIZCLR";
 
    DCH1CSIZSET : aliased unsigned  -- p32mx470f512.h:3979
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "DCH1CSIZSET";
 
    DCH1CSIZINV : aliased unsigned  -- p32mx470f512.h:3980
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "DCH1CSIZINV";
 
    DCH1CPTR : aliased unsigned  -- p32mx470f512.h:3981
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "DCH1CPTR";
 
    DCH1CPTRCLR : aliased unsigned  -- p32mx470f512.h:3982
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "DCH1CPTRCLR";
 
    DCH1CPTRSET : aliased unsigned  -- p32mx470f512.h:3983
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "DCH1CPTRSET";
 
    DCH1CPTRINV : aliased unsigned  -- p32mx470f512.h:3984
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "DCH1CPTRINV";
 
    DCH1DAT : aliased unsigned  -- p32mx470f512.h:3985
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "DCH1DAT";
 
    DCH1DATCLR : aliased unsigned  -- p32mx470f512.h:3986
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "DCH1DATCLR";
 
    DCH1DATSET : aliased unsigned  -- p32mx470f512.h:3987
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "DCH1DATSET";
 
    DCH1DATINV : aliased unsigned  -- p32mx470f512.h:3988
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "DCH1DATINV";
 
    DCH2CON : aliased unsigned  -- p32mx470f512.h:3989
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "DCH2CON";
 
@@ -10162,27 +10162,27 @@ package P32mx470f512h is
      Unchecked_Union => True;  -- p32mx470f512.h:4006
 
    DCH2CONbits : aliased uu_DCH2CONbits_t  -- p32mx470f512.h:4007
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "DCH2CON";
+     External_Name => "DCH2CONbits";
 
    DCH2CONCLR : aliased unsigned  -- p32mx470f512.h:4008
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "DCH2CONCLR";
 
    DCH2CONSET : aliased unsigned  -- p32mx470f512.h:4009
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "DCH2CONSET";
 
    DCH2CONINV : aliased unsigned  -- p32mx470f512.h:4010
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "DCH2CONINV";
 
    DCH2ECON : aliased unsigned  -- p32mx470f512.h:4011
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "DCH2ECON";
 
@@ -10214,27 +10214,27 @@ package P32mx470f512h is
      Unchecked_Union => True;  -- p32mx470f512.h:4026
 
    DCH2ECONbits : aliased uu_DCH2ECONbits_t  -- p32mx470f512.h:4027
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "DCH2ECON";
+     External_Name => "DCH2ECONbits";
 
    DCH2ECONCLR : aliased unsigned  -- p32mx470f512.h:4028
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "DCH2ECONCLR";
 
    DCH2ECONSET : aliased unsigned  -- p32mx470f512.h:4029
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "DCH2ECONSET";
 
    DCH2ECONINV : aliased unsigned  -- p32mx470f512.h:4030
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "DCH2ECONINV";
 
    DCH2INT : aliased unsigned  -- p32mx470f512.h:4031
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "DCH2INT";
 
@@ -10275,207 +10275,207 @@ package P32mx470f512h is
      Unchecked_Union => True;  -- p32mx470f512.h:4055
 
    DCH2INTbits : aliased uu_DCH2INTbits_t  -- p32mx470f512.h:4056
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "DCH2INT";
+     External_Name => "DCH2INTbits";
 
    DCH2INTCLR : aliased unsigned  -- p32mx470f512.h:4057
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "DCH2INTCLR";
 
    DCH2INTSET : aliased unsigned  -- p32mx470f512.h:4058
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "DCH2INTSET";
 
    DCH2INTINV : aliased unsigned  -- p32mx470f512.h:4059
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "DCH2INTINV";
 
    DCH2SSA : aliased unsigned  -- p32mx470f512.h:4060
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "DCH2SSA";
 
    DCH2SSACLR : aliased unsigned  -- p32mx470f512.h:4061
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "DCH2SSACLR";
 
    DCH2SSASET : aliased unsigned  -- p32mx470f512.h:4062
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "DCH2SSASET";
 
    DCH2SSAINV : aliased unsigned  -- p32mx470f512.h:4063
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "DCH2SSAINV";
 
    DCH2DSA : aliased unsigned  -- p32mx470f512.h:4064
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "DCH2DSA";
 
    DCH2DSACLR : aliased unsigned  -- p32mx470f512.h:4065
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "DCH2DSACLR";
 
    DCH2DSASET : aliased unsigned  -- p32mx470f512.h:4066
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "DCH2DSASET";
 
    DCH2DSAINV : aliased unsigned  -- p32mx470f512.h:4067
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "DCH2DSAINV";
 
    DCH2SSIZ : aliased unsigned  -- p32mx470f512.h:4068
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "DCH2SSIZ";
 
    DCH2SSIZCLR : aliased unsigned  -- p32mx470f512.h:4069
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "DCH2SSIZCLR";
 
    DCH2SSIZSET : aliased unsigned  -- p32mx470f512.h:4070
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "DCH2SSIZSET";
 
    DCH2SSIZINV : aliased unsigned  -- p32mx470f512.h:4071
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "DCH2SSIZINV";
 
    DCH2DSIZ : aliased unsigned  -- p32mx470f512.h:4072
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "DCH2DSIZ";
 
    DCH2DSIZCLR : aliased unsigned  -- p32mx470f512.h:4073
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "DCH2DSIZCLR";
 
    DCH2DSIZSET : aliased unsigned  -- p32mx470f512.h:4074
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "DCH2DSIZSET";
 
    DCH2DSIZINV : aliased unsigned  -- p32mx470f512.h:4075
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "DCH2DSIZINV";
 
    DCH2SPTR : aliased unsigned  -- p32mx470f512.h:4076
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "DCH2SPTR";
 
    DCH2SPTRCLR : aliased unsigned  -- p32mx470f512.h:4077
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "DCH2SPTRCLR";
 
    DCH2SPTRSET : aliased unsigned  -- p32mx470f512.h:4078
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "DCH2SPTRSET";
 
    DCH2SPTRINV : aliased unsigned  -- p32mx470f512.h:4079
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "DCH2SPTRINV";
 
    DCH2DPTR : aliased unsigned  -- p32mx470f512.h:4080
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "DCH2DPTR";
 
    DCH2DPTRCLR : aliased unsigned  -- p32mx470f512.h:4081
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "DCH2DPTRCLR";
 
    DCH2DPTRSET : aliased unsigned  -- p32mx470f512.h:4082
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "DCH2DPTRSET";
 
    DCH2DPTRINV : aliased unsigned  -- p32mx470f512.h:4083
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "DCH2DPTRINV";
 
    DCH2CSIZ : aliased unsigned  -- p32mx470f512.h:4084
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "DCH2CSIZ";
 
    DCH2CSIZCLR : aliased unsigned  -- p32mx470f512.h:4085
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "DCH2CSIZCLR";
 
    DCH2CSIZSET : aliased unsigned  -- p32mx470f512.h:4086
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "DCH2CSIZSET";
 
    DCH2CSIZINV : aliased unsigned  -- p32mx470f512.h:4087
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "DCH2CSIZINV";
 
    DCH2CPTR : aliased unsigned  -- p32mx470f512.h:4088
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "DCH2CPTR";
 
    DCH2CPTRCLR : aliased unsigned  -- p32mx470f512.h:4089
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "DCH2CPTRCLR";
 
    DCH2CPTRSET : aliased unsigned  -- p32mx470f512.h:4090
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "DCH2CPTRSET";
 
    DCH2CPTRINV : aliased unsigned  -- p32mx470f512.h:4091
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "DCH2CPTRINV";
 
    DCH2DAT : aliased unsigned  -- p32mx470f512.h:4092
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "DCH2DAT";
 
    DCH2DATCLR : aliased unsigned  -- p32mx470f512.h:4093
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "DCH2DATCLR";
 
    DCH2DATSET : aliased unsigned  -- p32mx470f512.h:4094
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "DCH2DATSET";
 
    DCH2DATINV : aliased unsigned  -- p32mx470f512.h:4095
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "DCH2DATINV";
 
    DCH3CON : aliased unsigned  -- p32mx470f512.h:4096
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "DCH3CON";
 
@@ -10509,27 +10509,27 @@ package P32mx470f512h is
      Unchecked_Union => True;  -- p32mx470f512.h:4113
 
    DCH3CONbits : aliased uu_DCH3CONbits_t  -- p32mx470f512.h:4114
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "DCH3CON";
+     External_Name => "DCH3CONbits";
 
    DCH3CONCLR : aliased unsigned  -- p32mx470f512.h:4115
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "DCH3CONCLR";
 
    DCH3CONSET : aliased unsigned  -- p32mx470f512.h:4116
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "DCH3CONSET";
 
    DCH3CONINV : aliased unsigned  -- p32mx470f512.h:4117
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "DCH3CONINV";
 
    DCH3ECON : aliased unsigned  -- p32mx470f512.h:4118
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "DCH3ECON";
 
@@ -10561,27 +10561,27 @@ package P32mx470f512h is
      Unchecked_Union => True;  -- p32mx470f512.h:4133
 
    DCH3ECONbits : aliased uu_DCH3ECONbits_t  -- p32mx470f512.h:4134
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "DCH3ECON";
+     External_Name => "DCH3ECONbits";
 
    DCH3ECONCLR : aliased unsigned  -- p32mx470f512.h:4135
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "DCH3ECONCLR";
 
    DCH3ECONSET : aliased unsigned  -- p32mx470f512.h:4136
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "DCH3ECONSET";
 
    DCH3ECONINV : aliased unsigned  -- p32mx470f512.h:4137
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "DCH3ECONINV";
 
    DCH3INT : aliased unsigned  -- p32mx470f512.h:4138
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "DCH3INT";
 
@@ -10622,207 +10622,207 @@ package P32mx470f512h is
      Unchecked_Union => True;  -- p32mx470f512.h:4162
 
    DCH3INTbits : aliased uu_DCH3INTbits_t  -- p32mx470f512.h:4163
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "DCH3INT";
+     External_Name => "DCH3INTbits";
 
    DCH3INTCLR : aliased unsigned  -- p32mx470f512.h:4164
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "DCH3INTCLR";
 
    DCH3INTSET : aliased unsigned  -- p32mx470f512.h:4165
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "DCH3INTSET";
 
    DCH3INTINV : aliased unsigned  -- p32mx470f512.h:4166
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "DCH3INTINV";
 
    DCH3SSA : aliased unsigned  -- p32mx470f512.h:4167
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "DCH3SSA";
 
    DCH3SSACLR : aliased unsigned  -- p32mx470f512.h:4168
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "DCH3SSACLR";
 
    DCH3SSASET : aliased unsigned  -- p32mx470f512.h:4169
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "DCH3SSASET";
 
    DCH3SSAINV : aliased unsigned  -- p32mx470f512.h:4170
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "DCH3SSAINV";
 
    DCH3DSA : aliased unsigned  -- p32mx470f512.h:4171
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "DCH3DSA";
 
    DCH3DSACLR : aliased unsigned  -- p32mx470f512.h:4172
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "DCH3DSACLR";
 
    DCH3DSASET : aliased unsigned  -- p32mx470f512.h:4173
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "DCH3DSASET";
 
    DCH3DSAINV : aliased unsigned  -- p32mx470f512.h:4174
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "DCH3DSAINV";
 
    DCH3SSIZ : aliased unsigned  -- p32mx470f512.h:4175
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "DCH3SSIZ";
 
    DCH3SSIZCLR : aliased unsigned  -- p32mx470f512.h:4176
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "DCH3SSIZCLR";
 
    DCH3SSIZSET : aliased unsigned  -- p32mx470f512.h:4177
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "DCH3SSIZSET";
 
    DCH3SSIZINV : aliased unsigned  -- p32mx470f512.h:4178
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "DCH3SSIZINV";
 
    DCH3DSIZ : aliased unsigned  -- p32mx470f512.h:4179
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "DCH3DSIZ";
 
    DCH3DSIZCLR : aliased unsigned  -- p32mx470f512.h:4180
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "DCH3DSIZCLR";
 
    DCH3DSIZSET : aliased unsigned  -- p32mx470f512.h:4181
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "DCH3DSIZSET";
 
    DCH3DSIZINV : aliased unsigned  -- p32mx470f512.h:4182
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "DCH3DSIZINV";
 
    DCH3SPTR : aliased unsigned  -- p32mx470f512.h:4183
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "DCH3SPTR";
 
    DCH3SPTRCLR : aliased unsigned  -- p32mx470f512.h:4184
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "DCH3SPTRCLR";
 
    DCH3SPTRSET : aliased unsigned  -- p32mx470f512.h:4185
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "DCH3SPTRSET";
 
    DCH3SPTRINV : aliased unsigned  -- p32mx470f512.h:4186
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "DCH3SPTRINV";
 
    DCH3DPTR : aliased unsigned  -- p32mx470f512.h:4187
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "DCH3DPTR";
 
    DCH3DPTRCLR : aliased unsigned  -- p32mx470f512.h:4188
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "DCH3DPTRCLR";
 
    DCH3DPTRSET : aliased unsigned  -- p32mx470f512.h:4189
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "DCH3DPTRSET";
 
    DCH3DPTRINV : aliased unsigned  -- p32mx470f512.h:4190
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "DCH3DPTRINV";
 
    DCH3CSIZ : aliased unsigned  -- p32mx470f512.h:4191
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "DCH3CSIZ";
 
    DCH3CSIZCLR : aliased unsigned  -- p32mx470f512.h:4192
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "DCH3CSIZCLR";
 
    DCH3CSIZSET : aliased unsigned  -- p32mx470f512.h:4193
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "DCH3CSIZSET";
 
    DCH3CSIZINV : aliased unsigned  -- p32mx470f512.h:4194
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "DCH3CSIZINV";
 
    DCH3CPTR : aliased unsigned  -- p32mx470f512.h:4195
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "DCH3CPTR";
 
    DCH3CPTRCLR : aliased unsigned  -- p32mx470f512.h:4196
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "DCH3CPTRCLR";
 
    DCH3CPTRSET : aliased unsigned  -- p32mx470f512.h:4197
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "DCH3CPTRSET";
 
    DCH3CPTRINV : aliased unsigned  -- p32mx470f512.h:4198
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "DCH3CPTRINV";
 
    DCH3DAT : aliased unsigned  -- p32mx470f512.h:4199
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "DCH3DAT";
 
    DCH3DATCLR : aliased unsigned  -- p32mx470f512.h:4200
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "DCH3DATCLR";
 
    DCH3DATSET : aliased unsigned  -- p32mx470f512.h:4201
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "DCH3DATSET";
 
    DCH3DATINV : aliased unsigned  -- p32mx470f512.h:4202
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "DCH3DATINV";
 
    CHECON : aliased unsigned  -- p32mx470f512.h:4203
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "CHECON";
 
@@ -10853,27 +10853,27 @@ package P32mx470f512h is
      Unchecked_Union => True;  -- p32mx470f512.h:4217
 
    CHECONbits : aliased uu_CHECONbits_t  -- p32mx470f512.h:4218
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "CHECON";
+     External_Name => "CHECONbits";
 
    CHECONCLR : aliased unsigned  -- p32mx470f512.h:4219
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "CHECONCLR";
 
    CHECONSET : aliased unsigned  -- p32mx470f512.h:4220
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "CHECONSET";
 
    CHECONINV : aliased unsigned  -- p32mx470f512.h:4221
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "CHECONINV";
 
    CHEACC : aliased unsigned  -- p32mx470f512.h:4222
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "CHEACC";
 
@@ -10887,27 +10887,27 @@ package P32mx470f512h is
      Alignment => 4;  -- p32mx470f512.h:4227
 
    CHEACCbits : aliased uu_CHEACCbits_t  -- p32mx470f512.h:4228
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "CHEACC";
+     External_Name => "CHEACCbits";
 
    CHEACCCLR : aliased unsigned  -- p32mx470f512.h:4229
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "CHEACCCLR";
 
    CHEACCSET : aliased unsigned  -- p32mx470f512.h:4230
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "CHEACCSET";
 
    CHEACCINV : aliased unsigned  -- p32mx470f512.h:4231
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "CHEACCINV";
 
    CHETAG : aliased unsigned  -- p32mx470f512.h:4232
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "CHETAG";
 
@@ -10938,27 +10938,27 @@ package P32mx470f512h is
      Unchecked_Union => True;  -- p32mx470f512.h:4246
 
    CHETAGbits : aliased uu_CHETAGbits_t  -- p32mx470f512.h:4247
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "CHETAG";
+     External_Name => "CHETAGbits";
 
    CHETAGCLR : aliased unsigned  -- p32mx470f512.h:4248
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "CHETAGCLR";
 
    CHETAGSET : aliased unsigned  -- p32mx470f512.h:4249
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "CHETAGSET";
 
    CHETAGINV : aliased unsigned  -- p32mx470f512.h:4250
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "CHETAGINV";
 
    CHEMSK : aliased unsigned  -- p32mx470f512.h:4251
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "CHEMSK";
 
@@ -10971,27 +10971,27 @@ package P32mx470f512h is
      Alignment => 4;  -- p32mx470f512.h:4255
 
    CHEMSKbits : aliased uu_CHEMSKbits_t  -- p32mx470f512.h:4256
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "CHEMSK";
+     External_Name => "CHEMSKbits";
 
    CHEMSKCLR : aliased unsigned  -- p32mx470f512.h:4257
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "CHEMSKCLR";
 
    CHEMSKSET : aliased unsigned  -- p32mx470f512.h:4258
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "CHEMSKSET";
 
    CHEMSKINV : aliased unsigned  -- p32mx470f512.h:4259
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "CHEMSKINV";
 
    CHEW0 : aliased unsigned  -- p32mx470f512.h:4260
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "CHEW0";
 
@@ -11001,12 +11001,12 @@ package P32mx470f512h is
      with Convention => C_Pass_By_Copy;  -- p32mx470f512.h:4263
 
    CHEW0bits : aliased uu_CHEW0bits_t  -- p32mx470f512.h:4264
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "CHEW0";
+     External_Name => "CHEW0bits";
 
    CHEW1 : aliased unsigned  -- p32mx470f512.h:4265
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "CHEW1";
 
@@ -11016,12 +11016,12 @@ package P32mx470f512h is
      with Convention => C_Pass_By_Copy;  -- p32mx470f512.h:4268
 
    CHEW1bits : aliased uu_CHEW1bits_t  -- p32mx470f512.h:4269
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "CHEW1";
+     External_Name => "CHEW1bits";
 
    CHEW2 : aliased unsigned  -- p32mx470f512.h:4270
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "CHEW2";
 
@@ -11031,12 +11031,12 @@ package P32mx470f512h is
      with Convention => C_Pass_By_Copy;  -- p32mx470f512.h:4273
 
    CHEW2bits : aliased uu_CHEW2bits_t  -- p32mx470f512.h:4274
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "CHEW2";
+     External_Name => "CHEW2bits";
 
    CHEW3 : aliased unsigned  -- p32mx470f512.h:4275
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "CHEW3";
 
@@ -11046,12 +11046,12 @@ package P32mx470f512h is
      with Convention => C_Pass_By_Copy;  -- p32mx470f512.h:4278
 
    CHEW3bits : aliased uu_CHEW3bits_t  -- p32mx470f512.h:4279
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "CHEW3";
+     External_Name => "CHEW3bits";
 
    CHELRU : aliased unsigned  -- p32mx470f512.h:4280
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "CHELRU";
 
@@ -11063,12 +11063,12 @@ package P32mx470f512h is
      Alignment => 4;  -- p32mx470f512.h:4283
 
    CHELRUbits : aliased uu_CHELRUbits_t  -- p32mx470f512.h:4284
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "CHELRU";
+     External_Name => "CHELRUbits";
 
    CHEHIT : aliased unsigned  -- p32mx470f512.h:4285
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "CHEHIT";
 
@@ -11078,12 +11078,12 @@ package P32mx470f512h is
      with Convention => C_Pass_By_Copy;  -- p32mx470f512.h:4288
 
    CHEHITbits : aliased uu_CHEHITbits_t  -- p32mx470f512.h:4289
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "CHEHIT";
+     External_Name => "CHEHITbits";
 
    CHEMIS : aliased unsigned  -- p32mx470f512.h:4290
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "CHEMIS";
 
@@ -11093,17 +11093,17 @@ package P32mx470f512h is
      with Convention => C_Pass_By_Copy;  -- p32mx470f512.h:4293
 
    CHEMISbits : aliased uu_CHEMISbits_t  -- p32mx470f512.h:4294
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "CHEMIS";
+     External_Name => "CHEMISbits";
 
    RESERVED1 : aliased unsigned  -- p32mx470f512.h:4295
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "RESERVED1";
 
    CHEPFABT : aliased unsigned  -- p32mx470f512.h:4296
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "CHEPFABT";
 
@@ -11113,12 +11113,12 @@ package P32mx470f512h is
      with Convention => C_Pass_By_Copy;  -- p32mx470f512.h:4299
 
    CHEPFABTbits : aliased uu_CHEPFABTbits_t  -- p32mx470f512.h:4300
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "CHEPFABT";
+     External_Name => "CHEPFABTbits";
 
    U1OTGIR : aliased unsigned  -- p32mx470f512.h:4301
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "U1OTGIR";
 
@@ -11137,17 +11137,17 @@ package P32mx470f512h is
      Alignment => 4;  -- p32mx470f512.h:4311
 
    U1OTGIRbits : aliased uu_U1OTGIRbits_t  -- p32mx470f512.h:4312
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "U1OTGIR";
+     External_Name => "U1OTGIRbits";
 
    U1OTGIRCLR : aliased unsigned  -- p32mx470f512.h:4313
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "U1OTGIRCLR";
 
    U1OTGIE : aliased unsigned  -- p32mx470f512.h:4314
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "U1OTGIE";
 
@@ -11166,27 +11166,27 @@ package P32mx470f512h is
      Alignment => 4;  -- p32mx470f512.h:4324
 
    U1OTGIEbits : aliased uu_U1OTGIEbits_t  -- p32mx470f512.h:4325
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "U1OTGIE";
+     External_Name => "U1OTGIEbits";
 
    U1OTGIECLR : aliased unsigned  -- p32mx470f512.h:4326
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "U1OTGIECLR";
 
    U1OTGIESET : aliased unsigned  -- p32mx470f512.h:4327
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "U1OTGIESET";
 
    U1OTGIEINV : aliased unsigned  -- p32mx470f512.h:4328
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "U1OTGIEINV";
 
    U1OTGSTAT : aliased unsigned  -- p32mx470f512.h:4329
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "U1OTGSTAT";
 
@@ -11205,12 +11205,12 @@ package P32mx470f512h is
      Alignment => 4;  -- p32mx470f512.h:4339
 
    U1OTGSTATbits : aliased uu_U1OTGSTATbits_t  -- p32mx470f512.h:4340
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "U1OTGSTAT";
+     External_Name => "U1OTGSTATbits";
 
    U1OTGCON : aliased unsigned  -- p32mx470f512.h:4341
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "U1OTGCON";
 
@@ -11229,27 +11229,27 @@ package P32mx470f512h is
      Alignment => 4;  -- p32mx470f512.h:4351
 
    U1OTGCONbits : aliased uu_U1OTGCONbits_t  -- p32mx470f512.h:4352
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "U1OTGCON";
+     External_Name => "U1OTGCONbits";
 
    U1OTGCONCLR : aliased unsigned  -- p32mx470f512.h:4353
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "U1OTGCONCLR";
 
    U1OTGCONSET : aliased unsigned  -- p32mx470f512.h:4354
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "U1OTGCONSET";
 
    U1OTGCONINV : aliased unsigned  -- p32mx470f512.h:4355
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "U1OTGCONINV";
 
    U1PWRC : aliased unsigned  -- p32mx470f512.h:4356
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "U1PWRC";
 
@@ -11267,27 +11267,27 @@ package P32mx470f512h is
      Alignment => 4;  -- p32mx470f512.h:4365
 
    U1PWRCbits : aliased uu_U1PWRCbits_t  -- p32mx470f512.h:4366
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "U1PWRC";
+     External_Name => "U1PWRCbits";
 
    U1PWRCCLR : aliased unsigned  -- p32mx470f512.h:4367
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "U1PWRCCLR";
 
    U1PWRCSET : aliased unsigned  -- p32mx470f512.h:4368
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "U1PWRCSET";
 
    U1PWRCINV : aliased unsigned  -- p32mx470f512.h:4369
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "U1PWRCINV";
 
    U1IR : aliased unsigned  -- p32mx470f512.h:4370
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "U1IR";
 
@@ -11328,17 +11328,17 @@ package P32mx470f512h is
      Unchecked_Union => True;  -- p32mx470f512.h:4388
 
    U1IRbits : aliased uu_U1IRbits_t  -- p32mx470f512.h:4389
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "U1IR";
+     External_Name => "U1IRbits";
 
    U1IRCLR : aliased unsigned  -- p32mx470f512.h:4390
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "U1IRCLR";
 
    U1IE : aliased unsigned  -- p32mx470f512.h:4391
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "U1IE";
 
@@ -11379,27 +11379,27 @@ package P32mx470f512h is
      Unchecked_Union => True;  -- p32mx470f512.h:4409
 
    U1IEbits : aliased uu_U1IEbits_t  -- p32mx470f512.h:4410
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "U1IE";
+     External_Name => "U1IEbits";
 
    U1IECLR : aliased unsigned  -- p32mx470f512.h:4411
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "U1IECLR";
 
    U1IESET : aliased unsigned  -- p32mx470f512.h:4412
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "U1IESET";
 
    U1IEINV : aliased unsigned  -- p32mx470f512.h:4413
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "U1IEINV";
 
    U1EIR : aliased unsigned  -- p32mx470f512.h:4414
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "U1EIR";
 
@@ -11442,17 +11442,17 @@ package P32mx470f512h is
      Unchecked_Union => True;  -- p32mx470f512.h:4434
 
    U1EIRbits : aliased uu_U1EIRbits_t  -- p32mx470f512.h:4435
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "U1EIR";
+     External_Name => "U1EIRbits";
 
    U1EIRCLR : aliased unsigned  -- p32mx470f512.h:4436
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "U1EIRCLR";
 
    U1EIE : aliased unsigned  -- p32mx470f512.h:4437
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "U1EIE";
 
@@ -11495,27 +11495,27 @@ package P32mx470f512h is
      Unchecked_Union => True;  -- p32mx470f512.h:4457
 
    U1EIEbits : aliased uu_U1EIEbits_t  -- p32mx470f512.h:4458
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "U1EIE";
+     External_Name => "U1EIEbits";
 
    U1EIECLR : aliased unsigned  -- p32mx470f512.h:4459
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "U1EIECLR";
 
    U1EIESET : aliased unsigned  -- p32mx470f512.h:4460
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "U1EIESET";
 
    U1EIEINV : aliased unsigned  -- p32mx470f512.h:4461
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "U1EIEINV";
 
    U1STAT : aliased unsigned  -- p32mx470f512.h:4462
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "U1STAT";
 
@@ -11549,12 +11549,12 @@ package P32mx470f512h is
      Unchecked_Union => True;  -- p32mx470f512.h:4477
 
    U1STATbits : aliased uu_U1STATbits_t  -- p32mx470f512.h:4478
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "U1STAT";
+     External_Name => "U1STATbits";
 
    U1CON : aliased unsigned  -- p32mx470f512.h:4479
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "U1CON";
 
@@ -11605,27 +11605,27 @@ package P32mx470f512h is
      Unchecked_Union => True;  -- p32mx470f512.h:4503
 
    U1CONbits : aliased uu_U1CONbits_t  -- p32mx470f512.h:4504
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "U1CON";
+     External_Name => "U1CONbits";
 
    U1CONCLR : aliased unsigned  -- p32mx470f512.h:4505
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "U1CONCLR";
 
    U1CONSET : aliased unsigned  -- p32mx470f512.h:4506
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "U1CONSET";
 
    U1CONINV : aliased unsigned  -- p32mx470f512.h:4507
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "U1CONINV";
 
    U1ADDR : aliased unsigned  -- p32mx470f512.h:4508
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "U1ADDR";
 
@@ -11659,27 +11659,27 @@ package P32mx470f512h is
      Unchecked_Union => True;  -- p32mx470f512.h:4523
 
    U1ADDRbits : aliased uu_U1ADDRbits_t  -- p32mx470f512.h:4524
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "U1ADDR";
+     External_Name => "U1ADDRbits";
 
    U1ADDRCLR : aliased unsigned  -- p32mx470f512.h:4525
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "U1ADDRCLR";
 
    U1ADDRSET : aliased unsigned  -- p32mx470f512.h:4526
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "U1ADDRSET";
 
    U1ADDRINV : aliased unsigned  -- p32mx470f512.h:4527
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "U1ADDRINV";
 
    U1BDTP1 : aliased unsigned  -- p32mx470f512.h:4528
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "U1BDTP1";
 
@@ -11692,27 +11692,27 @@ package P32mx470f512h is
      Alignment => 4;  -- p32mx470f512.h:4532
 
    U1BDTP1bits : aliased uu_U1BDTP1bits_t  -- p32mx470f512.h:4533
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "U1BDTP1";
+     External_Name => "U1BDTP1bits";
 
    U1BDTP1CLR : aliased unsigned  -- p32mx470f512.h:4534
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "U1BDTP1CLR";
 
    U1BDTP1SET : aliased unsigned  -- p32mx470f512.h:4535
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "U1BDTP1SET";
 
    U1BDTP1INV : aliased unsigned  -- p32mx470f512.h:4536
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "U1BDTP1INV";
 
    U1FRML : aliased unsigned  -- p32mx470f512.h:4537
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "U1FRML";
 
@@ -11744,12 +11744,12 @@ package P32mx470f512h is
      Unchecked_Union => True;  -- p32mx470f512.h:4552
 
    U1FRMLbits : aliased uu_U1FRMLbits_t  -- p32mx470f512.h:4553
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "U1FRML";
+     External_Name => "U1FRMLbits";
 
    U1FRMH : aliased unsigned  -- p32mx470f512.h:4554
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "U1FRMH";
 
@@ -11778,12 +11778,12 @@ package P32mx470f512h is
      Unchecked_Union => True;  -- p32mx470f512.h:4564
 
    U1FRMHbits : aliased uu_U1FRMHbits_t  -- p32mx470f512.h:4565
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "U1FRMH";
+     External_Name => "U1FRMHbits";
 
    U1TOK : aliased unsigned  -- p32mx470f512.h:4566
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "U1TOK";
 
@@ -11832,27 +11832,27 @@ package P32mx470f512h is
      Unchecked_Union => True;  -- p32mx470f512.h:4588
 
    U1TOKbits : aliased uu_U1TOKbits_t  -- p32mx470f512.h:4589
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "U1TOK";
+     External_Name => "U1TOKbits";
 
    U1TOKCLR : aliased unsigned  -- p32mx470f512.h:4590
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "U1TOKCLR";
 
    U1TOKSET : aliased unsigned  -- p32mx470f512.h:4591
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "U1TOKSET";
 
    U1TOKINV : aliased unsigned  -- p32mx470f512.h:4592
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "U1TOKINV";
 
    U1SOF : aliased unsigned  -- p32mx470f512.h:4593
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "U1SOF";
 
@@ -11862,27 +11862,27 @@ package P32mx470f512h is
      with Convention => C_Pass_By_Copy;  -- p32mx470f512.h:4596
 
    U1SOFbits : aliased uu_U1SOFbits_t  -- p32mx470f512.h:4597
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "U1SOF";
+     External_Name => "U1SOFbits";
 
    U1SOFCLR : aliased unsigned  -- p32mx470f512.h:4598
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "U1SOFCLR";
 
    U1SOFSET : aliased unsigned  -- p32mx470f512.h:4599
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "U1SOFSET";
 
    U1SOFINV : aliased unsigned  -- p32mx470f512.h:4600
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "U1SOFINV";
 
    U1BDTP2 : aliased unsigned  -- p32mx470f512.h:4601
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "U1BDTP2";
 
@@ -11892,27 +11892,27 @@ package P32mx470f512h is
      with Convention => C_Pass_By_Copy;  -- p32mx470f512.h:4604
 
    U1BDTP2bits : aliased uu_U1BDTP2bits_t  -- p32mx470f512.h:4605
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "U1BDTP2";
+     External_Name => "U1BDTP2bits";
 
    U1BDTP2CLR : aliased unsigned  -- p32mx470f512.h:4606
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "U1BDTP2CLR";
 
    U1BDTP2SET : aliased unsigned  -- p32mx470f512.h:4607
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "U1BDTP2SET";
 
    U1BDTP2INV : aliased unsigned  -- p32mx470f512.h:4608
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "U1BDTP2INV";
 
    U1BDTP3 : aliased unsigned  -- p32mx470f512.h:4609
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "U1BDTP3";
 
@@ -11922,27 +11922,27 @@ package P32mx470f512h is
      with Convention => C_Pass_By_Copy;  -- p32mx470f512.h:4612
 
    U1BDTP3bits : aliased uu_U1BDTP3bits_t  -- p32mx470f512.h:4613
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "U1BDTP3";
+     External_Name => "U1BDTP3bits";
 
    U1BDTP3CLR : aliased unsigned  -- p32mx470f512.h:4614
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "U1BDTP3CLR";
 
    U1BDTP3SET : aliased unsigned  -- p32mx470f512.h:4615
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "U1BDTP3SET";
 
    U1BDTP3INV : aliased unsigned  -- p32mx470f512.h:4616
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "U1BDTP3INV";
 
    U1CNFG1 : aliased unsigned  -- p32mx470f512.h:4617
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "U1CNFG1";
 
@@ -11959,27 +11959,27 @@ package P32mx470f512h is
      Alignment => 4;  -- p32mx470f512.h:4625
 
    U1CNFG1bits : aliased uu_U1CNFG1bits_t  -- p32mx470f512.h:4626
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "U1CNFG1";
+     External_Name => "U1CNFG1bits";
 
    U1CNFG1CLR : aliased unsigned  -- p32mx470f512.h:4627
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "U1CNFG1CLR";
 
    U1CNFG1SET : aliased unsigned  -- p32mx470f512.h:4628
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "U1CNFG1SET";
 
    U1CNFG1INV : aliased unsigned  -- p32mx470f512.h:4629
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "U1CNFG1INV";
 
    U1EP0 : aliased unsigned  -- p32mx470f512.h:4630
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "U1EP0";
 
@@ -11998,27 +11998,27 @@ package P32mx470f512h is
      Alignment => 4;  -- p32mx470f512.h:4640
 
    U1EP0bits : aliased uu_U1EP0bits_t  -- p32mx470f512.h:4641
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "U1EP0";
+     External_Name => "U1EP0bits";
 
    U1EP0CLR : aliased unsigned  -- p32mx470f512.h:4642
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "U1EP0CLR";
 
    U1EP0SET : aliased unsigned  -- p32mx470f512.h:4643
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "U1EP0SET";
 
    U1EP0INV : aliased unsigned  -- p32mx470f512.h:4644
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "U1EP0INV";
 
    U1EP1 : aliased unsigned  -- p32mx470f512.h:4645
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "U1EP1";
 
@@ -12034,27 +12034,27 @@ package P32mx470f512h is
      Alignment => 4;  -- p32mx470f512.h:4652
 
    U1EP1bits : aliased uu_U1EP1bits_t  -- p32mx470f512.h:4653
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "U1EP1";
+     External_Name => "U1EP1bits";
 
    U1EP1CLR : aliased unsigned  -- p32mx470f512.h:4654
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "U1EP1CLR";
 
    U1EP1SET : aliased unsigned  -- p32mx470f512.h:4655
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "U1EP1SET";
 
    U1EP1INV : aliased unsigned  -- p32mx470f512.h:4656
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "U1EP1INV";
 
    U1EP2 : aliased unsigned  -- p32mx470f512.h:4657
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "U1EP2";
 
@@ -12070,27 +12070,27 @@ package P32mx470f512h is
      Alignment => 4;  -- p32mx470f512.h:4664
 
    U1EP2bits : aliased uu_U1EP2bits_t  -- p32mx470f512.h:4665
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "U1EP2";
+     External_Name => "U1EP2bits";
 
    U1EP2CLR : aliased unsigned  -- p32mx470f512.h:4666
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "U1EP2CLR";
 
    U1EP2SET : aliased unsigned  -- p32mx470f512.h:4667
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "U1EP2SET";
 
    U1EP2INV : aliased unsigned  -- p32mx470f512.h:4668
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "U1EP2INV";
 
    U1EP3 : aliased unsigned  -- p32mx470f512.h:4669
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "U1EP3";
 
@@ -12106,27 +12106,27 @@ package P32mx470f512h is
      Alignment => 4;  -- p32mx470f512.h:4676
 
    U1EP3bits : aliased uu_U1EP3bits_t  -- p32mx470f512.h:4677
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "U1EP3";
+     External_Name => "U1EP3bits";
 
    U1EP3CLR : aliased unsigned  -- p32mx470f512.h:4678
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "U1EP3CLR";
 
    U1EP3SET : aliased unsigned  -- p32mx470f512.h:4679
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "U1EP3SET";
 
    U1EP3INV : aliased unsigned  -- p32mx470f512.h:4680
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "U1EP3INV";
 
    U1EP4 : aliased unsigned  -- p32mx470f512.h:4681
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "U1EP4";
 
@@ -12142,27 +12142,27 @@ package P32mx470f512h is
      Alignment => 4;  -- p32mx470f512.h:4688
 
    U1EP4bits : aliased uu_U1EP4bits_t  -- p32mx470f512.h:4689
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "U1EP4";
+     External_Name => "U1EP4bits";
 
    U1EP4CLR : aliased unsigned  -- p32mx470f512.h:4690
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "U1EP4CLR";
 
    U1EP4SET : aliased unsigned  -- p32mx470f512.h:4691
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "U1EP4SET";
 
    U1EP4INV : aliased unsigned  -- p32mx470f512.h:4692
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "U1EP4INV";
 
    U1EP5 : aliased unsigned  -- p32mx470f512.h:4693
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "U1EP5";
 
@@ -12178,27 +12178,27 @@ package P32mx470f512h is
      Alignment => 4;  -- p32mx470f512.h:4700
 
    U1EP5bits : aliased uu_U1EP5bits_t  -- p32mx470f512.h:4701
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "U1EP5";
+     External_Name => "U1EP5bits";
 
    U1EP5CLR : aliased unsigned  -- p32mx470f512.h:4702
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "U1EP5CLR";
 
    U1EP5SET : aliased unsigned  -- p32mx470f512.h:4703
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "U1EP5SET";
 
    U1EP5INV : aliased unsigned  -- p32mx470f512.h:4704
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "U1EP5INV";
 
    U1EP6 : aliased unsigned  -- p32mx470f512.h:4705
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "U1EP6";
 
@@ -12214,27 +12214,27 @@ package P32mx470f512h is
      Alignment => 4;  -- p32mx470f512.h:4712
 
    U1EP6bits : aliased uu_U1EP6bits_t  -- p32mx470f512.h:4713
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "U1EP6";
+     External_Name => "U1EP6bits";
 
    U1EP6CLR : aliased unsigned  -- p32mx470f512.h:4714
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "U1EP6CLR";
 
    U1EP6SET : aliased unsigned  -- p32mx470f512.h:4715
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "U1EP6SET";
 
    U1EP6INV : aliased unsigned  -- p32mx470f512.h:4716
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "U1EP6INV";
 
    U1EP7 : aliased unsigned  -- p32mx470f512.h:4717
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "U1EP7";
 
@@ -12250,27 +12250,27 @@ package P32mx470f512h is
      Alignment => 4;  -- p32mx470f512.h:4724
 
    U1EP7bits : aliased uu_U1EP7bits_t  -- p32mx470f512.h:4725
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "U1EP7";
+     External_Name => "U1EP7bits";
 
    U1EP7CLR : aliased unsigned  -- p32mx470f512.h:4726
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "U1EP7CLR";
 
    U1EP7SET : aliased unsigned  -- p32mx470f512.h:4727
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "U1EP7SET";
 
    U1EP7INV : aliased unsigned  -- p32mx470f512.h:4728
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "U1EP7INV";
 
    U1EP8 : aliased unsigned  -- p32mx470f512.h:4729
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "U1EP8";
 
@@ -12286,27 +12286,27 @@ package P32mx470f512h is
      Alignment => 4;  -- p32mx470f512.h:4736
 
    U1EP8bits : aliased uu_U1EP8bits_t  -- p32mx470f512.h:4737
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "U1EP8";
+     External_Name => "U1EP8bits";
 
    U1EP8CLR : aliased unsigned  -- p32mx470f512.h:4738
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "U1EP8CLR";
 
    U1EP8SET : aliased unsigned  -- p32mx470f512.h:4739
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "U1EP8SET";
 
    U1EP8INV : aliased unsigned  -- p32mx470f512.h:4740
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "U1EP8INV";
 
    U1EP9 : aliased unsigned  -- p32mx470f512.h:4741
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "U1EP9";
 
@@ -12322,27 +12322,27 @@ package P32mx470f512h is
      Alignment => 4;  -- p32mx470f512.h:4748
 
    U1EP9bits : aliased uu_U1EP9bits_t  -- p32mx470f512.h:4749
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "U1EP9";
+     External_Name => "U1EP9bits";
 
    U1EP9CLR : aliased unsigned  -- p32mx470f512.h:4750
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "U1EP9CLR";
 
    U1EP9SET : aliased unsigned  -- p32mx470f512.h:4751
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "U1EP9SET";
 
    U1EP9INV : aliased unsigned  -- p32mx470f512.h:4752
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "U1EP9INV";
 
    U1EP10 : aliased unsigned  -- p32mx470f512.h:4753
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "U1EP10";
 
@@ -12358,27 +12358,27 @@ package P32mx470f512h is
      Alignment => 4;  -- p32mx470f512.h:4760
 
    U1EP10bits : aliased uu_U1EP10bits_t  -- p32mx470f512.h:4761
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "U1EP10";
+     External_Name => "U1EP10bits";
 
    U1EP10CLR : aliased unsigned  -- p32mx470f512.h:4762
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "U1EP10CLR";
 
    U1EP10SET : aliased unsigned  -- p32mx470f512.h:4763
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "U1EP10SET";
 
    U1EP10INV : aliased unsigned  -- p32mx470f512.h:4764
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "U1EP10INV";
 
    U1EP11 : aliased unsigned  -- p32mx470f512.h:4765
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "U1EP11";
 
@@ -12394,27 +12394,27 @@ package P32mx470f512h is
      Alignment => 4;  -- p32mx470f512.h:4772
 
    U1EP11bits : aliased uu_U1EP11bits_t  -- p32mx470f512.h:4773
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "U1EP11";
+     External_Name => "U1EP11bits";
 
    U1EP11CLR : aliased unsigned  -- p32mx470f512.h:4774
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "U1EP11CLR";
 
    U1EP11SET : aliased unsigned  -- p32mx470f512.h:4775
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "U1EP11SET";
 
    U1EP11INV : aliased unsigned  -- p32mx470f512.h:4776
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "U1EP11INV";
 
    U1EP12 : aliased unsigned  -- p32mx470f512.h:4777
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "U1EP12";
 
@@ -12430,27 +12430,27 @@ package P32mx470f512h is
      Alignment => 4;  -- p32mx470f512.h:4784
 
    U1EP12bits : aliased uu_U1EP12bits_t  -- p32mx470f512.h:4785
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "U1EP12";
+     External_Name => "U1EP12bits";
 
    U1EP12CLR : aliased unsigned  -- p32mx470f512.h:4786
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "U1EP12CLR";
 
    U1EP12SET : aliased unsigned  -- p32mx470f512.h:4787
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "U1EP12SET";
 
    U1EP12INV : aliased unsigned  -- p32mx470f512.h:4788
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "U1EP12INV";
 
    U1EP13 : aliased unsigned  -- p32mx470f512.h:4789
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "U1EP13";
 
@@ -12466,27 +12466,27 @@ package P32mx470f512h is
      Alignment => 4;  -- p32mx470f512.h:4796
 
    U1EP13bits : aliased uu_U1EP13bits_t  -- p32mx470f512.h:4797
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "U1EP13";
 
    U1EP13CLR : aliased unsigned  -- p32mx470f512.h:4798
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "U1EP13CLR";
 
    U1EP13SET : aliased unsigned  -- p32mx470f512.h:4799
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "U1EP13SET";
 
    U1EP13INV : aliased unsigned  -- p32mx470f512.h:4800
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "U1EP13INV";
 
    U1EP14 : aliased unsigned  -- p32mx470f512.h:4801
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "U1EP14";
 
@@ -12502,27 +12502,27 @@ package P32mx470f512h is
      Alignment => 4;  -- p32mx470f512.h:4808
 
    U1EP14bits : aliased uu_U1EP14bits_t  -- p32mx470f512.h:4809
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "U1EP14";
+     External_Name => "U1EP14bits";
 
    U1EP14CLR : aliased unsigned  -- p32mx470f512.h:4810
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "U1EP14CLR";
 
    U1EP14SET : aliased unsigned  -- p32mx470f512.h:4811
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "U1EP14SET";
 
    U1EP14INV : aliased unsigned  -- p32mx470f512.h:4812
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "U1EP14INV";
 
    U1EP15 : aliased unsigned  -- p32mx470f512.h:4813
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "U1EP15";
 
@@ -12538,27 +12538,27 @@ package P32mx470f512h is
      Alignment => 4;  -- p32mx470f512.h:4820
 
    U1EP15bits : aliased uu_U1EP15bits_t  -- p32mx470f512.h:4821
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "U1EP15";
+     External_Name => "U1EP15bits";
 
    U1EP15CLR : aliased unsigned  -- p32mx470f512.h:4822
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "U1EP15CLR";
 
    U1EP15SET : aliased unsigned  -- p32mx470f512.h:4823
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "U1EP15SET";
 
    U1EP15INV : aliased unsigned  -- p32mx470f512.h:4824
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "U1EP15INV";
 
    ANSELB : aliased unsigned  -- p32mx470f512.h:4825
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "ANSELB";
 
@@ -12599,27 +12599,27 @@ package P32mx470f512h is
      Unchecked_Union => True;  -- p32mx470f512.h:4848
 
    ANSELBbits : aliased uu_ANSELBbits_t  -- p32mx470f512.h:4849
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "ANSELB";
+     External_Name => "ANSELBbits";
 
    ANSELBCLR : aliased unsigned  -- p32mx470f512.h:4850
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "ANSELBCLR";
 
    ANSELBSET : aliased unsigned  -- p32mx470f512.h:4851
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "ANSELBSET";
 
    ANSELBINV : aliased unsigned  -- p32mx470f512.h:4852
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "ANSELBINV";
 
    TRISB : aliased unsigned  -- p32mx470f512.h:4853
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "TRISB";
 
@@ -12661,27 +12661,27 @@ package P32mx470f512h is
      Unchecked_Union => True;  -- p32mx470f512.h:4876
 
    TRISBbits : aliased uu_TRISBbits_t  -- p32mx470f512.h:4877
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "TRISB";
+     External_Name => "TRISBbits";
 
    TRISBCLR : aliased unsigned  -- p32mx470f512.h:4878
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "TRISBCLR";
 
    TRISBSET : aliased unsigned  -- p32mx470f512.h:4879
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "TRISBSET";
 
    TRISBINV : aliased unsigned  -- p32mx470f512.h:4880
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "TRISBINV";
 
    PORTB : aliased unsigned  -- p32mx470f512.h:4881
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "PORTB";
 
@@ -12723,27 +12723,27 @@ package P32mx470f512h is
      Unchecked_Union => True;  -- p32mx470f512.h:4904
 
    PORTBbits : aliased uu_PORTBbits_t  -- p32mx470f512.h:4905
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "PORTB";
+     External_Name => "PORTBbits";
 
    PORTBCLR : aliased unsigned  -- p32mx470f512.h:4906
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "PORTBCLR";
 
    PORTBSET : aliased unsigned  -- p32mx470f512.h:4907
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "PORTBSET";
 
    PORTBINV : aliased unsigned  -- p32mx470f512.h:4908
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "PORTBINV";
 
    LATB : aliased unsigned  -- p32mx470f512.h:4909
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "LATB";
 
@@ -12783,27 +12783,27 @@ package P32mx470f512h is
      Unchecked_Union => True;  -- p32mx470f512.h:4932
 
    LATBbits : aliased uu_LATBbits_t  -- p32mx470f512.h:4933
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "LATB";
+     External_Name => "LATBbits";
 
    LATBCLR : aliased unsigned  -- p32mx470f512.h:4934
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "LATBCLR";
 
    LATBSET : aliased unsigned  -- p32mx470f512.h:4935
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "LATBSET";
 
    LATBINV : aliased unsigned  -- p32mx470f512.h:4936
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "LATBINV";
 
    ODCB : aliased unsigned  -- p32mx470f512.h:4937
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "ODCB";
 
@@ -12843,27 +12843,27 @@ package P32mx470f512h is
      Unchecked_Union => True;  -- p32mx470f512.h:4960
 
    ODCBbits : aliased uu_ODCBbits_t  -- p32mx470f512.h:4961
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "ODCB";
+     External_Name => "ODCBbits";
 
    ODCBCLR : aliased unsigned  -- p32mx470f512.h:4962
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "ODCBCLR";
 
    ODCBSET : aliased unsigned  -- p32mx470f512.h:4963
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "ODCBSET";
 
    ODCBINV : aliased unsigned  -- p32mx470f512.h:4964
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "ODCBINV";
 
    CNPUB : aliased unsigned  -- p32mx470f512.h:4965
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "CNPUB";
 
@@ -12903,27 +12903,27 @@ package P32mx470f512h is
      Unchecked_Union => True;  -- p32mx470f512.h:4988
 
    CNPUBbits : aliased uu_CNPUBbits_t  -- p32mx470f512.h:4989
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "CNPUB";
+     External_Name => "CNPUBbits";
 
    CNPUBCLR : aliased unsigned  -- p32mx470f512.h:4990
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "CNPUBCLR";
 
    CNPUBSET : aliased unsigned  -- p32mx470f512.h:4991
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "CNPUBSET";
 
    CNPUBINV : aliased unsigned  -- p32mx470f512.h:4992
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "CNPUBINV";
 
    CNPDB : aliased unsigned  -- p32mx470f512.h:4993
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "CNPDB";
 
@@ -12963,27 +12963,27 @@ package P32mx470f512h is
      Unchecked_Union => True;  -- p32mx470f512.h:5016
 
    CNPDBbits : aliased uu_CNPDBbits_t  -- p32mx470f512.h:5017
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "CNPDB";
+     External_Name => "CNPDBbits";
 
    CNPDBCLR : aliased unsigned  -- p32mx470f512.h:5018
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "CNPDBCLR";
 
    CNPDBSET : aliased unsigned  -- p32mx470f512.h:5019
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "CNPDBSET";
 
    CNPDBINV : aliased unsigned  -- p32mx470f512.h:5020
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "CNPDBINV";
 
    CNCONB : aliased unsigned  -- p32mx470f512.h:5021
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "CNCONB";
 
@@ -13011,27 +13011,27 @@ package P32mx470f512h is
      Unchecked_Union => True;  -- p32mx470f512.h:5032
 
    CNCONBbits : aliased uu_CNCONBbits_t  -- p32mx470f512.h:5033
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "CNCONB";
+     External_Name => "CNCONBbits";
 
    CNCONBCLR : aliased unsigned  -- p32mx470f512.h:5034
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "CNCONBCLR";
 
    CNCONBSET : aliased unsigned  -- p32mx470f512.h:5035
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "CNCONBSET";
 
    CNCONBINV : aliased unsigned  -- p32mx470f512.h:5036
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "CNCONBINV";
 
    CNENB : aliased unsigned  -- p32mx470f512.h:5037
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "CNENB";
 
@@ -13071,27 +13071,27 @@ package P32mx470f512h is
      Unchecked_Union => True;  -- p32mx470f512.h:5060
 
    CNENBbits : aliased uu_CNENBbits_t  -- p32mx470f512.h:5061
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "CNENB";
+     External_Name => "CNENBbits";
 
    CNENBCLR : aliased unsigned  -- p32mx470f512.h:5062
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "CNENBCLR";
 
    CNENBSET : aliased unsigned  -- p32mx470f512.h:5063
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "CNENBSET";
 
    CNENBINV : aliased unsigned  -- p32mx470f512.h:5064
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "CNENBINV";
 
    CNSTATB : aliased unsigned  -- p32mx470f512.h:5065
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "CNSTATB";
 
@@ -13131,27 +13131,27 @@ package P32mx470f512h is
      Unchecked_Union => True;  -- p32mx470f512.h:5088
 
    CNSTATBbits : aliased uu_CNSTATBbits_t  -- p32mx470f512.h:5089
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "CNSTATB";
+     External_Name => "CNSTATBbits";
 
    CNSTATBCLR : aliased unsigned  -- p32mx470f512.h:5090
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "CNSTATBCLR";
 
    CNSTATBSET : aliased unsigned  -- p32mx470f512.h:5091
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "CNSTATBSET";
 
    CNSTATBINV : aliased unsigned  -- p32mx470f512.h:5092
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "CNSTATBINV";
 
    ANSELC : aliased unsigned  -- p32mx470f512.h:5093
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "ANSELC";
 
@@ -13180,27 +13180,27 @@ package P32mx470f512h is
      Unchecked_Union => True;  -- p32mx470f512.h:5105
 
    ANSELCbits : aliased uu_ANSELCbits_t  -- p32mx470f512.h:5106
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "ANSELC";
+     External_Name => "ANSELCbits";
 
    ANSELCCLR : aliased unsigned  -- p32mx470f512.h:5107
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "ANSELCCLR";
 
    ANSELCSET : aliased unsigned  -- p32mx470f512.h:5108
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "ANSELCSET";
 
    ANSELCINV : aliased unsigned  -- p32mx470f512.h:5109
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "ANSELCINV";
 
    TRISC : aliased unsigned  -- p32mx470f512.h:5110
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "TRISC";
 
@@ -13229,27 +13229,27 @@ package P32mx470f512h is
      Unchecked_Union => True;  -- p32mx470f512.h:5122
 
    TRISCbits : aliased uu_TRISCbits_t  -- p32mx470f512.h:5123
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "TRISC";
 
    TRISCCLR : aliased unsigned  -- p32mx470f512.h:5124
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "TRISCCLR";
 
    TRISCSET : aliased unsigned  -- p32mx470f512.h:5125
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "TRISCSET";
 
    TRISCINV : aliased unsigned  -- p32mx470f512.h:5126
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "TRISCINV";
 
    PORTC : aliased unsigned  -- p32mx470f512.h:5127
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "PORTC";
 
@@ -13278,27 +13278,27 @@ package P32mx470f512h is
      Unchecked_Union => True;  -- p32mx470f512.h:5139
 
    PORTCbits : aliased uu_PORTCbits_t  -- p32mx470f512.h:5140
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "PORTC";
+     External_Name => "PORTCbits";
 
    PORTCCLR : aliased unsigned  -- p32mx470f512.h:5141
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "PORTCCLR";
 
    PORTCSET : aliased unsigned  -- p32mx470f512.h:5142
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "PORTCSET";
 
    PORTCINV : aliased unsigned  -- p32mx470f512.h:5143
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "PORTCINV";
 
    LATC : aliased unsigned  -- p32mx470f512.h:5144
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "LATC";
 
@@ -13327,27 +13327,27 @@ package P32mx470f512h is
      Unchecked_Union => True;  -- p32mx470f512.h:5156
 
    LATCbits : aliased uu_LATCbits_t  -- p32mx470f512.h:5157
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "LATC";
+     External_Name => "LATCbits";
 
    LATCCLR : aliased unsigned  -- p32mx470f512.h:5158
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "LATCCLR";
 
    LATCSET : aliased unsigned  -- p32mx470f512.h:5159
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "LATCSET";
 
    LATCINV : aliased unsigned  -- p32mx470f512.h:5160
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "LATCINV";
 
    ODCC : aliased unsigned  -- p32mx470f512.h:5161
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "ODCC";
 
@@ -13376,27 +13376,27 @@ package P32mx470f512h is
      Unchecked_Union => True;  -- p32mx470f512.h:5173
 
    ODCCbits : aliased uu_ODCCbits_t  -- p32mx470f512.h:5174
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "ODCC";
+     External_Name => "ODCCbits";
 
    ODCCCLR : aliased unsigned  -- p32mx470f512.h:5175
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "ODCCCLR";
 
    ODCCSET : aliased unsigned  -- p32mx470f512.h:5176
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "ODCCSET";
 
    ODCCINV : aliased unsigned  -- p32mx470f512.h:5177
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "ODCCINV";
 
    CNPUC : aliased unsigned  -- p32mx470f512.h:5178
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "CNPUC";
 
@@ -13425,27 +13425,27 @@ package P32mx470f512h is
      Unchecked_Union => True;  -- p32mx470f512.h:5190
 
    CNPUCbits : aliased uu_CNPUCbits_t  -- p32mx470f512.h:5191
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "CNPUC";
+     External_Name => "CNPUCbits";
 
    CNPUCCLR : aliased unsigned  -- p32mx470f512.h:5192
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "CNPUCCLR";
 
    CNPUCSET : aliased unsigned  -- p32mx470f512.h:5193
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "CNPUCSET";
 
    CNPUCINV : aliased unsigned  -- p32mx470f512.h:5194
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "CNPUCINV";
 
    CNPDC : aliased unsigned  -- p32mx470f512.h:5195
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "CNPDC";
 
@@ -13474,27 +13474,27 @@ package P32mx470f512h is
      Unchecked_Union => True;  -- p32mx470f512.h:5207
 
    CNPDCbits : aliased uu_CNPDCbits_t  -- p32mx470f512.h:5208
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "CNPDC";
 
    CNPDCCLR : aliased unsigned  -- p32mx470f512.h:5209
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "CNPDCCLR";
 
    CNPDCSET : aliased unsigned  -- p32mx470f512.h:5210
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "CNPDCSET";
 
    CNPDCINV : aliased unsigned  -- p32mx470f512.h:5211
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "CNPDCINV";
 
    CNCONC : aliased unsigned  -- p32mx470f512.h:5212
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "CNCONC";
 
@@ -13522,27 +13522,27 @@ package P32mx470f512h is
      Unchecked_Union => True;  -- p32mx470f512.h:5223
 
    CNCONCbits : aliased uu_CNCONCbits_t  -- p32mx470f512.h:5224
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "CNCONC";
 
    CNCONCCLR : aliased unsigned  -- p32mx470f512.h:5225
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "CNCONCCLR";
 
    CNCONCSET : aliased unsigned  -- p32mx470f512.h:5226
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "CNCONCSET";
 
    CNCONCINV : aliased unsigned  -- p32mx470f512.h:5227
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "CNCONCINV";
 
    CNENC : aliased unsigned  -- p32mx470f512.h:5228
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "CNENC";
 
@@ -13571,27 +13571,27 @@ package P32mx470f512h is
      Unchecked_Union => True;  -- p32mx470f512.h:5240
 
    CNENCbits : aliased uu_CNENCbits_t  -- p32mx470f512.h:5241
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "CNENC";
+     External_Name => "CNENCbits";
 
    CNENCCLR : aliased unsigned  -- p32mx470f512.h:5242
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "CNENCCLR";
 
    CNENCSET : aliased unsigned  -- p32mx470f512.h:5243
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "CNENCSET";
 
    CNENCINV : aliased unsigned  -- p32mx470f512.h:5244
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "CNENCINV";
 
    CNSTATC : aliased unsigned  -- p32mx470f512.h:5245
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "CNSTATC";
 
@@ -13620,27 +13620,27 @@ package P32mx470f512h is
      Unchecked_Union => True;  -- p32mx470f512.h:5257
 
    CNSTATCbits : aliased uu_CNSTATCbits_t  -- p32mx470f512.h:5258
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "CNSTATC";
+     External_Name => "CNSTATCbits";
 
    CNSTATCCLR : aliased unsigned  -- p32mx470f512.h:5259
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "CNSTATCCLR";
 
    CNSTATCSET : aliased unsigned  -- p32mx470f512.h:5260
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "CNSTATCSET";
 
    CNSTATCINV : aliased unsigned  -- p32mx470f512.h:5261
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "CNSTATCINV";
 
    ANSELD : aliased unsigned  -- p32mx470f512.h:5262
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "ANSELD";
 
@@ -13668,27 +13668,27 @@ package P32mx470f512h is
      Unchecked_Union => True;  -- p32mx470f512.h:5273
 
    ANSELDbits : aliased uu_ANSELDbits_t  -- p32mx470f512.h:5274
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "ANSELD";
+     External_Name => "ANSELDbits";
 
    ANSELDCLR : aliased unsigned  -- p32mx470f512.h:5275
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "ANSELDCLR";
 
    ANSELDSET : aliased unsigned  -- p32mx470f512.h:5276
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "ANSELDSET";
 
    ANSELDINV : aliased unsigned  -- p32mx470f512.h:5277
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "ANSELDINV";
 
    TRISD : aliased unsigned  -- p32mx470f512.h:5278
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "TRISD";
 
@@ -13724,27 +13724,27 @@ package P32mx470f512h is
      Unchecked_Union => True;  -- p32mx470f512.h:5297
 
    TRISDbits : aliased uu_TRISDbits_t  -- p32mx470f512.h:5298
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "TRISD";
+     External_Name => "TRISDbits";
 
    TRISDCLR : aliased unsigned  -- p32mx470f512.h:5299
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "TRISDCLR";
 
    TRISDSET : aliased unsigned  -- p32mx470f512.h:5300
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "TRISDSET";
 
    TRISDINV : aliased unsigned  -- p32mx470f512.h:5301
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "TRISDINV";
 
    PORTD : aliased unsigned  -- p32mx470f512.h:5302
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "PORTD";
 
@@ -13780,27 +13780,27 @@ package P32mx470f512h is
      Unchecked_Union => True;  -- p32mx470f512.h:5321
 
    PORTDbits : aliased uu_PORTDbits_t  -- p32mx470f512.h:5322
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "PORTD";
+     External_Name => "PORTDbits";
 
    PORTDCLR : aliased unsigned  -- p32mx470f512.h:5323
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "PORTDCLR";
 
    PORTDSET : aliased unsigned  -- p32mx470f512.h:5324
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "PORTDSET";
 
    PORTDINV : aliased unsigned  -- p32mx470f512.h:5325
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "PORTDINV";
 
    LATD : aliased unsigned  -- p32mx470f512.h:5326
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "LATD";
 
@@ -13836,27 +13836,27 @@ package P32mx470f512h is
      Unchecked_Union => True;  -- p32mx470f512.h:5345
 
    LATDbits : aliased uu_LATDbits_t  -- p32mx470f512.h:5346
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "LATD";
+     External_Name => "LATDbits";
 
    LATDCLR : aliased unsigned  -- p32mx470f512.h:5347
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "LATDCLR";
 
    LATDSET : aliased unsigned  -- p32mx470f512.h:5348
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "LATDSET";
 
    LATDINV : aliased unsigned  -- p32mx470f512.h:5349
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "LATDINV";
 
    ODCD : aliased unsigned  -- p32mx470f512.h:5350
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "ODCD";
 
@@ -13892,27 +13892,27 @@ package P32mx470f512h is
      Unchecked_Union => True;  -- p32mx470f512.h:5369
 
    ODCDbits : aliased uu_ODCDbits_t  -- p32mx470f512.h:5370
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "ODCD";
+     External_Name => "ODCDbits";
 
    ODCDCLR : aliased unsigned  -- p32mx470f512.h:5371
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "ODCDCLR";
 
    ODCDSET : aliased unsigned  -- p32mx470f512.h:5372
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "ODCDSET";
 
    ODCDINV : aliased unsigned  -- p32mx470f512.h:5373
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "ODCDINV";
 
    CNPUD : aliased unsigned  -- p32mx470f512.h:5374
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "CNPUD";
 
@@ -13948,27 +13948,27 @@ package P32mx470f512h is
      Unchecked_Union => True;  -- p32mx470f512.h:5393
 
    CNPUDbits : aliased uu_CNPUDbits_t  -- p32mx470f512.h:5394
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "CNPUD";
 
    CNPUDCLR : aliased unsigned  -- p32mx470f512.h:5395
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "CNPUDCLR";
 
    CNPUDSET : aliased unsigned  -- p32mx470f512.h:5396
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "CNPUDSET";
 
    CNPUDINV : aliased unsigned  -- p32mx470f512.h:5397
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "CNPUDINV";
 
    CNPDD : aliased unsigned  -- p32mx470f512.h:5398
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "CNPDD";
 
@@ -14004,27 +14004,27 @@ package P32mx470f512h is
      Unchecked_Union => True;  -- p32mx470f512.h:5417
 
    CNPDDbits : aliased uu_CNPDDbits_t  -- p32mx470f512.h:5418
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "CNPDD";
 
    CNPDDCLR : aliased unsigned  -- p32mx470f512.h:5419
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "CNPDDCLR";
 
    CNPDDSET : aliased unsigned  -- p32mx470f512.h:5420
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "CNPDDSET";
 
    CNPDDINV : aliased unsigned  -- p32mx470f512.h:5421
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "CNPDDINV";
 
    CNCOND : aliased unsigned  -- p32mx470f512.h:5422
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "CNCOND";
 
@@ -14052,27 +14052,27 @@ package P32mx470f512h is
      Unchecked_Union => True;  -- p32mx470f512.h:5433
 
    CNCONDbits : aliased uu_CNCONDbits_t  -- p32mx470f512.h:5434
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "CNCOND";
 
    CNCONDCLR : aliased unsigned  -- p32mx470f512.h:5435
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "CNCONDCLR";
 
    CNCONDSET : aliased unsigned  -- p32mx470f512.h:5436
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "CNCONDSET";
 
    CNCONDINV : aliased unsigned  -- p32mx470f512.h:5437
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "CNCONDINV";
 
    CNEND : aliased unsigned  -- p32mx470f512.h:5438
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "CNEND";
 
@@ -14108,27 +14108,27 @@ package P32mx470f512h is
      Unchecked_Union => True;  -- p32mx470f512.h:5457
 
    CNENDbits : aliased uu_CNENDbits_t  -- p32mx470f512.h:5458
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "CNEND";
 
    CNENDCLR : aliased unsigned  -- p32mx470f512.h:5459
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "CNENDCLR";
 
    CNENDSET : aliased unsigned  -- p32mx470f512.h:5460
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "CNENDSET";
 
    CNENDINV : aliased unsigned  -- p32mx470f512.h:5461
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "CNENDINV";
 
    CNSTATD : aliased unsigned  -- p32mx470f512.h:5462
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "CNSTATD";
 
@@ -14164,27 +14164,27 @@ package P32mx470f512h is
      Unchecked_Union => True;  -- p32mx470f512.h:5481
 
    CNSTATDbits : aliased uu_CNSTATDbits_t  -- p32mx470f512.h:5482
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "CNSTATD";
 
    CNSTATDCLR : aliased unsigned  -- p32mx470f512.h:5483
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "CNSTATDCLR";
 
    CNSTATDSET : aliased unsigned  -- p32mx470f512.h:5484
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "CNSTATDSET";
 
    CNSTATDINV : aliased unsigned  -- p32mx470f512.h:5485
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "CNSTATDINV";
 
    ANSELE : aliased unsigned  -- p32mx470f512.h:5486
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "ANSELE";
 
@@ -14215,27 +14215,27 @@ package P32mx470f512h is
      Unchecked_Union => True;  -- p32mx470f512.h:5500
 
    ANSELEbits : aliased uu_ANSELEbits_t  -- p32mx470f512.h:5501
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "ANSELE";
 
    ANSELECLR : aliased unsigned  -- p32mx470f512.h:5502
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "ANSELECLR";
 
    ANSELESET : aliased unsigned  -- p32mx470f512.h:5503
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "ANSELESET";
 
    ANSELEINV : aliased unsigned  -- p32mx470f512.h:5504
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "ANSELEINV";
 
    TRISE : aliased unsigned  -- p32mx470f512.h:5505
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "TRISE";
 
@@ -14267,27 +14267,27 @@ package P32mx470f512h is
      Unchecked_Union => True;  -- p32mx470f512.h:5520
 
    TRISEbits : aliased uu_TRISEbits_t  -- p32mx470f512.h:5521
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "TRISE";
 
    TRISECLR : aliased unsigned  -- p32mx470f512.h:5522
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "TRISECLR";
 
    TRISESET : aliased unsigned  -- p32mx470f512.h:5523
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "TRISESET";
 
    TRISEINV : aliased unsigned  -- p32mx470f512.h:5524
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "TRISEINV";
 
    PORTE : aliased unsigned  -- p32mx470f512.h:5525
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "PORTE";
 
@@ -14319,27 +14319,27 @@ package P32mx470f512h is
      Unchecked_Union => True;  -- p32mx470f512.h:5540
 
    PORTEbits : aliased uu_PORTEbits_t  -- p32mx470f512.h:5541
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "PORTE";
 
    PORTECLR : aliased unsigned  -- p32mx470f512.h:5542
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "PORTECLR";
 
    PORTESET : aliased unsigned  -- p32mx470f512.h:5543
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "PORTESET";
 
    PORTEINV : aliased unsigned  -- p32mx470f512.h:5544
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "PORTEINV";
 
    LATE : aliased unsigned  -- p32mx470f512.h:5545
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "LATE";
 
@@ -14371,27 +14371,27 @@ package P32mx470f512h is
      Unchecked_Union => True;  -- p32mx470f512.h:5560
 
    LATEbits : aliased uu_LATEbits_t  -- p32mx470f512.h:5561
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "LATE";
 
    LATECLR : aliased unsigned  -- p32mx470f512.h:5562
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "LATECLR";
 
    LATESET : aliased unsigned  -- p32mx470f512.h:5563
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "LATESET";
 
    LATEINV : aliased unsigned  -- p32mx470f512.h:5564
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "LATEINV";
 
    ODCE : aliased unsigned  -- p32mx470f512.h:5565
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "ODCE";
 
@@ -14423,27 +14423,27 @@ package P32mx470f512h is
      Unchecked_Union => True;  -- p32mx470f512.h:5580
 
    ODCEbits : aliased uu_ODCEbits_t  -- p32mx470f512.h:5581
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "ODCE";
 
    ODCECLR : aliased unsigned  -- p32mx470f512.h:5582
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "ODCECLR";
 
    ODCESET : aliased unsigned  -- p32mx470f512.h:5583
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "ODCESET";
 
    ODCEINV : aliased unsigned  -- p32mx470f512.h:5584
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "ODCEINV";
 
    CNPUE : aliased unsigned  -- p32mx470f512.h:5585
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "CNPUE";
 
@@ -14475,27 +14475,27 @@ package P32mx470f512h is
      Unchecked_Union => True;  -- p32mx470f512.h:5600
 
    CNPUEbits : aliased uu_CNPUEbits_t  -- p32mx470f512.h:5601
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "CNPUE";
 
    CNPUECLR : aliased unsigned  -- p32mx470f512.h:5602
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "CNPUECLR";
 
    CNPUESET : aliased unsigned  -- p32mx470f512.h:5603
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "CNPUESET";
 
    CNPUEINV : aliased unsigned  -- p32mx470f512.h:5604
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "CNPUEINV";
 
    CNPDE : aliased unsigned  -- p32mx470f512.h:5605
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "CNPDE";
 
@@ -14527,27 +14527,27 @@ package P32mx470f512h is
      Unchecked_Union => True;  -- p32mx470f512.h:5620
 
    CNPDEbits : aliased uu_CNPDEbits_t  -- p32mx470f512.h:5621
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "CNPDE";
 
    CNPDECLR : aliased unsigned  -- p32mx470f512.h:5622
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "CNPDECLR";
 
    CNPDESET : aliased unsigned  -- p32mx470f512.h:5623
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "CNPDESET";
 
    CNPDEINV : aliased unsigned  -- p32mx470f512.h:5624
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "CNPDEINV";
 
    CNCONE : aliased unsigned  -- p32mx470f512.h:5625
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "CNCONE";
 
@@ -14575,27 +14575,27 @@ package P32mx470f512h is
      Unchecked_Union => True;  -- p32mx470f512.h:5636
 
    CNCONEbits : aliased uu_CNCONEbits_t  -- p32mx470f512.h:5637
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "CNCONE";
 
    CNCONECLR : aliased unsigned  -- p32mx470f512.h:5638
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "CNCONECLR";
 
    CNCONESET : aliased unsigned  -- p32mx470f512.h:5639
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "CNCONESET";
 
    CNCONEINV : aliased unsigned  -- p32mx470f512.h:5640
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "CNCONEINV";
 
    CNENE : aliased unsigned  -- p32mx470f512.h:5641
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "CNENE";
 
@@ -14627,27 +14627,27 @@ package P32mx470f512h is
      Unchecked_Union => True;  -- p32mx470f512.h:5656
 
    CNENEbits : aliased uu_CNENEbits_t  -- p32mx470f512.h:5657
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "CNENE";
 
    CNENECLR : aliased unsigned  -- p32mx470f512.h:5658
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "CNENECLR";
 
    CNENESET : aliased unsigned  -- p32mx470f512.h:5659
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "CNENESET";
 
    CNENEINV : aliased unsigned  -- p32mx470f512.h:5660
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "CNENEINV";
 
    CNSTATE : aliased unsigned  -- p32mx470f512.h:5661
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "CNSTATE";
 
@@ -14679,27 +14679,27 @@ package P32mx470f512h is
      Unchecked_Union => True;  -- p32mx470f512.h:5676
 
    CNSTATEbits : aliased uu_CNSTATEbits_t  -- p32mx470f512.h:5677
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "CNSTATE";
 
    CNSTATECLR : aliased unsigned  -- p32mx470f512.h:5678
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "CNSTATECLR";
 
    CNSTATESET : aliased unsigned  -- p32mx470f512.h:5679
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "CNSTATESET";
 
    CNSTATEINV : aliased unsigned  -- p32mx470f512.h:5680
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "CNSTATEINV";
 
    ANSELF : aliased unsigned  -- p32mx470f512.h:5681
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "ANSELF";
 
@@ -14709,27 +14709,27 @@ package P32mx470f512h is
      with Convention => C_Pass_By_Copy;  -- p32mx470f512.h:5684
 
    ANSELFbits : aliased uu_ANSELFbits_t  -- p32mx470f512.h:5685
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "ANSELF";
 
    ANSELFCLR : aliased unsigned  -- p32mx470f512.h:5686
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "ANSELFCLR";
 
    ANSELFSET : aliased unsigned  -- p32mx470f512.h:5687
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "ANSELFSET";
 
    ANSELFINV : aliased unsigned  -- p32mx470f512.h:5688
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "ANSELFINV";
 
    TRISF : aliased unsigned  -- p32mx470f512.h:5689
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "TRISF";
 
@@ -14759,27 +14759,27 @@ package P32mx470f512h is
      Unchecked_Union => True;  -- p32mx470f512.h:5702
 
    TRISFbits : aliased uu_TRISFbits_t  -- p32mx470f512.h:5703
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "TRISF";
 
    TRISFCLR : aliased unsigned  -- p32mx470f512.h:5704
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "TRISFCLR";
 
    TRISFSET : aliased unsigned  -- p32mx470f512.h:5705
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "TRISFSET";
 
    TRISFINV : aliased unsigned  -- p32mx470f512.h:5706
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "TRISFINV";
 
    PORTF : aliased unsigned  -- p32mx470f512.h:5707
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "PORTF";
 
@@ -14809,27 +14809,27 @@ package P32mx470f512h is
      Unchecked_Union => True;  -- p32mx470f512.h:5720
 
    PORTFbits : aliased uu_PORTFbits_t  -- p32mx470f512.h:5721
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "PORTF";
 
    PORTFCLR : aliased unsigned  -- p32mx470f512.h:5722
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "PORTFCLR";
 
    PORTFSET : aliased unsigned  -- p32mx470f512.h:5723
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "PORTFSET";
 
    PORTFINV : aliased unsigned  -- p32mx470f512.h:5724
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "PORTFINV";
 
    LATF : aliased unsigned  -- p32mx470f512.h:5725
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "LATF";
 
@@ -14859,27 +14859,27 @@ package P32mx470f512h is
      Unchecked_Union => True;  -- p32mx470f512.h:5738
 
    LATFbits : aliased uu_LATFbits_t  -- p32mx470f512.h:5739
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "LATF";
 
    LATFCLR : aliased unsigned  -- p32mx470f512.h:5740
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "LATFCLR";
 
    LATFSET : aliased unsigned  -- p32mx470f512.h:5741
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "LATFSET";
 
    LATFINV : aliased unsigned  -- p32mx470f512.h:5742
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "LATFINV";
 
    ODCF : aliased unsigned  -- p32mx470f512.h:5743
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "ODCF";
 
@@ -14909,27 +14909,27 @@ package P32mx470f512h is
      Unchecked_Union => True;  -- p32mx470f512.h:5756
 
    ODCFbits : aliased uu_ODCFbits_t  -- p32mx470f512.h:5757
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "ODCF";
+     External_Name => "ODCFbits";
 
    ODCFCLR : aliased unsigned  -- p32mx470f512.h:5758
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "ODCFCLR";
 
    ODCFSET : aliased unsigned  -- p32mx470f512.h:5759
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "ODCFSET";
 
    ODCFINV : aliased unsigned  -- p32mx470f512.h:5760
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "ODCFINV";
 
    CNPUF : aliased unsigned  -- p32mx470f512.h:5761
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "CNPUF";
 
@@ -14959,27 +14959,27 @@ package P32mx470f512h is
      Unchecked_Union => True;  -- p32mx470f512.h:5774
 
    CNPUFbits : aliased uu_CNPUFbits_t  -- p32mx470f512.h:5775
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "CNPUF";
+     External_Name => "CNPUFbits";
 
    CNPUFCLR : aliased unsigned  -- p32mx470f512.h:5776
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "CNPUFCLR";
 
    CNPUFSET : aliased unsigned  -- p32mx470f512.h:5777
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "CNPUFSET";
 
    CNPUFINV : aliased unsigned  -- p32mx470f512.h:5778
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "CNPUFINV";
 
    CNPDF : aliased unsigned  -- p32mx470f512.h:5779
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "CNPDF";
 
@@ -15009,27 +15009,27 @@ package P32mx470f512h is
      Unchecked_Union => True;  -- p32mx470f512.h:5792
 
    CNPDFbits : aliased uu_CNPDFbits_t  -- p32mx470f512.h:5793
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "CNPDF";
+     External_Name => "CNPDFbits";
 
    CNPDFCLR : aliased unsigned  -- p32mx470f512.h:5794
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "CNPDFCLR";
 
    CNPDFSET : aliased unsigned  -- p32mx470f512.h:5795
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "CNPDFSET";
 
    CNPDFINV : aliased unsigned  -- p32mx470f512.h:5796
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "CNPDFINV";
 
    CNCONF : aliased unsigned  -- p32mx470f512.h:5797
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "CNCONF";
 
@@ -15057,27 +15057,27 @@ package P32mx470f512h is
      Unchecked_Union => True;  -- p32mx470f512.h:5808
 
    CNCONFbits : aliased uu_CNCONFbits_t  -- p32mx470f512.h:5809
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "CNCONF";
+     External_Name => "CNCONFbits";
 
    CNCONFCLR : aliased unsigned  -- p32mx470f512.h:5810
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "CNCONFCLR";
 
    CNCONFSET : aliased unsigned  -- p32mx470f512.h:5811
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "CNCONFSET";
 
    CNCONFINV : aliased unsigned  -- p32mx470f512.h:5812
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "CNCONFINV";
 
    CNENF : aliased unsigned  -- p32mx470f512.h:5813
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "CNENF";
 
@@ -15107,27 +15107,27 @@ package P32mx470f512h is
      Unchecked_Union => True;  -- p32mx470f512.h:5826
 
    CNENFbits : aliased uu_CNENFbits_t  -- p32mx470f512.h:5827
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "CNENF";
 
    CNENFCLR : aliased unsigned  -- p32mx470f512.h:5828
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "CNENFCLR";
 
    CNENFSET : aliased unsigned  -- p32mx470f512.h:5829
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "CNENFSET";
 
    CNENFINV : aliased unsigned  -- p32mx470f512.h:5830
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "CNENFINV";
 
    CNSTATF : aliased unsigned  -- p32mx470f512.h:5831
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "CNSTATF";
 
@@ -15157,27 +15157,27 @@ package P32mx470f512h is
      Unchecked_Union => True;  -- p32mx470f512.h:5844
 
    CNSTATFbits : aliased uu_CNSTATFbits_t  -- p32mx470f512.h:5845
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "CNSTATF";
 
    CNSTATFCLR : aliased unsigned  -- p32mx470f512.h:5846
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "CNSTATFCLR";
 
    CNSTATFSET : aliased unsigned  -- p32mx470f512.h:5847
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "CNSTATFSET";
 
    CNSTATFINV : aliased unsigned  -- p32mx470f512.h:5848
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "CNSTATFINV";
 
    ANSELG : aliased unsigned  -- p32mx470f512.h:5849
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "ANSELG";
 
@@ -15206,27 +15206,27 @@ package P32mx470f512h is
      Unchecked_Union => True;  -- p32mx470f512.h:5861
 
    ANSELGbits : aliased uu_ANSELGbits_t  -- p32mx470f512.h:5862
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "ANSELG";
+     External_Name => "ANSELGbits";
 
    ANSELGCLR : aliased unsigned  -- p32mx470f512.h:5863
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "ANSELGCLR";
 
    ANSELGSET : aliased unsigned  -- p32mx470f512.h:5864
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "ANSELGSET";
 
    ANSELGINV : aliased unsigned  -- p32mx470f512.h:5865
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "ANSELGINV";
 
    TRISG : aliased unsigned  -- p32mx470f512.h:5866
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "TRISG";
 
@@ -15258,27 +15258,27 @@ package P32mx470f512h is
      Unchecked_Union => True;  -- p32mx470f512.h:5881
 
    TRISGbits : aliased uu_TRISGbits_t  -- p32mx470f512.h:5882
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "TRISG";
+     External_Name => "TRISGbits";
 
    TRISGCLR : aliased unsigned  -- p32mx470f512.h:5883
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "TRISGCLR";
 
    TRISGSET : aliased unsigned  -- p32mx470f512.h:5884
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "TRISGSET";
 
    TRISGINV : aliased unsigned  -- p32mx470f512.h:5885
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "TRISGINV";
 
    PORTG : aliased unsigned  -- p32mx470f512.h:5886
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "PORTG";
 
@@ -15310,27 +15310,27 @@ package P32mx470f512h is
      Unchecked_Union => True;  -- p32mx470f512.h:5901
 
    PORTGbits : aliased uu_PORTGbits_t  -- p32mx470f512.h:5902
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "PORTG";
+     External_Name => "PORTGbits";
 
    PORTGCLR : aliased unsigned  -- p32mx470f512.h:5903
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "PORTGCLR";
 
    PORTGSET : aliased unsigned  -- p32mx470f512.h:5904
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "PORTGSET";
 
    PORTGINV : aliased unsigned  -- p32mx470f512.h:5905
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "PORTGINV";
 
    LATG : aliased unsigned  -- p32mx470f512.h:5906
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "LATG";
 
@@ -15362,27 +15362,27 @@ package P32mx470f512h is
      Unchecked_Union => True;  -- p32mx470f512.h:5921
 
    LATGbits : aliased uu_LATGbits_t  -- p32mx470f512.h:5922
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "LATG";
+     External_Name => "LATGbits";
 
    LATGCLR : aliased unsigned  -- p32mx470f512.h:5923
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "LATGCLR";
 
    LATGSET : aliased unsigned  -- p32mx470f512.h:5924
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "LATGSET";
 
    LATGINV : aliased unsigned  -- p32mx470f512.h:5925
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "LATGINV";
 
    ODCG : aliased unsigned  -- p32mx470f512.h:5926
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "ODCG";
 
@@ -15414,27 +15414,27 @@ package P32mx470f512h is
      Unchecked_Union => True;  -- p32mx470f512.h:5941
 
    ODCGbits : aliased uu_ODCGbits_t  -- p32mx470f512.h:5942
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "ODCG";
+     External_Name => "ODCGbits";
 
    ODCGCLR : aliased unsigned  -- p32mx470f512.h:5943
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "ODCGCLR";
 
    ODCGSET : aliased unsigned  -- p32mx470f512.h:5944
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "ODCGSET";
 
    ODCGINV : aliased unsigned  -- p32mx470f512.h:5945
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "ODCGINV";
 
    CNPUG : aliased unsigned  -- p32mx470f512.h:5946
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "CNPUG";
 
@@ -15466,27 +15466,27 @@ package P32mx470f512h is
      Unchecked_Union => True;  -- p32mx470f512.h:5961
 
    CNPUGbits : aliased uu_CNPUGbits_t  -- p32mx470f512.h:5962
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "CNPUG";
+     External_Name => "CNPUGbits";
 
    CNPUGCLR : aliased unsigned  -- p32mx470f512.h:5963
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "CNPUGCLR";
 
    CNPUGSET : aliased unsigned  -- p32mx470f512.h:5964
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "CNPUGSET";
 
    CNPUGINV : aliased unsigned  -- p32mx470f512.h:5965
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "CNPUGINV";
 
    CNPDG : aliased unsigned  -- p32mx470f512.h:5966
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "CNPDG";
 
@@ -15518,27 +15518,27 @@ package P32mx470f512h is
      Unchecked_Union => True;  -- p32mx470f512.h:5981
 
    CNPDGbits : aliased uu_CNPDGbits_t  -- p32mx470f512.h:5982
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "CNPDG";
+     External_Name => "CNPDGbits";
 
    CNPDGCLR : aliased unsigned  -- p32mx470f512.h:5983
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "CNPDGCLR";
 
    CNPDGSET : aliased unsigned  -- p32mx470f512.h:5984
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "CNPDGSET";
 
    CNPDGINV : aliased unsigned  -- p32mx470f512.h:5985
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "CNPDGINV";
 
    CNCONG : aliased unsigned  -- p32mx470f512.h:5986
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "CNCONG";
 
@@ -15566,27 +15566,27 @@ package P32mx470f512h is
      Unchecked_Union => True;  -- p32mx470f512.h:5997
 
    CNCONGbits : aliased uu_CNCONGbits_t  -- p32mx470f512.h:5998
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "CNCONG";
+     External_Name => "CNCONGbits";
 
    CNCONGCLR : aliased unsigned  -- p32mx470f512.h:5999
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "CNCONGCLR";
 
    CNCONGSET : aliased unsigned  -- p32mx470f512.h:6000
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "CNCONGSET";
 
    CNCONGINV : aliased unsigned  -- p32mx470f512.h:6001
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "CNCONGINV";
 
    CNENG : aliased unsigned  -- p32mx470f512.h:6002
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "CNENG";
 
@@ -15618,27 +15618,27 @@ package P32mx470f512h is
      Unchecked_Union => True;  -- p32mx470f512.h:6017
 
    CNENGbits : aliased uu_CNENGbits_t  -- p32mx470f512.h:6018
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "CNENG";
+     External_Name => "CNENGbits";
 
    CNENGCLR : aliased unsigned  -- p32mx470f512.h:6019
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "CNENGCLR";
 
    CNENGSET : aliased unsigned  -- p32mx470f512.h:6020
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "CNENGSET";
 
    CNENGINV : aliased unsigned  -- p32mx470f512.h:6021
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "CNENGINV";
 
    CNSTATG : aliased unsigned  -- p32mx470f512.h:6022
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "CNSTATG";
 
@@ -15670,27 +15670,27 @@ package P32mx470f512h is
      Unchecked_Union => True;  -- p32mx470f512.h:6037
 
    CNSTATGbits : aliased uu_CNSTATGbits_t  -- p32mx470f512.h:6038
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "CNSTATG";
+     External_Name => "CNSTATGbits";
 
    CNSTATGCLR : aliased unsigned  -- p32mx470f512.h:6039
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "CNSTATGCLR";
 
    CNSTATGSET : aliased unsigned  -- p32mx470f512.h:6040
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "CNSTATGSET";
 
    CNSTATGINV : aliased unsigned  -- p32mx470f512.h:6041
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "CNSTATGINV";
 
    DEVCFG3 : aliased unsigned  -- p32mx470f512.h:6042
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "DEVCFG3";
 
@@ -15721,12 +15721,12 @@ package P32mx470f512h is
      Unchecked_Union => True;  -- p32mx470f512.h:6056
 
    DEVCFG3bits : aliased uu_DEVCFG3bits_t  -- p32mx470f512.h:6057
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "DEVCFG3";
+     External_Name => "DEVCFG3bits";
 
    DEVCFG2 : aliased unsigned  -- p32mx470f512.h:6058
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "DEVCFG2";
 
@@ -15758,12 +15758,12 @@ package P32mx470f512h is
      Unchecked_Union => True;  -- p32mx470f512.h:6073
 
    DEVCFG2bits : aliased uu_DEVCFG2bits_t  -- p32mx470f512.h:6074
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "DEVCFG2";
+     External_Name => "DEVCFG2bits";
 
    DEVCFG1 : aliased unsigned  -- p32mx470f512.h:6075
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "DEVCFG1";
 
@@ -15802,12 +15802,12 @@ package P32mx470f512h is
      Unchecked_Union => True;  -- p32mx470f512.h:6097
 
    DEVCFG1bits : aliased uu_DEVCFG1bits_t  -- p32mx470f512.h:6098
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "DEVCFG1";
+     External_Name => "DEVCFG1bits";
 
    DEVCFG0 : aliased unsigned  -- p32mx470f512.h:6099
-     with Import => True,
+     with Export => True,
      Convention => C,
      External_Name => "DEVCFG0";
 
@@ -15847,9 +15847,9 @@ package P32mx470f512h is
      Unchecked_Union => True;  -- p32mx470f512.h:6118
 
    DEVCFG0bits : aliased uu_DEVCFG0bits_t  -- p32mx470f512.h:6119
-     with Import => True,
+     with Export => True,
      Convention => C,
-     External_Name => "DEVCFG0";
+     External_Name => "DEVCFG0bits";
 
    --  Vector Numbers
    --  IRQ Numbers
@@ -15858,186 +15858,186 @@ package P32mx470f512h is
 
    --  p32mx470f512.h:7066
    OC4CON_ON_POSITION : Unsigned;
-   pragma Import (C, OC4CON_ON_POSITION, "_OC4CON_ON_POSITION");
+   pragma Export (C, OC4CON_ON_POSITION, "_OC4CON_ON_POSITION");
    OC4CON_ON_MASK     : Unsigned;
-   pragma Import (C, OC4CON_ON_MASK, "_OC4CON_ON_MASK");
+   pragma Export (C, OC4CON_ON_MASK, "_OC4CON_ON_MASK");
    OC4CON_ON_LENGTH   : Unsigned;
-   pragma Import (C, OC4CON_ON_LENGTH, "_OC4CON_ON_LENGTH");
+   pragma Export (C, OC4CON_ON_LENGTH, "_OC4CON_ON_LENGTH");
 
    --  p32mx470f512.h:8289
    OC2CON_ON_POSITION : Unsigned;
-   pragma Import (C, OC2CON_ON_POSITION, "_OC2CON_ON_POSITION");
+   pragma Export (C, OC2CON_ON_POSITION, "_OC2CON_ON_POSITION");
    OC2CON_ON_MASK     : Unsigned;
-   pragma Import (C, OC2CON_ON_MASK, "_OC2CON_ON_MASK");
+   pragma Export (C, OC2CON_ON_MASK, "_OC2CON_ON_MASK");
    OC2CON_ON_LENGTH   : Unsigned;
-   pragma Import (C, OC2CON_ON_LENGTH, "_OC2CON_ON_LENGTH");
+   pragma Export (C, OC2CON_ON_LENGTH, "_OC2CON_ON_LENGTH");
 
    --  p32mx470f512.h:11126
    INTCON_INT0EP_POSITION : Unsigned;
-   pragma Import (C, INTCON_INT0EP_POSITION, "_INTCON_INT0EP_POSITION");
+   pragma Export (C, INTCON_INT0EP_POSITION, "_INTCON_INT0EP_POSITION");
    INTCON_INT0EP_MASK     : Unsigned;
-   pragma Import (C, INTCON_INT0EP_MASK, "_INTCON_INT0EP_MASK");
+   pragma Export (C, INTCON_INT0EP_MASK, "_INTCON_INT0EP_MASK");
    INTCON_INT0EP_LENGTH   : Unsigned;
-   pragma Import (C, INTCON_INT0EP_LENGTH, "_INTCON_INT0EP_LENGTH");
+   pragma Export (C, INTCON_INT0EP_LENGTH, "_INTCON_INT0EP_LENGTH");
 
    --  p32mx470f512.h:11250
    IFS0_IC4EIF_POSITION : Unsigned;
-   pragma Import (C, IFS0_IC4EIF_POSITION, "_IFS0_IC4EIF_POSITION");
+   pragma Export (C, IFS0_IC4EIF_POSITION, "_IFS0_IC4EIF_POSITION");
    IFS0_IC4EIF_MASK     : Unsigned;
-   pragma Import (C, IFS0_IC4EIF_MASK, "_IFS0_IC4EIF_MASK");
+   pragma Export (C, IFS0_IC4EIF_MASK, "_IFS0_IC4EIF_MASK");
    IFS0_IC4EIF_LENGTH   : Unsigned;
-   pragma Import (C, IFS0_IC4EIF_LENGTH, "_IFS0_IC4EIF_LENGTH");
+   pragma Export (C, IFS0_IC4EIF_LENGTH, "_IFS0_IC4EIF_LENGTH");
 
    --  p32mx470f512.h:11254
    IFS0_IC4IF_POSITION  : constant Unsigned;
-   pragma Import (C, IFS0_IC4IF_POSITION, "_IFS0_IC4IF_POSITION");
+   pragma Export (C, IFS0_IC4IF_POSITION, "_IFS0_IC4IF_POSITION");
    IFS0_IC4IF_MASK      : constant Unsigned;
-   pragma Import (C, IFS0_IC4IF_MASK, "_IFS0_IC4IF_MASK");
+   pragma Export (C, IFS0_IC4IF_MASK, "_IFS0_IC4IF_MASK");
    IFS0_IC4IF_LENGTH    : constant Unsigned;
-   pragma Import (C, IFS0_IC4IF_LENGTH, "_IFS0_IC4IF_LENGTH");
+   pragma Export (C, IFS0_IC4IF_LENGTH, "_IFS0_IC4IF_LENGTH");
 
    --  p32mx470f512.h:11258
    IFS0_OC4IF_POSITION  : constant unsigned;
-   pragma Import (C, IFS0_OC4IF_POSITION, "_IFS0_OC4IF_POSITION");
+   pragma Export (C, IFS0_OC4IF_POSITION, "_IFS0_OC4IF_POSITION");
    IFS0_OC4IF_MASK      : constant Unsigned;
-   pragma Import (C, IFS0_OC4IF_MASK, "_IFS0_OC4IF_MASK");
+   pragma Export (C, IFS0_OC4IF_MASK, "_IFS0_OC4IF_MASK");
    IFS0_OC4IF_LENGTH    : constant Unsigned;
-   pragma Import (C, IFS0_OC4IF_LENGTH, "_IFS0_OC4IF_LENGTH");
+   pragma Export (C, IFS0_OC4IF_LENGTH, "_IFS0_OC4IF_LENGTH");
 
    --  p32mx470f512.h:11262
    IFS0_INT4IF_POSITION : Unsigned;
-   pragma Import (C, IFS0_INT4IF_POSITION, "_IFS0_INT4IF_POSITION");
+   pragma Export (C, IFS0_INT4IF_POSITION, "_IFS0_INT4IF_POSITION");
    IFS0_INT4IF_MASK     : Unsigned;
-   pragma Import (C, IFS0_INT4IF_MASK, "_IFS0_INT4IF_MASK");
+   pragma Export (C, IFS0_INT4IF_MASK, "_IFS0_INT4IF_MASK");
    IFS0_INT4IF_LENGTH   : Unsigned;
-   pragma Import (C, IFS0_INT4IF_LENGTH, "_IFS0_INT4IF_LENGTH");
+   pragma Export (C, IFS0_INT4IF_LENGTH, "_IFS0_INT4IF_LENGTH");
 
    --  p32mx470f512.h:12497
    IFS0_T4IF_POSITION   : Unsigned;
-   pragma Import (C, IFS0_T4IF_POSITION, "_IFS0_T4IF_POSITION");
+   pragma Export (C, IFS0_T4IF_POSITION, "_IFS0_T4IF_POSITION");
    IFS0_T4IF_MASK       : Unsigned;
-   pragma Import (C, IFS0_T4IF_MASK, "_IFS0_T4IF_MASK");
+   pragma Export (C, IFS0_T4IF_MASK, "_IFS0_T4IF_MASK");
    IFS0_T4IF_LENGTH     : Unsigned;
-   pragma Import (C, IFS0_T4IF_LENGTH, "_IFS0_T4IF_LENGTH");
+   pragma Export (C, IFS0_T4IF_LENGTH, "_IFS0_T4IF_LENGTH");
 
    --  p32mx470f512.h:12797
    IEC0_T4IE_POSITION      : Unsigned;
-   pragma Import (C, IEC0_T4IE_POSITION, "_IEC0_T4IE_POSITION");
+   pragma Export (C, IEC0_T4IE_POSITION, "_IEC0_T4IE_POSITION");
    IEC0_T4IE_MASK          : Unsigned;
-   pragma Import (C, IEC0_T4IE_MASK, "_IIEC0_T4IE_MASK");
+   pragma Export (C, IEC0_T4IE_MASK, "_IIEC0_T4IE_MASK");
    IEC0_T4IE_LENGTH        : Unsigned;
-   pragma Import (C, IEC0_T4IE_LENGTH, "_IEC0_T4IE_LENGTH");
+   pragma Export (C, IEC0_T4IE_LENGTH, "_IEC0_T4IE_LENGTH");
 
    --  p32mx470f512.h:11182
    IFS0_INT0IF_POSITION    : Unsigned;
-   pragma Import (C, IFS0_INT0IF_POSITION, "_IFS0_INT0IF_POSITION");
+   pragma Export (C, IFS0_INT0IF_POSITION, "_IFS0_INT0IF_POSITION");
    IFS0_INT0IF_MASK        : Unsigned;
-   pragma Import (C, IFS0_INT0IF_MASK, "_IFS0_INT0IF_MASK");
+   pragma Export (C, IFS0_INT0IF_MASK, "_IFS0_INT0IF_MASK");
    IFS0_INT0IF_LENGTH      : Unsigned;
-   pragma Import (C, IFS0_INT0IF_LENGTH, "_IFS0_INT0IF_LENGTH");
+   pragma Export (C, IFS0_INT0IF_LENGTH, "_IFS0_INT0IF_LENGTH");
 
    --  p32mx470f512.h:11481
    IEC0_INT0IE_POSITION    : Unsigned;
-   pragma Import (C, IEC0_INT0IE_POSITION, "_IEC0_INT0IE_POSITION");
+   pragma Export (C, IEC0_INT0IE_POSITION, "_IEC0_INT0IE_POSITION");
    IEC0_INT0IE_MASK        : Unsigned;
-   pragma Import (C, IEC0_INT0IE_MASK, "_IEC0_INT0IE_MASK");
+   pragma Export (C, IEC0_INT0IE_MASK, "_IEC0_INT0IE_MASK");
    IEC0_INT0IE_LENGTH      : Unsigned;
-   pragma Import (C, IEC0_INT0IE_LENGTH, "_IEC0_INT0IE_LENGTH");
+   pragma Export (C, IEC0_INT0IE_LENGTH, "_IEC0_INT0IE_LENGTH");
 
    --  p32mx470f512.h:11486
    IEC0_T1IE_POSITION         : Unsigned;
-   pragma Import (C, IEC0_T1IE_POSITION, "_IEC0_T1IE_POSITION");
+   pragma Export (C, IEC0_T1IE_POSITION, "_IEC0_T1IE_POSITION");
    IEC0_T1IE_MASK             : Unsigned;
-   pragma Import (C, IEC0_T1IE_MASK, "_IIEC0_T1IE_MASK");
+   pragma Export (C, IEC0_T1IE_MASK, "_IIEC0_T1IE_MASK");
    IEC0_T1IE_LENGTH           : Unsigned;
-   pragma Import (C, IEC0_T1IE_LENGTH, "_IEC0_T1IE_LENGTH");
+   pragma Export (C, IEC0_T1IE_LENGTH, "_IEC0_T1IE_LENGTH");
 
    --  p32mx470f512.h:11498
    IEC0_OC1IE_POSITION        : Unsigned;
-   pragma Import (C, IEC0_OC1IE_POSITION, "_IEC0_OC1IE_POSITION");
+   pragma Export (C, IEC0_OC1IE_POSITION, "_IEC0_OC1IE_POSITION");
      IEC0_OC1IE_MASK          : Unsigned;
-   pragma Import (C, IEC0_OC1IE_MASK, "_IEC0_OC1IE_MASK");
+   pragma Export (C, IEC0_OC1IE_MASK, "_IEC0_OC1IE_MASK");
      IEC0_OC1IE_LENGTH        : Unsigned;
-   pragma Import (C, IEC0_OC1IE_LENGTH, "_IEC0_OC1IE_LENGTH");
+   pragma Export (C, IEC0_OC1IE_LENGTH, "_IEC0_OC1IE_LENGTH");
 
      --  p32mx470f512.h:11550
      IEC0_IC4EIE_POSITION    : Unsigned;
-   pragma Import (C, IEC0_IC4EIE_POSITION, "_IEC0_IC4EIE_POSITION");
+   pragma Export (C, IEC0_IC4EIE_POSITION, "_IEC0_IC4EIE_POSITION");
    IEC0_IC4EIE_MASK           : Unsigned;
-   pragma Import (C, IEC0_IC4EIE_MASK, "_IEC0_IC4EIE_MASK");
+   pragma Export (C, IEC0_IC4EIE_MASK, "_IEC0_IC4EIE_MASK");
    IEC0_IC4EIE_LENGTH         : Unsigned;
-   pragma Import (C, IEC0_IC4EIE_LENGTH, "_IEC0_IC4EIE_LENGTH");
+   pragma Export (C, IEC0_IC4EIE_LENGTH, "_IEC0_IC4EIE_LENGTH");
 
    --  p32mx470f512.h:11554
    IEC0_IC4IE_POSITION     : Unsigned;
-   pragma Import (C, IEC0_IC4IE_POSITION, "_IEC0_IC4IE_POSITION");
+   pragma Export (C, IEC0_IC4IE_POSITION, "_IEC0_IC4IE_POSITION");
    IEC0_IC4IE_MASK         : Unsigned;
-   pragma Import (C, IEC0_IC4IE_MASK, "_IEC0_IC4IE_MASK");
+   pragma Export (C, IEC0_IC4IE_MASK, "_IEC0_IC4IE_MASK");
    IEC0_IC4IE_LENGTH       : Unsigned;
-   pragma Import (C, IEC0_IC4IE_LENGTH, "_IEC0_IC4IE_LENGTH");
+   pragma Export (C, IEC0_IC4IE_LENGTH, "_IEC0_IC4IE_LENGTH");
 
    --  p32mx470f512.h:11558
    IEC0_OC4IE_POSITION     : Unsigned;
-   pragma Import (C, IEC0_OC4IE_POSITION, "_IEC0_OC4IE_POSITION");
+   pragma Export (C, IEC0_OC4IE_POSITION, "_IEC0_OC4IE_POSITION");
    IEC0_OC4IE_MASK         : Unsigned;
-   pragma Import (C, IEC0_OC4IE_MASK, "_IEC0_OC4IE_MASK");
+   pragma Export (C, IEC0_OC4IE_MASK, "_IEC0_OC4IE_MASK");
    IEC0_OC4IE_LENGTH       : Unsigned;
-   pragma Import (C, IEC0_OC4IE_LENGTH, "_IEC0_OC4IE_LENGTH");
+   pragma Export (C, IEC0_OC4IE_LENGTH, "_IEC0_OC4IE_LENGTH");
 
    --  p32mx470f512.h:11562
    IEC0_INT4IE_POSITION    : Unsigned;
-   pragma Import (C, IEC0_INT4IE_POSITION, "_IEC0_INT4IE_POSITION");
+   pragma Export (C, IEC0_INT4IE_POSITION, "_IEC0_INT4IE_POSITION");
    IEC0_INT4IE_MASK        : Unsigned;
-   pragma Import (C, IEC0_INT4IE_MASK, "_IEC0_INT4IE_MASK");
+   pragma Export (C, IEC0_INT4IE_MASK, "_IEC0_INT4IE_MASK");
    IEC0_INT4IE_LENGTH      : Unsigned;
-   pragma Import (C, IEC0_INT4IE_LENGTH, "_IEC0_INT4IE_LENGTH");
+   pragma Export (C, IEC0_INT4IE_LENGTH, "_IEC0_INT4IE_LENGTH");
 
    --  p32mx470f512.h:11794
 IPC0_INT0IS_POSITION        : Unsigned;
-   pragma Import (C, IPC0_INT0IS_POSITION, "_IPC0_INT0IS_POSITION");
+   pragma Export (C, IPC0_INT0IS_POSITION, "_IPC0_INT0IS_POSITION");
 IPC0_INT0IS_MASK        : Unsigned;
-   pragma Import (C, IPC0_INT0IS_MASK, "_IPC0_INT0IS_MASK");
+   pragma Export (C, IPC0_INT0IS_MASK, "_IPC0_INT0IS_MASK");
    IPC0_INT0IS_LENGTH        : Unsigned;
-   pragma Import (C, IPC0_INT0IS_LENGTH, "_IPC0_INT0IS_LENGTH");
+   pragma Export (C, IPC0_INT0IS_LENGTH, "_IPC0_INT0IS_LENGTH");
 
    --  p32mx470f512.h:11798
    IPC0_INT0IP_POSITION         : Unsigned;
-   pragma Import (C, IPC0_INT0IP_POSITION, "_IPC0_INT0IP_POSITION");
+   pragma Export (C, IPC0_INT0IP_POSITION, "_IPC0_INT0IP_POSITION");
    IPC0_INT0IP_MASK             : Unsigned;
-   pragma Import (C, IPC0_INT0IP_MASK, "_IPC0_INT0IP_MASK");
+   pragma Export (C, IPC0_INT0IP_MASK, "_IPC0_INT0IP_MASK");
    IPC0_INT0IP_LENGTH           : Unsigned;
-   pragma Import (C, IPC0_INT0IP_LENGTH, "_IPC0_INT0IP_LENGTH");
+   pragma Export (C, IPC0_INT0IP_LENGTH, "_IPC0_INT0IP_LENGTH");
 
    --  p32mx470f512.h:11918
    IPC4_T4IP_POSITION           : Unsigned;
-   pragma Import (C, IPC4_T4IP_POSITION, "_IPC4_T4IP_POSITION");
+   pragma Export (C, IPC4_T4IP_POSITION, "_IPC4_T4IP_POSITION");
    IPC4_T4IP_MASK               : Unsigned;
-   pragma Import (C, IPC4_T4IP_MASK, "_IPC4_T4IP_MASK");
+   pragma Export (C, IPC4_T4IP_MASK, "_IPC4_T4IP_MASK");
    IPC4_T4IP_LENGTH             : Unsigned;
-   pragma Import (C, IPC4_T4IP_LENGTH, "_IPC4_T4IP_LENGTH");
+   pragma Export (C, IPC4_T4IP_LENGTH, "_IPC4_T4IP_LENGTH");
 
    --  p32mx470f512.h:11922
    IPC4_IC4IS_POSITION : Unsigned;
-   pragma Import (C, IPC4_IC4IS_POSITION, "_IPC4_IC4IS_POSITION");
+   pragma Export (C, IPC4_IC4IS_POSITION, "_IPC4_IC4IS_POSITION");
    IPC4_IC4IS_MASK     : Unsigned;
-   pragma Import (C, IPC4_IC4IS_MASK, "_IPC4_IC4IS_MASK");
+   pragma Export (C, IPC4_IC4IS_MASK, "_IPC4_IC4IS_MASK");
    IPC4_IC4IS_LENGTH   : Unsigned;
-   pragma Import (C, IPC4_IC4IS_LENGTH, "_IPC4_IC4IS_LENGTH");
+   pragma Export (C, IPC4_IC4IS_LENGTH, "_IPC4_IC4IS_LENGTH");
 
    --  p32mx470f512.h:11926
    IPC4_IC4IP_POSITION : Unsigned;
-   pragma Import (C, IPC4_IC4IP_POSITION, "_IPC4_IC4IP_POSITION");
+   pragma Export (C, IPC4_IC4IP_POSITION, "_IPC4_IC4IP_POSITION");
    IPC4_IC4IP_MASK     : Unsigned;
-   pragma Import (C, IPC4_IC4IP_MASK, "_IPC4_IC4IP_MASK");
+   pragma Export (C, IPC4_IC4IP_MASK, "_IPC4_IC4IP_MASK");
    IPC4_IC4IP_LENGTH   : Unsigned ;
-   pragma Import (C, IPC4_IC4IP_LENGTH, "_IPC4_IC4IP_LENGTH");
+   pragma Export (C, IPC4_IC4IP_LENGTH, "_IPC4_IC4IP_LENGTH");
 
    --  p32mx470f512.h:13165
    IPC4_T4IS_POSITION : Unsigned;
-   pragma Import (C, IPC4_T4IS_POSITION, "_IPC4_T4IS_POSITION");
+   pragma Export (C, IPC4_T4IS_POSITION, "_IPC4_T4IS_POSITION");
    IPC4_T4IS_MASK     : Unsigned;
-   pragma Import (C, IPC4_T4IS_MASK, "_IPC4_T4IS_MASK");
+   pragma Export (C, IPC4_T4IS_MASK, "_IPC4_T4IS_MASK");
    IPC4_T4IS_LENGTH   : Unsigned;
-   pragma Import (C, IPC4_T4IS_LENGTH, "_IPC4_T4IS_LENGTH");
+   pragma Export (C, IPC4_T4IS_LENGTH, "_IPC4_T4IS_LENGTH");
 
 end P32mx470f512h;

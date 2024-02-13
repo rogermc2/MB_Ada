@@ -6975,9 +6975,9 @@ volatile __DEVCFG0bits_t DEVCFG0bits __asm__ ("DEVCFG0");
 /* #define _OC2CON_SIDL_MASK                        0x00002000 */
 /* #define _OC2CON_SIDL_LENGTH                      0x00000001 */
 
-/* #define _OC2CON_ON_POSITION                      0x0000000F */
-/* #define _OC2CON_ON_MASK                          0x00008000 */
-/* #define _OC2CON_ON_LENGTH                        0x00000001 */
+#define _OC2CON_ON_POSITION                      0x0000000F
+#define _OC2CON_ON_MASK                          0x00008000
+#define _OC2CON_ON_LENGTH                        0x00000001
 
 /* #define _OC2CON_OCM0_POSITION                    0x00000000 */
 /* #define _OC2CON_OCM0_MASK                        0x00000001 */
@@ -11487,9 +11487,9 @@ volatile __DEVCFG0bits_t DEVCFG0bits __asm__ ("DEVCFG0");
 #define _IEC0_T1IE_MASK                          0x00000010
 #define _IEC0_T1IE_LENGTH                        0x00000001
 
-/* #define _IEC0_IC1EIE_POSITION                    0x00000005 */
-/* #define _IEC0_IC1EIE_MASK                        0x00000020 */
-/* #define _IEC0_IC1EIE_LENGTH                      0x00000001 */
+#define _IEC0_IC1EIE_POSITION                    0x00000005
+#define _IEC0_IC1EIE_MASK                        0x00000020
+#define _IEC0_IC1EIE_LENGTH                      0x00000001
 
 /* #define _IEC0_IC1IE_POSITION                     0x00000006 */
 /* #define _IEC0_IC1IE_MASK                         0x00000040 */
@@ -11791,9 +11791,9 @@ volatile __DEVCFG0bits_t DEVCFG0bits __asm__ ("DEVCFG0");
 /* #define _IPC0_CS1IP_MASK                         0x001C0000 */
 /* #define _IPC0_CS1IP_LENGTH                       0x00000003 */
 
-/* #define _IPC0_INT0IS_POSITION                    0x00000018 */
-/* #define _IPC0_INT0IS_MASK                        0x03000000 */
-/* #define _IPC0_INT0IS_LENGTH                      0x00000002 */
+#define _IPC0_INT0IS_POSITION                    0x00000018
+#define _IPC0_INT0IS_MASK                        0x03000000
+#define _IPC0_INT0IS_LENGTH                      0x00000002
 
 #define _IPC0_INT0IP_POSITION                    0x0000001A
 #define _IPC0_INT0IP_MASK                        0x1C000000

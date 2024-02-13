@@ -1,7 +1,7 @@
 
 with Interfaces.C; use Interfaces.C;
 
-package body PPS is
+package body PPS_A is
 
    procedure PPS_Input (Group : Natural; Pin, Func : String) is
       C_Group : constant char_array := To_C (Integer'Image (Group));
@@ -25,4 +25,4 @@ package body PPS is
 
    end PPS_Output;
 
-end PPS;
+end PPS_A;
