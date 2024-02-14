@@ -1,7 +1,5 @@
 
---  -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
 --  *	p32_defs.h
---  *
 --  *	chipKIT core files for PIC32
 --  *		Copyright (c) 2011 by Digilent Inc.
 
@@ -31,12 +29,14 @@
 --  *	Boston, MA  02111-1307  USA
 
 with Interfaces; use Interfaces;
+with Interfaces.C; use Interfaces.C;
 
 package P32_Defs is
 
    --  #include <p32xxxx.h>
    --  #include "cpudefs.h"
    --  #include <inttypes.h>
+   type Bit is mod 2 ** 1 with Size => 1;
 
    FLASH_SPEED_HZ : Positive := 30000000;
 
@@ -64,10 +64,10 @@ package P32_Defs is
    --  most special function registers.
 
    type p32_Regset is record
-      reg : uint32_t;
-      clr : uint32_t;
-      set : uint32_t;
-      inv : uint32_t;
+      reg : unsigned_32;
+      clr : unsigned_32;
+      set : unsigned_32;
+      inv : unsigned_32;
    end record;
 
    --  This structure describes the register layout for a buffer
@@ -75,14 +75,16 @@ package P32_Defs is
    --  registers.
 
    type p32_regbuf is record
-      reg  : uint32_t;
-      rsv1 : uint32_t;
-      rsv2 : uint32_t;
-      rsv3 : uint32_t;
+      reg  : unsigned_32;
+      rsv1 : unsigned_32;
+      rsv2 : unsigned_32;
+      rsv3 : unsigned_32;
    end record;
 
+   type P32_Disc_Type is (Ansel, Tris, Port, Lat, Odc, Cnpu, Cnpd);
+
    --  This structure describes the register layout of an I/O port.
-   type p32_uart (Disc : p32_regset) is record
+   type p32_uart (Disc : P32_Disc_Type) is record
       cncon             : p32_regset;
       cnen              : p32_regset;
       cnstat            : p32_regset;
@@ -127,14 +129,16 @@ package P32_Defs is
    end record;
 
    --  This structure defines the registers for a PIC32 UART.
-   type p32_uart (Disc : U1MODEbits_t) is record
+   type P32_UART_Disc_Type is (UART_Mode, UART_Sta);
+
+   type p32_UART_Register (Disc : P32_UART_Disc_Type) is record
       uxTx  : p32_regbuf;
       uxRx  : p32_regbuf;
       uxBrg : p32_regbuf;
       case Disc is
-         when uartMode =>
+         when UART_Mode =>
             uxMode : p32_regset;
-         when uartSta =>
+         when UART_Sta =>
             uxSta  : p32_regset;
       end case;
    end record;
@@ -154,13 +158,14 @@ package P32_Defs is
    UARTSTA_ADDEN  : constant Natural:= 5;
 
    --  Structure for the registers of a PIC32 SPI controller
-   type p32_spi  (Disc : SPI2CONbits_t) is record
+   type P32_SPI_Disc_Type is (SPI_Con, SPI_Stat);
+   type p32_SPI  (Disc : P32_SPI_Disc_Type) is record
       sxBuf : p32_regset;
       sxBrg : p32_regset;
       case Disc is
-         when spiCon =>
+         when SPI_Con =>
             sxCon  : p32_regset;
-         when   spiStat =>
+         when   SPI_Stat =>
             sxStat : p32_regset;
       end case;
    end record;
@@ -182,16 +187,17 @@ package P32_Defs is
    SPISTAT_SPIRBF : constant Natural := 0;
 
    --  This structure defines the registers for a PIC32 I2C port.
-   type p32_i2c (Disc : I2C1CONbits_t) is record
+   type P32_I2C_Disc_Type is (I2C_Con, I2C_Stat);
+   type P32_I2C (Disc : P32_I2C_Disc_Type) is record
       ixAdd: p32_regset;
       ixMsk: p32_regset;
       ixBrg: p32_regset;
       ixTrn: p32_regset;
       ixRcv: p32_regset;
       case Disc is
-      when  i2cCon =>
+      when  I2C_Con =>
          ixCon : p32_regset;
-      when i2cStat=>
+      when I2C_Stat =>
          ixStat: p32_regset;
       end case;
    end record;
@@ -343,13 +349,13 @@ package P32_Defs is
    ICCON_OVERFLOW           : constant Natural := 2 * BN_ICCON_ICOV;
    ICCON_ICBNE	             : constant Natural := 2 * BN_ICCON_ICBNE;
    ICCON_ICM_INTERRUPT      : constant Natural := 128 * BN_ICCON_ICM;
-   ICCON_ICM_EVERY_EDGE     : constant Natural := 64 * N_ICCON_ICM;
+   ICCON_ICM_EVERY_EDGE     : constant Natural := 64 * BN_ICCON_ICM;
    ICCON_ICM_RISING_16      : constant Natural := 32 * BN_ICCON_ICM;
    ICCON_ICM_RISING_4       : constant Natural := 16 * BN_ICCON_ICM;
    ICCON_ICM_RISING_EDGE    : constant Natural := 8 * BN_ICCON_ICM;
    ICCON_ICM_FALLING_EDGE   : constant Natural := 4 * BN_ICCON_ICM;
    ICCON_ICM_EDGE_DETECT    : constant Natural := 2 * BN_ICCON_ICM;
-   ICCON_ICM_DISABLE        : constant Natura := BN_ICCON_ICM;
+   ICCON_ICM_DISABLE        : constant Natural := BN_ICCON_ICM;
 
    --  This structure defines the registers for a PIC32 Output Compare.
    type p32_oc is record
@@ -359,12 +365,12 @@ package P32_Defs is
    end record;
 
    --  Define bits in the output compare control register
-   BN_OCCON_ON     : constant Natura := 15;
-   BN_OCCON_SIDL   : constant Natura := 13;
-   BN_OCCON_OC32   : constant Natura := 5;
-   BN_OCCON_OCFLT  : constant Natura := 4;
-   BN_OCCON_OCTSEL : constant Natura := 3;
-   BN_OCCON_OCM    : constant Natura := 0;
+   BN_OCCON_ON     : constant Natural := 15;
+   BN_OCCON_SIDL   : constant Natural := 13;
+   BN_OCCON_OC32   : constant Natural := 5;
+   BN_OCCON_OCFLT  : constant Natural := 4;
+   BN_OCCON_OCTSEL : constant Natural := 3;
+   BN_OCCON_OCM    : constant Natural := 0;
 
    OCCON_ON	        : constant Natural := 2 * BN_OCCON_ON;
    OCCON_OFF	       : constant Natural := 0;
@@ -420,254 +426,263 @@ package P32_Defs is
 
    --  This structure defines the registers for the PIC32 parallel master port.
    type p32_pmp is record
-         pmpCon : p32_regset;
-         pmpMode : p32_regset;
-         pmpAddr : p32_regset;
-         pmpDout : p32_regset;
-         pmpDin : p32_regset;
-         pmpAen : p32_regset;
-         pmpStat : p32_regset;
-      end record;
+      pmpCon  : p32_regset;
+      pmpMode : p32_regset;
+      pmpAddr : p32_regset;
+      pmpDout : p32_regset;
+      pmpDin  : p32_regset;
+      pmpAen  : p32_regset;
+      pmpStat : p32_regset;
+   end record;
 
-      --  Peripheral Pin Select Output Declarations
-      PPS_SET_A : constant Unsigned_32 := 16#0100#;
-      PPS_SET_B : constant Unsigned_32 := 16#0200#;
-      PPS_SET_C : constant Unsigned_32 := 16#0400#;
-      PPS_SET_D : constant Unsigned_32 := 16#0800#;
+   --  Peripheral Pin Select Output Declarations
+   PPS_SET_A : constant Unsigned_16 := 16#0100#;
+   PPS_SET_B : constant Unsigned_16 := 16#0200#;
+   PPS_SET_C : constant Unsigned_16 := 16#0400#;
+   PPS_SET_D : constant Unsigned_16 := 16#0800#;
 
-      subtype p32_ppsout is uint32_t;
+   subtype p32_ppsout is unsigned_16;
 
-      PPS_INPUT_BIT : Unsigned_16 := 16#8000#;
-                      PPS_OUT_MASK : constant Unsigned_32 := 16#000F#;
-                      PPS_IN_MASK  : constant Unsigned_32 := 16#00FF#;
-                      NUMPPS_IN    : constant Unsigned_32 := 51;          --   This must be set to the highest PPS_IN_xxx value
-                        NUMPPS_OUT : constant Unsigned_32 := 2#1111#;      --   This must be set to the highest PPS_OUT_xxx value
+   PPS_INPUT_BIT : constant Unsigned_16 := 16#8000#;
+   PPS_OUT_MASK  : constant Unsigned_16 := 16#000F#;
+   PPS_IN_MASK   : constant Unsigned_16 := 16#00FF#;
+   NUMPPS_IN     : constant Unsigned_16 := 51;          --   This must be set to the highest PPS_IN_xxx value
+   NUMPPS_OUT    : constant Unsigned_16 := 2#1111#;      --   This must be set to the highest PPS_OUT_xxx value
 
-                      typedef enum {
-                        PPS_OUT_GPIO    = (0 + (PPS_SET_A or PPS_SET_B or PPS_SET_C or PPS_SET_D)),
+   type PPS_Function_Type is
+     (PPS_OUT_GPIO, PPS_OUT_U3TX, PPS_OUT_U4RTS, PPS_OUT_SDO2, PPS_OUT_OC3,
+      PPS_OUT_C2OUT, PPS_OUT_U2TX, PPS_OUT_U1TX, PPS_OUT_U5RTS,PPS_OUT_SDO1,
+      PPS_OUT_OC4, PPS_OUT_U3RTS, PPS_OUT_U4TX, PPS_OUT_REFCLKO, PPS_OUT_U5TX,
+      PPS_OUT_SS1, PPS_OUT_OC5,PPS_OUT_C1OUT, PPS_OUT_U2RTS, PPS_OUT_U1RTS,
+      PPS_OUT_SS2, PPS_OUT_OC2, PPS_OUT_OC1, PPS_IN_INT1, PPS_IN_INT2,
+      PPS_IN_INT3, PPS_IN_INT4, PPS_IN_T2CK, PPS_IN_T3CK, PPS_IN_T4CK,
+      PPS_IN_T5CK, PPS_IN_IC1, PPS_IN_IC2, PPS_IN_IC3, PPS_IN_IC4, PPS_IN_IC5,
+      PPS_IN_OCFA, PPS_IN_U1RX, PPS_IN_U1CTS, PPS_IN_U2RX, PPS_IN_U2CTS,
+      PPS_IN_U3RX, PPS_IN_U3CTS, PPS_IN_U4RX, PPS_IN_U4CTS, PPS_IN_U5RX,
+      PPS_IN_U5CTS, PPS_IN_SDI1, PPS_IN_SS1, PPS_IN_SDI2, PPS_IN_SS2,
+      PPS_IN_REFCLKI);
 
-                      PPS_OUT_U3TX    = (0b0001 + PPS_SET_A),
-                      PPS_OUT_U4RTS   = (0b0010 + PPS_SET_A),
-                      PPS_OUT_SDO2    = (0b0110 + (PPS_SET_A  or  PPS_SET_B)),
-                      PPS_OUT_OC3     = (0b1011 + PPS_SET_A),
-                      PPS_OUT_C2OUT   = (0b1101 + PPS_SET_A),
+   for PPS_Function_Type use
+     (PPS_OUT_U3TX    => 2#0001# + PPS_SET_A,
+      PPS_OUT_U4RTS   => 2#0010# + PPS_SET_A,
+      PPS_OUT_SDO2    => 2#0110# + (PPS_SET_A  or  PPS_SET_B),
+      PPS_OUT_OC3     => 2#1011# + PPS_SET_A,
+      PPS_OUT_C2OUT   => 2#1101# + PPS_SET_A,
 
-                      PPS_OUT_U2TX    = (0b0001 + PPS_SET_B),
-                      PPS_OUT_U1TX    = (0b0011 + PPS_SET_B),
-                      PPS_OUT_U5RTS   = (0b0100 + PPS_SET_B),
-                      PPS_OUT_SDO1    = (0b1000 + (PPS_SET_B  or  PPS_SET_C  or  PPS_SET_D)),
-                      PPS_OUT_OC4     = (0b1011 + PPS_SET_B),
+      PPS_OUT_U2TX    => 2#0001# + PPS_SET_B,
+      PPS_OUT_U1TX    => 2#0011# + PPS_SET_B,
+      PPS_OUT_U5RTS   => 2#0100# + PPS_SET_B,
+      PPS_OUT_SDO1    => 2#1000# + (PPS_SET_B  or  PPS_SET_C  or  PPS_SET_D),
+      PPS_OUT_OC4     => 2#1011# + PPS_SET_B,
 
-                      PPS_OUT_U3RTS   = (0b0001 + PPS_SET_C),
-                      PPS_OUT_U4TX    = (0b0010 + PPS_SET_C),
-                      PPS_OUT_REFCLKO = (0b0011 + PPS_SET_C),
-                      PPS_OUT_U5TX    = (0b0100 + (PPS_SET_C  or  PPS_SET_D)),
-                      PPS_OUT_SS1     = (0b0111 + PPS_SET_C),
-                      PPS_OUT_OC5     = (0b1011 + PPS_SET_C),
-                      PPS_OUT_C1OUT   = (0b1101 + PPS_SET_C),
+      PPS_OUT_U3RTS   => 2#0001# + PPS_SET_C,
+      PPS_OUT_U4TX    => 2#0010# + PPS_SET_C,
+      PPS_OUT_REFCLKO => 2#0011# + PPS_SET_C,
+      PPS_OUT_U5TX    => 2#0100# + (PPS_SET_C  or  PPS_SET_D),
+      PPS_OUT_SS1     => 2#0111# + PPS_SET_C,
+      PPS_OUT_OC5     => 2#1011# + PPS_SET_C,
+      PPS_OUT_C1OUT   => 2#1101# + PPS_SET_C,
 
-                      PPS_OUT_U2RTS   = (0b0001 + PPS_SET_D),
-                      PPS_OUT_U1RTS   = (0b0011 + PPS_SET_D),
-                      PPS_OUT_SS2     = (0b0110 + PPS_SET_D),
-                      PPS_OUT_OC2     = (0b1011 + PPS_SET_D),
-                      PPS_OUT_OC1     = (0b1100 + PPS_SET_D),
+      PPS_OUT_U2RTS   => 2#0001# + PPS_SET_D,
+      PPS_OUT_U1RTS   => 2#0011# + PPS_SET_D,
+      PPS_OUT_SS2     => 2#0110# + PPS_SET_D,
+      PPS_OUT_OC2     => 2#1011# + PPS_SET_D,
+      PPS_OUT_OC1     => 2#1100# + PPS_SET_D,
 
-                      PPS_IN_INT1 = (0 + PPS_SET_D + PPS_INPUT_BIT),
-                      PPS_IN_INT2 = (1 + PPS_SET_C + PPS_INPUT_BIT),
-                      PPS_IN_INT3 = (2 + PPS_SET_A + PPS_INPUT_BIT),
-                      PPS_IN_INT4 = (3 + PPS_SET_B + PPS_INPUT_BIT),
-                      PPS_IN_T2CK = (5 + PPS_SET_A + PPS_INPUT_BIT),
-                      PPS_IN_T3CK = (6 + PPS_SET_D + PPS_INPUT_BIT),
-                      PPS_IN_T4CK = (7 + PPS_SET_C + PPS_INPUT_BIT),
-                      PPS_IN_T5CK = (8 + PPS_SET_B + PPS_INPUT_BIT),
-                      PPS_IN_IC1 = (9 + PPS_SET_D + PPS_INPUT_BIT),
-                      PPS_IN_IC2 = (10 + PPS_SET_C + PPS_INPUT_BIT),
-                      PPS_IN_IC3 = (11 + PPS_SET_A + PPS_INPUT_BIT),
-                      PPS_IN_IC4 = (12 + PPS_SET_B + PPS_INPUT_BIT),
-                      PPS_IN_IC5 = (13 + PPS_SET_C + PPS_INPUT_BIT),
-                      PPS_IN_OCFA = (17 + PPS_SET_D + PPS_INPUT_BIT),
-                      PPS_IN_U1RX = (19 + PPS_SET_A + PPS_INPUT_BIT),
-                      PPS_IN_U1CTS = (20 + PPS_SET_C + PPS_INPUT_BIT),
-                      PPS_IN_U2RX = (21 + PPS_SET_A + PPS_INPUT_BIT),
-                      PPS_IN_U2CTS = (22 + PPS_SET_C + PPS_INPUT_BIT),
-                      PPS_IN_U3RX = (23 + PPS_SET_B + PPS_INPUT_BIT),
-                      PPS_IN_U3CTS = (24 + PPS_SET_D + PPS_INPUT_BIT),
-                      PPS_IN_U4RX = (25 + PPS_SET_D + PPS_INPUT_BIT),
-                      PPS_IN_U4CTS = (26 + PPS_SET_B + PPS_INPUT_BIT),
-                      PPS_IN_U5RX = (27 + PPS_SET_D + PPS_INPUT_BIT),
-                      PPS_IN_U5CTS = (28 + PPS_SET_A + PPS_INPUT_BIT),
-                      PPS_IN_SDI1 = (32 + PPS_SET_B + PPS_INPUT_BIT),
-                      PPS_IN_SS1 = (33 + PPS_SET_C + PPS_INPUT_BIT),
-                      PPS_IN_SDI2 = (35 + PPS_SET_B + PPS_INPUT_BIT),
-                      PPS_IN_SS2 = (36 + PPS_SET_D + PPS_INPUT_BIT),
-                      PPS_IN_REFCLKI = (51 + PPS_SET_A + PPS_INPUT_BIT),
+      PPS_IN_INT1 => PPS_SET_D + PPS_INPUT_BIT,
+      PPS_IN_INT2 => unsigned_16 (1 + PPS_SET_C + PPS_INPUT_BIT),
+      PPS_IN_INT3 => unsigned_16 (2 + PPS_SET_A + PPS_INPUT_BIT),
+      PPS_IN_INT4 => unsigned_16 (3 + PPS_SET_B + PPS_INPUT_BIT),
+      PPS_IN_T2CK => unsigned_16 (5 + PPS_SET_A + PPS_INPUT_BIT),
+      PPS_IN_T3CK => unsigned_16 (6 + PPS_SET_D + PPS_INPUT_BIT),
+      PPS_IN_T4CK => unsigned_16 (7 + PPS_SET_C + PPS_INPUT_BIT),
+      PPS_IN_T5CK => unsigned_16 (8 + PPS_SET_B + PPS_INPUT_BIT),
+      PPS_IN_IC1 => unsigned_16 (9 + PPS_SET_D + PPS_INPUT_BIT),
+      PPS_IN_IC2 => unsigned_16 (10 + PPS_SET_C + PPS_INPUT_BIT),
+      PPS_IN_IC3 => unsigned_16 (11 + PPS_SET_A + PPS_INPUT_BIT),
+      PPS_IN_IC4 => unsigned_16 (12 + PPS_SET_B + PPS_INPUT_BIT),
+      PPS_IN_IC5 => unsigned_16 (13 + PPS_SET_C + PPS_INPUT_BIT),
+      PPS_IN_OCFA => unsigned_16 (17 + PPS_SET_D + PPS_INPUT_BIT),
+      PPS_IN_U1RX => unsigned_16 (19 + PPS_SET_A + PPS_INPUT_BIT),
+      PPS_IN_U1CTS => unsigned_16 (20 + PPS_SET_C + PPS_INPUT_BIT),
+      PPS_IN_U2RX => unsigned_16 (21 + PPS_SET_A + PPS_INPUT_BIT),
+      PPS_IN_U2CTS => unsigned_16 (22 + PPS_SET_C + PPS_INPUT_BIT),
+      PPS_IN_U3RX => unsigned_16 (23 + PPS_SET_B + PPS_INPUT_BIT),
+      PPS_IN_U3CTS => unsigned_16 (24 + PPS_SET_D + PPS_INPUT_BIT),
+      PPS_IN_U4RX => unsigned_16 (25 + PPS_SET_D + PPS_INPUT_BIT),
+      PPS_IN_U4CTS => unsigned_16 (26 + PPS_SET_B + PPS_INPUT_BIT),
+      PPS_IN_U5RX => unsigned_16 (27 + PPS_SET_D + PPS_INPUT_BIT),
+      PPS_IN_U5CTS => unsigned_16 (28 + PPS_SET_A + PPS_INPUT_BIT),
+      PPS_IN_SDI1 => unsigned_16 (32 + PPS_SET_B + PPS_INPUT_BIT),
+      PPS_IN_SS1 => unsigned_16 (33 + PPS_SET_C + PPS_INPUT_BIT),
+      PPS_IN_SDI2 => unsigned_16 (35 + PPS_SET_B + PPS_INPUT_BIT),
+      PPS_IN_SS2 => unsigned_16 (36 + PPS_SET_D + PPS_INPUT_BIT),
+      PPS_IN_REFCLKI => unsigned_16 (51 + PPS_SET_A + PPS_INPUT_BIT));
 
-                      } ppsFunctionType;
+   subtype p32_ppsin is unsigned_32 ;
 
-                      typedef uint32_t p32_ppsin;
+   PPS_RPD2  : constant Natural := 0 + PPS_SET_A;
+   PPS_RPG8  : constant Natural := 1 + PPS_SET_A;
+   PPS_RPF4  : constant Natural := 2 + PPS_SET_A;
+   PPS_RPD10 : constant Natural := 3 + PPS_SET_A;
+   PPS_RPF1  : constant Natural := 4 + PPS_SET_A;
+   PPS_RPB9  : constant Natural := 5 + PPS_SET_A;
+   PPS_RPB10 : constant Natural := 6 + PPS_SET_A;
+   PPS_RPC14 : constant Natural := 7 + PPS_SET_A;
+   PPS_RPB5  : constant Natural := 8 + PPS_SET_A;
+   PPS_RPC1  : constant Natural := 10 + PPS_SET_A;
+   PPS_RPD14 : constant Natural := 11 + PPS_SET_A;
+   PPS_RPG1  : constant Natural := 12 + PPS_SET_A;
+   PPS_RPA14 : constant Natural := 13 + PPS_SET_A;
+   PPS_RPF2  : constant Natural := 15 + PPS_SET_A;
 
-                      PPS_RPD2  : constant Natural := ( 0 + PPS_SET_A);
-                      PPS_RPG8  : constant Natural := ( 1 + PPS_SET_A);
-                      PPS_RPF4  : constant Natural := ( 2 + PPS_SET_A);
-                      PPS_RPD10 : constant Natural := ( 3 + PPS_SET_A);
-                      PPS_RPF1  : constant Natural := ( 4 + PPS_SET_A);
-                      PPS_RPB9  : constant Natural := ( 5 + PPS_SET_A);
-                      PPS_RPB10 : constant Natural := ( 6 + PPS_SET_A);
-                      PPS_RPC14 : constant Natural :=  ( 7 + PPS_SET_A);
-                      PPS_RPB5  : constant Natural := ( 8 + PPS_SET_A);
-                      PPS_RPC1  : constant Natural := (10 + PPS_SET_A);
-                      PPS_RPD14 : constant Natural := (11 + PPS_SET_A);
-                      PPS_RPG1  : constant Natural := (12 + PPS_SET_A);
-                      PPS_RPA14 : constant Natural := (13 + PPS_SET_A);
-                      PPS_RPF2  : constant Natural := (15 + PPS_SET_A);
+   PPS_RPD3  : constant Natural := 0 + PPS_SET_B;
+   PPS_RPG7  : constant Natural := 1 + PPS_SET_B;
+   PPS_RPF5  : constant Natural := 2 + PPS_SET_B;
+   PPS_RPD11 : constant Natural := 3 + PPS_SET_B;
+   PPS_RPF0  : constant Natural := 4 + PPS_SET_B;
+   PPS_RPB1  : constant Natural := 5 + PPS_SET_B;
+   PPS_RPE5  : constant Natural := 6 + PPS_SET_B;
+   PPS_RPC13 : constant Natural := 7 + PPS_SET_B;
+   PPS_RPB3  : constant Natural := 8 + PPS_SET_B;
+   PPS_RPC4  : constant Natural := 10 + PPS_SET_B;
+   PPS_RPD15 : constant Natural := 11 + PPS_SET_B;
+   PPS_RPG0  : constant Natural := 12 + PPS_SET_B;
+   PPS_RPA15 : constant Natural := 13 + PPS_SET_B;
+   PPS_RPF2  : constant Natural := 14 + PPS_SET_B;
+   PPS_RPF7  : constant Natural := 15 + PPS_SET_B;
 
-                      PPS_RPD3 : constant Natural := ( 0 + PPS_SET_B)
-                        PPS_RPG7 : constant Natural := ( 1 + PPS_SET_B)
-                        PPS_RPF5 : constant Natural := ( 2 + PPS_SET_B)
-                        PPS_RPD11      ( 3 + PPS_SET_B)
-                        PPS_RPF0 : constant Natural := ( 4 + PPS_SET_B)
-                        PPS_RPB1 : constant Natural := ( 5 + PPS_SET_B)
-                        PPS_RPE5 : constant Natural := ( 6 + PPS_SET_B)
-                        PPS_RPC13      ( 7 + PPS_SET_B)
-                        PPS_RPB3 : constant Natural := ( 8 + PPS_SET_B)
-                        PPS_RPC4 : constant Natural := (10 + PPS_SET_B)
-                        PPS_RPD15      (11 + PPS_SET_B)
-                        PPS_RPG0 : constant Natural := (12 + PPS_SET_B)
-                        PPS_RPA15      (13 + PPS_SET_B)
-                        PPS_RPF2 : constant Natural := (14 + PPS_SET_B)
-                        PPS_RPF7 : constant Natural := (15 + PPS_SET_B)
+   PPS_RPD9   : constant Natural := 0 + PPS_SET_C;
+   PPS_RPG6   : constant Natural := 1 + PPS_SET_C;
+   PPS_RPB8   : constant Natural := 2 + PPS_SET_C;
+   PPS_RPB15  : constant Natural := 3 + PPS_SET_C;
+   PPS_RPD4   : constant Natural := 4 + PPS_SET_C;
+   PPS_RPB0   : constant Natural := 5 + PPS_SET_C;
+   PPS_RPE3   : constant Natural := 6 + PPS_SET_C;
+   PPS_RPB7   : constant Natural := 7 + PPS_SET_C;
+   PPS_RPF12  : constant Natural := 9 + PPS_SET_C;
+   PPS_RPD12  : constant Natural := 10 + PPS_SET_C;
+   PPS_RPF8   : constant Natural := 11 + PPS_SET_C;
+   PPS_RPC3   : constant Natural := 12 + PPS_SET_C;
+   PPS_RPE9   : constant Natural := 13 + PPS_SET_C;
+   PPS_RPB2   : constant Natural := 15 + PPS_SET_C;
 
-                        PPS_RPD9 : constant Natural := ( 0 + PPS_SET_C)
-                        PPS_RPG6 : constant Natural := ( 1 + PPS_SET_C)
-                        PPS_RPB8 : constant Natural := ( 2 + PPS_SET_C)
-                        PPS_RPB15      ( 3 + PPS_SET_C)
-                        PPS_RPD4 : constant Natural := ( 4 + PPS_SET_C)
-                        PPS_RPB0 : constant Natural := ( 5 + PPS_SET_C)
-                        PPS_RPE3 : constant Natural := ( 6 + PPS_SET_C)
-                        PPS_RPB7 : constant Natural := ( 7 + PPS_SET_C)
-                        PPS_RPF12      ( 9 + PPS_SET_C)
-                        PPS_RPD12      (10 + PPS_SET_C)
-                        PPS_RPF8 : constant Natural := (11 + PPS_SET_C)
-                        PPS_RPC3 : constant Natural := (12 + PPS_SET_C)
-                        PPS_RPE9 : constant Natural := (13 + PPS_SET_C)
-                        PPS_RPB2 : constant Natural := (15 + PPS_SET_C)
+   PPS_RPD1  : constant Natural := 0 + PPS_SET_D;
+   PPS_RPG9  : constant Natural := 1 + PPS_SET_D;
+   PPS_RPB14 : constant Natural := 2 + PPS_SET_D;
+   PPS_RPD0  : constant Natural := 3 + PPS_SET_D;
+   PPS_RPD8  : constant Natural := 4 + PPS_SET_D;
+   PPS_RPB6  : constant Natural := 5 + PPS_SET_D;
+   PPS_RPD5  : constant Natural := 6 + PPS_SET_D;
+   PPS_RPB2  : constant Natural := 7 + PPS_SET_D;
+   PPS_RPF3  : constant Natural := 8 + PPS_SET_D;
+   PPS_RPF13 : constant Natural := 9 + PPS_SET_D;
+   PPS_RPF2  : constant Natural := 11 + PPS_SET_D;
+   PPS_RPC2  : constant Natural := 12 + PPS_SET_D;
+   PPS_RPE8  : constant Natural := 13 + PPS_SET_D;
 
-                        PPS_RPD1 : constant Natural := ( 0 + PPS_SET_D)
-                        PPS_RPG9 : constant Natural := ( 1 + PPS_SET_D)
-                        PPS_RPB14      ( 2 + PPS_SET_D)
-                        PPS_RPD0 : constant Natural := ( 3 + PPS_SET_D)
-                        PPS_RPD8 : constant Natural := ( 4 + PPS_SET_D)
-                        PPS_RPB6 : constant Natural := ( 5 + PPS_SET_D)
-                        PPS_RPD5 : constant Natural := ( 6 + PPS_SET_D)
-                        PPS_RPB2 : constant Natural := ( 7 + PPS_SET_D)
-                        PPS_RPF3 : constant Natural := ( 8 + PPS_SET_D)
-                        PPS_RPF13      ( 9 + PPS_SET_D)
-                        PPS_RPF2 : constant Natural := (11 + PPS_SET_D)
-                        PPS_RPC2 : constant Natural := (12 + PPS_SET_D)
-                        PPS_RPE8 : constant Natural := (13 + PPS_SET_D)
+   PPS_RPB0R      : constant Natural := 0
+     PPS_RPB1R    : constant Natural := 1;
+   PPS_RPB2R      : constant Natural := 2;
+   PPS_RPB3R      : constant Natural := 3;
+   PPS_RPB5R      : constant Natural := 5;
+   PPS_RPB6R      : constant Natural := 6;
+   PPS_RPB7R      : constant Natural := 7;
+   PPS_RPB8R      : constant Natural := 8;
+   PPS_RPB9R      : constant Natural := 9;
+   PPS_RPB10R     : constant Natural := 10;
+   PPS_RPB14R     : constant Natural := 14;
+   PPS_RPB15R     : constant Natural := 15;
+   PPS_RPC13R     : constant Natural := 29;
+   PPS_RPC14R     : constant Natural := 30;
+   PPS_RPD0R      : constant Natural := 32;
+   PPS_RPD1R      : constant Natural := 33;
+   PPS_RPD2R      : constant Natural := 34;
+   PPS_RPD3R      : constant Natural := 35;
+   PPS_RPD4R      : constant Natural := 36;
+   PPS_RPD5R      : constant Natural := 37;
+   PPS_RPD8R      : constant Natural := 40;
+   PPS_RPD9R      : constant Natural := 41;
+   PPS_RPD10R     : constant Natural := 42;
+   PPS_RPD11R     : constant Natural := 43;
+   PPS_RPE3R      : constant Natural :=  51;
+   PPS_RPE5R      : constant Natural := 53;
+   PPS_RPF0R      : constant Natural := 64;
+   PPS_RPF1R      : constant Natural := 65;
+   PPS_RPF4R      : constant Natural := 68;
+   PPS_RPF5R      : constant Natural := 69;
+   PPS_RPG6R      : constant Natural := 86;
+   PPS_RPG7R      : constant Natural := 87;
+   PPS_RPG8R      : constant Natural := 88;
+   PPS_RPG9R      : constant Natural := 89;
 
-                        PPS_RPB0R    0
-                          PPS_RPB1R    1
-                            PPS_RPB2R    2
-                              PPS_RPB3R    3
-                                PPS_RPB5R    5
-                                  PPS_RPB6R    6
-                                    PPS_RPB7R    7
-                                      PPS_RPB8R    8
-                                        PPS_RPB9R    9
-                                          PPS_RPB10R    10
-                                            PPS_RPB14R    14
-                                              PPS_RPB15R    15
-                                                PPS_RPC13R    29
-                                                  PPS_RPC14R    30
-                                                    PPS_RPD0R    32
-                                                      PPS_RPD1R    33
-                                                        PPS_RPD2R    34
-                                                          PPS_RPD3R    35
-                                                            PPS_RPD4R    36
-                                                              PPS_RPD5R    37
-                                                                PPS_RPD8R    40
-                                                                  PPS_RPD9R    41
-                                                                    PPS_RPD10R    42
-                                                                      PPS_RPD11R    43
-                                                                        PPS_RPE3R    51
-                                                                          PPS_RPE5R    53
-                                                                            PPS_RPF0R    64
-                                                                              PPS_RPF1R    65
-                                                                                PPS_RPF4R    68
-                                                                                  PPS_RPF5R    69
-                                                                                    PPS_RPG6R    86
-                                                                                      PPS_RPG7R    87
-                                                                                        PPS_RPG8R    88
-                                                                                          PPS_RPG9R    89
+   --  These symbols define the values to load into a PPS input select register
+   --  to assign the actual input pin. The PIC32 architecture divides these values
+   --  into four disjoint sets. Set membership is defined as part of the value to
+   --  allow error checking when the pins are being mapped.
 
-                                                                                          --  These symbols define the values to load into a PPS input select register
-                      --  to assign the actual input pin. The PIC32 architecture divides these values
-                      --  into four disjoint sets. Set membership is defined as part of the value to
-                      --  allow error checking when the pins are being mapped.
+   PPS_RPD2 : constant Natural := 0 + PPS_SET_A;
+   PPS_RPG8 : constant Natural := 1 + PPS_SET_A;
+   PPS_RPF4 : constant Natural := 2 + PPS_SET_A;
+   PPS_RPD10 : constant Natural := 3 + PPS_SET_A;
+   PPS_RPF1 : constant Natural := 4 + PPS_SET_A;
+   PPS_RPB9 : constant Natural := 5 + PPS_SET_A;
+   PPS_RPB10 : constant Natural := 6 + PPS_SET_A;
+   PPS_RPC14 : constant Natural := 7 + PPS_SET_A;
+   PPS_RPB5 : constant Natural := 8 + PPS_SET_A;
+   --  PPS_RPXX : constant Natural := 9 + PPS_SET_A;
+   PPS_RPC1 : constant Natural := 10 + PPS_SET_A;
+   PPS_RPD14 : constant Natural := 11 + PPS_SET_A;
+   PPS_RPG1 : constant Natural := 12 + PPS_SET_A;
+   PPS_RPA14 : constant Natural := 13 + PPS_SET_A;
+   PPS_RPD6 : constant Natural := 14 + PPS_SET_A;
+   --  PPS_RPXX : constant Natural := 15 + PPS_SET_A;
 
-                        PPS_RPD2 : constant Natural := (0 + PPS_SET_A);
-                      PPS_RPG8 : constant Natural := (1 + PPS_SET_A);
-                      PPS_RPF4 : constant Natural := (2 + PPS_SET_A);
-                      PPS_RPD10 : constant Natural := (3 + PPS_SET_A);
-                      PPS_RPF1 : constant Natural := (4 + PPS_SET_A);
-                      PPS_RPB9 : constant Natural := (5 + PPS_SET_A);
-                      PPS_RPB10 : constant Natural := (6 + PPS_SET_A);
-                      PPS_RPC14 : constant Natural := (7 + PPS_SET_A);
-                      PPS_RPB5 : constant Natural := (8 + PPS_SET_A);
-                      --  PPS_RPXX : constant Natural := (9 + PPS_SET_A);
-                      PPS_RPC1 : constant Natural := (10 + PPS_SET_A);
-                      PPS_RPD14 : constant Natural := (11 + PPS_SET_A);
-                      PPS_RPG1 : constant Natural := (12 + PPS_SET_A);
-                      PPS_RPA14 : constant Natural := (13 + PPS_SET_A);
-                      PPS_RPD6 : constant Natural := (14 + PPS_SET_A);
-                      --  PPS_RPXX : constant Natural := (15 + PPS_SET_A);
+   PPS_RPD3 : constant Natural := 0 + PPS_SET_B;
+   PPS_RPG7 : constant Natural := 1 + PPS_SET_B;
+   PPS_RPF5 : constant Natural := 2 + PPS_SET_B;
+   PPS_RPD11 : constant Natural := 3 + PPS_SET_B;
+   PPS_RPF0 : constant Natural := 4 + PPS_SET_B;
+   PPS_RPB1 : constant Natural := 5 + PPS_SET_B;
+   PPS_RPE5 : constant Natural := 6 + PPS_SET_B;
+   PPS_RPC13 : constant Natural := 7 + PPS_SET_B;
+   PPS_RPB3 : constant Natural := 8 + PPS_SET_B;
+   --  PPS_RPXX : constant Natural := 9 + PPS_SET_B;
+   PPS_RPC4 : constant Natural := 10 + PPS_SET_B;
+   PPS_RPD15 : constant Natural := 11 + PPS_SET_B;
+   PPS_RPG0 : constant Natural := 12 + PPS_SET_B;
+   PPS_RPA15 : constant Natural := 13 + PPS_SET_B;
+   PPS_RPD7 : constant Natural := 14 + PPS_SET_B;
+   --  PPS_RPXX : constant Natural := 15 + PPS_SET_B;
 
-                      PPS_RPD3 : constant Natural := (0 + PPS_SET_B)
-                        PPS_RPG7 : constant Natural := (1 + PPS_SET_B)
-                        PPS_RPF5 : constant Natural := (2 + PPS_SET_B)
-                        PPS_RPD11 : constant Natural := (3 + PPS_SET_B)
-                        PPS_RPF0 : constant Natural := (4 + PPS_SET_B)
-                        PPS_RPB1 : constant Natural := (5 + PPS_SET_B)
-                        PPS_RPE5 : constant Natural := (6 + PPS_SET_B)
-                        PPS_RPC13 : constant Natural := (7 + PPS_SET_B)
-                        PPS_RPB3 : constant Natural := (8 + PPS_SET_B)
-                      --  PPS_RPXX : constant Natural := (9 + PPS_SET_B)
-                        PPS_RPC4 : constant Natural := (10 + PPS_SET_B)
-                        PPS_RPD15 : constant Natural := (11 + PPS_SET_B)
-                        PPS_RPG0 : constant Natural := (12 + PPS_SET_B)
-                        PPS_RPA15 : constant Natural := (13 + PPS_SET_B)
-                        PPS_RPD7 : constant Natural := (14 + PPS_SET_B)
-                      --  PPS_RPXX : constant Natural := (15 + PPS_SET_B)
+   PPS_RPD9 : constant Natural := 0 + PPS_SET_C;
+   PPS_RPG6 : constant Natural := 1 + PPS_SET_C;
+   PPS_RPB8 : constant Natural := 2 + PPS_SET_C;
+   PPS_RPB15 : constant Natural := 3 + PPS_SET_C;
+   PPS_RPD4 : constant Natural := 4 + PPS_SET_C;
+   PPS_RPB0 : constant Natural := 5 + PPS_SET_C;
+   PPS_RPE3 : constant Natural := 6 + PPS_SET_C;
+   PPS_RPB7 : constant Natural := 7 + PPS_SET_C;
+   --  PPS_RPXX : constant Natural := 8 + PPS_SET_C;
+   PPS_RPF12 : constant Natural := 9 + PPS_SET_C;
+   PPS_RPD12 : constant Natural := 10 + PPS_SET_C;
+   PPS_RPF8 : constant Natural := 11 + PPS_SET_C;
+   PPS_RPC3 : constant Natural := 12 + PPS_SET_C;
+   PPS_RPE9 : constant Natural := 13 + PPS_SET_C;
+   --  PPS_RPXX : constant Natural := 14 + PPS_SET_C;
+   --  PPS_RPXX : constant Natural := 15 + PPS_SET_C;
 
-                        PPS_RPD9 : constant Natural := (0 + PPS_SET_C)
-                        PPS_RPG6 : constant Natural := (1 + PPS_SET_C)
-                        PPS_RPB8 : constant Natural := (2 + PPS_SET_C)
-                        PPS_RPB15 : constant Natural := (3 + PPS_SET_C)
-                        PPS_RPD4 : constant Natural := (4 + PPS_SET_C)
-                        PPS_RPB0 : constant Natural := (5 + PPS_SET_C)
-                        PPS_RPE3 : constant Natural := (6 + PPS_SET_C)
-                        PPS_RPB7 : constant Natural := (7 + PPS_SET_C)
-                      --  PPS_RPXX : constant Natural := (8 + PPS_SET_C)
-                        PPS_RPF12 : constant Natural := (9 + PPS_SET_C)
-                        PPS_RPD12 : constant Natural := (10 + PPS_SET_C)
-                        PPS_RPF8 : constant Natural := (11 + PPS_SET_C)
-                        PPS_RPC3 : constant Natural := (12 + PPS_SET_C)
-                        PPS_RPE9 : constant Natural := (13 + PPS_SET_C)
-                      --  PPS_RPXX : constant Natural := (14 + PPS_SET_C)
-                      --  PPS_RPXX : constant Natural := (15 + PPS_SET_C)
+   PPS_RPD1 : constant Natural := 0 + PPS_SET_D;
+   PPS_RPG9 : constant Natural := 1 + PPS_SET_D;
+   PPS_RPB14 : constant Natural := 2 + PPS_SET_D;
+   PPS_RPD0 : constant Natural := 3 + PPS_SET_D;
+   PPS_RPB6 : constant Natural := 5 + PPS_SET_D;
+   PPS_RPD5 : constant Natural := 6 + PPS_SET_D;
+   PPS_RPB2 : constant Natural := 7 + PPS_SET_D;
+   PPS_RPF3 : constant Natural := 8 + PPS_SET_D;
+   PPS_RPF13 : constant Natural := 9 + PPS_SET_D;
+   PPS_RPF2 : constant Natural := 11 + PPS_SET_D;
+   PPS_RPC2 : constant Natural := 12 + PPS_SET_D;
+   PP_RPE8 : constant Natural := 13 + PPS_SET_D;
 
-                        PPS_RPD1 : constant Natural := (0 + PPS_SET_D)
-                        PPS_RPG9 : constant Natural := (1 + PPS_SET_D)
-                        PPS_RPB14 : constant Natural := (2 + PPS_SET_D)
-                        PPS_RPD0 : constant Natural := (3 + PPS_SET_D)
-                        PPS_RPB6 : constant Natural := (5 + PPS_SET_D)
-                        PPS_RPD5 : constant Natural := (6 + PPS_SET_D)
-                        PPS_RPB2 : constant Natural := (7 + PPS_SET_D)
-                        PPS_RPF3 : constant Natural := (8 + PPS_SET_D)
-                        PPS_RPF13 : constant Natural := (9 + PPS_SET_D)
-                        PPS_RPF2 : constant Natural := (11 + PPS_SET_D)
-                        PPS_RPC2 : constant Natural := (12 + PPS_SET_D)
-                        PP_RPE8 : constant Natural := (13 + PPS_SET_D)
-
-                      end P32_Defs;
+end P32_Defs;
