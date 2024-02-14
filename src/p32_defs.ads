@@ -436,10 +436,10 @@ package P32_Defs is
    end record;
 
    --  Peripheral Pin Select Output Declarations
-   PPS_SET_A : constant Unsigned_16 := 16#0100#;
-   PPS_SET_B : constant Unsigned_16 := 16#0200#;
-   PPS_SET_C : constant Unsigned_16 := 16#0400#;
-   PPS_SET_D : constant Unsigned_16 := 16#0800#;
+   PPS_SET_A : constant Unsigned_16 := 16#0100#;  --  256
+   PPS_SET_B : constant Unsigned_16 := 16#0200#;  --  512
+   PPS_SET_C : constant Unsigned_16 := 16#0400#;  --  1024
+   PPS_SET_D : constant Unsigned_16 := 16#0800#;  --  2048
 
    subtype p32_ppsout is unsigned_16;
 
@@ -450,8 +450,9 @@ package P32_Defs is
    NUMPPS_OUT    : constant Unsigned_16 := 2#1111#;      --   This must be set to the highest PPS_OUT_xxx value
 
    type PPS_Function_Type is
-     (PPS_OUT_GPIO, PPS_OUT_U3TX, PPS_OUT_U4RTS, PPS_OUT_SDO2, PPS_OUT_OC3,
-      PPS_OUT_C2OUT, PPS_OUT_U2TX, PPS_OUT_U1TX, PPS_OUT_U5RTS,PPS_OUT_SDO1,
+     (PPS_OUT_U3TX, PPS_OUT_U4RTS, PPS_OUT_SDO2, PPS_OUT_OC3, PPS_OUT_C2OUT,
+      PPS_OUT_GPIO,
+      PPS_OUT_U2TX, PPS_OUT_U1TX, PPS_OUT_U5RTS,PPS_OUT_SDO1,
       PPS_OUT_OC4, PPS_OUT_U3RTS, PPS_OUT_U4TX, PPS_OUT_REFCLKO, PPS_OUT_U5TX,
       PPS_OUT_SS1, PPS_OUT_OC5,PPS_OUT_C1OUT, PPS_OUT_U2RTS, PPS_OUT_U1RTS,
       PPS_OUT_SS2, PPS_OUT_OC2, PPS_OUT_OC1, PPS_IN_INT1, PPS_IN_INT2,
@@ -463,23 +464,26 @@ package P32_Defs is
       PPS_IN_REFCLKI);
 
    for PPS_Function_Type use
-     (PPS_OUT_U3TX    => 2#0001# + PPS_SET_A,
-      PPS_OUT_U4RTS   => 2#0010# + PPS_SET_A,
-      PPS_OUT_SDO2    => 2#0110# + (PPS_SET_A  or  PPS_SET_B),
-      PPS_OUT_OC3     => 2#1011# + PPS_SET_A,
-      PPS_OUT_C2OUT   => 2#1101# + PPS_SET_A,
+     (PPS_OUT_U3TX    => 1 + PPS_SET_A,
+      PPS_OUT_U4RTS   => 2 + PPS_SET_A,
+      PPS_OUT_SDO2    => 6 + (PPS_SET_A  or  PPS_SET_B),
+      PPS_OUT_OC3     => 11 + PPS_SET_A,
+      PPS_OUT_C2OUT   => 13 + PPS_SET_A,
+      --  PPS_OUT_GPIO = 3840
+      PPS_OUT_GPIO    => PPS_SET_A or PPS_SET_B or PPS_SET_C or PPS_SET_D,
 
-      PPS_OUT_U2TX    => 2#0001# + PPS_SET_B,
-      PPS_OUT_U1TX    => 2#0011# + PPS_SET_B,
-      PPS_OUT_U5RTS   => 2#0100# + PPS_SET_B,
-      PPS_OUT_SDO1    => 2#1000# + (PPS_SET_B  or  PPS_SET_C  or  PPS_SET_D),
-      PPS_OUT_OC4     => 2#1011# + PPS_SET_B,
+      PPS_OUT_U2TX    => 1 + PPS_SET_B,  --  513
+      PPS_OUT_U1TX    => 3 + PPS_SET_B,  --  515
+      PPS_OUT_U5RTS   => 8 + PPS_SET_B,  --  520
+      --  PPS_OUT_SDO1 = 3584 + 8 = 3592
+      PPS_OUT_SDO1    => 8 + (PPS_SET_B  or  PPS_SET_C  or  PPS_SET_D),
+      PPS_OUT_OC4     => 11 + PPS_SET_B,
 
-      PPS_OUT_U3RTS   => 2#0001# + PPS_SET_C,
-      PPS_OUT_U4TX    => 2#0010# + PPS_SET_C,
-      PPS_OUT_REFCLKO => 2#0011# + PPS_SET_C,
-      PPS_OUT_U5TX    => 2#0100# + (PPS_SET_C  or  PPS_SET_D),
-      PPS_OUT_SS1     => 2#0111# + PPS_SET_C,
+      PPS_OUT_U3RTS   => 1 + PPS_SET_C,
+      PPS_OUT_U4TX    => 2 + PPS_SET_C,
+      PPS_OUT_REFCLKO => 3 + PPS_SET_C,
+      PPS_OUT_U5TX    => 4 + (PPS_SET_C or PPS_SET_D),
+      PPS_OUT_SS1     => 7 + PPS_SET_C,
       PPS_OUT_OC5     => 2#1011# + PPS_SET_C,
       PPS_OUT_C1OUT   => 2#1101# + PPS_SET_C,
 
