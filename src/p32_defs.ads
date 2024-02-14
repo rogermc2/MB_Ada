@@ -443,20 +443,20 @@ package P32_Defs is
 
    subtype p32_ppsout is unsigned_16;
 
-   PPS_INPUT_BIT : constant Unsigned_16 := 16#8000#;
-   PPS_OUT_MASK  : constant Unsigned_16 := 16#000F#;
-   PPS_IN_MASK   : constant Unsigned_16 := 16#00FF#;
+   PPS_INPUT_BIT : constant Unsigned_16 := 16#8000#;  --  32768
+   PPS_OUT_MASK  : constant Unsigned_16 := 15;
+   PPS_IN_MASK   : constant Unsigned_16 := 255;
    NUMPPS_IN     : constant Unsigned_16 := 51;          --   This must be set to the highest PPS_IN_xxx value
-   NUMPPS_OUT    : constant Unsigned_16 := 2#1111#;      --   This must be set to the highest PPS_OUT_xxx value
+   NUMPPS_OUT    : constant Unsigned_16 := 15;      --   This must be set to the highest PPS_OUT_xxx value
 
    type PPS_Function_Type is
-     (PPS_OUT_U3TX, PPS_OUT_U4RTS, PPS_OUT_SDO2, PPS_OUT_OC3, PPS_OUT_C2OUT,
-      PPS_OUT_GPIO,
-      PPS_OUT_U2TX, PPS_OUT_U1TX, PPS_OUT_U5RTS,PPS_OUT_SDO1,
-      PPS_OUT_OC4, PPS_OUT_U3RTS, PPS_OUT_U4TX, PPS_OUT_REFCLKO, PPS_OUT_U5TX,
-      PPS_OUT_SS1, PPS_OUT_OC5,PPS_OUT_C1OUT, PPS_OUT_U2RTS, PPS_OUT_U1RTS,
-      PPS_OUT_SS2, PPS_OUT_OC2, PPS_OUT_OC1, PPS_IN_INT1, PPS_IN_INT2,
-      PPS_IN_INT3, PPS_IN_INT4, PPS_IN_T2CK, PPS_IN_T3CK, PPS_IN_T4CK,
+     (PPS_OUT_U3TX, PPS_OUT_U4RTS, PPS_OUT_OC3, PPS_OUT_C2OUT,
+      PPS_OUT_U2TX, PPS_OUT_U1TX, PPS_OUT_U5RTS, PPS_OUT_OC4, PPS_OUT_SDO2,
+      PPS_OUT_U3RTS, PPS_OUT_U4TX, PPS_OUT_REFCLKO,
+      PPS_OUT_SS1, PPS_OUT_OC5, PPS_OUT_C1OUT, PPS_OUT_U2RTS, PPS_OUT_U1RTS,
+      PPS_OUT_SS2, PPS_OUT_OC2, PPS_OUT_OC1, PPS_OUT_U5TX, PPS_OUT_SDO1,
+      PPS_OUT_GPIO, PPS_IN_INT2,
+      PPS_IN_INT3, PPS_IN_INT4, PPS_IN_INT1, PPS_IN_T2CK, PPS_IN_T3CK, PPS_IN_T4CK,
       PPS_IN_T5CK, PPS_IN_IC1, PPS_IN_IC2, PPS_IN_IC3, PPS_IN_IC4, PPS_IN_IC5,
       PPS_IN_OCFA, PPS_IN_U1RX, PPS_IN_U1CTS, PPS_IN_U2RX, PPS_IN_U2CTS,
       PPS_IN_U3RX, PPS_IN_U3CTS, PPS_IN_U4RX, PPS_IN_U4CTS, PPS_IN_U5RX,
@@ -464,64 +464,67 @@ package P32_Defs is
       PPS_IN_REFCLKI);
 
    for PPS_Function_Type use
-     (PPS_OUT_U3TX    => 1 + PPS_SET_A,
-      PPS_OUT_U4RTS   => 2 + PPS_SET_A,
-      PPS_OUT_SDO2    => 6 + (PPS_SET_A  or  PPS_SET_B),
-      PPS_OUT_OC3     => 11 + PPS_SET_A,
-      PPS_OUT_C2OUT   => 13 + PPS_SET_A,
-      --  PPS_OUT_GPIO = 3840
-      PPS_OUT_GPIO    => PPS_SET_A or PPS_SET_B or PPS_SET_C or PPS_SET_D,
+     (PPS_OUT_U3TX    => 1 + PPS_SET_A,    --  257
+      PPS_OUT_U4RTS   => 2 + PPS_SET_A,    --  258
+      PPS_OUT_OC3     => 11 + PPS_SET_A,   --  267
+      PPS_OUT_C2OUT   => 13 + PPS_SET_A,   --  270
 
       PPS_OUT_U2TX    => 1 + PPS_SET_B,  --  513
       PPS_OUT_U1TX    => 3 + PPS_SET_B,  --  515
-      PPS_OUT_U5RTS   => 8 + PPS_SET_B,  --  520
+      PPS_OUT_U5RTS   => 8 + PPS_SET_B,  --  520,
+      PPS_OUT_OC4     => 11 + PPS_SET_B,  --  512 + 11 = 523
+      PPS_OUT_SDO2    => 6 + (PPS_SET_A or PPS_SET_B),  --  768 + 6 = 774
+
+      PPS_OUT_U3RTS   => 1 + PPS_SET_C,  --  1025
+      PPS_OUT_U4TX    => 2 + PPS_SET_C,  --  1026
+      PPS_OUT_REFCLKO => 3 + PPS_SET_C,  --  1027
+      PPS_OUT_SS1     => 7 + PPS_SET_C,  --  1031
+      PPS_OUT_OC5     => 11 + PPS_SET_C,  --  1035
+      PPS_OUT_C1OUT   => 13 + PPS_SET_C,  --  1037
+      PPS_OUT_U2RTS   => 1 + PPS_SET_D,   --  2049
+      PPS_OUT_U1RTS   => 3 + PPS_SET_D,   --  2051
+      PPS_OUT_SS2     => 6 + PPS_SET_D,   --  2054
+      PPS_OUT_OC2     => 11 + PPS_SET_D,  --  2059
+      PPS_OUT_OC1     => 12 + PPS_SET_D,  --  2060
+
+      PPS_OUT_U5TX    => 4 + (PPS_SET_C or PPS_SET_D),  --  12400
+
       --  PPS_OUT_SDO1 = 3584 + 8 = 3592
       PPS_OUT_SDO1    => 8 + (PPS_SET_B  or  PPS_SET_C  or  PPS_SET_D),
-      PPS_OUT_OC4     => 11 + PPS_SET_B,
-
-      PPS_OUT_U3RTS   => 1 + PPS_SET_C,
-      PPS_OUT_U4TX    => 2 + PPS_SET_C,
-      PPS_OUT_REFCLKO => 3 + PPS_SET_C,
-      PPS_OUT_U5TX    => 4 + (PPS_SET_C or PPS_SET_D),
-      PPS_OUT_SS1     => 7 + PPS_SET_C,
-      PPS_OUT_OC5     => 2#1011# + PPS_SET_C,
-      PPS_OUT_C1OUT   => 2#1101# + PPS_SET_C,
-
-      PPS_OUT_U2RTS   => 2#0001# + PPS_SET_D,
-      PPS_OUT_U1RTS   => 2#0011# + PPS_SET_D,
-      PPS_OUT_SS2     => 2#0110# + PPS_SET_D,
-      PPS_OUT_OC2     => 2#1011# + PPS_SET_D,
-      PPS_OUT_OC1     => 2#1100# + PPS_SET_D,
-
+      --  PPS_OUT_GPIO = 3840
+      PPS_OUT_GPIO    => PPS_SET_A or PPS_SET_B or PPS_SET_C or PPS_SET_D,
+      --  PPS_INPUT_BIT  16#8000#  32768
+      --  PPS_SET_A + PPS_INPUT_BIT  256 + 32768 = 33024
+      --  PPS_SET_B + PPS_INPUT_BIT  256 + 32768 = 33280
+      PPS_IN_INT3 => 2 + PPS_SET_A + PPS_INPUT_BIT,  --  33024
+      PPS_IN_INT4 => 3 + PPS_SET_B + PPS_INPUT_BIT,  --  33280
+      PPS_IN_T2CK => 5 + PPS_SET_A + PPS_INPUT_BIT,
       PPS_IN_INT1 => PPS_SET_D + PPS_INPUT_BIT,
-      PPS_IN_INT2 => unsigned_16 (1 + PPS_SET_C + PPS_INPUT_BIT),
-      PPS_IN_INT3 => unsigned_16 (2 + PPS_SET_A + PPS_INPUT_BIT),
-      PPS_IN_INT4 => unsigned_16 (3 + PPS_SET_B + PPS_INPUT_BIT),
-      PPS_IN_T2CK => unsigned_16 (5 + PPS_SET_A + PPS_INPUT_BIT),
-      PPS_IN_T3CK => unsigned_16 (6 + PPS_SET_D + PPS_INPUT_BIT),
-      PPS_IN_T4CK => unsigned_16 (7 + PPS_SET_C + PPS_INPUT_BIT),
-      PPS_IN_T5CK => unsigned_16 (8 + PPS_SET_B + PPS_INPUT_BIT),
-      PPS_IN_IC1 => unsigned_16 (9 + PPS_SET_D + PPS_INPUT_BIT),
-      PPS_IN_IC2 => unsigned_16 (10 + PPS_SET_C + PPS_INPUT_BIT),
-      PPS_IN_IC3 => unsigned_16 (11 + PPS_SET_A + PPS_INPUT_BIT),
-      PPS_IN_IC4 => unsigned_16 (12 + PPS_SET_B + PPS_INPUT_BIT),
-      PPS_IN_IC5 => unsigned_16 (13 + PPS_SET_C + PPS_INPUT_BIT),
-      PPS_IN_OCFA => unsigned_16 (17 + PPS_SET_D + PPS_INPUT_BIT),
-      PPS_IN_U1RX => unsigned_16 (19 + PPS_SET_A + PPS_INPUT_BIT),
-      PPS_IN_U1CTS => unsigned_16 (20 + PPS_SET_C + PPS_INPUT_BIT),
-      PPS_IN_U2RX => unsigned_16 (21 + PPS_SET_A + PPS_INPUT_BIT),
-      PPS_IN_U2CTS => unsigned_16 (22 + PPS_SET_C + PPS_INPUT_BIT),
-      PPS_IN_U3RX => unsigned_16 (23 + PPS_SET_B + PPS_INPUT_BIT),
-      PPS_IN_U3CTS => unsigned_16 (24 + PPS_SET_D + PPS_INPUT_BIT),
-      PPS_IN_U4RX => unsigned_16 (25 + PPS_SET_D + PPS_INPUT_BIT),
-      PPS_IN_U4CTS => unsigned_16 (26 + PPS_SET_B + PPS_INPUT_BIT),
-      PPS_IN_U5RX => unsigned_16 (27 + PPS_SET_D + PPS_INPUT_BIT),
-      PPS_IN_U5CTS => unsigned_16 (28 + PPS_SET_A + PPS_INPUT_BIT),
-      PPS_IN_SDI1 => unsigned_16 (32 + PPS_SET_B + PPS_INPUT_BIT),
-      PPS_IN_SS1 => unsigned_16 (33 + PPS_SET_C + PPS_INPUT_BIT),
-      PPS_IN_SDI2 => unsigned_16 (35 + PPS_SET_B + PPS_INPUT_BIT),
-      PPS_IN_SS2 => unsigned_16 (36 + PPS_SET_D + PPS_INPUT_BIT),
-      PPS_IN_REFCLKI => unsigned_16 (51 + PPS_SET_A + PPS_INPUT_BIT));
+      PPS_IN_INT2 => 1 + PPS_SET_C + PPS_INPUT_BIT,
+      PPS_IN_T3CK => 6 + PPS_SET_D + PPS_INPUT_BIT,
+      PPS_IN_T4CK => 7 + PPS_SET_C + PPS_INPUT_BIT,
+      PPS_IN_T5CK => 8 + PPS_SET_B + PPS_INPUT_BIT,
+      PPS_IN_IC1 => 9 + PPS_SET_D + PPS_INPUT_BIT,
+      PPS_IN_IC2 => 10 + PPS_SET_C + PPS_INPUT_BIT,
+      PPS_IN_IC3 => 11 + PPS_SET_A + PPS_INPUT_BIT,
+      PPS_IN_IC4 => 12 + PPS_SET_B + PPS_INPUT_BIT,
+      PPS_IN_IC5 => 13 + PPS_SET_C + PPS_INPUT_BIT,
+      PPS_IN_OCFA => 17 + PPS_SET_D + PPS_INPUT_BIT,
+      PPS_IN_U1RX => 19 + PPS_SET_A + PPS_INPUT_BIT,
+      PPS_IN_U1CTS => 20 + PPS_SET_C + PPS_INPUT_BIT,
+      PPS_IN_U2RX => 21 + PPS_SET_A + PPS_INPUT_BIT,
+      PPS_IN_U2CTS => 22 + PPS_SET_C + PPS_INPUT_BIT,
+      PPS_IN_U3RX => 23 + PPS_SET_B + PPS_INPUT_BIT,
+      PPS_IN_U3CTS => 24 + PPS_SET_D + PPS_INPUT_BIT,
+      PPS_IN_U4RX => 25 + PPS_SET_D + PPS_INPUT_BIT,
+      PPS_IN_U4CTS => 26 + PPS_SET_B + PPS_INPUT_BIT,
+      PPS_IN_U5RX => 27 + PPS_SET_D + PPS_INPUT_BIT,
+      PPS_IN_U5CTS => 28 + PPS_SET_A + PPS_INPUT_BIT,
+      PPS_IN_SDI1 => 32 + PPS_SET_B + PPS_INPUT_BIT,
+      PPS_IN_SS1 => 33 + PPS_SET_C + PPS_INPUT_BIT,
+      PPS_IN_SDI2 => 35 + PPS_SET_B + PPS_INPUT_BIT,
+      PPS_IN_SS2 => 36 + PPS_SET_D + PPS_INPUT_BIT,
+      PPS_IN_REFCLKI => 51 + PPS_SET_A + PPS_INPUT_BIT);
 
    subtype p32_ppsin is unsigned_32 ;
 
