@@ -58,38 +58,38 @@ IN_PIN_PPS2_RPF2 : constant Natural := 14;  --  Assign RPF2  as Input Pin
 IN_PIN_PPS2_RPF7 : constant Natural := 15;  --  Assign RPF7  as Input Pin
 
 --  Input Pins Group 3
-IN_FN_PPS3_INT2 : constant Natural := Natural (INT2Rbits.INT2R);
-IN_FN_PPS3_T4CK : constant Natural := Natural (T4CKRbits.T4CKR);
-IN_FN_PPS3_IC2 : constant Natural := Natural (IC2Rbits.IC2R);
-IN_FN_PPS3_IC5 : constant Natural := Natural (IC5Rbits.IC5R);
+IN_FN_PPS3_INT2  : constant Natural := Natural (INT2Rbits.INT2R);
+IN_FN_PPS3_T4CK  : constant Natural := Natural (T4CKRbits.T4CKR);
+IN_FN_PPS3_IC2   : constant Natural := Natural (IC2Rbits.IC2R);
+IN_FN_PPS3_IC5   : constant Natural := Natural (IC5Rbits.IC5R);
 IN_FN_PPS3_U1CTS : constant Natural := Natural (U1CTSRbits.U1CTSR);
 IN_FN_PPS3_U2CTS : constant Natural := Natural (U2CTSRbits.U2CTSR);
-IN_FN_PPS3_SS1 : constant Natural := Natural (SS1Rbits.SS1R);
+IN_FN_PPS3_SS1   : constant Natural := Natural (SS1Rbits.SS1R);
 
-IN_PIN_PPS3_RPD9 : constant Natural := 0;   --  Assign RPD9  as Input Pin
-IN_PIN_PPS3_RPG6 : constant Natural := 1;   --  Assign RPG6  as Input Pin
-IN_PIN_PPS3_RPB8 : constant Natural := 2;   --  Assign RPB8  as Input Pin
+IN_PIN_PPS3_RPD9  : constant Natural := 0;   --  Assign RPD9  as Input Pin
+IN_PIN_PPS3_RPG6  : constant Natural := 1;   --  Assign RPG6  as Input Pin
+IN_PIN_PPS3_RPB8  : constant Natural := 2;   --  Assign RPB8  as Input Pin
 IN_PIN_PPS3_RPB15 : constant Natural := 3;   --  Assign RPB15 as Input Pin
-IN_PIN_PPS3_RPD4 : constant Natural := 4;   --  Assign RPD4  as Input Pin
-IN_PIN_PPS3_RPB0 : constant Natural := 5;   --  Assign RPB0  as Input Pin
-IN_PIN_PPS3_RPE3 : constant Natural := 6;   --  Assign RPE3  as Input Pin
-IN_PIN_PPS3_RPB7 : constant Natural := 7;   --  Assign RPB7  as Input Pin
+IN_PIN_PPS3_RPD4  : constant Natural := 4;   --  Assign RPD4  as Input Pin
+IN_PIN_PPS3_RPB0  : constant Natural := 5;   --  Assign RPB0  as Input Pin
+IN_PIN_PPS3_RPE3  : constant Natural := 6;   --  Assign RPE3  as Input Pin
+IN_PIN_PPS3_RPB7  : constant Natural := 7;   --  Assign RPB7  as Input Pin
 IN_PIN_PPS3_RPF12 : constant Natural := 9;   --  Assign RPF12 as Input Pin
 IN_PIN_PPS3_RPD12 : constant Natural := 10;  --  Assign RPD12 as Input Pin
-IN_PIN_PPS3_RPF8 : constant Natural := 11;  --  Assign RPF8  as Input Pin
-IN_PIN_PPS3_RPC3 : constant Natural := 12; --  Assign RPC3  as Input Pin
-IN_PIN_PPS3_RPE9 : constant Natural := 13; --  Assign RPE9  as Input Pin
-IN_PIN_PPS3_RPB2 : constant Natural := 15; --  Assign RPB2  as Input Pin
+IN_PIN_PPS3_RPF8  : constant Natural := 11;  --  Assign RPF8  as Input Pin
+IN_PIN_PPS3_RPC3  : constant Natural := 12; --  Assign RPC3  as Input Pin
+IN_PIN_PPS3_RPE9  : constant Natural := 13; --  Assign RPE9  as Input Pin
+IN_PIN_PPS3_RPB2  : constant Natural := 15; --  Assign RPB2  as Input Pin
 
 --  Input Pins Group 4
-IN_FN_PPS4_INT1 : constant Natural := Natural (INT1Rbits.INT1R);
-IN_FN_PPS4_T3CK : constant Natural := Natural (T3CKRbits.T3CKR);
-IN_FN_PPS4_IC1 : constant Natural := Natural (IC1Rbits.IC1R);
+IN_FN_PPS4_INT1  : constant Natural := Natural (INT1Rbits.INT1R);
+IN_FN_PPS4_T3CK  : constant Natural := Natural (T3CKRbits.T3CKR);
+IN_FN_PPS4_IC1   : constant Natural := Natural (IC1Rbits.IC1R);
 IN_FN_PPS4_U3CTS : constant Natural := Natural (U3CTSRbits.U3CTSR);
-IN_FN_PPS4_U4RX : constant Natural := Natural (U4RXRbits.U4RXR);
-IN_FN_PPS4_U5RX : constant Natural := Natural (U5RXRbits.U5RXR);
-IN_FN_PPS4_SS2 : constant Natural := Natural (SS2Rbits.SS2R);
-IN_FN_PPS4_OCFA : constant Natural := Natural (OCFARbits.OCFAR);
+IN_FN_PPS4_U4RX  : constant Natural := Natural (U4RXRbits.U4RXR);
+IN_FN_PPS4_U5RX  : constant Natural := Natural (U5RXRbits.U5RXR);
+IN_FN_PPS4_SS2   : constant Natural := Natural (SS2Rbits.SS2R);
+IN_FN_PPS4_OCFA  : constant Natural := Natural (OCFARbits.OCFAR);
 
 IN_PIN_PPS4_RPD1 : constant Natural := 0;   --  Assign RPD1  as Input Pin
 IN_PIN_PPS4_RPG9 : constant Natural := 1;   --  Assign RPG9  as Input Pin
@@ -110,83 +110,6 @@ IN_PIN_PPS4_RPE8 : constant Natural := 13;  --  Assign RPE8  as Input Pin
 --  ---------------------------------------------------------------------------*/
 --  Section:  Remappable Peripheral Outputs:                                         : constant Natural :=
 --  ---------------------------------------------------------------------------*/
---  #if   (((__PIC32_FEATURE_SET__ >= 100) && (__PIC32_FEATURE_SET__ <= 299)) || defined(__32MXGENERIC__))
---  Output Pin Group 1
-PPS_OUTPUT_BASE_ADDRESS : constant Natural := Natural (RPA0R); -- Happens to be the first one
-OUT_PIN_PPS1_RPA0 : constant Natural := Natural (RPA0Rbits.RPA0R);
-OUT_PIN_PPS1_RPB3 : constant Natural := Natural (RPB3Rbits.RPB3R);
-OUT_PIN_PPS1_RPB4 : constant Natural := Natural (RPB4Rbits.RPB4R);
-OUT_PIN_PPS1_RPB15 : constant Natural := Natural (RRPB15Rbits.RPB15R);
-OUT_PIN_PPS1_RPB7 : constant Natural := Natural (RPB7Rbits.RPB7R);
-OUT_PIN_PPS1_RPC7 : constant Natural := Natural (RPC7Rbits.RPC7R);
-OUT_PIN_PPS1_RPC0 : constant Natural := Natural (RPC0Rbits.RPC0R);
-OUT_PIN_PPS1_RPC5 : constant Natural := Natural (RPC5Rbits.RPC5R);
-
-OUT_FN_PPS1_NULL : constant Natural := 0;  --  No Connect
-OUT_FN_PPS1_U1TX : constant Natural := 1;  --  RPn tied to U1TX
-OUT_FN_PPS1_U2RTS : constant Natural := 2;  --  RPn tied to U2RTS_BAR
-OUT_FN_PPS1_SS1 : constant Natural := 3;  --  RPn tied to SS1
---                                      4  - RESERVED
-OUT_FN_PPS1_OC1 : constant Natural := 5;  --  RPn tied to OC1
---                                    6  - RESERVED
-OUT_FN_PPS1_C2OUT : constant Natural := 7;  --  RPn tied to C2OUT
-
---  Output Pin Group 2
-OUT_PIN_PPS2_RPA1 : constant Natural := Natural (RPA1Rbits.RPA1R);
-OUT_PIN_PPS2_RPB5 : constant Natural := Natural (RPB5Rbits.RPB5R);
-OUT_PIN_PPS2_RPB1 : constant Natural := Natural (RPB1Rbits.RPB1R);
-OUT_PIN_PPS2_RPB11 : constant Natural := Natural (RPB11Rbits.RPB11R);
-OUT_PIN_PPS2_RPB8 : constant Natural := Natural (RPB8Rbits.RPB8R);
-OUT_PIN_PPS2_RPA8 : constant Natural := Natural (RPA8Rbits.RPA8R);
-OUT_PIN_PPS2_RPC8 : constant Natural := Natural (RPC8Rbits.RPC8R);
-OUT_PIN_PPS2_RPA9 : constant Natural := Natural (RPA9Rbits.RPA9R);
-
-OUT_FN_PPS2_NULL : constant Natural := 0;  --  No Connect
---                                     1  - RESERVED
---                                     2  - RESERVED
-OUT_FN_PPS2_SDO1 : constant Natural := 3;  --  RPn tied to SDO1
-OUT_FN_PPS2_SDO2 : constant Natural := 4;  --  RPn tied to SDO2
-OUT_FN_PPS2_OC2 : constant Natural := 5;  --  RPn tied to OC2
---                                      6  - RESERVED
---                                      7  - RESERVED
-
---  Output Pin Group 3
-OUT_PIN_PPS3_RPA2 : constant Natural := Natural (RPA2Rbits.RPA2R);
-OUT_PIN_PPS3_RPB6 : constant Natural := Natural (RPB6Rbits.RPB6R);
-OUT_PIN_PPS3_RPA4 : constant Natural := Natural (RPA4Rbits.RPA4R);
-OUT_PIN_PPS3_RPB13 : constant Natural := Natural (RPB13Rbits.RPB13R);
-OUT_PIN_PPS3_RPB2 : constant Natural := Natural (RPB2Rbits.RPB2R);
-OUT_PIN_PPS3_RPC6 : constant Natural := Natural (RPC6Rbits.RPC6R);
-OUT_PIN_PPS3_RPC1 : constant Natural := Natural (RPC1Rbits.RPC1R);
-OUT_PIN_PPS3_RPC3 : constant Natural := Natural (RPC3Rbits.RPC3R);
-
-OUT_FN_PPS3_NULL : constant Natural := 0;  --  No Connect
---                                     1 ; - RESERVED
---                                     2  - RESERVED
-OUT_FN_PPS3_SDO1 : constant Natural := 3;  --  RPn tied to SDO1
-OUT_FN_PPS3_SDO2 : constant Natural := 4;  --  RPn tied to SDO2
-OUT_FN_PPS3_OC4 : constant Natural := 5;  --  RPn tied to OC4
-OUT_FN_PPS3_OC5 : constant Natural := 6;  --  RPn tied to OC5
-OUT_FN_PPS3_REFCLKO : constant Natural := 7;  --  RPn tied to REFCLKO
-
---  Output Pin Group 4
-OUT_PIN_PPS4_RPA3 : constant Natural := Natural (RPA3Rbits.RPA3R);
-OUT_PIN_PPS4_RPB14 : constant Natural := Natural (RPB14Rbits.RPB14R);
-OUT_PIN_PPS4_RPB0 : constant Natural := Natural (RPB0Rbits.RPB0R);
-OUT_PIN_PPS4_RPB10 : constant Natural := Natural (RPB10Rbits.RPB10R);
-OUT_PIN_PPS4_RPB9 : constant Natural := Natural (RPB9Rbits.RPB9R);
-OUT_PIN_PPS4_RPC9 : constant Natural := Natural (RPC9Rbits.RPC9R);
-OUT_PIN_PPS4_RPC2 : constant Natural := Natural (RPC2Rbits.RPC2R);
-OUT_PIN_PPS4_RPC4 : constant Natural := Natural (RPC4Rbits.RPC4R);
-
-OUT_FN_PPS4_NULL : constant Natural := 0;  --  No Connect
-OUT_FN_PPS4_U1RTS : constant Natural := 1;  --  RPn tied to U1RTS
-OUT_FN_PPS4_U2TX : constant Natural := 2;  --  RPn tied to U2TX
---                                     3  - RESERVED
-OUT_FN_PPS4_SS2 : constant Natural := 4;  --  RPn tied to SS2_BAR
-OUT_FN_PPS4_OC3 : constant Natural := 5;  --  RPn tied to OC31
---                                    6  - RESERVED
-OUT_FN_PPS4_C1OUT : constant Natural := 7;  --  RPn tied to C1OUT
 
 --  #elif (__PIC32_FEATURE_SET__ == 330) || (__PIC32_FEATURE_SET__ == 350) || (__PIC32_FEATURE_SET__ == 370) || (__PIC32_FEATURE_SET__ == 430) || (__PIC32_FEATURE_SET__ == 450) || (__PIC32_FEATURE_SET__ == 470)
 --  Output Pin Group 1
