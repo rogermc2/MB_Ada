@@ -40,7 +40,7 @@ package IO_Ports is
    procedure Com1_En_PPS_Close;
    procedure Com1_Tx_PPS_Close;
    procedure Com2_Tx_PPS_Close;
-   procedure Com3_Tx_PPS_Close;
+--     procedure Com3_Tx_PPS_Close;
    procedure Com4_Tx_PPS_Close;
    function Console_Rx_Pin return Positive;
    function Console_Tx_Pin return Positive;
@@ -49,13 +49,13 @@ package IO_Ports is
    function INT2PIN return Positive;
    function INT3PIN return Positive;
    function INT4PIN return Positive;
-   procedure INT1Pin_Close;
+--     procedure INT1Pin_Close;
    procedure INT1Pin_Open;
-   procedure INT2Pin_Close;
+--     procedure INT2Pin_Close;
    procedure INT2Pin_Open;
-   procedure INT3Pin_Close;
+--     procedure INT3Pin_Close;
    procedure INT3Pin_Open;
-   procedure INT4Pin_Close;
+--     procedure INT4Pin_Close;
    procedure INT4Pin_Open;
    procedure PWM_Ch1_Close;
    procedure PWM_Ch2_Close;

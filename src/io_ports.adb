@@ -7,8 +7,8 @@ package body IO_Ports is
    Num_Pins_64_Chip  : constant Positive := 64;
    Num_Pins_100_Chip : constant Positive := 100;
 
---  #define PPSInput(grp,fn,pin) IN_FN_PPS##grp##_##fn = IN_PIN_PPS##grp##_##pin
---  #define PPSOutput(grp,pin,fn)   OUT_PIN_PPS##grp##_##pin = OUT_FN_PPS##grp##_##fn
+   --  pps.h 223 and 476
+ --  #define PPSOutput(grp,pin,fn)   OUT_PIN_PPS##grp##_##pin = OUT_FN_PPS##grp##_##fn
    procedure Com1_En_PPS_Close is
    begin
 --           PPS_Output ("4", "RPB14", Character'Image (ASCII.NUL));
@@ -30,12 +30,13 @@ package body IO_Ports is
 
    end Com2_Tx_PPS_Close;
 
-   procedure Com3_Tx_PPS_Close is
-   begin
---           PPS_Output ("3", "RPB0", Character'Image (ASCII.NUL));
-       OUT_PIN_PPS4_RPB0 := OUT_FN_PPS3_NULL;
-
-   end Com3_Tx_PPS_Close;
+--     procedure Com3_Tx_PPS_Close is
+--     begin
+--  --           PPS_Output ("3", "RPB0", Character'Image (ASCII.NUL));
+--        OUT_PIN_PPS4_RPB0 := OUT_FN_PPS3_NULL;
+--        --  OUT_PIN_PPS4_RPB0 only defined for 32MXGeneric
+--
+--     end Com3_Tx_PPS_Close;
 
    procedure Com4_Tx_PPS_Close is
    begin
@@ -79,15 +80,16 @@ package body IO_Ports is
 
    procedure INT1Pin_Close is
    begin
+   --  PPSInput(grp,fn,pin) IN_FN_PPS##grp##_##fn = IN_PIN_PPS##grp##_##pin
 --        PPS_Input ("4", "INT1", Character'Image (ASCII.NUL));
-      IN_FN_PPS4 = IN_PIN_PPS4_INT1;
-
+      IN_FN_PPS4_INT1 := IN_PIN_PPS4_NULL;
+      --  IN_FN undefined for Fn = Null;
       end INT1Pin_Close;
 
    procedure INT1Pin_Open is
    begin
 --        PPS_Input ("4", "INT1", "RPD1");
-      IN_FN_PPS4_RPD1 = IN_PIN_PPS4_INT1;
+      IN_FN_PPS4_INT1 := IN_PIN_PPS4_RPD1;
 
    end INT1Pin_Open;
 
@@ -101,15 +103,16 @@ package body IO_Ports is
 
       end INT2PIN;
 
-   procedure INT2Pin_Close is
-   begin
-      IN_FN_PPS4 = IN_PIN_PPS4_INT2;
+--     procedure INT2Pin_Close is
+--     begin
+--        IN_FN_PPS4 := IN_PIN_PPS4_INT2;
+      --  IN_FN undefined for Fn = Null;
 
-      end INT2Pin_Close;
+--        end INT2Pin_Close;
 
    procedure INT2Pin_Open is
    begin
-      IN_FN_PPS4_RPD1 = IN_PIN_PPS4_INT2;
+      IN_FN_PPS4_INT2 := IN_PIN_PPS4_RPD1;
 
    end INT2Pin_Open;
 
@@ -123,15 +126,16 @@ package body IO_Ports is
 
    end INT3PIN;
 
-   procedure INT3Pin_Close is
-   begin
-      IN_FN_PPS4 = IN_PIN_PPS4_INT3;
+--     procedure INT3Pin_Close is
+--     begin
+--        IN_FN_PPS4 := IN_PIN_PPS4_INT3;
+      --  IN_FN undefined for Fn = Null;
 
-      end INT3Pin_Close;
+--        end INT3Pin_Close;
 
    procedure INT3Pin_Open is
    begin
-      IN_FN_PPS4_RPD1 = IN_PIN_PPS4_INT3;
+      IN_FN_PPS4_RPD1 := IN_PIN_PPS4_INT3;
 
    end INT3Pin_Open;
 
@@ -145,15 +149,16 @@ package body IO_Ports is
 
    end INT4PIN;
 
-   procedure INT4Pin_Close is
-   begin
-      IN_FN_PPS4 = IN_PIN_PPS4_INT4;
+--     procedure INT4Pin_Close is
+--     begin
+--        IN_FN_PPS4 := IN_PIN_PPS4_INT4;
+      --  IN_FN undefined for Fn = Null;
 
-      end INT4Pin_Close;
+--        end INT4Pin_Close;
 
    procedure INT4Pin_Open is
    begin
-      IN_FN_PPS4_RPD1 = IN_PIN_PPS4_INT4;
+      IN_FN_PPS4_RPD1 := IN_PIN_PPS4_INT4;
 
    end INT4Pin_Open;
 
