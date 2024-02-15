@@ -165,6 +165,8 @@ package PPS is
    OUT_PIN_PPS2_RPC13 : Natural := Natural (RPC13Rbits.RPC13R);
    OUT_PIN_PPS2_RPB3  : Natural := Natural (RPB3Rbits.RPB3R);
    OUT_PIN_PPS2_RPF3  : Natural := Natural (RPF3Rbits.RPF3R);
+   --  RPC4Rbits is not defined for P32mx470f512h
+   --  OUT_PIN_PPS2_RPC4  : Natural := Natural (RPC4Rbits.RPC4R);
    OUT_PIN_PPS2_RPD15 : Natural := Natural (RPD15Rbits.RPD15R);
    OUT_PIN_PPS2_RPG0  : Natural := Natural (RPG0Rbits.RPG0R);
    OUT_PIN_PPS2_RPA15 : Natural := Natural (RPA15Rbits.RPA15R);
@@ -223,7 +225,7 @@ package PPS is
    OUT_PIN_PPS4_RPG9   : Natural := Natural (RPG9Rbits.RPG9R);
    OUT_PIN_PPS4_RPB14  : Natural := Natural (RPB14Rbits.RPB14R);
    OUT_PIN_PPS4_RPD0   : Natural := Natural (RPD0Rbits.RPD0R);
-   OUT_PIN_PPS4_RPD    : Natural := Natural (RPD8Rbits.RPD8R);
+   OUT_PIN_PPS4_RPD8   : Natural := Natural (RPD8Rbits.RPD8R);
    OUT_PIN_PPS4_RP6    : Natural := Natural (RPB6Rbits.RPB6R);
    OUT_PIN_PPS4_RPD5   : Natural := Natural (RPD5Rbits.RPD5R);
    OUT_PIN_PPS4_RPF3   : Natural := Natural (RPF3Rbits.RPF3R);
