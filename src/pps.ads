@@ -155,7 +155,6 @@ OUT_PIN_PPS2_RPE5 : constant Natural := Natural (RPE5Rbits.RPE5R);
 OUT_PIN_PPS2_RPC13 : constant Natural := Natural (RPC13Rbits.RPC13R);
 OUT_PIN_PPS2_RPB3 : constant Natural := Natural (RPB3Rbits.RPB3R);
 OUT_PIN_PPS2_RPF3 : constant Natural := Natural (RPF3Rbits.RPF3R);
-OUT_PIN_PPS2_RPC4 : constant Natural := Natural (RPC4Rbits.RPC4R);
 OUT_PIN_PPS2_RPD15 : constant Natural := Natural (RPD15Rbits.RPD15R);
 OUT_PIN_PPS2_RPG0 : constant Natural := Natural (RPG0Rbits.RPG0R);
 OUT_PIN_PPS2_RPA15 : constant Natural := Natural (RPA15Rbits.RPA15R);
@@ -190,7 +189,6 @@ OUT_PIN_PPS3_RPB2 : constant Natural := Natural (RPB2Rbits.RPB2R);
 OUT_PIN_PPS3_RPF12 : constant Natural := Natural (RPF12Rbits.RPF12R);
 OUT_PIN_PPS3_RPD12 : constant Natural := Natural (RPD12Rbits.RPD12R);
 OUT_PIN_PPS3_RPF8 : constant Natural := Natural (RPF8Rbits.RPF8R);
-OUT_PIN_PPS3_RPC3 : constant Natural := Natural (RPC3Rbits.RPC3R);
 OUT_PIN_PPS3_RPE9 : constant Natural := Natural (RPE9Rbits.RPE9R);
 
 OUT_FN_PPS3_NULL : constant Natural := 0;  --  No Connect
@@ -222,7 +220,6 @@ OUT_PIN_PPS4_RPF3 : constant Natural := Natural (RPF3Rbits.RPF3R);
 OUT_PIN_PPS4_RPF6 : constant Natural := Natural (RPF6Rbits.RPF6R);
 OUT_PIN_PPS4_RPF13 : constant Natural := Natural (RPF13Rbits.RPF13R);
 OUT_PIN_PPS4_RPF2 : constant Natural := Natural (RPF2Rbits.RPF2R);
-OUT_PIN_PPS4_RPC2 : constant Natural := Natural (RPC2Rbits.RPC2R);
 OUT_PIN_PPS4_RPE8 : constant Natural := Natural (RPE8Rbits.RPE8R);
 
 OUT_FN_PPS4_NULL : constant Natural := 0;  --  No Connect

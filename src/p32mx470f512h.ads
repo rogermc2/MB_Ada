@@ -7243,6 +7243,40 @@ package P32mx470f512h is
      Convention => C,
      External_Name => "SS2Rbits";
 
+  RPA14R : aliased unsigned
+     with Export => True,
+     Convention => C,
+     External_Name => "RPA14R";
+
+   type uu_RPA14Rbits_t is record
+      RPA14R : Extensions.Unsigned_4;
+   end record
+     with Convention => C_Pass_By_Copy,
+     Pack => True,
+     Alignment => 4;
+
+   RPA14Rbits : aliased uu_RPA14Rbits_t
+     with Export => True,
+     Convention => C,
+     External_Name => "RPA14Rbits";
+
+  RPA15R : aliased unsigned
+     with Export => True,
+     Convention => C,
+     External_Name => "RPA15R";
+
+   type uu_RPA15Rbits_t is record
+      RPA15R : Extensions.Unsigned_4;
+   end record
+     with Convention => C_Pass_By_Copy,
+     Pack => True,
+     Alignment => 4;
+
+   RPA15Rbits : aliased uu_RPA15Rbits_t
+     with Export => True,
+     Convention => C,
+     External_Name => "RPA15Rbits";
+
    REFCLKIR : aliased unsigned  -- p32mx470f512.h:2950
      with Export => True,
      Convention => C,
@@ -7463,6 +7497,52 @@ package P32mx470f512h is
      with Export => True,
      Convention => C,
      External_Name => "RPB15Rbits";
+
+ RPC13R : aliased unsigned
+     with Export => True,
+     Convention => C,
+     External_Name => "RPC13R";
+
+   type uu_RPC13Rbits_t is record
+      RPC13R : Extensions.Unsigned_4;
+   end record
+     with Convention => C_Pass_By_Copy,
+     Pack => True,
+     Alignment => 4;
+
+   RPC13Rbits : aliased uu_RPC13Rbits_t
+     with Export => True,
+     Convention => C,
+     External_Name => "RPC13Rbits";
+
+ RPC1R : aliased unsigned
+     with Export => True,
+     Convention => C,
+     External_Name => "RPC1R";
+
+   type uu_RPC1Rbits_t is record
+      RPC1R : Extensions.Unsigned_4;
+   end record
+     with Convention => C_Pass_By_Copy,
+     Pack => True,
+     Alignment => 4;
+
+   RPC1Rbits : aliased uu_RPC1Rbits_t
+     with Export => True,
+     Convention => C,
+     External_Name => "RPC1Rbits";
+
+ type uu_RPC14Rbits_t is record
+      RPC14R : Extensions.Unsigned_4;
+   end record
+     with Convention => C_Pass_By_Copy,
+     Pack => True,
+     Alignment => 4;
+
+   RPC14Rbits : aliased uu_RPC14Rbits_t
+     with Export => True,
+     Convention => C,
+     External_Name => "RPC14Rbits";
 
    RPD0R : aliased unsigned  -- p32mx470f512.h:3015
      with Export => True,
@@ -7871,6 +7951,108 @@ package P32mx470f512h is
      with Export => True,
      Convention => C,
      External_Name => "RPF6Rbits";
+
+ RPF7R : aliased unsigned
+     with Export => True,
+     Convention => C,
+     External_Name => "RPF7R";
+
+   type uu_RPF7Rbits_t is record
+      RPF7R : Extensions.Unsigned_4;
+   end record
+     with Convention => C_Pass_By_Copy,
+     Pack => True,
+     Alignment => 4;
+
+   RPF7Rbits : aliased uu_RPF7Rbits_t
+     with Export => True,
+     Convention => C,
+     External_Name => "RPF7Rbits";
+
+ RPF8R : aliased unsigned
+     with Export => True,
+     Convention => C,
+     External_Name => "RPF8R";
+
+   type uu_RPF8Rbits_t is record
+      RPF8R : Extensions.Unsigned_4;
+   end record
+     with Convention => C_Pass_By_Copy,
+     Pack => True,
+     Alignment => 4;
+
+   RPF8Rbits : aliased uu_RPF8Rbits_t
+     with Export => True,
+     Convention => C,
+     External_Name => "RPF8Rbits";
+
+ RPF12R : aliased unsigned
+     with Export => True,
+     Convention => C,
+     External_Name => "RPF12R";
+
+   type uu_RPF12Rbits_t is record
+      RPF12R : Extensions.Unsigned_4;
+   end record
+     with Convention => C_Pass_By_Copy,
+     Pack => True,
+     Alignment => 4;
+
+   RPF12Rbits : aliased uu_RPF12Rbits_t
+     with Export => True,
+     Convention => C,
+     External_Name => "RPF12Rbits";
+
+    RPF13R : aliased unsigned
+     with Export => True,
+     Convention => C,
+     External_Name => "RPF13R";
+
+   type uu_RPF13Rbits_t is record
+      RPF13R : Extensions.Unsigned_4;
+   end record
+     with Convention => C_Pass_By_Copy,
+     Pack => True,
+     Alignment => 4;
+
+   RPF13Rbits : aliased uu_RPF13Rbits_t
+     with Export => True,
+     Convention => C,
+     External_Name => "RPF13Rbits";
+
+   RPG0R : aliased unsigned
+     with Export => True,
+     Convention => C,
+     External_Name => "RPG0R";
+
+   type uu_RPG0Rbits_t is record
+      RPG0R : Extensions.Unsigned_4;
+   end record
+     with Convention => C_Pass_By_Copy,
+     Pack => True,
+     Alignment => 4;
+
+   RPG0Rbits : aliased uu_RPG0Rbits_t
+     with Export => True,
+     Convention => C,
+     External_Name => "RPG0Rbits";
+
+   RPG1R : aliased unsigned
+     with Export => True,
+     Convention => C,
+     External_Name => "RPG1R";
+
+   type uu_RPG1Rbits_t is record
+      RPG1R : Extensions.Unsigned_4;
+   end record
+     with Convention => C_Pass_By_Copy,
+     Pack => True,
+     Alignment => 4;
+
+   RPG1Rbits : aliased uu_RPG1Rbits_t
+     with Export => True,
+     Convention => C,
+     External_Name => "RPG1Rbits";
 
    RPG6R : aliased unsigned  -- p32mx470f512.h:3135
      with Export => True,
