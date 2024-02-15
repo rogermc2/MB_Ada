@@ -86,10 +86,10 @@ package body Misc_MX470 is
       Ports.mJTAG_Port_Enable (False);                                --  turn off jtag
       Bus_Speed := SYSTEM_Config (M_Misc.Clock_Speed, SYS_CFG_ALL);  --  set wait states, bus speed, etc for the best performance
 
-      --        SpiChnClose (SPI_CHANNEL1);
+--        SpiChnClose (SPI_CHANNEL1);
       Close_SPI_Channel (SPI_CHANNEL_1);
       SPI_PPS_CLOSE;     --  SPI is not reset by the watchdog
-      --        SpiChnClose (SPI_CHANNEL2);
+--        SpiChnClose (SPI_CHANNEL2);
       Close_SPI_Channel (SPI_CHANNEL_2);
       SPI2_PPS_CLOSE;    --  SPI is not reset by the watchdog
       Close_OC1;

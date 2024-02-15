@@ -725,11 +725,10 @@ package body M_Basic is
    end Get_Next_Command;
 
    procedure Init_Basic is
-      Routine_Name : constant String := "M_Basic.Init_Basic ";
+--        Routine_Name : constant String := "M_Basic.Init_Basic ";
    begin
       Arguments.Default_Type := T_NBR;
       Clear_Program;
-      Put_Line (Routine_Name);
       Command_And_Token_Functions.Init_Operator_Functions;
 
    end Init_Basic;
