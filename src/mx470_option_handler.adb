@@ -6,7 +6,6 @@ with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Ada.Text_IO; use Ada.Text_IO;
 
 with Arguments;
---  with C_Functions;
 with Commands;
 with Command_And_Token_Tables; use Command_And_Token_Tables;
 with Console;
@@ -45,12 +44,9 @@ package body MX470_Option_Handler is
       use M_Basic.Conversion;
       use String_Buffer_Package;
       Routine_Name : constant String := "MX470_Option_Handler.Do_Console ";
-      --        TP           : constant Natural := Check_String (Command_Line, "CONSOLE");
-      --        Found        : constant Boolean := TP > 0;
       Found        : constant Boolean :=
         Check_String (Element (Subfunction, 1), "CONSOLE");
    begin
-      --        Put_Line ("Do_Console");
       if Found then
          if Check_String (Element (Subfunction, 2), "OFF") then
             Flash.Option.SDCARD_CS := 0;
@@ -107,15 +103,11 @@ package body MX470_Option_Handler is
    function Do_Controls (Command_Line : String_Buffer) return Boolean is
       use Evaluation;
       use String_Buffer_Package;
-      --        TP    : constant Natural := Check_String (Command_Line, "CONTROLS");
-      --        Found : constant Boolean := TP > 0;
       Found : constant Boolean :=
         Check_String (Element (Command_Line, 1), "CONTROLS");
       Arg   : Unbounded_String;
    begin
-      --        Put_Line ("Do_Controls");
       if Found then
-         --           Arg := Get_Arg (Command_Line, TP);
          Arg := Get_Arg (Command_Line, 1);
          Flash.Option.Max_Controls := Get_Int (Arg, 0, 1000) + 1;
          Save_And_Reset;
@@ -127,11 +119,8 @@ package body MX470_Option_Handler is
 
    function Do_Error (Subfunction : String_Buffer) return Boolean is
       use String_Buffer_Package;
-      --        TP    : constant Natural := Check_String (Command_Line, "ERROR");
-      --        Found : constant Boolean := TP > 0;
       Found : constant Boolean := Check_String (Element (Subfunction, 1), "ERROR");
    begin
-      --        Put_Line ("Do_Error");
       if Found then
          if Flash.Option.SDCARD_CS = 0 then
             Put_Line ("SD card has not been configured.");
@@ -154,7 +143,6 @@ package body MX470_Option_Handler is
       Found : constant Boolean :=
         Check_String (Element (Command_Line, 1), "KEYBOARD");
    begin
-      --        Put_Line ("Do_Keyboard");
       if Found then
          if Check_String (Element (Command_Line, 2), "DISABLE") then
             Flash.Option.Keyboard_Config := NO_KEYBOARD;
@@ -222,9 +210,7 @@ package body MX470_Option_Handler is
       Found        : constant Boolean :=
         Check_String (Element (Command_Line, 1), "LIST");
    begin
-      --        Put_Line (Routine_Name);
       if Found then
-         --           Put_Line (Routine_Name & "FOUND");
          if Option.SDCARD_CS > 0 then
             Put ("OPTION SDCARD " & Integer'Image (Option.SDCARD_CS));
             if Option.SD_CD > 0 then
@@ -250,7 +236,6 @@ package body MX470_Option_Handler is
       if Found then
          Flash.Reset_All_Options;
          Save_And_Reset;
-
       end if;
 
       return Found;
@@ -261,23 +246,18 @@ package body MX470_Option_Handler is
       use Arguments;
       use Evaluation;
       use String_Buffer_Package;
-      --        TP    : constant Natural := Check_String (Command_Line, "RTC");
-      Arg_Data : Arguments_Record;
+       Arg_Data : Arguments_Record;
       Arg      : Unbounded_String;
       Found    : constant Boolean :=
         Check_String (Element (Command_Line, 1), "RTC");
    begin
-      --        Put_Line ("Do_RTC");
       if Found then
-         --           Put_Line ("Do_RTC found");
          if Check_String (Element (Command_Line, 2), "DISABLE") then
             Flash.Option.RTC_Clock := 0;
             Flash.Option.RTC_Data := 0;
          else
             Arg_Data :=
               Get_Args (Command_Line, 1, 3 , ",");
---                Get_Args (To_Unbounded_String (Element (Command_Line, 2)),
---                          1, 3 , ",");
             if Arg_Data.Arg_C = 3 then
                Arg :=
                  To_Unbounded_String (Arg_Data.Arg_Buffer (Arg_Data.Arg_V (1)));
@@ -304,11 +284,10 @@ package body MX470_Option_Handler is
    function Do_SD_Card (Command_Line : String_Buffer) return Boolean is
       use Ada.Containers;
       use String_Buffer_Package;
-      Routine_Name : constant String := "MXX470_Option_Handler.Do_SD_Card ";
+--        Routine_Name : constant String := "MXX470_Option_Handler.Do_SD_Card ";
       Found : constant Boolean :=
         Check_String (Element (Command_Line, 1), "SDCARD");
    begin
-      Put_Line (Routine_Name & "Command_Line");
       Support.Print_Buffer (Command_Line);
       if Found and then Length (Command_Line) > 1 then
          if Check_String (Element (Command_Line, 2), "DISABLE") then

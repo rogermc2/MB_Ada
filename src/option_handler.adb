@@ -52,7 +52,6 @@ package body Option_Handler is
 
    function Do_Baud_Rate (Command_Line : String_Buffer) return Boolean is
       use String_Buffer_Package;
---        TP    : constant Natural := Check_String (Command_Line, "BAUDRATE");
       Found : constant Boolean :=
         Check_String (Element (Command_Line, 1), "BAUDRATE");
       Arg   : Unbounded_String;
@@ -95,8 +94,6 @@ package body Option_Handler is
 
    function Do_Colour_Code (Command_Line : String_Buffer) return Boolean is
       use String_Buffer_Package;
---        TP    : constant Natural := Check_String (Command_Line, "COLOURCODE");
---        Found : constant Boolean := TP > 0;
       Found : constant Boolean :=
         Check_String (Element (Command_Line, 1), "COLOURCODE");
    begin
@@ -140,15 +137,12 @@ package body Option_Handler is
       use Arguments.Arg_Package;
       use String_Buffer_Package;
       Routine_Name : constant String := "Option_Handler.Do_Display ";
---        TP           : constant Natural := Check_String (Command_Line, "BAUDRATE");
---        Found        : constant Boolean := TP > 0;
       Found        : constant Boolean :=
         Check_String (Element (Command_Line, 1), "BAUDRATE");
       Arg_Data     : Arguments.Arguments_Record;
       Arg          : Unbounded_String;
    begin
       if Found then
---           Arguments.Get_Args (To_Unbounded_String (Command_Line), TP, 3, ",");
          Arg_Data := Arguments.Get_Args (Command_Line, 2, 3, ",");
          Assert (not Flash.Option.DISPLAY_CONSOLE, Routine_Name &
                    "DISPLAY, LCD console cannot be Changed ");
@@ -173,8 +167,6 @@ package body Option_Handler is
       use Draw;
       use String_Buffer_Package;
       Routine_Name  : constant String := "Option_Handler.Do_LCD_Panel ";
---        TP            : constant Natural := Check_String (Command_Line, "LCDPANEL");
---        Found         : constant Boolean := TP > 0;
       Found         : constant Boolean :=
         Check_String (Element (Command_Line, 1), "LCDPANEL");
       Arg_Data      : Arguments_Record;
@@ -210,8 +202,6 @@ package body Option_Handler is
 
    function Do_PIN (Command_Line : String_Buffer) return Boolean is
       use String_Buffer_Package;
---        TP           : constant Natural := Check_String (Command_Line, "PIN");
---        Found        : constant Boolean := TP > 0;
       Found        : constant Boolean :=
         Check_String (Element (Command_Line, 1), "PIN");
       Arg          : Unbounded_String;
