@@ -317,7 +317,7 @@ package body Option_Handler is
          Done := MX470_Option_Handler.Other_Options;
       end if;
 
-      Assert (Done, Routine_Name & "unrecognized option " & Subfunction);
+      Put_Line (Routine_Name & "unrecognized option " & Subfunction);
 
    end Option_Cmd;
 

@@ -87,17 +87,13 @@ package body Tokenizer is
       Match_I                : Integer := -1;
       Match_P                : Integer := -1;
       Last_Ptr               : Positive := Ptr;
+      OK                     : Boolean := True;
    begin
       --        Put_Line (Routine_Name & "In_Buffer: " & Get_Input_Buffer);
-      while Ptr < Input_Buffer_Length loop
+      while OK and then Ptr < Input_Buffer_Length loop
          --           Put_Line (Routine_Name & "Last_Ptr : " & Integer'Image (Last_Ptr));
          Last_Ptr := Ptr;
          aChar := Get_Input_Character (Ptr);
---           Put_Line (Routine_Name & "Ptr, aChar, First_Nonwhite: " &
---                       Integer'Image (Ptr) & ", " & aChar & ", " &
---                       Boolean'Image (First_Nonwhite) );
---           Put_Line (Routine_Name & "Input_Buffer_Length : " &
---                       Integer'Image (Input_Buffer_Length));
          --           delay (1.0);
          if aChar = ' ' then
             Ptr := Ptr + 1;
@@ -119,8 +115,6 @@ package body Tokenizer is
             First_Nonwhite := False;
          elsif First_Nonwhite then
             --  MMBasic  939 - 1026
-            --              Put_Line (Routine_Name & "939 First_Nonwhite, Match_P: " &
-            --                          Integer'Image (Match_P));
             Process_First_Nonwhite (Token_Buffer, Ptr, Label_Valid,
                                     First_Nonwhite, Match_I, Match_P);
             if Ptr > Integer (Length (Token_Buffer)) then
@@ -131,10 +125,9 @@ package body Tokenizer is
             end if;
 
             --  MMBasic 1029
-         elsif Check_For_Function_Or_Keyword (Token_Buffer, Ptr, First_Nonwhite) then
-            --              Put_Line (Routine_Name & "Function_Or_Keyword check,  Ptr: " &
-            --                       Integer'Image (Ptr));
-            Assert (Ptr > Last_Ptr, Routine_Name &
+         elsif Check_For_Function_Or_Keyword
+           (Token_Buffer, Ptr, First_Nonwhite) then
+              Assert (Ptr > Last_Ptr, Routine_Name &
                       "Check_For_Function_Or_Keywords did not increment Ptr");
             --  MMBasic  1067
          elsif M_Basic_Utilities.Is_Name_Start (aChar) then
@@ -150,12 +143,11 @@ package body Tokenizer is
             Ptr := Ptr + 1;
          end if;
 
-         --           Put_Line (Routine_Name & "end loop, First_Nonwhite: " &
-         --                       Boolean'Image (First_Nonwhite) & ", Ptr: " &
-         --                       Integer'image (Ptr) & ", aChar: " &
-         --                       Character'image (aChar));
-         --           New_Line;
-         Assert (Ptr > Last_Ptr, Routine_Name & "Ptr was not incremented");
+         OK := Ptr > Last_Ptr;
+         if not OK then
+            Put_Line (Routine_Name & "command " & Get_Input_Buffer &
+                        " not recognized");
+         end if;
       end loop;
 
       --  1108 Terminates with three null characters.
@@ -175,7 +167,7 @@ package body Tokenizer is
                        From_Console : Boolean) is
       use Ada.Strings;
       use Support;
-      Routine_Name   : constant String := "Tokenizer.Tokenize ";
+--        Routine_Name   : constant String := "Tokenizer.Tokenize ";
       aChar          : Character;
       In_Ptr         : Positive := 1;  --  tp
    begin
@@ -201,8 +193,6 @@ package body Tokenizer is
       --  841 Process the rest of the line
       if Input_Buffer_Length > In_Ptr then
          Parse_Line (Token_Buffer, In_Ptr);
-         Put_Line (Routine_Name & "841 PARSED LINE:");
-         Print_Buffer (Token_Buffer);
       end if;
 
    end Tokenize;

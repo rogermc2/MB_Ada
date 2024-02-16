@@ -159,11 +159,6 @@ package body Parse_Functions is
                      (Integer (M_Misc.C_Base_Token) + Match_Index));
       --  Step over the input buffer command.
       I_Pos := Match_I_Pos;
---        Put_Line (Routine_Name & "C_Base_Token, Match_Index: " &
---                    Interfaces.Unsigned_16'Image (M_Misc.C_Base_Token) & ", " &
---                    Integer'Image (Match_Index));
---        Put_Line (Routine_Name & "C_Base_Token + Match_Index: " &
---                    Integer'Image (Integer (M_Misc.C_Base_Token) + Match_Index));
       Put_Line (Routine_Name & "Buffer:");
       Support.Print_Buffer (Token_Buffer);
 
@@ -241,7 +236,6 @@ package body Parse_Functions is
 --          "Parse_Functions.Process_First_Nonwhite ";
       aChar         : constant Character := Get_Input_Character (I_Pos);
    begin
---        Put_Line (Routine_Name & "947 Input Buffer:" & Get_Input_Buffer);
       if aChar = '?' then
          --  MMBasic 947
          Match_I := Get_Command_Value ("Print") - Integer (M_Misc.C_Base_Token);
@@ -253,9 +247,7 @@ package body Parse_Functions is
 
       else  --  not print short cut
          --  MMBasic 958
---           Put_Line (Routine_Name & "958 Input Buffer:" & Get_Input_Buffer);
          Try_Command (Token_Buffer, I_Pos, Label_Valid, First_Nonwhite);
---           Put_Line (Routine_Name & "Token Buffer:");
          Support.Print_Buffer (Token_Buffer);
       end if;
 
