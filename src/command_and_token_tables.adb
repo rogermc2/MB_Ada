@@ -83,7 +83,7 @@ package body Command_And_Token_Tables is
       (To_Unbounded_String ("Files"), T_CMD, 0, cmd_files),
       (To_Unbounded_String ("Name"),  T_CMD, 0, cmd_name));
 
---     --  from Functions.h
+   --     --  from Functions.h
    Function_Commands     : array (1 .. Num_Function_Commands)
      of Command_Table_Item :=
        ((To_Unbounded_String ("ACos("),T_FUN or T_NBR, 0, fun_acos),
@@ -144,7 +144,7 @@ package body Command_And_Token_Tables is
       (To_Unbounded_String ("To"), T_NA, 0, op_invalid),
       (To_Unbounded_String ("Until"), T_NA, 0, op_invalid),
       (To_Unbounded_String ("While"), T_NA, 0, op_invalid),
-   --  from FileIO.h
+      --  from FileIO.h
       (To_Unbounded_String ("Cwd$"), T_FNA or T_STR, 0, op_invalid),
       (To_Unbounded_String ("Dir$("), T_FUN or T_STR, 0, op_invalid));
 
@@ -296,8 +296,6 @@ package body Command_And_Token_Tables is
    procedure Load_Input_Buffer (File_Num : Natural) is
    begin
       Serial_File_IO.MM_Get_Line (File_Num, In_Buffer);
-      Put_Line ("Command_And_Token_Tables.Load_Input_Buffer In_Buffer: " &
-                  To_String (In_Buffer));
 
    end Load_Input_Buffer;
 
@@ -347,33 +345,34 @@ package body Command_And_Token_Tables is
    end Type_Mask;
 
 begin
-   for index in 1 .. Num_Functions loop         --  118
+   for index in 1 .. Num_Functions loop         --  117
       Command_Table (index) := Function_Types (index);
    end loop;
 
-   for index in 1 .. Num_Commands loop           --  53   171
+   for index in 1 .. Num_Commands loop           --  53   170
       Command_Table (Num_Functions + index) := Command_Types (index);
    end loop;
 
-   for index in 1 .. Num_Function_Commands loop  --  45   216
+   for index in 1 .. Num_Function_Commands loop  --  45   215
       Command_Table (Num_Functions + Num_Commands + index) :=
         Function_Commands (index);
    end loop;
 
-   for index in 1 .. Num_File_IO_Commands loop    --  9   225
+   for index in 1 .. Num_File_IO_Commands loop    --  9   224
       Command_Table
         (Num_Functions+ Num_Commands + Num_Function_Commands + index) :=
         File_IO_Commands (index);
    end loop;
 
-   for index in 1 ..Num_Operators loop           --  19   117
+   for index in 1 ..Num_Operators loop           --  19   243
       Command_Table
         (Num_Functions + Num_Commands + Num_Function_Commands +
            Num_File_IO_Commands + index) := Operators.Operator_Types (index);
    end loop;
 
-   Command_Table (Command_Table_Size) :=          --  1   118
+   Command_Table (Command_Table_Size) :=          --  1   244
      (To_Unbounded_String (""), T_NA, 0, Null);
+   Put_Line ("Command_Table_Size: " & Integer'Image (Command_Table_Size));
 
    for index in 1 .. Num_Functions loop            --  117  117
       Token_Table (index) := Function_Types (index);

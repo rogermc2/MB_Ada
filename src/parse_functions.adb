@@ -1,7 +1,6 @@
 
 with Interfaces;
 
---  with Ada.Assertions;
 with Ada.Characters.Handling;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Ada.Text_IO; use Ada.Text_IO;
@@ -150,7 +149,7 @@ package body Parse_Functions is
      (Token_Buffer                : out String_Buffer; I_Pos : in out Positive;
       Match_I_Pos                 : Positive; Match_Index : Integer;
       First_Nonwhite, Label_Valid : in out Boolean) is
-      Routine_Name  : constant String := "Parse_Functions.Process_Command ";
+--        Routine_Name  : constant String := "Parse_Functions.Process_Command ";
       use Ada.Characters.Handling;
       use Support;
    begin
@@ -159,8 +158,6 @@ package body Parse_Functions is
                      (Integer (M_Misc.C_Base_Token) + Match_Index));
       --  Step over the input buffer command.
       I_Pos := Match_I_Pos;
-      Put_Line (Routine_Name & "Buffer:");
-      Support.Print_Buffer (Token_Buffer);
 
       --  MMBasic 995
       if Match_Index + Integer (M_Misc.C_Base_Token) =
@@ -231,7 +228,6 @@ package body Parse_Functions is
       Label_Valid      : in out Boolean;
       First_Nonwhite   : in out Boolean;
       Match_I, Match_P : in out Integer) is
-      --        use Ada.Assertions;
 --        Routine_Name  : constant String :=
 --          "Parse_Functions.Process_First_Nonwhite ";
       aChar         : constant Character := Get_Input_Character (I_Pos);
@@ -248,7 +244,6 @@ package body Parse_Functions is
       else  --  not print short cut
          --  MMBasic 958
          Try_Command (Token_Buffer, I_Pos, Label_Valid, First_Nonwhite);
-         Support.Print_Buffer (Token_Buffer);
       end if;
 
    end Process_First_Nonwhite;
@@ -298,19 +293,19 @@ package body Parse_Functions is
       Label_Valid  : in out Boolean; First_Nonwhite : in out Boolean) is
       use Interfaces;
       use Ada.Characters.Handling;
---        Routine_Name  : constant String := "Parse_Functions.Try_Command ";
+      Routine_Name  : constant String := "Parse_Functions.Try_Command ";
       Line_In       : constant String := To_Upper (Get_Input_Buffer);
       TP2           : Positive;          --  Line_In ptr
       Command       : Command_Table_Item;
-      Index         : Natural := 0;
       TP_Pos        : Natural := P;      --  tp  command table index
+      Index         : Natural := 0;
       Match_I       : Integer := -1;
       Match_L       : Integer := 0;
       Match_P       : Integer := 0;
---        Found         : Boolean := False;
+      Matched       : Boolean := False;
    begin
       --  MMBasic 958
-      while Index < Command_Table'Last loop
+      while not Matched and then Index < Command_Table'Last loop
          Index := Index + 1;
          declare
             TP : constant String :=
@@ -338,13 +333,14 @@ package body Parse_Functions is
             if TP_Pos > TP'Last and then
               (TP2 = Line_In'Last + 1 or else
                  not Is_Name_Character (Get_Input_Character (TP2)) or else
-                 (Command_Table (Index).Command_Type and T_FUN) =
-                   T_FUN) then
+                   (Command_Table (Index).Command_Type and T_FUN) =
+                     T_FUN) then
                --  MMBasic 977
                if TP (TP_Pos - 1) = '(' or else TP2 = Line_In'Last + 1 or else
                  not Is_Name_Character (Line_In (TP2)) then
                   Command := Command_Table (Index);
-                  if Length (Command.Name) > Match_L then
+                  Matched := Length (Command.Name) > Match_L;
+                  if Matched then
                      --  MMBasic 982
                      Match_P := TP2;
                      Match_I := Index;
@@ -356,9 +352,9 @@ package body Parse_Functions is
          TP_Pos := TP_Pos + 1;
       end loop;
 
---        Put_Line (Routine_Name & "990 Command Name: " & To_String (Command.Name));
-           --  990
+      --  990
       if P <= Input_Buffer_Length then
+         Put_Line (Routine_Name & "990 Command Name: " & To_String (Command.Name));
          if Match_I > -1 then
             --  Match found
             --  993 - 1004 process rest of command line
@@ -368,7 +364,7 @@ package body Parse_Functions is
             --  MMBasic 1009
          elsif Label_Valid and then
            Is_Name_Start (Get_Input_Character (P)) then
-           Try_Label (Token_Buffer, P, Label_Valid);
+            Try_Label (Token_Buffer, P, Label_Valid);
          end if;
       end if;
 
@@ -467,7 +463,7 @@ package body Parse_Functions is
       use Ada.Characters.Handling;
       use Ada.Strings;
       use String_Buffer_Package;
---        Routine_Name : constant String := "Parse_Functions.Try_Number ";
+      --        Routine_Name : constant String := "Parse_Functions.Try_Number ";
       aChar        : Character := Get_Input_Character (I_Pos);
       Number       : Unbounded_String;
       Done         : Boolean := False;

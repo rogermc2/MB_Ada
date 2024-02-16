@@ -89,9 +89,7 @@ package body Tokenizer is
       Last_Ptr               : Positive := Ptr;
       OK                     : Boolean := True;
    begin
-      --        Put_Line (Routine_Name & "In_Buffer: " & Get_Input_Buffer);
       while OK and then Ptr < Input_Buffer_Length loop
-         --           Put_Line (Routine_Name & "Last_Ptr : " & Integer'Image (Last_Ptr));
          Last_Ptr := Ptr;
          aChar := Get_Input_Character (Ptr);
          --           delay (1.0);

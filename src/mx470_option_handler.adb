@@ -219,8 +219,8 @@ package body MX470_Option_Handler is
                if Option.SD_WP > 0 then
                   Put (", " & Integer'Image (Option.SD_WP));
                end if;
-               New_Line;
             end if;
+            New_Line;
          end if;
       end if;
 
@@ -284,10 +284,11 @@ package body MX470_Option_Handler is
    function Do_SD_Card (Command_Line : String_Buffer) return Boolean is
       use Ada.Containers;
       use String_Buffer_Package;
---        Routine_Name : constant String := "MXX470_Option_Handler.Do_SD_Card ";
+      Routine_Name : constant String := "MXX470_Option_Handler.Do_SD_Card ";
       Found : constant Boolean :=
         Check_String (Element (Command_Line, 1), "SDCARD");
    begin
+      Put_Line (Routine_Name & "Command_Line:");
       Support.Print_Buffer (Command_Line);
       if Found and then Length (Command_Line) > 1 then
          if Check_String (Element (Command_Line, 2), "DISABLE") then
