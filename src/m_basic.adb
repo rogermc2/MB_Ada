@@ -437,7 +437,6 @@ package body M_Basic is
       Global.Command_Line := Token_Buffer;
       Global.Command_Line.Delete_First;
 
-      Put_Line (Routine_Name);
       if not Done then
          Done := Program_Ptr >= Flash.Prog_Memory'Length;
       end if;
@@ -455,16 +454,16 @@ package body M_Basic is
             Command_Token_Test :=
               M_Misc.C_Base_Token and Command_Token - M_Misc.C_Base_Token;
 
-            Put_Line (Routine_Name & "process Command_Token");
             if Command_Token >= Command_Token_Test and then
               Command_Token_Test < Unsigned_16 (Command_Table_Size) and then
               Command_Table
                 (Positive (Command_Token - M_Misc.C_Base_Token)).Command_Type =
                   T_CMD then
                --  243
-               Put_Line (Routine_Name & "243 Command_Token: " &
-                           Unsigned_16'Image (Command_Token));
                T_Arg := T_CMD;   -- type of returned value
+               Assert (Command_Token - M_Misc.C_Base_Token <=
+                         Command_Table'Length, Routine_Name &
+                         "243 Command_Token is out of Command_Table range");
                --  Execute the command
                Command_Ptr := Command_Table
                  (Integer (Command_Token - M_Misc.C_Base_Token)).Function_Ptr;
@@ -547,7 +546,6 @@ package body M_Basic is
 
          --  225
          if Program_Ptr <= Positive (Token_Buffer.Length) then
-            Put_Line (Routine_Name & "Execute_Command");
             Execute_Command (Token_Buffer, Program_Ptr, Save_Local_Index);
             --  Find next statement if any
             while not Done and then

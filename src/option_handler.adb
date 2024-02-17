@@ -20,15 +20,15 @@ with M_Basic; use M_Basic;
 with M_Misc; use M_Misc;
 with MX470_Option_Handler;
 with SPI_LCD;
-with Support;
+--  with Support;
 
 package body Option_Handler is
 
---     function Get_Arg (Command_Line : String; TP : Positive) return Unbounded_String is
---     begin
---        return To_Unbounded_String (Slice (To_Unbounded_String (Command_Line),
---                                    TP, Command_Line'Length));
---     end Get_Arg;
+   --     function Get_Arg (Command_Line : String; TP : Positive) return Unbounded_String is
+   --     begin
+   --        return To_Unbounded_String (Slice (To_Unbounded_String (Command_Line),
+   --                                    TP, Command_Line'Length));
+   --     end Get_Arg;
 
    function Do_Autorun (Command_Line : String_Buffer) return Boolean is
       use String_Buffer_Package;
@@ -257,57 +257,63 @@ package body Option_Handler is
       use M_Basic.Conversion;
       use String_Buffer_Package;
       Routine_Name : constant String := "Option_Handler.Option_Cmd ";
-      Subfunction  : constant String := Command_Line (1);
-      Arg          : Unbounded_String;
-      Done         : Boolean := False;
    begin
-      Put_Line (Routine_Name & "Command_Line:");
-      Support.Print_Buffer (Command_Line);
-      Assert (Integer (Command_Line.Length) > 0, Routine_Name &
-                "called with empty Global.Command_Line");
-      Commands.Option_Error_Check := External.CP_IGNORE_INUSE;
-      if Current_Line_Ptr /= null then
-         Commands.Option_Error_Check :=
-           Commands.Option_Error_Check or External.CP_NOABORT;
+      if Integer (Command_Line.Length) < 1 then
+         Put_Line (Routine_Name & "called with empty Command_Line.");
+      else
+         declare
+            Subfunction  : constant String := Command_Line (1);
+            Arg          : Unbounded_String;
+            Done         : Boolean := False;
+
+         begin
+            Assert (Integer (Command_Line.Length) > 0, Routine_Name &
+                      "called with empty Global.Command_Line");
+            Commands.Option_Error_Check := External.CP_IGNORE_INUSE;
+            if Current_Line_Ptr /= null then
+               Commands.Option_Error_Check :=
+                 Commands.Option_Error_Check or External.CP_NOABORT;
+            end if;
+
+            --  Check_String checks if the next text in an element (a basic statement)
+            --  corresponds to an alphabetic string.
+            if Check_String (Subfunction, "BASE") then
+               Assert (not Commands.Dim_Used, Routine_Name &
+                         "BASE Option must be before DIM or LOCAL");
+               Option_Base := Get_Int (Element (Command_Line, 2), 0, 1);
+               Done := True;
+
+            elsif Check_String (Subfunction, "EXPLICIT") then
+               Assert (Arguments.Var_Count = 0, Routine_Name &
+                         "EXPLICIT variables have been defined already.");
+               Arguments.Option_Explicit := True;
+               Done := True;
+
+            elsif not Do_Default (Command_Line) then
+               if Check_String (Subfunction, "BREAK") then
+                  Arg := To_Unbounded_String (Element (Command_Line, 2));
+                  Global.Break_Key := Integer (Get_Integer (Arg));
+                  Done := True;
+               end if;
+            end if;
+
+            Done := Done or else Do_Autorun (Command_Line) or else
+              Do_Case (Command_Line) or else
+              Do_Tab (Command_Line) or else
+              Do_Baud_Rate (Command_Line) or else
+              Do_Display (Command_Line) or else
+              Do_PIN (Command_Line) or else
+              Do_Colour_Code (Command_Line) or else
+              Do_LCD_Panel (Command_Line) or else
+              Do_Save (Command_Line);
+
+            if not Done then
+               Done := MX470_Option_Handler.Other_Options;
+            end if;
+
+            Put_Line (Routine_Name & "unrecognized option " & Subfunction);
+         end;  --  declare block
       end if;
-
-      --  Check_String checks if the next text in an element (a basic statement)
-      --  corresponds to an alphabetic string.
-      if Check_String (Subfunction, "BASE") then
-         Assert (not Commands.Dim_Used, Routine_Name &
-                   "BASE Option must be before DIM or LOCAL");
-         Option_Base := Get_Int (Element (Command_Line, 2), 0, 1);
-         Done := True;
-
-      elsif Check_String (Subfunction, "EXPLICIT") then
-         Assert (Arguments.Var_Count = 0, Routine_Name &
-                   "EXPLICIT variables have been defined already.");
-         Arguments.Option_Explicit := True;
-         Done := True;
-
-      elsif not Do_Default (Command_Line) then
-         if Check_String (Subfunction, "BREAK") then
-            Arg := To_Unbounded_String (Element (Command_Line, 2));
-            Global.Break_Key := Integer (Get_Integer (Arg));
-            Done := True;
-         end if;
-      end if;
-
-      Done := Done or else Do_Autorun (Command_Line) or else
-        Do_Case (Command_Line) or else
-        Do_Tab (Command_Line) or else
-        Do_Baud_Rate (Command_Line) or else
-        Do_Display (Command_Line) or else
-        Do_PIN (Command_Line) or else
-        Do_Colour_Code (Command_Line) or else
-        Do_LCD_Panel (Command_Line) or else
-        Do_Save (Command_Line);
-
-      if not Done then
-         Done := MX470_Option_Handler.Other_Options;
-      end if;
-
-      Put_Line (Routine_Name & "unrecognized option " & Subfunction);
 
    end Option_Cmd;
 
