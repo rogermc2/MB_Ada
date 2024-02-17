@@ -158,14 +158,14 @@ package body Parse_Functions is
                      (Integer (M_Misc.C_Base_Token) + Match_Index));
       --  Step over the input buffer command.
       I_Pos := Match_I_Pos;
-
       --  MMBasic 995
       if Match_Index + Integer (M_Misc.C_Base_Token) =
         Get_Command_Value ("Rem") then
          --  MMBasic 996 copy everything
          Copy_Slice (Token_Buffer, I_Pos, Input_Buffer_Length);
 
-      elsif I_Pos <= Input_Buffer_Length and then Is_Alphanumeric (Get_Input_Character (I_Pos - 1)) and then
+      elsif I_Pos <= Input_Buffer_Length and then
+        Is_Alphanumeric (Get_Input_Character (I_Pos - 1)) and then
         Get_Input_Character (I_Pos) = ' ' then
          I_Pos := I_Pos + 1;
       end if;
@@ -215,8 +215,8 @@ package body Parse_Functions is
       end loop;
       Put_Line (Routine_Name & "Command: " & To_String (Command));
       Append (Token_Buffer, To_String (Command));
-      Put_Line (Routine_Name & "Token Buffer:");
-      Support.Print_Buffer (Token_Buffer);
+--        Put_Line (Routine_Name & "Token Buffer:");
+--        Support.Print_Buffer (Token_Buffer);
 
       First_Nonwhite := False;
       Label_Valid := False;
@@ -354,7 +354,6 @@ package body Parse_Functions is
 
       --  990
       if P <= Input_Buffer_Length then
-         Put_Line (Routine_Name & "990 Command Name: " & To_String (Command.Name));
          if Match_I > -1 then
             --  Match found
             --  993 - 1004 process rest of command line

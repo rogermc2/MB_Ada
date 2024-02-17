@@ -117,15 +117,15 @@ package body Tokenizer is
                                     First_Nonwhite, Match_I, Match_P);
             if Ptr > Integer (Length (Token_Buffer)) then
                Put_Line (Routine_Name & "no more input buffer characters." );
-            else
-               Put_Line (Routine_Name & "958 First_Nonwhite, Ptr: " &
-                           Get_Input_Character(Ptr));
+--              else
+--                 Put_Line (Routine_Name & "958 First_Nonwhite, Ptr: " &
+--                             Get_Input_Character(Ptr));
             end if;
 
             --  MMBasic 1029
          elsif Check_For_Function_Or_Keyword
            (Token_Buffer, Ptr, First_Nonwhite) then
-              Assert (Ptr > Last_Ptr, Routine_Name &
+            Assert (Ptr > Last_Ptr, Routine_Name &
                       "Check_For_Function_Or_Keywords did not increment Ptr");
             --  MMBasic  1067
          elsif M_Basic_Utilities.Is_Name_Start (aChar) then
@@ -165,7 +165,7 @@ package body Tokenizer is
                        From_Console : Boolean) is
       use Ada.Strings;
       use Support;
---        Routine_Name   : constant String := "Tokenizer.Tokenize ";
+      --        Routine_Name   : constant String := "Tokenizer.Tokenize ";
       aChar          : Character;
       In_Ptr         : Positive := 1;  --  tp
    begin

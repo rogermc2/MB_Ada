@@ -466,7 +466,6 @@ package body M_Basic is
                  (Integer (Command_Token - M_Misc.C_Base_Token)).Function_Ptr;
                Assert (Command_Ptr /= null, Routine_Name &
                          "247 Command_Ptr is null");
-               Put_Line (Routine_Name & "executing command:");
                Command_Ptr.all;
 
             end if;
@@ -497,7 +496,6 @@ package body M_Basic is
             Done := not No_Abort and Interupt_Check /= 0;
          end if;
       end if;
-      Put_Line (Routine_Name & "done");
 
    end Execute_Command;
 
@@ -510,12 +508,9 @@ package body M_Basic is
       Save_Local_Index : Natural         := 0;
       Program_Ptr      : Positive        := 1;
       Item_Ptr         : Positive        := 1;
-      --        Done             : Boolean         := Integer (Token_Buffer.Length) = 0;
    begin
-      --        if not Done then
       --  194
-      --           while not Done and then
-      while Program_Ptr < Integer (Token_Buffer.Length) loop
+      while Program_Ptr <= Integer (Token_Buffer.Length) loop
          Item := To_Unbounded_String (Token_Buffer (Program_Ptr));
          Item_Ptr := 1;
          if Element (Item, Item_Ptr) = '0' then
@@ -550,14 +545,8 @@ package body M_Basic is
          end if;
 
          --  279
-         --              Done := Is_Command_End (Token_Buffer, Program_Ptr);
-         --              if not Done then
-         Program_Ptr := Program_Ptr + 1;
-         --              end if;
+          Program_Ptr := Program_Ptr + 1;
       end loop;
-      --        else
-      --           Put_Line (Routine_Name & "Buffer is empty");
-      --        end if;
 
    exception
       when Constraint_Error =>
@@ -725,7 +714,7 @@ package body M_Basic is
    end Get_Next_Command;
 
    procedure Init_Basic is
---        Routine_Name : constant String := "M_Basic.Init_Basic ";
+      --        Routine_Name : constant String := "M_Basic.Init_Basic ";
    begin
       Arguments.Default_Type := T_NBR;
       Clear_Program;
