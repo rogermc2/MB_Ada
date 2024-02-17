@@ -437,6 +437,7 @@ package body M_Basic is
       Global.Command_Line := Token_Buffer;
       Global.Command_Line.Delete_First;
 
+      Put_Line (Routine_Name);
       if not Done then
          Done := Program_Ptr >= Flash.Prog_Memory'Length;
       end if;
@@ -454,12 +455,15 @@ package body M_Basic is
             Command_Token_Test :=
               M_Misc.C_Base_Token and Command_Token - M_Misc.C_Base_Token;
 
+            Put_Line (Routine_Name & "process Command_Token");
             if Command_Token >= Command_Token_Test and then
               Command_Token_Test < Unsigned_16 (Command_Table_Size) and then
               Command_Table
                 (Positive (Command_Token - M_Misc.C_Base_Token)).Command_Type =
                   T_CMD then
                --  243
+               Put_Line (Routine_Name & "243 Command_Token: " &
+                           Unsigned_16'Image (Command_Token));
                T_Arg := T_CMD;   -- type of returned value
                --  Execute the command
                Command_Ptr := Command_Table
@@ -505,9 +509,10 @@ package body M_Basic is
       use String_Buffer_Package;
       Routine_Name     : constant String := "M_Basic.Execute_Program ";
       Item             : Unbounded_String;
-      Save_Local_Index : Natural         := 0;
-      Program_Ptr      : Positive        := 1;
-      Item_Ptr         : Positive        := 1;
+      Save_Local_Index : Natural := 0;
+      Program_Ptr      : Positive := 1;
+      Item_Ptr         : Positive  := 1;
+      Done             : Boolean := False;
    begin
       --  194
       while Program_Ptr <= Integer (Token_Buffer.Length) loop
@@ -524,8 +529,9 @@ package body M_Basic is
          end if;
 
          --  217
-         if Element (Item, Item_Ptr) = Element (Trim (To_Unbounded_String
-                                                (Integer'Image (T_LINENBR)), Left), 1) then
+         if Element (Item, Item_Ptr) = Element
+           (Trim (To_Unbounded_String
+            (Integer'Image (T_LINENBR)), Left), 1) then
             Item_Ptr := Item_Ptr + 3;
          end if;
 
@@ -541,11 +547,23 @@ package body M_Basic is
 
          --  225
          if Program_Ptr <= Positive (Token_Buffer.Length) then
+            Put_Line (Routine_Name & "Execute_Command");
             Execute_Command (Token_Buffer, Program_Ptr, Save_Local_Index);
+            --  Find next statement if any
+            while not Done and then
+              Program_Ptr < Integer (Token_Buffer.Length) loop
+               Item := To_Unbounded_String (Token_Buffer (Program_Ptr));
+               Done := Element (Item, Program_Ptr) = '0';
+               if not Done then
+                  Program_Ptr := Program_Ptr + 1;
+               end if;
+            end loop;
          end if;
 
          --  279
-          Program_Ptr := Program_Ptr + 1;
+         if not Done then
+            Program_Ptr := Program_Ptr + 1;
+         end if;
       end loop;
 
    exception
