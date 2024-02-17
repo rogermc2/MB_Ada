@@ -8,6 +8,7 @@ with Ada.Text_IO; use Ada.Text_IO;
 with Arguments;
 with Commands;
 with Command_And_Token_Tables; use Command_And_Token_Tables;
+with Configuration;
 with Console;
 with Evaluation;
 with External;
@@ -23,7 +24,7 @@ with Support;
 package body MX470_Option_Handler is
 
    Restart_Exception : Exception;
-   UIOTGSTAT : constant Interfaces.Unsigned_16 := 0;
+   UIOTGSTAT         : constant Interfaces.Unsigned_16 := 0;
 
    procedure Save_And_Reset;
 
@@ -33,7 +34,7 @@ package body MX470_Option_Handler is
    begin
       return To_Unbounded_String (Element (Command_Line, TP));
 
-    end Get_Arg;
+   end Get_Arg;
 
    --  Check_String checks if the next text in an element (a basic statement)
    --  corresponds to an alphabetic string.
@@ -206,7 +207,7 @@ package body MX470_Option_Handler is
    function Do_List (Command_Line : String_Buffer) return Boolean is
       use Flash;
       use String_Buffer_Package;
---        Routine_Name : constant String := "MX470_Option_Handler.Do_List ";
+      --        Routine_Name : constant String := "MX470_Option_Handler.Do_List ";
       Found        : constant Boolean :=
         Check_String (Element (Command_Line, 1), "LIST");
       Sub_Found    : Boolean := False;
@@ -223,6 +224,29 @@ package body MX470_Option_Handler is
                end if;
             end if;
             New_Line;
+         end if;
+
+         if Option.Autorun then
+            Sub_Found := True;
+            Put_Line ("Option.Autorun not implemented.");
+         end if;
+
+         if Option.Serial_Con_Disabled then
+            Sub_Found := True;
+            Put_Line ("Option.Serial_Con_Disabled not implemented.");
+         else
+            if Option.Baud_Rate /= Configuration.CONSOLE_BAUDRATE then
+               Sub_Found := True;
+               Put_Line ("Option.Baud_Rate not implemented.");
+            end if;
+            if Option.Invert = 1 then
+               Sub_Found := True;
+               Put_Line ("Option.Invert not implemented.");
+            end if;
+            if Option.Invert = 2 then
+               Sub_Found := True;
+               Put_Line ("Option.Console.Auto not implemented.");
+            end if;
          end if;
 
          if not Sub_Found then
@@ -252,7 +276,7 @@ package body MX470_Option_Handler is
       use Arguments;
       use Evaluation;
       use String_Buffer_Package;
-       Arg_Data : Arguments_Record;
+      Arg_Data : Arguments_Record;
       Arg      : Unbounded_String;
       Found    : constant Boolean :=
         Check_String (Element (Command_Line, 1), "RTC");
@@ -290,7 +314,7 @@ package body MX470_Option_Handler is
    function Do_SD_Card (Command_Line : String_Buffer) return Boolean is
       use Ada.Containers;
       use String_Buffer_Package;
---        Routine_Name : constant String := "MXX470_Option_Handler.Do_SD_Card ";
+      --        Routine_Name : constant String := "MXX470_Option_Handler.Do_SD_Card ";
       Found : constant Boolean :=
         Check_String (Element (Command_Line, 1), "SDCARD");
    begin
@@ -315,7 +339,7 @@ package body MX470_Option_Handler is
    function Other_Options return Boolean is
       use Global;
       use String_Buffer_Package;
---        Routine_Name : constant String := "MX470_Option_Handler.Other_Options ";
+      --        Routine_Name : constant String := "MX470_Option_Handler.Other_Options ";
       Subfunction  : String_Buffer := Command_Line;
       Result       : Boolean := False;
    begin
@@ -343,20 +367,20 @@ package body MX470_Option_Handler is
       if Current_Line_Ptr = null and then Flash.Save_Options then
          delay (0.2);
          if (UIOTGSTAT and 1) > 0 then
-         Put_Line (Routine_Name);
+            Put_Line (Routine_Name);
             Put_Line ("Please restart the Micromite");
          else
             Except_Code := RESTART_NO_AUTORUN;
---              C_Functions.Soft_Reset;
+            --              C_Functions.Soft_Reset;
             Put_Line ("Restart");
             raise Restart_Exception;
---              Support.Restart;
+            --              Support.Restart;
          end if;
       end if;
 
    exception
-         when Restart_Exception => Support.Execute_MM_Basic;
-         when others => Put_Line (Routine_Name);
+      when Restart_Exception => Support.Execute_MM_Basic;
+      when others => Put_Line (Routine_Name);
 
    end Save_And_Reset;
 
