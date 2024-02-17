@@ -206,12 +206,14 @@ package body MX470_Option_Handler is
    function Do_List (Command_Line : String_Buffer) return Boolean is
       use Flash;
       use String_Buffer_Package;
-      --        Routine_Name : constant String := "MX470_Option_Handler.Do_List ";
+--        Routine_Name : constant String := "MX470_Option_Handler.Do_List ";
       Found        : constant Boolean :=
         Check_String (Element (Command_Line, 1), "LIST");
+      Sub_Found    : Boolean := False;
    begin
       if Found then
-         if Option.SDCARD_CS > 0 then
+         Sub_Found := Option.SDCARD_CS > 0;
+         if Sub_Found then
             Put ("OPTION SDCARD " & Integer'Image (Option.SDCARD_CS));
             if Option.SD_CD > 0 then
                Put (", " & Integer'Image (Option.SD_CD));
@@ -221,6 +223,10 @@ package body MX470_Option_Handler is
                end if;
             end if;
             New_Line;
+         end if;
+
+         if not Sub_Found then
+            Put_Line ("No options are set.");
          end if;
       end if;
 
@@ -284,12 +290,10 @@ package body MX470_Option_Handler is
    function Do_SD_Card (Command_Line : String_Buffer) return Boolean is
       use Ada.Containers;
       use String_Buffer_Package;
-      Routine_Name : constant String := "MXX470_Option_Handler.Do_SD_Card ";
+--        Routine_Name : constant String := "MXX470_Option_Handler.Do_SD_Card ";
       Found : constant Boolean :=
         Check_String (Element (Command_Line, 1), "SDCARD");
    begin
-      Put_Line (Routine_Name & "Command_Line:");
-      Support.Print_Buffer (Command_Line);
       if Found and then Length (Command_Line) > 1 then
          if Check_String (Element (Command_Line, 2), "DISABLE") then
             Flash.Option.SDCARD_CS := 0;
