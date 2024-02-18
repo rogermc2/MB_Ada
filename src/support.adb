@@ -1,4 +1,5 @@
 
+with Ada.Characters.Handling;
 with Ada.Text_IO; use Ada.Text_IO;
 
 with Audio;
@@ -14,14 +15,23 @@ with M_Basic;
 with M_Misc;
 with Memory;
 with Misc_MX470;
+with P32mx470f512h;
 with SPI_LCD;
 with SSD_1963;
+with Tokenizer;
 with Touch;
 with Watchdog_Timer;
 
 package body Support is
 
    Saved_Cause  : Setup_Exception := Cause_Nothing;
+   --     Watchdog_Set : Boolean := False;
+
+   function "=" (L, R : Byte) return Boolean is
+   begin
+      return R = L;
+
+   end "=";
 
    procedure Buffer_Append (Buffer : in out String_Buffer; Item : String) is
       use String_Buffer_Package;
@@ -37,6 +47,7 @@ package body Support is
       return Element (Buffer, Pos);
 
    end Buffer_Item;
+
    function Buffer_Length (Buffer : String_Buffer) return Natural is
    begin
       return Natural (Buffer.Length);
@@ -52,7 +63,7 @@ package body Support is
 
    procedure Clear_Buffer (Buffer : in out String_Buffer) is
       use String_Buffer_Package;
-      begin
+   begin
       Buffer := Empty_Vector;
 
    end Clear_Buffer;
@@ -72,6 +83,62 @@ package body Support is
       null;
    end Do_PIN;
 
+   procedure Execute_MM_Basic is
+      Routine_Name  : constant String := "Support.Execute_MM_Basic ";
+      Startup_Token : constant String := "MM.Startup";
+      Token_Buffer  : String_Buffer;
+   begin
+      Setup_MM_Basic;
+
+      --  298
+      if Except_Cause /= Cause_MM_Startup then
+         M_Basic.Clear_Program;
+         M_Basic.Prepare_Program (True);
+
+         Except_Cause := Cause_MM_Startup;
+         Clear_Buffer (Token_Buffer);
+         Buffer_Append (Token_Buffer, Startup_Token);
+
+         --  311
+         if M_Basic.Find_Subfunction (Startup_Token, T_NOTYPE) /= 0 then
+            Buffer_Append (Token_Buffer, Startup_Token);
+            M_Basic.Execute_Program (Token_Buffer);
+         else
+            Put_Line (Routine_Name &
+                        "Startup_Token not found,Token_Buffer_Length: " &
+                        Integer'Image (Buffer_Length (Token_Buffer)));
+            Put_Line (Routine_Name & "Token_Buffer (1): " &
+                        Buffer_Item (Token_Buffer, 1));
+         end if;
+      end if;
+
+      --  Autorun code
+
+      Except_Cause := Cause_Nothing;
+      loop
+         Process_Commands;
+
+         if not Global.Error_In_Prompt and M_Basic.Find_Subfunction
+           ("MM.PROMPT", T_NOTYPE) /= 0 then
+            Global.Error_In_Prompt := True;
+            Clear_Buffer (Token_Buffer);
+            Buffer_Append (Token_Buffer, "MM.PROMPT");
+            M_Basic.Execute_Program (Token_Buffer);
+         else
+            --  Print prompt
+            M_Basic.Print_String ("> ");
+         end if;
+
+         Global.Error_In_Prompt := False;
+         Load_Input_Buffer (0);
+         if Input_Buffer_Length > 0 then
+            Tokenizer.Tokenize (Token_Buffer, True);
+            M_Basic.Execute_Program (Token_Buffer);
+         end if;
+      end loop;
+
+   end Execute_MM_Basic;
+
    procedure Initialize is
    begin
       --  140
@@ -90,8 +157,35 @@ package body Support is
       end if;
    end Initialize;
 
+   function Is_Integer (Term : String) return Boolean is
+      use Ada.Characters.Handling;
+      OK : Boolean := True;
+   begin
+      for char of Term loop
+         OK := OK and Is_Digit (char);
+      end loop;
+
+      return OK;
+
+   end Is_Integer;
+
+   procedure Print_Buffer (Buffer     : String_Buffer;
+                           With_Delim : Boolean := False) is
+      use String_Buffer_Package;
+   begin
+      for index in Buffer.First_Index .. Buffer.Last_Index loop
+         Put (Element (Buffer, index));
+         if With_Delim then
+            Put (" ");
+         end if;
+      end loop;
+      New_Line;
+
+   end Print_Buffer;
+
    procedure Process_Commands is
---        Routine_Name : constant String := "Support.Process_Commands";
+      use M_Basic.Conversion;
+      --        Routine_Name : constant String := "Support.Process_Commands";
    begin
       if Flash.Option.DISPLAY_CONSOLE then
          Draw.Set_Font (Global.Prompt_Font);
@@ -103,10 +197,10 @@ package body Support is
          end if;
       end if;
 
---        Put_Line (Routine_Name & "Current_Line_Ptr: " &
---                    Integer'Image (M_Basic.Current_Line_Ptr));
+      --        Put_Line (Routine_Name & "Current_Line_Ptr: " &
+      --                    Integer'Image (M_Basic.Current_Line_Ptr));
 
-      if M_Basic.Current_Line_Ptr > 0 then
+      if M_Basic.Current_Line_Ptr /= null then
          Audio.Close_Audio;
          Audio.Vol_Left := 100;
          Audio.Vol_Right := 100;
@@ -117,7 +211,7 @@ package body Support is
       M_Misc.Echo_Option := True;
       M_Basic.Local_Index := 0;  --  Should not be needed but ensures that all
       Memory.Clear_Temp_Memory;  --  space will be cleared.
-      M_Basic.Current_Line_Ptr := 0;
+      M_Basic.Current_Line_Ptr := null;
 
       if Global.MM_Char_Pos > 1 then
          --  Prompt should be on a new line.
@@ -135,11 +229,78 @@ package body Support is
    end Process_Commands;
 
    procedure Restart is
+      use Flash;
    begin
-      null;
+      if not (Except_Code = RESET_COMMAND or else
+              Except_Code = RESTART_NO_AUTORUN or else
+              Except_Code = RESTART_DO_AUTORUN) then
+         if Except_Code = WATCHDOG_TIMEOUT then
+            --              Watchdog_Set := True;
+            New_Line;
+            Put_Line ("Watchdog timeout!");
+         elsif Except_Code /= PIN_RESTART then
+            if Except_Cause /= Cause_Nothing then
+               if Except_Cause = Cause_MM_Startup then
+                  New_Line;
+                  Put_Line ("Error in MM_Startup!");
+               else
+                  New_Line;
+                  Put ("Option error - Cleared OPTION ");
+                  case Except_Cause is
+                  when Cause_Display =>
+                     Put_Line ("LCD PANEL");
+                     Option.Display_Type := 0;
+                  when Cause_File_IO =>
+                     Put_Line ("SDCARD");
+                     Option.SDCARD_CS := 0;
+                  when Cause_Keyboard =>
+                     Put_Line ("KEYBOARD");
+                     Option.Keyboard_Config := Keyboard.NO_KEYBOARD;
+                  when Cause_RTC =>
+                     Put_Line ("RTC");
+                     Option.RTC_Data := 0;
+                  when Cause_Touch =>
+                     Put_Line ("TOUCH");
+                     Option.Touch_CS := 0;
+                  when others => null;
+                  end case;
+
+                  Save_Options;
+               end if;
+            end if;
+         else
+            New_Line;
+            Put ("CPU exception # ");
+            Put (Exception_Code'Image (Except_Code) & " ");
+
+            --  191
+            case Except_Code is
+               when EXCEP_AdEL =>
+                  Put_Line ("(address error on load or ifetch)");
+               when EXCEP_AdES => Put_Line ("(address error store)");
+               when EXCEP_IBE =>  Put_Line ("(bus error on ifetch)");
+               when EXCEP_DBE =>  Put_Line ("(bus error on load or store)");
+               when EXCEP_Overflow => Put_Line ("(arithmetic overflow)");
+               when EXCEP_Trap =>  Put_Line ("(possible divide by zero)");
+               when others => null;
+            end case;
+
+            M_Basic.Prepare_Program (False);
+
+            --  202 more code
+
+            New_Line;
+            Put_Line ("Processor restarted");
+            New_Line;
+            delay (0.2);
+         end if;
+      end if;
+
+      --        P32mx470f512h.RCONCLR := 16#0040#;
+
    end Restart;
 
-   procedure Setup is
+   procedure Setup_MM_Basic is
    begin
       Except_Cause := Cause_Display;
       SPI_LCD.Init_Display_SPI (False);
@@ -157,7 +318,7 @@ package body Support is
       Except_Cause := Cause_Touch;
       Touch.Init_Touch;
 
-   end Setup;
+   end Setup_MM_Basic;
 
    procedure Skip_Spaces (Buffer : String_Buffer; Pos : in out Positive) is
       use String_Buffer_Package;
@@ -192,5 +353,24 @@ package body Support is
       end loop;
 
    end Skip_Buffer_Spaces;
+
+   function To_String (aChar : Character) return String is
+      String1 : String (1 ..1);
+   begin
+      String1 (1) := aChar;
+      return String1;
+
+   end To_String;
+
+   function To_UB_String (aChar : Character)
+                          return Ada.Strings.Unbounded.Unbounded_String is
+      use Ada.Strings.Unbounded;
+      String1 : String (1 ..1);
+   begin
+      String1 (1) := aChar;
+
+      return To_Unbounded_String (String1);
+
+   end To_UB_String;
 
 end Support;

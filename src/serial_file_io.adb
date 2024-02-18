@@ -1,4 +1,3 @@
-with Ada.Text_IO; use Ada.Text_IO;
 
 with Configuration;
 with Console;
@@ -71,23 +70,25 @@ package body Serial_File_IO is
    function Process_File (File_Num : Positive) return Unbounded_String is
       use M_Misc;
       Routine_Name : constant String := "Serial_File_IO.Process_File ";
-      File_ID      : File_Type;
+--        File_ID      : File_Type;
       tp           : Unbounded_String;
       aChar        : Character       := ' ';
       Num_Chars    : Natural         := 0;
       Done         : Boolean         := False;
    begin
-      Open (File_ID, In_File, To_String (File_Table (File_Num).Name));
+      Open (File_Table (File_Num).File_ID, In_File,
+            To_String (File_Table (File_Num).Name));
 
       while not Done loop
          Done := Console.Check_Abort;
          if not Done then
             Done :=
               File_Table (File_Num).Com > Max_Com_Ports or
-              End_Of_File (File_ID);
+              End_Of_File (File_Table (File_Num).File_ID);
 
             if not Done then
-               aChar := MMF_Get_Character (File_Num, File_ID);
+               aChar :=
+                 MMF_Get_Character (File_Num, File_Table (File_Num).File_ID);
                if aChar = Character'Val (9) then
                   --  expand tabs to spaces.
                   while Num_Chars <= Configuration.MAXSTRLEN and
@@ -114,7 +115,7 @@ package body Serial_File_IO is
          end if;
       end loop;
 
-      Close (File_ID);
+      Close (File_Table (File_Num).File_ID);
 
       return tp;
 

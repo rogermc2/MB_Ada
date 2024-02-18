@@ -360,7 +360,7 @@ package body Command_And_Token_Functions is
          Index := Index + 1;
          Found := Token = To_String (Command_Table (Index).Name);
          if Found then
-            Value := M_Misc.C_Base_Token + Index - 1;
+            Value :=Integer ( M_Misc.C_Base_Token) + Index - 1;
          end if;
       end loop;
 
@@ -385,7 +385,7 @@ package body Command_And_Token_Functions is
          if Found then
             --              Put_Line (Routine_Name & "token found, index: " &
             --                          Integer'Image (Index));
-            Value := M_Misc.C_Base_Token + Index - 1;
+            Value := Integer (M_Misc.C_Base_Token) + Index - 1;
          end if;
       end loop;
 
@@ -422,27 +422,6 @@ package body Command_And_Token_Functions is
       c_IRET := Get_Command_Value ("IReturn");
       c_CFUN := Get_Command_Value ("CFunction");
       c_CSUB := Get_Command_Value ("CSub");
-
---        for index in Function_Types'Range loop
---           Command_Table (index) := Function_Types (index);
---        end loop;
---
---        for index in Command_Types'Range loop
---           Command_Table (Function_Types'Length + index) := Command_Types (index);
---        end loop;
---
---        for index in Operator_Types'Range loop
---           Command_Table
---             (Function_Types'Length + Command_Types'Length + index) :=
---             Operator_Types (index);
---        end loop;
---
---        Command_Table (Command_Table_Size) :=
---          (To_Unbounded_String (""), T_NA, 0, Null);
-
-      for index in Token_Table'Range loop
-         Token_Table (index) := Command_Table (index);
-      end loop;
 
    end Init_Operator_Functions;
 
@@ -572,59 +551,59 @@ package body Command_And_Token_Functions is
 
    end cmdCSUB;
 
-   --  Get_Next_Command returns a pointer to the next command in the program.
-   --  Get_Next_Command contains the logic for stepping over a line number and
-   --  label (if present).
-   --  p is the current place in the program to start the search from.
-   --  CLine is a pointer to a char pointer which points to the start of the
-   --  current line for error reporting (if NULL it will be ignored).
-   --  EOFMsg is the error message to use if the end of the program is reached.
-   procedure Get_Next_Command (Pos, Current_Line : in out Positive;
-                               EOF_Message       : String) is
-      use Flash;
-      use Global;
-      use M_Misc;
-      OK : Boolean := True;
-   begin
-      while OK and then Pos <= C_Base_Token loop
-         --  look for the zero marking the start of an element
-         if Prog_Memory (Pos) /= T_NEWLINE then
-            while Prog_Memory (Pos) /= "0" loop
-               Pos := Pos + 1;
-            end loop;
-            Pos := Pos + 1;
-         end if;
-
-         OK :=  Prog_Memory (Pos) = "0";
-         if not OK then
-            if EOF_Message'Length /= 0 then
-               null;
-            end if;
-
-         else
-            if Prog_Memory (Pos) = T_NEWLINE then
-               if Current_Line > 0 then
-                  Current_Line := Pos;
-               end if;
-               Pos := Pos + 1;
-            end if;
-
-            if Prog_Memory (Pos) = T_LINENBR then
-               Pos := Pos + 3;
-            end if;
-
-            Skip_Spaces (Pos);
-
-            if Prog_Memory (1) = T_LABEL then
-               --  skip over the label
-               Pos := Pos + Integer'Value (To_String (Prog_Memory (2))) + 2;
-               Skip_Spaces (Pos);
-            end if;
-         end if;
-
-      end loop;
-
-   end Get_Next_Command;
+--     --  Get_Next_Command returns a pointer to the next command in the program.
+--     --  Get_Next_Command contains the logic for stepping over a line number and
+--     --  label (if present).
+--     --  p is the current place in the program to start the search from.
+--     --  CLine is a pointer to a char pointer which points to the start of the
+--     --  current line for error reporting (if NULL it will be ignored).
+--     --  EOFMsg is the error message to use if the end of the program is reached.
+--     procedure Get_Next_Command (Pos, Current_Line : in out Positive;
+--                                 EOF_Message       : String) is
+--        use Flash;
+--        use Global;
+--        use M_Misc;
+--        OK : Boolean := True;
+--     begin
+--        while OK and then Pos <= C_Base_Token loop
+--           --  look for the zero marking the start of an element
+--           if Prog_Memory (Pos) /= Integer'Image (T_NEWLINE) then
+--              while Prog_Memory (Pos) /= "0" loop
+--                 Pos := Pos + 1;
+--              end loop;
+--              Pos := Pos + 1;
+--           end if;
+--
+--           OK :=  Prog_Memory (Pos) = "0";
+--           if not OK then
+--              if EOF_Message'Length /= 0 then
+--                 null;
+--              end if;
+--
+--           else
+--              if Prog_Memory (Pos) = Integer'Image (T_NEWLINE) then
+--                 if Current_Line > 0 then
+--                    Current_Line := Pos;
+--                 end if;
+--                 Pos := Pos + 1;
+--              end if;
+--
+--              if Prog_Memory (Pos) = Integer'Image (T_LINENBR) then
+--                 Pos := Pos + 3;
+--              end if;
+--
+--              Skip_Spaces (Pos);
+--
+--              if Prog_Memory (1) = Integer'Image (T_LABEL) then
+--                 --  skip over the label
+--                 Pos := Pos + Integer'Value (To_String (Prog_Memory (2))) + 2;
+--                 Skip_Spaces (Pos);
+--              end if;
+--           end if;
+--
+--        end loop;
+--
+--     end Get_Next_Command;
 
    procedure Skip_Spaces (Pos : in out Positive) is
       use Flash;

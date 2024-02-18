@@ -1,10 +1,8 @@
 
-with Interfaces;
-
 with Ada.Assertions; use Ada.Assertions;
 with Ada.Characters.Handling;
+--  with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Ada.Text_IO; use Ada.Text_IO;
-
 --  with Command_And_Token_Tables; use Command_And_Token_Tables;
 with Console;
 with Flash;
@@ -91,8 +89,9 @@ package body M_Misc is
    end Check_Interrupt;
 
    procedure Crunch_Data (Pos : Positive; aChar : Character) is
+      Routine_Name : constant String := "M_Misc.Crunch_Data ";
    begin
-      null;
+      Put_Line (Routine_Name & "not implemented");
 
    end Crunch_Data;
 

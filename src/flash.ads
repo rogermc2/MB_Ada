@@ -1,34 +1,38 @@
 
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 
+with Commands;
 with Configuration; use Configuration;
+with M_Basic;
 with Draw;
+with Keyboard;
 
 package Flash is
 
    type UB_String_Access is access all Unbounded_String;
    type Pins_Array is array (1 .. 8) of Integer;
 
-   FLASH_PAGE_SIZE : constant Positive := 4096;
-   PROG_FLASH_SIZE : constant Positive := 16 * FLASH_PAGE_SIZE;
+   FLASH_PAGE_SIZE  : constant Positive := 4096;
+   PROG_FLASH_SIZE  : constant Positive := 16 * FLASH_PAGE_SIZE;
    EDIT_BUFFER_SIZE : constant Positive := 46 * FLASH_PAGE_SIZE;
 
    type Prog_Memory_Array is array (1 .. PROG_FLASH_SIZE) of
-     Unbounded_String;
+     aliased Unbounded_String;
 
    Prog_Memory     : Prog_Memory_Array :=
-                       (others => To_Unbounded_String ("ff"));
+     (others => To_Unbounded_String ("ff"));
+   Prog_Memory_Ptr : M_Basic.Program_Ptr;
 
    type Option_Record is record
       Autorun              : Boolean := False;
       Tab                  : Natural := 2;
-      Invert               : Boolean := False;
-      List_Case            : Boolean := False;
+      Invert               : Natural := 0;
+      List_Case            : Commands.Config_Cases;
       Height               : Positive := SCREENHEIGHT;
       Width                : Positive := SCREENWIDTH;
       PIN                  : Integer := 0;
       Baud_Rate            : Integer := CONSOLE_BAUDRATE;
-      Colour_Code          : Integer := 0;
+      Colour_Code          : Boolean := False;
       Display_Type         : Integer := 0;
       Display_Orientation  : Integer := 0;
       Touch_CS             : Natural := 0;
@@ -49,7 +53,8 @@ package Flash is
       DISPLAY_BL           : Natural := 0;
       DISPLAY_CONSOLE      : Boolean := False;
       Default_Font         : Natural := 1;
-      Keyboard_Config      : Natural := 0;
+      Keyboard_Config      : Keyboard.Keyboard_Configuration :=
+                               Keyboard.NO_KEYBOARD;
       Program_Flash_Size   : Positive := PROG_FLASH_SIZE;
       --  general use storage for CFunctions written by PeterM
       Pins                 : Pins_Array := (others => 0);
@@ -68,9 +73,12 @@ package Flash is
 
    C_Function_Flash   : UB_String_Access := Null;
    C_Function_Library : UB_String_Access := Null;
-   Option : Option_Record;
+   Option             : Option_Record;
 
    procedure Clear_Saved_Variables;
    procedure Load_Options;
+   procedure Reset_All_Options;
+   procedure Save_Options;
+   function Save_Options return Boolean;
 
 end Flash;

@@ -71,8 +71,8 @@ package Command_And_Token_Functions is
    function cmdCFUN return String;
    function cmdCSUB return String;
 
-   procedure Get_Next_Command (Pos, Current_Line : in out Positive;
-                               EOF_Message       : String);
+--     procedure Get_Next_Command (Pos, Current_Line : in out Positive;
+--                                 EOF_Message       : String);
    procedure Skip_Spaces (Pos : in out Positive);
 
 end Command_And_Token_Functions;

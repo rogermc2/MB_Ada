@@ -13,4 +13,22 @@ package body Flash is
 
    end Load_Options;
 
+   procedure Reset_All_Options is
+   begin
+      null;
+
+   end Reset_All_Options;
+
+   procedure Save_Options is
+   begin
+      null;
+
+   end Save_Options;
+
+   function Save_Options return Boolean is
+   begin
+      return True;
+
+   end Save_Options;
+
 end Flash;

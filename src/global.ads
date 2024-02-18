@@ -1,31 +1,44 @@
 
 with Interfaces; use Interfaces;
---  with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 
+with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
+
+with Command_And_Token_Tables; use Command_And_Token_Tables;
 with Configuration;
 with Exceptions;
 
 package Global is
 
-   F_Return : Float := 0.0;
-   E_Float  : Float := 0.0;
+   F_Arg_1           : Float := 0.0;
+   F_Arg_2           : Float := 0.0;
+   F_Return          : Float := 0.0;
+   I_Arg_1           : Integer := 0;
+   I_Arg_2           : Integer := 0;
+   I_Return          : Integer := 0;
+   E_Float           : Float := 0.0;
+   E_Integer         : Integer := 0;
+   S_Arg_1           : Unbounded_String;
+   S_Arg_2           : Unbounded_String;
+   S_Return          : Unbounded_String;
+   Command_Line      : String_Buffer;
+   UB_Return         : Unbounded_String;
 
    --  Flags used in the program lines
    --  end of a command
-   T_CMDEND         : constant String := "0";
+   T_CMDEND         : constant Natural := 0;
    --  Single byte indicating the start of a new line
-   T_NEWLINE        : constant String := "1";
+   T_NEWLINE        : constant Positive := 1;
    --  three bytes for a line number
-   T_LINENBR        : constant String := "2";
+   T_LINENBR        : constant Positive := 2;
    --  variable length indicating a label
-   T_LABEL          : constant String := "3";
+   T_LABEL          : constant Positive := 3;
 
    --  dummy last operator in an expression
-   E_END            : constant String:= "FF";
+   E_END            : constant Positive:= 255;
 
    --  these constants are used in the second argument of the findvar()
    --  function, they should be or"d together
-   V_FIND            : constant Unsigned_16:= 0;
+   V_FIND              : constant Unsigned_16:= 0;
    --  a straight forward find, if the variable is not found
    --  it is created and set to zero
    --  throw an error if not found
@@ -42,7 +55,7 @@ package Global is
    V_FUNCT             : constant Unsigned_16:= 16#4000#;
 
    --  these flags are used in the last argument in expression()
-   E_NOERROR           : Boolean := True;
+   E_NOERROR           : constant Unsigned_16 := 1;
    E_ERROR             : constant Natural:= 0;
    E_DONE_GETVAL       : constant Natural:= 2;
 

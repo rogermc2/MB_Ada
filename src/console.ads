@@ -11,6 +11,7 @@ package Console is
 
    function Check_Abort return Boolean;
    function Get_Console (aChar : out Character) return Boolean;
+   procedure Init_Serial_Console;
    function MM_Get_Character return Character;
 
 end Console;

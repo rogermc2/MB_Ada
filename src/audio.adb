@@ -6,6 +6,11 @@ package body Audio is
       null;
    end Audio_Interrupt;
 
+   procedure Check_Wave_Input is
+   begin
+      null;
+   end Check_Wave_Input;
+
    procedure Close_Audio is
    begin
       null;

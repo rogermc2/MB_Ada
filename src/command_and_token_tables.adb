@@ -10,237 +10,264 @@ package body Command_And_Token_Tables is
 
    In_Buffer : Unbounded_String;
 
+   --  from Commands.h
    Command_Types : array (1 .. Num_Commands) of Command_Table_Item :=
-                     ((To_Unbounded_String ("ACos("),T_FUN or T_NBR,
-                      0, fun_acos),
-                      (To_Unbounded_String ("Abs("), T_FUN or T_NBR or T_INT,
-                       0, fun_abs),
-                      (To_Unbounded_String ("Asc("), T_FUN or T_INT,
-                       0, fun_asc),
-                      (To_Unbounded_String ("ASin("), T_FUN or T_NBR,
-                       0, fun_asin),
-                      (To_Unbounded_String ("Atn("), T_FUN or T_NBR,
-                       0, fun_atn),
-                      (To_Unbounded_String ("Bin$("), T_FUN or T_STR,
-                       0, fun_bin),
-                      (To_Unbounded_String ("Chr$("), T_FUN or T_STR,
-                       0, fun_chr),
-                      (To_Unbounded_String ("Cint("), T_FUN or T_INT,
-                       0, fun_cint),
-                      (To_Unbounded_String ("Cos("), T_FUN or T_NBR,
-                       0, fun_cos),
-                      (To_Unbounded_String ("Deg("), T_FUN or T_NBR,
-                       0, fun_deg),
-                      (To_Unbounded_String ("MM.Errno"), T_FNA or T_INT,
-                       0, fun_errno),
-                      (To_Unbounded_String ("MM.ErrMsg$"), T_FNA or T_STR,
-                       0, fun_errmsg),
-                      (To_Unbounded_String ("Exp("), T_FUN or T_NBR,
-                       0, fun_exp),
-                      (To_Unbounded_String ("Fix("), T_FUN or T_INT,
-                       0, fun_fix),
-                      (To_Unbounded_String ("Hex$("), T_FUN or T_STR,
-                       0, fun_hex),
-                      (To_Unbounded_String ("Inkey$"), T_FNA or T_STR,
-                       0, fun_inkey),
-                      (To_Unbounded_String ("Instr("), T_FUN or T_INT,
-                       0, fun_instr),
-                      (To_Unbounded_String ("Int("), T_FUN or T_INT,
-                       0, fun_int),
-                      (To_Unbounded_String ("LCase$("), T_FUN or T_STR,
-                       0, fun_lcase),
-                      (To_Unbounded_String ("Left$("), T_FUN or T_STR,
-                       0, fun_left),
-                      (To_Unbounded_String ("Len("), T_FUN or T_INT,
-                       0, fun_len),
-                      (To_Unbounded_String ("Log("), T_FUN or T_NBR,
-                       0, fun_log),
-                      (To_Unbounded_String ("Mid$("), T_FUN or T_STR,
-                       0, fun_mid),
-                      (To_Unbounded_String ("MM.Ver"), T_FNA or T_NBR,
-                       0, fun_version),
-                      (To_Unbounded_String ("Oct$("), T_FUN or T_STR,
-                       0, fun_oct),
-                      (To_Unbounded_String ("Pi"), T_FNA or T_NBR, 0, fun_pi ),
-                      (To_Unbounded_String ("Pos"), T_FNA or T_INT, 0, fun_pos),
-                      (To_Unbounded_String ("Rad("), T_FUN or T_NBR,
-                       0, fun_rad),
-                      (To_Unbounded_String ("Right$("), T_FUN or T_STR,
-                       0, fun_right),
-                      (To_Unbounded_String ("Rnd("), T_FUN or T_NBR,
-                       0, fun_rnd),  -- this must come before Rnd without bracket
-                      (To_Unbounded_String ("Rnd"), T_FNA or T_NBR,
-                       0, fun_rnd),   -- this must come after Rnd(
-                      (To_Unbounded_String ("Sgn("), T_FUN or T_INT,
-                       0, fun_sgn),
-                      (To_Unbounded_String ("Sin("), T_FUN or T_NBR,
-                       0, fun_sin),
-                      (To_Unbounded_String ("Space$("), T_FUN or T_NBR,
-                       0, fun_space),
-                      (To_Unbounded_String ("Spc("), T_FUN or T_STR,
-                       0, fun_space),
-                      (To_Unbounded_String ("Sqr("), T_FUN or T_NBR,
-                       0, fun_sqr),
-                      (To_Unbounded_String ("Str$("), T_FUN or T_STR,
-                       0, fun_str),
-                      (To_Unbounded_String ("String$(("), T_FUN or T_STR,
-                       0, fun_string),
-                      (To_Unbounded_String ("Tab("), T_FUN or T_STR,
-                       0, fun_tab),
-                      (To_Unbounded_String ("Tan("), T_FUN or T_NBR,
-                       0, fun_tan),
-                      (To_Unbounded_String ("UCase$("), T_FUN or T_STR,
-                       0, fun_ucase),
-                      (To_Unbounded_String ("Val("), T_FUN or T_NBR or T_INT,
-                       0, fun_val),
-                      (To_Unbounded_String ("Eval("),
-                       T_FUN or T_NBR or T_INT or T_STR, 0, fun_eval),
-                      (To_Unbounded_String ("Max("), T_FUN or T_NBR,
-                       0, fun_max),
-                      (To_Unbounded_String ("Min("), T_FUN or T_NBR,
-                       0, fun_min));
+     ((To_Unbounded_String ("Clear"), T_CMD, 0, cmd_clear),
+      (To_Unbounded_String ("Continue"), T_CMD, 0, cmd_continue),
+      (To_Unbounded_String ("Data"), T_CMD, 0, cmd_null),
+      (To_Unbounded_String ("Dim"), T_CMD, 0, cmd_dim),
+      (To_Unbounded_String ("Do"), T_CMD, 0, cmd_do),
 
+      (To_Unbounded_String ("ElseIf"), T_CMD, 0, cmd_else),
+      (To_Unbounded_String ("Else If"), T_CMD, 0, cmd_else),
+      (To_Unbounded_String ("Case Else"), T_CMD, 0, cmd_case),
+      (To_Unbounded_String ("Else"),  T_CMD, 0, cmd_else),
+
+      (To_Unbounded_String ("Select Case"), T_CMD, 0, cmd_select),
+      (To_Unbounded_String ("End Select"), T_CMD, 0, cmd_null),
+      (To_Unbounded_String ("Case"), T_CMD, 0, cmd_case),
+
+      (To_Unbounded_String ("End Function"), T_CMD, 0, cmd_endfun),
+      (To_Unbounded_String ("End Sub"), T_CMD, 0, cmd_return),
+      (To_Unbounded_String ("EndIf"), T_CMD, 0, cmd_null),
+      (To_Unbounded_String ("End If"), T_CMD, 0, cmd_null),
+      (To_Unbounded_String ("End"), T_CMD, 0, cmd_end),
+
+      (To_Unbounded_String ("Exit For"),T_CMD, 0, cmd_exitfor),
+      (To_Unbounded_String ("Exit Sub"),T_CMD, 0, cmd_return),
+      (To_Unbounded_String ("Exit Function"), T_CMD, 0, cmd_endfun),
+      (To_Unbounded_String ("Exit Do"), T_CMD, 0, cmd_exit),
+      (To_Unbounded_String ("Exit"), T_CMD, 0, cmd_exit),
+
+      (To_Unbounded_String ("Erase"), T_CMD, 0, cmd_erase),
+      (To_Unbounded_String ("Error"), T_CMD, 0, cmd_error),
+      (To_Unbounded_String ("For"),T_CMD, 0, cmd_for),
+      (To_Unbounded_String ("Function"),T_CMD, 0, cmd_subfun),
+      (To_Unbounded_String ("GoSub"), T_CMD, 0, cmd_gosub),
+      (To_Unbounded_String ("GoTo"), T_CMD, 0, cmd_goto),
+      (To_Unbounded_String ("If"), T_CMD, 0, cmd_if ),
+      (To_Unbounded_String ("Line Input"), T_CMD, 0, cmd_lineinput),
+      (To_Unbounded_String ("Input"), T_CMD, 0, cmd_input),
+      (To_Unbounded_String ("Let"), T_CMD, 0, cmd_let),
+      (To_Unbounded_String ("List"),  T_CMD, 0, cmd_list),
+      (To_Unbounded_String ("Local"), T_CMD, 0, cmd_dim),
+      (To_Unbounded_String ("Loop"),  T_CMD, 0, cmd_loop),
+      (To_Unbounded_String ("New"), T_CMD, 0, cmd_new),
+      (To_Unbounded_String ("Next"),  T_CMD, 0, cmd_next),
+      (To_Unbounded_String ("On"), T_CMD, 0, cmd_on),
+      (To_Unbounded_String ("Print"), T_CMD, 0, cmd_print),
+      (To_Unbounded_String ("Randomize"), T_CMD, 0, cmd_randomize),
+      (To_Unbounded_String ("Read"), T_CMD, 0, cmd_read),
+      (To_Unbounded_String ("Rem"), T_CMD, 0, cmd_null),
+      (To_Unbounded_String ("Restore"), T_CMD, 0, cmd_restore),
+      (To_Unbounded_String ("Return"), T_CMD, 0, cmd_return),
+      (To_Unbounded_String ("Run"), T_CMD, 0, cmd_run),
+      (To_Unbounded_String ("Static"), T_CMD, 0, cmd_dim),
+      (To_Unbounded_String ("Sub"), T_CMD, 0, cmd_subfun),
+      (To_Unbounded_String ("TROFF"), T_CMD, 0, cmd_troff),
+      (To_Unbounded_String ("TRON"), T_CMD, 0, cmd_tron),
+      (To_Unbounded_String ("Trace"), T_CMD, 0, cmd_trace),
+      (To_Unbounded_String ("Wend"), T_CMD, 0, cmd_loop),
+      (To_Unbounded_String ("While"), T_CMD, 0, cmd_do),
+      (To_Unbounded_String ("Const"), T_CMD, 0, cmd_const));
+
+   --  from FileIO.h
+   File_IO_Commands : array (1 .. Num_File_IO_Commands) of Command_Table_Item :=
+     ((To_Unbounded_String ("Save"), T_CMD, 0, cmd_save),
+      (To_Unbounded_String ("Load"), T_CMD, 0, cmd_load),
+      (To_Unbounded_String ("MKdir"), T_CMD, 0, cmd_mkdir),
+      (To_Unbounded_String ("Rmdir"), T_CMD, 0, cmd_rmdir),
+      (To_Unbounded_String ("Chdir"), T_CMD, 0, cmd_chdir),
+      (To_Unbounded_String ("Kill"), T_CMD, 0, cmd_kill),
+      (To_Unbounded_String ("Seek"), T_CMD, 0, cmd_seek),
+      (To_Unbounded_String ("Files"), T_CMD, 0, cmd_files),
+      (To_Unbounded_String ("Name"),  T_CMD, 0, cmd_name));
+
+   --     --  from Functions.h
+   Function_Commands     : array (1 .. Num_Function_Commands)
+     of Command_Table_Item :=
+       ((To_Unbounded_String ("ACos("),T_FUN or T_NBR, 0, fun_acos),
+        (To_Unbounded_String ("Abs("), T_FUN or T_NBR or T_INT, 0, fun_abs),
+        (To_Unbounded_String ("Asc("), T_FUN or T_INT, 0, fun_asc),
+        (To_Unbounded_String ("ASin("), T_FUN or T_NBR, 0, fun_asin),
+        (To_Unbounded_String ("Atn("), T_FUN or T_NBR, 0, fun_atn),
+        (To_Unbounded_String ("Bin$("), T_FUN or T_STR, 0, fun_bin),
+        (To_Unbounded_String ("Chr$("), T_FUN or T_STR, 0, fun_chr),
+        (To_Unbounded_String ("Cint("), T_FUN or T_INT, 0, fun_cint),
+        (To_Unbounded_String ("Cos("), T_FUN or T_NBR, 0, fun_cos),
+        (To_Unbounded_String ("Deg("), T_FUN or T_NBR, 0, fun_deg),
+        (To_Unbounded_String ("MM.Errno"), T_FNA or T_INT, 0, fun_errno),
+        (To_Unbounded_String ("MM.ErrMsg$"), T_FNA or T_STR, 0, fun_errmsg),
+        (To_Unbounded_String ("Exp("), T_FUN or T_NBR, 0, fun_exp),
+        (To_Unbounded_String ("Fix("), T_FUN or T_INT, 0, fun_fix),
+        (To_Unbounded_String ("Hex$("), T_FUN or T_STR, 0, fun_hex),
+        (To_Unbounded_String ("Inkey$"), T_FNA or T_STR, 0, fun_inkey),
+        (To_Unbounded_String ("Instr("), T_FUN or T_INT, 0, fun_instr),
+        (To_Unbounded_String ("Int("), T_FUN or T_INT, 0, fun_int),
+        (To_Unbounded_String ("LCase$("), T_FUN or T_STR, 0, fun_lcase),
+        (To_Unbounded_String ("Left$("), T_FUN or T_STR, 0, fun_left),
+        (To_Unbounded_String ("Len("), T_FUN or T_INT, 0, fun_len),
+        (To_Unbounded_String ("Log("), T_FUN or T_NBR, 0, fun_log),
+        (To_Unbounded_String ("Mid$("), T_FUN or T_STR,  0, fun_mid),
+        (To_Unbounded_String ("MM.Ver"), T_FNA or T_NBR, 0, fun_version),
+        (To_Unbounded_String ("Oct$("), T_FUN or T_STR, 0, fun_oct),
+        (To_Unbounded_String ("Pi"), T_FNA or T_NBR, 0, fun_pi),
+        (To_Unbounded_String ("Pos"), T_FNA or T_INT, 0, fun_pos),
+        (To_Unbounded_String ("Rad("), T_FUN or T_NBR, 0, fun_rad),
+        (To_Unbounded_String ("Right$("), T_FUN or T_STR, 0, fun_right),
+        (To_Unbounded_String ("Rnd("), T_FUN or T_NBR, 0, fun_rnd),  -- this must come before Rnd without bracket
+        (To_Unbounded_String ("Rnd"), T_FNA or T_NBR, 0, fun_rnd),   -- this must come after Rnd(
+        (To_Unbounded_String ("Sgn("), T_FUN or T_INT, 0, fun_sgn),
+        (To_Unbounded_String ("Sin("), T_FUN or T_NBR, 0, fun_sin),
+        (To_Unbounded_String ("Space$("), T_FUN or T_NBR, 0, fun_space),
+        (To_Unbounded_String ("Spc("), T_FUN or T_STR, 0, fun_space),
+        (To_Unbounded_String ("Sqr("), T_FUN or T_NBR, 0, fun_sqr),
+        (To_Unbounded_String ("Str$("), T_FUN or T_STR, 0, fun_str),
+        (To_Unbounded_String ("String$(("), T_FUN or T_STR, 0, fun_string),
+        (To_Unbounded_String ("Tab("), T_FUN or T_STR, 0, fun_tab),
+        (To_Unbounded_String ("Tan("), T_FUN or T_NBR, 0, fun_tan),
+        (To_Unbounded_String ("UCase$("), T_FUN or T_STR, 0, fun_ucase),
+        (To_Unbounded_String ("Val("), T_FUN or T_NBR or T_INT, 0, fun_val),
+        (To_Unbounded_String ("Eval("), T_FUN or T_NBR or T_INT or T_STR,
+         0, fun_eval),
+        (To_Unbounded_String ("Max("), T_FUN or T_NBR, 0, fun_max),
+        (To_Unbounded_String ("Min("), T_FUN or T_NBR, 0, fun_min));
+
+   --  from Commands.h
    Token_Types   : array (1 .. Num_Tokens) of Command_Table_Item :=
-                     ((To_Unbounded_String ("For"), T_NA, 0, op_invalid),
-                      (To_Unbounded_String ("Else"), T_NA, 0, op_invalid),
-                      (To_Unbounded_String ("GoSub"), T_NA, 0, op_invalid),
-                      (To_Unbounded_String ("GoTo"), T_NA, 0, op_invalid),
-                      (To_Unbounded_String ("Step"), T_NA, 0, op_invalid),
-                      (To_Unbounded_String ("Then"), T_NA, 0, op_invalid),
-                      (To_Unbounded_String ("To"), T_NA, 0, op_invalid),
-                      (To_Unbounded_String ("Until"), T_NA, 0, op_invalid),
-                      (To_Unbounded_String ("While"), T_NA, 0, op_invalid));
+     ((To_Unbounded_String ("For"), T_NA, 0, op_invalid),
+      (To_Unbounded_String ("Else"), T_NA, 0, op_invalid),
+      (To_Unbounded_String ("GoSub"), T_NA, 0, op_invalid),
+      (To_Unbounded_String ("GoTo"), T_NA, 0, op_invalid),
+      (To_Unbounded_String ("Step"), T_NA, 0, op_invalid),
+      (To_Unbounded_String ("Then"), T_NA, 0, op_invalid),
+      (To_Unbounded_String ("To"), T_NA, 0, op_invalid),
+      (To_Unbounded_String ("Until"), T_NA, 0, op_invalid),
+      (To_Unbounded_String ("While"), T_NA, 0, op_invalid),
+      --  from FileIO.h
+      (To_Unbounded_String ("Cwd$"), T_FNA or T_STR, 0, op_invalid),
+      (To_Unbounded_String ("Dir$("), T_FUN or T_STR, 0, op_invalid));
 
+   --  from MM_Misc.h
    Function_Types  : array (1 .. Num_Functions) of Command_Table_Item :=
-                       ((To_Unbounded_String ("fun_abs"), T_NA, 0, Null),
-                        (To_Unbounded_String ("fun_asc"), T_NA, 0, Null),
-                        (To_Unbounded_String ("fun_atn"), T_NA, 0, Null),
-                        (To_Unbounded_String ("fun_bin"), T_NA, 0, Null),
-                        (To_Unbounded_String ("fun_chr"), T_NA, 0, Null),
-                        (To_Unbounded_String ("fun_cint"), T_NA, 0, Null),
-                        (To_Unbounded_String ("fun_cos"), T_NA, 0, Null),
-                        (To_Unbounded_String ("fun_deg"), T_NA, 0, Null),
-                        (To_Unbounded_String ("fun_errno"), T_NA, 0, Null),
-                        (To_Unbounded_String ("fun_errmsg"), T_NA, 0, Null),
-                        (To_Unbounded_String ("fun_exp"), T_NA, 0, Null),
-                        (To_Unbounded_String ("fun_fix"), T_NA, 0, Null),
-                        (To_Unbounded_String ("fun_hex"), T_NA, 0, Null),
-                        (To_Unbounded_String ("fun_inkey"), T_NA, 0, Null),
-                        (To_Unbounded_String ("fun_instr"), T_NA, 0, Null),
-                        (To_Unbounded_String ("fun_int"), T_NA, 0, Null),
-                        (To_Unbounded_String ("fun_lcase"), T_NA, 0, Null),
-                        (To_Unbounded_String ("fun_left"), T_NA, 0, Null),
-                        (To_Unbounded_String ("fun_len"), T_NA, 0, Null),
-                        (To_Unbounded_String ("fun_log"), T_NA, 0, Null),
-                        (To_Unbounded_String ("fun_mid"), T_NA, 0, Null),
-                        (To_Unbounded_String ("fun_oct"), T_NA, 0, Null),
-                        (To_Unbounded_String ("fun_pi"), T_NA, 0, Null),
-                        (To_Unbounded_String ("fun_pos"), T_NA, 0, Null),
-                        (To_Unbounded_String ("fun_rad"), T_NA, 0, Null),
-                        (To_Unbounded_String ("fun_right"), T_NA, 0, Null),
-                        (To_Unbounded_String ("fun_rnd"), T_NA, 0, Null),
-                        (To_Unbounded_String ("fun_sgn"), T_NA, 0, Null),
-                        (To_Unbounded_String ("fun_sin"), T_NA, 0, Null),
-                        (To_Unbounded_String ("fun_space"), T_NA, 0, Null),
-                        (To_Unbounded_String ("fun_sqr"), T_NA, 0, Null),
-                        (To_Unbounded_String ("fun_str"), T_NA, 0, Null),
-                        (To_Unbounded_String ("fun_string"), T_NA, 0, Null),
-                        (To_Unbounded_String ("fun_tab"), T_NA, 0, Null),
-                        (To_Unbounded_String ("fun_tan"), T_NA, 0, Null),
-                        (To_Unbounded_String ("fun_ucase"), T_NA, 0, Null),
-                        (To_Unbounded_String ("fun_val"), T_NA, 0, Null),
-                        (To_Unbounded_String ("fun_eval"), T_NA, 0, Null),
-                        (To_Unbounded_String ("fun_asin"), T_NA, 0, Null),
-                        (To_Unbounded_String ("fun_acos"), T_NA, 0, Null),
-                        (To_Unbounded_String ("fun_max"), T_NA, 0, Null),
-                        (To_Unbounded_String ("fun_min"), T_NA, 0, Null),
-                        (To_Unbounded_String ("AutoSave"), T_CMD,
-                         0, cmd_autosave),
-                        (To_Unbounded_String ("Option"), T_CMD, 0, cmd_option),
-                        (To_Unbounded_String ("Pause"), T_CMD, 0, cmd_pause),
-                        (To_Unbounded_String ("Timer"), T_CMD or T_FUN,
-                         0, cmd_timer),
-                        (To_Unbounded_String ("Date$"), T_CMD or T_FUN,
-                         0, cmd_date),
-                        (To_Unbounded_String ("Time$"), T_CMD or T_FUN,
-                         0, cmd_time),
-                        (To_Unbounded_String ("IRetirn"), T_CMD,
-                         0, cmd_ireturn),
-                        (To_Unbounded_String ("Poke"), T_CMD, 0, cmd_poke),
-                        (To_Unbounded_String ("SetTick"), T_CMD,
-                         0, cmd_settick),
-                        (To_Unbounded_String ("WatchDog"), T_CMD,
-                         0, cmd_watchdog),
-                        (To_Unbounded_String ("CPU"),T_CMD, 0, cmd_cpu),
-                        (To_Unbounded_String ("CFunction"), T_CMD,
-                         0, cmd_cfunction),
-                        (To_Unbounded_String ("End CFunction"), T_CMD,
-                         0, cmd_null),
-                        (To_Unbounded_String ("CSub"),T_CMD, 0, cmd_cfunction),
-                        (To_Unbounded_String ("End CSub"),T_CMD, 0, cmd_null),
-                        (To_Unbounded_String ("DefineFont"), T_CMD,
-                         0, cmd_cfunction),
-                        (To_Unbounded_String ("End DefineFont"), T_CMD,
-                         0, cmd_null),
-                        (To_Unbounded_String ("cmd_clear"), T_NA, 0, Null),
-                        (To_Unbounded_String ("cmd_continue"), T_NA, 0, Null),
-                        (To_Unbounded_String ("cmd_dim"), T_NA, 0, Null),
-                        (To_Unbounded_String ("cmd_do"), T_NA, 0, Null),
-                        (To_Unbounded_String ("cmd_else"), T_NA, 0, Null),
-                        (To_Unbounded_String ("cmd_end"), T_NA, 0, Null),
-                        (To_Unbounded_String ("cmd_endfun"), T_NA, 0, Null),
-                        (To_Unbounded_String ("cmd_endsub"), T_NA, 0, Null),
-                        (To_Unbounded_String ("cmd_erase"), T_NA, 0, Null),
-                        (To_Unbounded_String ("cmd_error"), T_NA, 0, Null),
-                        (To_Unbounded_String ("cmd_exit"), T_NA, 0, Null),
-                        (To_Unbounded_String ("cmd_exitfor"), T_NA, 0, Null),
-                        (To_Unbounded_String ("cmd_for"), T_NA, 0, Null),
-                        (To_Unbounded_String ("cmd_subfun"), T_NA, 0, Null),
-                        (To_Unbounded_String ("cmd_gosub"), T_NA, 0, Null),
-                        (To_Unbounded_String ("cmd_goto"), T_NA, 0, Null),
-                        (To_Unbounded_String ("cmd_if"), T_NA, 0, Null),
-                        (To_Unbounded_String ("cmd_input"), T_NA, 0, Null),
-                        (To_Unbounded_String ("cmd_let"), T_NA, 0, Null),
-                        (To_Unbounded_String ("cmd_lineinput"), T_NA, 0, Null),
-                        (To_Unbounded_String ("cmd_list"), T_NA, 0, Null),
-                        (To_Unbounded_String ("cmd_loop"), T_NA, 0, Null),
-                        (To_Unbounded_String ("cmd_new"), T_NA, 0, Null),
-                        (To_Unbounded_String ("cmd_next"), T_NA, 0, Null),
-                        (To_Unbounded_String ("cmd_null"), T_NA, 0, Null),
-                        (To_Unbounded_String ("cmd_on"), T_NA, 0, Null),
-                        (To_Unbounded_String ("cmd_print"), T_NA, 0, Null),
-                        (To_Unbounded_String ("cmd_randomize"), T_NA, 0, Null),
-                        (To_Unbounded_String ("cmd_read"), T_NA, 0, Null),
-                        (To_Unbounded_String ("cmd_restore"), T_NA, 0, Null),
-                        (To_Unbounded_String ("cmd_return"), T_NA, 0, Null),
-                        (To_Unbounded_String ("cmd_run"), T_NA, 0, Null),
-                        (To_Unbounded_String ("cmd_troff"), T_NA, 0, Null),
-                        (To_Unbounded_String ("cmd_tron"), T_NA, 0, Null),
-                        (To_Unbounded_String ("cmd_trace"), T_NA, 0, Null),
-                        (To_Unbounded_String ("cmd_const"), T_NA, 0, Null),
-                        (To_Unbounded_String ("cmd_select"), T_NA, 0, Null),
-                        (To_Unbounded_String ("cmd_case"), T_NA, 0, Null),
-                        (To_Unbounded_String ("op_invalid"), T_NA, 0, Null),
-                        (To_Unbounded_String ("op_exp"), T_NA, 0, Null),
-                        (To_Unbounded_String ("op_mul"), T_NA, 0, Null),
-                        (To_Unbounded_String ("op_div"), T_NA, 0, Null),
-                        (To_Unbounded_String ("op_divint"), T_NA, 0, Null),
-                        (To_Unbounded_String ("op_add"), T_NA, 0, Null),
-                        (To_Unbounded_String ("op_subtract"), T_NA, 0, Null),
-                        (To_Unbounded_String ("op_mod"), T_NA, 0, Null),
-                        (To_Unbounded_String ("op_ne"), T_NA, 0, Null),
-                        (To_Unbounded_String ("op_gte"), T_NA, 0, Null),
-                        (To_Unbounded_String ("op_lte"), T_NA, 0, Null),
-                        (To_Unbounded_String ("op_lt"), T_NA, 0, Null),
-                        (To_Unbounded_String ("op_gt"), T_NA, 0, Null),
-                        (To_Unbounded_String ("op_equal"), T_NA, 0, Null),
-                        (To_Unbounded_String ("op_and"), T_NA, 0, Null),
-                        (To_Unbounded_String ("op_or"), T_NA, 0, Null),
-                        (To_Unbounded_String ("op_xor"), T_NA, 0, Null),
-                        (To_Unbounded_String ("op_not"), T_NA, 0, Null),
-                        (To_Unbounded_String ("op_shiftleft"), T_NA, 0, Null),
-                        (To_Unbounded_String ("op_shiftright"), T_NA, 0, Null),
-                        (To_Unbounded_String (""), T_NA, 0, Null));
+     ((To_Unbounded_String ("fun_abs"), T_NA, 0, Null),
+      (To_Unbounded_String ("fun_asc"), T_NA, 0, Null),
+      (To_Unbounded_String ("fun_atn"), T_NA, 0, Null),
+      (To_Unbounded_String ("fun_bin"), T_NA, 0, Null),
+      (To_Unbounded_String ("fun_chr"), T_NA, 0, Null),
+      (To_Unbounded_String ("fun_cint"), T_NA, 0, Null),
+      (To_Unbounded_String ("fun_cos"), T_NA, 0, Null),
+      (To_Unbounded_String ("fun_deg"), T_NA, 0, Null),
+      (To_Unbounded_String ("fun_errno"), T_NA, 0, Null),
+      (To_Unbounded_String ("fun_errmsg"), T_NA, 0, Null),
+      (To_Unbounded_String ("fun_exp"), T_NA, 0, Null),
+      (To_Unbounded_String ("fun_fix"), T_NA, 0, Null),
+      (To_Unbounded_String ("fun_hex"), T_NA, 0, Null),
+      (To_Unbounded_String ("fun_inkey"), T_NA, 0, Null),
+      (To_Unbounded_String ("fun_instr"), T_NA, 0, Null),
+      (To_Unbounded_String ("fun_int"), T_NA, 0, Null),
+      (To_Unbounded_String ("fun_lcase"), T_NA, 0, Null),
+      (To_Unbounded_String ("fun_left"), T_NA, 0, Null),
+      (To_Unbounded_String ("fun_len"), T_NA, 0, Null),
+      (To_Unbounded_String ("fun_log"), T_NA, 0, Null),
+      (To_Unbounded_String ("fun_mid"), T_NA, 0, Null),
+      (To_Unbounded_String ("fun_oct"), T_NA, 0, Null),
+      (To_Unbounded_String ("fun_pi"), T_NA, 0, Null),
+      (To_Unbounded_String ("fun_pos"), T_NA, 0, Null),
+      (To_Unbounded_String ("fun_rad"), T_NA, 0, Null),
+      (To_Unbounded_String ("fun_right"), T_NA, 0, Null),
+      (To_Unbounded_String ("fun_rnd"), T_NA, 0, Null),
+      (To_Unbounded_String ("fun_sgn"), T_NA, 0, Null),
+      (To_Unbounded_String ("fun_sin"), T_NA, 0, Null),
+      (To_Unbounded_String ("fun_space"), T_NA, 0, Null),
+      (To_Unbounded_String ("fun_sqr"), T_NA, 0, Null),
+      (To_Unbounded_String ("fun_str"), T_NA, 0, Null),
+      (To_Unbounded_String ("fun_string"), T_NA, 0, Null),
+      (To_Unbounded_String ("fun_tab"), T_NA, 0, Null),
+      (To_Unbounded_String ("fun_tan"), T_NA, 0, Null),
+      (To_Unbounded_String ("fun_ucase"), T_NA, 0, Null),
+      (To_Unbounded_String ("fun_val"), T_NA, 0, Null),
+      (To_Unbounded_String ("fun_eval"), T_NA, 0, Null),
+      (To_Unbounded_String ("fun_asin"), T_NA, 0, Null),
+      (To_Unbounded_String ("fun_acos"), T_NA, 0, Null),
+      (To_Unbounded_String ("fun_max"), T_NA, 0, Null),
+      (To_Unbounded_String ("fun_min"), T_NA, 0, Null),
+      (To_Unbounded_String ("AutoSave"), T_CMD, 0, cmd_autosave),
+      (To_Unbounded_String ("Option"), T_CMD, 0, cmd_option),
+      (To_Unbounded_String ("Pause"), T_CMD, 0, cmd_pause),
+      (To_Unbounded_String ("Timer"), T_CMD or T_FUN, 0, cmd_timer),
+      (To_Unbounded_String ("Date$"), T_CMD or T_FUN, 0, cmd_date),
+      (To_Unbounded_String ("Time$"), T_CMD or T_FUN, 0, cmd_time),
+      (To_Unbounded_String ("IRetirn"), T_CMD, 0, cmd_ireturn),
+      (To_Unbounded_String ("Poke"), T_CMD, 0, cmd_poke),
+      (To_Unbounded_String ("SetTick"), T_CMD, 0, cmd_settick),
+      (To_Unbounded_String ("WatchDog"), T_CMD, 0, cmd_watchdog),
+      (To_Unbounded_String ("CPU"),T_CMD, 0, cmd_cpu),
+      (To_Unbounded_String ("CFunction"), T_CMD, 0, cmd_cfunction),
+      (To_Unbounded_String ("End CFunction"), T_CMD, 0, cmd_null),
+      (To_Unbounded_String ("CSub"),T_CMD, 0, cmd_cfunction),
+      (To_Unbounded_String ("End CSub"), T_CMD, 0, cmd_null),
+      (To_Unbounded_String ("DefineFont"), T_CMD, 0, cmd_cfunction),
+      (To_Unbounded_String ("End DefineFont"), T_CMD, 0, cmd_null),
+      (To_Unbounded_String ("cmd_clear"), T_NA, 0, Null),
+      (To_Unbounded_String ("cmd_continue"), T_NA, 0, Null),
+      (To_Unbounded_String ("cmd_dim"), T_NA, 0, Null),
+      (To_Unbounded_String ("cmd_do"), T_NA, 0, Null),
+      (To_Unbounded_String ("cmd_else"), T_NA, 0, Null),
+      (To_Unbounded_String ("cmd_end"), T_NA, 0, Null),
+      (To_Unbounded_String ("cmd_endfun"), T_NA, 0, Null),
+      (To_Unbounded_String ("cmd_endsub"), T_NA, 0, Null),
+      (To_Unbounded_String ("cmd_erase"), T_NA, 0, Null),
+      (To_Unbounded_String ("cmd_error"), T_NA, 0, Null),
+      (To_Unbounded_String ("cmd_exit"), T_NA, 0, Null),
+      (To_Unbounded_String ("cmd_exitfor"), T_NA, 0, Null),
+      (To_Unbounded_String ("cmd_for"), T_NA, 0, Null),
+      (To_Unbounded_String ("cmd_subfun"), T_NA, 0, Null),
+      (To_Unbounded_String ("cmd_gosub"), T_NA, 0, Null),
+      (To_Unbounded_String ("cmd_goto"), T_NA, 0, Null),
+      (To_Unbounded_String ("cmd_if"), T_NA, 0, Null),
+      (To_Unbounded_String ("cmd_input"), T_NA, 0, Null),
+      (To_Unbounded_String ("cmd_let"), T_NA, 0, Null),
+      (To_Unbounded_String ("cmd_lineinput"), T_NA, 0, Null),
+      (To_Unbounded_String ("cmd_list"), T_NA, 0, Null),
+      (To_Unbounded_String ("cmd_loop"), T_NA, 0, Null),
+      (To_Unbounded_String ("cmd_new"), T_NA, 0, Null),
+      (To_Unbounded_String ("cmd_next"), T_NA, 0, Null),
+      (To_Unbounded_String ("cmd_null"), T_NA, 0, Null),
+      (To_Unbounded_String ("cmd_on"), T_NA, 0, Null),
+      (To_Unbounded_String ("cmd_print"), T_NA, 0, Null),
+      (To_Unbounded_String ("cmd_randomize"), T_NA, 0, Null),
+      (To_Unbounded_String ("cmd_read"), T_NA, 0, Null),
+      (To_Unbounded_String ("cmd_restore"), T_NA, 0, Null),
+      (To_Unbounded_String ("cmd_return"), T_NA, 0, Null),
+      (To_Unbounded_String ("cmd_run"), T_NA, 0, Null),
+      (To_Unbounded_String ("cmd_troff"), T_NA, 0, Null),
+      (To_Unbounded_String ("cmd_tron"), T_NA, 0, Null),
+      (To_Unbounded_String ("cmd_trace"), T_NA, 0, Null),
+      (To_Unbounded_String ("cmd_const"), T_NA, 0, Null),
+      (To_Unbounded_String ("cmd_select"), T_NA, 0, Null),
+      (To_Unbounded_String ("cmd_case"), T_NA, 0, Null),
+      (To_Unbounded_String ("op_invalid"), T_NA, 0, Null),
+      (To_Unbounded_String ("op_exp"), T_NA, 0, Null),
+      (To_Unbounded_String ("op_mul"), T_NA, 0, Null),
+      (To_Unbounded_String ("op_div"), T_NA, 0, Null),
+      (To_Unbounded_String ("op_divint"), T_NA, 0, Null),
+      (To_Unbounded_String ("op_add"), T_NA, 0, Null),
+      (To_Unbounded_String ("op_subtract"), T_NA, 0, Null),
+      (To_Unbounded_String ("op_mod"), T_NA, 0, Null),
+      (To_Unbounded_String ("op_ne"), T_NA, 0, Null),
+      (To_Unbounded_String ("op_gte"), T_NA, 0, Null),
+      (To_Unbounded_String ("op_lte"), T_NA, 0, Null),
+      (To_Unbounded_String ("op_lt"), T_NA, 0, Null),
+      (To_Unbounded_String ("op_gt"), T_NA, 0, Null),
+      (To_Unbounded_String ("op_equal"), T_NA, 0, Null),
+      (To_Unbounded_String ("op_and"), T_NA, 0, Null),
+      (To_Unbounded_String ("op_or"), T_NA, 0, Null),
+      (To_Unbounded_String ("op_xor"), T_NA, 0, Null),
+      (To_Unbounded_String ("op_not"), T_NA, 0, Null),
+      (To_Unbounded_String ("op_shiftleft"), T_NA, 0, Null),
+      (To_Unbounded_String ("op_shiftright"), T_NA, 0, Null));
+   --                          (To_Unbounded_String (""), T_NA, 0, Null));
 
    function Get_Input_Buffer return String is
    begin
@@ -269,8 +296,6 @@ package body Command_And_Token_Tables is
    procedure Load_Input_Buffer (File_Num : Natural) is
    begin
       Serial_File_IO.MM_Get_Line (File_Num, In_Buffer);
-      Put_Line ("Command_And_Token_Tables.Load_Input_Buffer In_Buffer: " &
-                  To_String (In_Buffer));
 
    end Load_Input_Buffer;
 
@@ -291,8 +316,8 @@ package body Command_And_Token_Tables is
    function Token_Type (Index : Integer) return Function_Type is
       T_Type : Function_Type := T_NA;
    begin
-      if Index < Token_Table'Length + C_Base_Token and then
-        Index >= C_Base_Token then
+      if Index < Token_Table'Length + Integer (C_Base_Token) and then
+        Index >= Integer (C_Base_Token) then
          T_Type := Token_Table (Index).Command_Type;
       end if;
 
@@ -306,21 +331,69 @@ package body Command_And_Token_Tables is
 
    end Trim_Input_Buffer;
 
+   function Type_Mask (Val : Unbounded_String) return Function_Type is
+      Val_16 : constant Unsigned_16 := Unsigned_16'Value (To_String (Val));
+   begin
+      return Val_16 and (T_NBR or T_INT or T_STR);
+
+   end Type_Mask;
+
+   function Type_Mask (Val : Function_Type) return Function_Type is
+   begin
+      return Val and (T_NBR or T_INT or T_STR);
+
+   end Type_Mask;
+
 begin
-   for index in 1 .. Num_Functions loop
+   for index in 1 .. Num_Functions loop         --  117
       Command_Table (index) := Function_Types (index);
    end loop;
 
-   for index in 1 .. Num_Commands loop
+   for index in 1 .. Num_Commands loop           --  53   170
       Command_Table (Num_Functions + index) := Command_Types (index);
    end loop;
 
-   for index in 1 ..Num_Operators loop
+   for index in 1 .. Num_Function_Commands loop  --  45   215
       Command_Table (Num_Functions + Num_Commands + index) :=
+        Function_Commands (index);
+   end loop;
+
+   for index in 1 .. Num_File_IO_Commands loop    --  9   224
+      Command_Table
+        (Num_Functions+ Num_Commands + Num_Function_Commands + index) :=
+        File_IO_Commands (index);
+   end loop;
+
+   for index in 1 ..Num_Operators loop           --  19   243
+      Command_Table
+        (Num_Functions + Num_Commands + Num_Function_Commands +
+           Num_File_IO_Commands + index) := Operators.Operator_Types (index);
+   end loop;
+
+   Command_Table (Command_Table_Size) :=          --  1   244
+     (To_Unbounded_String (""), T_NA, 0, Null);
+   Put_Line ("Command_Table_Size: " & Integer'Image (Command_Table_Size));
+
+   for index in 1 .. Num_Functions loop            --  117  117
+      Token_Table (index) := Function_Types (index);
+   end loop;
+
+   for index in 1 .. Num_Function_Commands loop    --  45   162
+      Token_Table (Num_Functions + index) := Function_Commands (index);
+   end loop;
+
+   for index in 1 ..Num_Operators loop              --  19   181
+      Token_Table (Num_Functions + Num_Function_Commands + index) :=
         Operators.Operator_Types (index);
    end loop;
 
-   Command_Table (Command_Table_Size) :=
+   for index in 1 ..Num_Tokens loop                  -- 11   192
+      Token_Table (Num_Functions + Num_Function_Commands +
+                     Num_Operators + index) :=
+          Token_Types (index);
+   end loop;
+
+   Token_Table (Token_Table_Size) :=                 --  1   193
      (To_Unbounded_String (""), T_NA, 0, Null);
 
 end  Command_And_Token_Tables;

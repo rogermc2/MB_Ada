@@ -1,9 +1,7 @@
 
 package IO_Support is
 
-   --     subtype String1 is String (1 .. 1);
    subtype String3 is String (1 .. 3);
-   --     subtype String4 is String (1 .. 4);
    subtype String5 is String (1 .. 5);
 
    Esc_Char   : constant Character := Character'Val (27);
