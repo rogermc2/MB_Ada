@@ -60,7 +60,7 @@ package body Fat_File is
         (Load_Word (FS.Win, BS_JmpBoot) = Word (16#EB#) and then
              (Load_Word (FS.Win, BS_JmpBoot + 2) = Word (16#90#))) then
          if (Load_DWord (FS.Win, BS_FilSysType) and DWord (16#FFFFFF#)) =
-           DWord (16#544146#) then
+           DWord (16#544146#) then  --  "TAF"
             --  Check FAT string
             Result := Check_FAT;
          elsif
