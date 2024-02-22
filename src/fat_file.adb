@@ -44,7 +44,7 @@ package body Fat_File is
       FA_Size     : Long_Integer; Total_Sect : Long_Integer)
       return F_Result;
 
-   --  ff.c 3062
+   --  ff.c 3066
    function Check_File_System (FS : in out Fat_FS; Sect : in out Long_Integer)
                                return FS_Format_Check is
       use Interfaces;
@@ -86,13 +86,13 @@ package body Fat_File is
       BR           : array (1 .. 4) of Long_Integer := (others => 0);
       BR_Index     : Positive;
    begin
-      --  ff.c 3077
+      --  ff.c 3164
       Format_Check := Check_File_System (FS, B_Sect);
       if Format_Check = Check_Not_FAT or else
         (FS_Format_Check'Enum_Rep (Format_Check) < 2 and then
          LD2PD (Vol_ID) /= 0) then
          --  Not a FAT-VBR or forced partition number
-         --  ff.c 3080
+         --  ff.c 3167
          for idx in 0 .. 3 loop
             --  Get partition offset
             Part_Ptr := Long_Integer (MBR_Table + idx * SZ_PTE);
@@ -117,7 +117,7 @@ package body Fat_File is
                  FS_Format_Check'Enum_Rep (Format_Check) >= 2 and then
                  BR_Index < 5;
             end loop;
-         end loop;
+         end loop;  --  ff.c 3182
       end if;
 
       return Format_Check;
@@ -181,7 +181,7 @@ package body Fat_File is
       Status       : Disk_IO.D_Status;
       Result       : F_Result;
    begin
-      --  ff.c 3025
+      --  ff.c 3115
       if Vol_ID < 0 then
          Result := FR_INVALID_DRIVE;
       else --  Vol_ID >= 0
@@ -194,11 +194,11 @@ package body Fat_File is
               Status = STA_PROTECT then
                Result := FR_WRITE_PROTECTED;
             else
-               --  ff.c 3046
+               --  ff.c 3135
                Result := FR_OK;
             end if;
          else
-            --  ff.c 3053
+            --  ff.c 3142
             FS.FS_Type := FS_FAT_Unknown;
             FS.Drive_Num := LD2PD (Vol_ID);
             Status := MMC_Pic32.Disk_Initialize (FS.Drive_Num);
@@ -208,10 +208,10 @@ package body Fat_File is
               Status = STA_PROTECT then
                Result := FR_WRITE_PROTECTED;
             else
-               --  ff.c 3073
+               --  ff.c 3164
                Format_Check := Check_Non_VBR (FS, Vol_ID, B_Sect);
 
-               --  ff.c 3089
+                --  ff.c 3182
                if Format_Check = Check_Disk_Error then
                   Result := FR_DISK_ERR;
                elsif
@@ -219,7 +219,7 @@ package body Fat_File is
                  FS_Format_Check'Enum_Rep (Check_Not_FAT) then
                   Result := FR_NO_FILESYSTEM;
                   Put_Line ("No FAT volume found");
-                  --  3097 Otherwise, a FAT volume has been found (bsect).
+                  --  3190 Otherwise, a FAT volume has been found (bsect).
                   --  The following code initializes the file system object.
                elsif FS_EXFAT_Support and then Format_Check = Check_EXFAT then
                   if Try_EXFAT (FS, B_Sect, Format, Max_LBA) /= FR_OK then
@@ -418,12 +418,13 @@ package body Fat_File is
       Num_Clusters : Long_Integer;
       Result       : F_Result := FR_OK;
    begin
-      --  ff.c 3099 Check zero filler
+      --  ff.c 3194 Check zero filler
       Idx := BPB_ZeroedEx;
       while Idx < BPB_ZeroedEx + 53 and then FS.Win (Idx) = 0 loop
          Idx := Idx + 1;
       end loop;
 
+      --  ff.c 3195
       if Idx < BPB_ZeroedEx + 53 then
          Result := FR_NO_FILESYSTEM;
 
@@ -438,7 +439,7 @@ package body Fat_File is
          Result := FR_NO_FILESYSTEM;
          Put_Line ("Invalid file  system sector size.");
       else
-         --  ff.c 3112 Set Max_LBA to last LBA + 1 of the volume.
+         --  ff.c 3206 Set Max_LBA to last LBA + 1 of the volume.
          Max_LBA := Long_Integer (Load_QWord (FS.Win, BPB_TotSecEx)) +
            B_Sect;
          if Max_LBA >= 16#100000000# then
@@ -446,7 +447,7 @@ package body Fat_File is
             Put_Line
               ("Invalid file system cannot be processed as a 32 bit LBA.");
          else
-            --  ff.c 3116
+            --  ff.c 3210
             Result := Try_FAT (FS, B_Sect, Num_Clusters,  Max_LBA , Format);
          end if;
       end if;
