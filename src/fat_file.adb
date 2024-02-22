@@ -39,11 +39,12 @@ package body Fat_File is
       Num_Clusters : out Long_Integer; Max_LBA : Long_Integer;
       Format  : in out FS_FAT_Format) return F_Result;
    function Try_FAT_Subtype
-     (FS           : in out Fat_FS; B_Sect : Long_Integer;
-      Num_Reserve  : Long_Integer; Num_Clusters : out Long_Integer;
-      FA_Size      : Long_Integer; Total_Sect : Long_Integer)
+     (FS          : in out Fat_FS; B_Sect : Long_Integer;
+      Num_Reserve : Long_Integer; Num_Clusters : out Long_Integer;
+      FA_Size     : Long_Integer; Total_Sect : Long_Integer)
       return F_Result;
 
+   --  ff.c 3062
    function Check_File_System (FS : in out Fat_FS; Sect : in out Long_Integer)
                                return FS_Format_Check is
       use Interfaces;
@@ -53,11 +54,20 @@ package body Fat_File is
       FS.Win_Sector := Long_Integer (16#FFFFFFFF#);
       if Move_Window (FS, Sect) /= FR_OK then
          Result := Check_Disk_Error;
-         --        elsif Load_Word (FS.Win + BS_55AA) /= 16#AA55# then
       elsif Load_Word (FS.Win, BS_55AA) /= 16#AA55# then
          Result := Check_Not_BS;
-      elsif Load_Word (FS.Win, BS_JmpBoot) = Word (16#E9#) then
-         null;
+      elsif Load_Word (FS.Win, BS_JmpBoot) = Word (16#E9#) or else
+        (Load_Word (FS.Win, BS_JmpBoot) = Word (16#EB#) and then
+             (Load_Word (FS.Win, BS_JmpBoot + 2) = Word (16#90#))) then
+         if (Load_DWord (FS.Win, BS_FilSysType) and DWord (16#FFFFFF#)) =
+           DWord (16#544146#) then
+            --  Check FAT string
+            Result := Check_FAT;
+         elsif
+           (Load_DWord (FS.Win, BS_FilSysType32) = DWord (16#33544146#)) then
+            --  Check FAT string
+            Result := Check_FAT;
+         end if;
       end if;
 
       return Result;
@@ -68,7 +78,7 @@ package body Fat_File is
    --  Supports only generic partitioning rules, FDISK and SFD.
 
    function Check_Non_VBR
-     (FS     : in out Fat_FS; Vol_ID : Integer; B_Sect : in out Long_Integer)
+     (FS : in out Fat_FS; Vol_ID : Integer; B_Sect : in out Long_Integer)
       return FS_Format_Check is
       use Interfaces;
       Format_Check : FS_Format_Check;

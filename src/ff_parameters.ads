@@ -55,7 +55,7 @@ package FF_Parameters is
    BS_BootSig     : constant Integer := 38;  --  Extended boot signature (BYTE)
    BS_VolID       : constant Integer := 39;  --  Volume serial number (DWORD)
    BS_VolLab      : constant Integer := 43;  --  Volume label string (8-byte)
-   BS_FilSysType  : constant Integer := 54;  --  File system type string (8-byte)
+   BS_FilSysType  : constant Long_Integer := 54;  --  File system type string (8-byte)
    BS_BootCode    : constant Integer := 62;  --  Boot code (448-byte)
    BS_55AA        : constant Long_Integer := 510;  --  Signature word (WORD)
 
@@ -73,7 +73,7 @@ package FF_Parameters is
    BS_BootSig32   : constant Integer := 66;  --  FAT32: Extended boot signature (BYTE)
    BS_VolID32     : constant Integer := 67;  --  FAT32: Volume serial number (DWORD)
    BS_VolLab32    : constant Integer := 71;  --  FAT32: Volume label string (8-byte)
-   BS_FilSysType32 : constant Integer := 82;  --  FAT32: File system type string (8-byte)
+   BS_FilSysType32 : constant Long_Integer := 82;  --  FAT32: File system type string (8-byte)
    BS_BootCode32  : constant Integer := 90;  --  FAT32: Boot code (420-byte)
 
    --  exFAT
