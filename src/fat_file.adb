@@ -65,7 +65,7 @@ package body Fat_File is
             Result := Check_FAT;
          elsif
            (Load_DWord (FS.Win, BS_FilSysType32) = DWord (16#33544146#)) then
-            --  Check FAT string
+            --  Check FAT string  16#33544146# = "3TAF"
             Result := Check_FAT;
          end if;
       end if;
@@ -189,11 +189,12 @@ package body Fat_File is
          RFS := FS;
          Mode := Mode and (not F_READ);
          if FS_FAT_Format'Enum_Rep (FS.FS_Type) > 0 then
+            --  FS_FAT nknown
             Status := MMC_Pic32.Disk_Status (FS.Drive_Num);
             if not FS_Read_Only and then Mode /= 0 and then
               Status = STA_PROTECT then
                Result := FR_WRITE_PROTECTED;
-            else
+            else --  FS_FAT_Unknown
                --  ff.c 3135
                Result := FR_OK;
             end if;
