@@ -468,7 +468,7 @@ package body Fat_File is
       FAT_Format  : FS_FAT_Format;
       Result      : F_Result := FR_OK;
    begin
-      --  ff.c 3190
+      --  ff.c 3282
       Sysect := Num_Reserve + FA_Size +
         FS.Root_Dir_Size / Sector_Size (FS) / SZDIRE;
       if Total_Sect < Sysect then
@@ -501,7 +501,7 @@ package body Fat_File is
             if Load_Word (FS.Win, BPB_FSVer32) /= 0 then
                Result := FR_NO_FILESYSTEM;
                Put_Line ("Fat32 version 0.0 is required.");
-            elsif fs.Root_Dir_Size /= 0 then
+            elsif FS.Root_Dir_Size /= 0 then
                Result := FR_NO_FILESYSTEM;
                Put_Line ("Root directory size must be 0.");
             else
