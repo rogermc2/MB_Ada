@@ -569,14 +569,14 @@ package body Fat_File is
       Done   : Boolean := False;
       Result : F_Result := FR_OK;
    begin
-      --  ff.c 3116
+      --  ff.c 3210
       FS.Fat_Size := Load_DWord (FS.Win, BPB_FatSzEx);
       FS.Num_Fats := FS.Win (BPB_NumFATsEx);
       if FS.Num_Fats > 1 then
          Result := FR_NO_FILESYSTEM;
          Put_Line
            ("Invalid file system, more than one FAT.");
-      elsif FS.Win (BPB_SecPerClusEx) / 2 = 0 then
+      elsif Shift_Left (FS.Win (BPB_SecPerClusEx), 1) = 0 then
          Result := FR_NO_FILESYSTEM;
          Put ("Invalid file system, Sectors per cluster must be ");
          Put_Line (" in the range 1 through 32768");
@@ -586,11 +586,11 @@ package body Fat_File is
             Result := FR_NO_FILESYSTEM;
             Put_Line ("Invalid file system, too many clusters. ");
          else
-            --  ff.c 3128
+            --  ff.c 3222
             FS.Num_Fat_Entries := Long_Integer (Num_Clusters + 2);
             FS.Volume_Base := B_Sect;
             FS.Data_Base := B_Sect +
-              Load_DWord (fs.Win, BPB_DataOfsEx);
+              Load_DWord (FS.Win, BPB_DataOfsEx);
             FS.Fat_Base :=
               B_Sect + Load_DWord (fs.Win, BPB_FatOfsEx);
             if Max_LBA < FS.Data_Base +
@@ -598,7 +598,7 @@ package body Fat_File is
                Result := FR_NO_FILESYSTEM;
                Put_Line ("Invalid file system.");
             else
-               --  ff.c 3137
+               --  ff.c 3231
                FS.Dir_Base := Load_DWord (FS.Win, BPB_RootClusEx);
                Sector := Clust2Sec (FS, FS.Dir_Base);
                if Move_Window (FS, Sector) /= FR_OK then
@@ -616,7 +616,7 @@ package body Fat_File is
                      end if;
                   end loop;
 
-                  --  ff.c 3147
+                  --  ff.c 3242
                   if Idx = Sector_Size (FS) then
                      Result := FR_NO_FILESYSTEM;
                      Put_Line ("Invalid file system.");
@@ -643,7 +643,7 @@ package body Fat_File is
       Num_Reserve : Long_Integer;
       Result      : F_Result := FR_OK;
    begin
-      --  ff.c 3159
+      --  ff.c 3252
       if Long_Integer
         (Load_Word (FS.Win, BPB_BytsPerSec)) /=
           Sector_Size (FS) then
@@ -652,7 +652,7 @@ package body Fat_File is
          Put ("BPB_BytsPerSec must be equal to the ");
          Put_Line ("physical sector size");
       else
-         --  ff.c 3160
+         --  ff.c 3255
          FA_Size := Long_Integer
            (Load_Word (FS.Win, BPB_FATSz16));
          if FA_Size = 0 then
@@ -661,14 +661,14 @@ package body Fat_File is
          end if;
 
          FS.Fat_Size := FA_Size;
-         FS.Num_Fats := fs.Win (BPB_NumFATs);
+         FS.Num_Fats := FS.Win (BPB_NumFATs);
          if FS.Num_Fats /= 1 and then
            FS.Num_Fats /= 2 then
             Result := FR_NO_FILESYSTEM;
             Put_Line ("Invalid file system");
             Put_Line ("Number of Fats must be 1 or 2");
          else
-            --  ff.c 3168
+            --  ff.c 3263
             FA_Size := Long_Integer (FS.Num_Fats);
             FS.Cluster_Size := FS.Win (BPB_SecPerClus);
             if FS.Cluster_Size = 0 or else
@@ -677,7 +677,7 @@ package body Fat_File is
                Put_Line ("Invalid file system");
                Put_Line ("Cluster_Size must be a power of 2");
             else
-               --  ff.c 3174
+               --  ff.c 3269
                FS.Root_Dir_Size :=
                  Long_Integer (Load_Word (FS.Win, BPB_RootEntCnt));
                if (FS.Root_Dir_Size) mod Sector_Size (FS) / SZDIRE
@@ -692,7 +692,7 @@ package body Fat_File is
                      Total_Sect := Load_DWord (FS.Win, BPB_TotSec32);
                   end if;
 
-                  --  ff.c 3182
+                  --  ff.c 3277
                   Num_Reserve :=
                     Long_Integer (Load_Word (FS.Win, BPB_RsvdSecCnt));
                   if Num_Reserve = 0 then
@@ -700,7 +700,7 @@ package body Fat_File is
                      Put_Line ("Invalid file system");
                      Put_Line ("Num_Reserve is zero.");
                   else
-                     --  ff.c 3190
+                     --  ff.c 3282
                      Result := Try_FAT_Subtype
                        (FS, B_Sect, Num_Reserve, Num_Clusters, FA_Size,
                         Total_Sect);
