@@ -4,7 +4,6 @@ with Interfaces.C;
 
 with Ada.Text_IO; use Ada.Text_IO;
 
-with Command_And_Token_Tables; use Command_And_Token_Tables;
 with Configuration;
 with External;
 with Flash;
@@ -36,7 +35,8 @@ package body MMC_Pic32 is
    CMD55  : constant Byte := 55;  --  APP_CMD
    CMD58  : constant Byte := 58;  --  READ_OCR
 
-   SPI_Speed : Positive;
+   Card_Type   : constant Byte := 0;
+   SPI_Speed   : Positive;
 
    procedure CS_Low;
    procedure Deselect;
@@ -44,8 +44,14 @@ package body MMC_Pic32 is
    function Exchange_SPI (Data_Out : Byte) return Integer;
    pragma Inline (Exchange_SPI);
    procedure F_Clock_Slow;
+   function Receiver_Datablock
+     (Buffer : out Byte_Array; Buffer_Pos : Positive; Num_Bytes : Natural)
+      return Natural;
+   procedure Rcvr_SPI_Multi (Buffer : out Byte_Array; Count : in out Natural);
+   procedure Send_Command (Command : Byte; Arg : DWord);
    function Send_Command (Command : Byte; Arg : DWord) return Byte;
    function Wait_Ready return Boolean;
+   function Xchg_SPI (Data : Byte) return Byte;
 
    function Cmd0_Send return Integer is
       Trys          : Integer := 100;
@@ -148,6 +154,40 @@ package body MMC_Pic32 is
 
    end Disk_Initialize;
 
+   function Disk_Read (Drive_Num : Natural; Buffer : out Byte_Array;
+                       Sector    : in out DWord; Count : in out Natural)
+                       return D_Result is
+      Pos        : Positive := 1;
+      Done       : Boolean := False;
+      Result     : D_Result := Res_Parameter_Invalid;
+   begin
+      if Drive_Num = 0 or Count > 0 then
+         if SD_Card_Stat = STA_NOINIT then
+            Result := Res_Not_Ready;
+         elsif (Card_Type and CT_BLOCK) = 0 then
+            Sector := 512 * Sector;
+            if Count = 1 then
+               --  Read a single block
+               if Send_Command (CMD17, Sector) = 0 and then
+                 Receiver_Datablock (Buffer, Pos, 512) > 0 then
+                  Count := 0;
+               elsif Send_Command (CMD18, Sector) = 0 then
+                  --  Read multiple blocks
+                  while not Done and then Count > 0 loop
+                     Done := Receiver_Datablock (Buffer, Pos, 512) = 0;
+                     Pos := Pos + 512;
+                     Count := Count - 1;
+                  end loop;
+                  Send_Command (CMD12, 0);
+               end if;
+            end if;
+         end if;
+      end if;
+
+      return Result;
+
+   end Disk_Read;
+
    function Disk_Status (Drive_Num : Natural) return D_Status is
    begin
       if Drive_Num = 0 then
@@ -208,6 +248,34 @@ package body MMC_Pic32 is
 
    end MDD_SDSPI_Card_Detect_State;
 
+   function Receiver_Datablock (Buffer    : out Byte_Array; Buffer_Pos : Positive;
+                                Num_Bytes : Natural) return Natural is
+      Token  : Byte := 16#FF#;
+      BTR    : Natural;
+      Result : Natural := 0;
+   begin
+      Timers.Timer1 := 100;
+      while Token = 16#FF# and then Timers.Timer1 > 0 loop
+         Token := Xchg_SPI (16#FF#);
+      end loop;
+
+      if Token = 16#FE# then
+         Rcvr_SPI_Multi (Buffer, BTR);
+         Token := Xchg_SPI (16#FF#);  --  Discard CRC
+         Token := Xchg_SPI (16#FF#);
+         Result := 1;
+      end if;
+
+      return Result;
+
+   end Receiver_Datablock;
+
+   procedure Rcvr_SPI_Multi (Buffer : out Byte_Array;
+                             Count  : in out Natural) is
+   begin
+      null;
+   end Rcvr_SPI_Multi;
+
    function Select_Card return Boolean is
       Result : Boolean := False;
    begin
@@ -220,6 +288,12 @@ package body MMC_Pic32 is
       return Result;
 
    end Select_Card;
+
+   procedure Send_Command (Command : Byte; Arg : DWord) is
+      Result : constant Byte := Send_Command (Command, Arg);
+   begin
+      null;
+   end Send_Command;
 
    function Send_Command (Command : Byte; Arg : DWord) return Byte is
       Cmd      : Byte := Command;
@@ -298,5 +372,18 @@ package body MMC_Pic32 is
       return D = 16#FF#;
 
    end Wait_Ready;
+
+   function Xchg_SPI (Data : Byte) return Byte is
+      use Interfaces.C;
+      use P32mx470f512h;
+   begin
+      SPI2BUF := unsigned (Data);
+      while (SPI2STAT and 16#80#) = 0 loop
+         null;
+      end loop;
+
+      return Byte (SPI2BUF);
+
+   end Xchg_SPI;
 
 end MMC_Pic32;

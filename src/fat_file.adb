@@ -140,7 +140,6 @@ package body Fat_File is
                      return F_Result is
       --        Routine_Name : constant String := "Fat_File.F_Mount ";
       Vol      : constant Integer := Get_Logical_Drive_Num (Path);
---        CFS      : Fat_FS (FS.Win_Size);
       Mode     : Word := 0;
       Result   : F_Result;
    begin
@@ -148,8 +147,6 @@ package body Fat_File is
       if Vol < 0 then
          Result := FR_INVALID_DRIVE;
       else
---           CFS := Fat_File_Sys (Vol);
---           CFS.FS_Type := FS_FAT_Unknown;
          FS.FS_Type := FS_FAT_Unknown;
          Fat_File_Sys (Vol) := FS;
          if Opt = 1 then
@@ -297,6 +294,7 @@ package body Fat_File is
 
    end Get_Logical_Drive_Num;
 
+   --  Get physical drive number
    function LD2PD (Vol : Natural) return Natural is
       use Ada.Assertions;
    begin
