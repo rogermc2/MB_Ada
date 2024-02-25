@@ -512,7 +512,7 @@ package body Fat_File is
             end if;
 
             --  ff.c 3219
-         elsif fs.Root_Dir_Size = 0 then
+         elsif FS.Root_Dir_Size = 0 then
             Result := FR_NO_FILESYSTEM;
             Put_Line
               ("Root directory size must not be 0.");

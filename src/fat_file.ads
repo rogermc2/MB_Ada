@@ -53,7 +53,8 @@ package Fat_File is
       ID                  : Natural := 0;
       Root_Dir_Size       : Long_Integer := 0;  --  n_rootdir
       Cluster_Size        : Byte := 0;
-      Sector_Size         : Long_Integer := 0;
+      --  diskio.h #define GET_SECTOR_SIZE 2, needed when _MAX_SS != _MIN_SS
+      Sector_Size         : Long_Integer := 2;
       Lfn_Buffer          : LFN_Buff;
       Dir_Buffer          : Dir_Buff;
       Last_Cluster        : Long_Integer := 0;
