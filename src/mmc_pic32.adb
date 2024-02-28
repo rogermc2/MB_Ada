@@ -35,7 +35,7 @@ package body MMC_Pic32 is
    CMD55  : constant Byte := 55;  --  APP_CMD
    CMD58  : constant Byte := 58;  --  READ_OCR
 
-   Card_Type   : constant Byte := 0;
+   Card_Type   : Byte := 0;
    SPI_Speed   : Positive;
 
    procedure CS_Low;
@@ -98,9 +98,10 @@ package body MMC_Pic32 is
    end Deselect;
 
    function Disk_Initialize (Drive_Num : Natural) return D_Status is
-      Ty     : Byte := 0;
-      OCR    : array (0 .. 3) of Byte;
-      Status : D_Status;
+      Ty      : Byte := 0;
+      OCR     : array (0 .. 3) of Byte;
+      Command : Byte := 0;
+      Status  : D_Status;
    begin
       --  mmc_pic32.c 397
       if Drive_Num > 0 then
@@ -144,10 +145,33 @@ package body MMC_Pic32 is
                   else
                      Ty := CT_SD2;
                   end if;
-
                end if;
             end if;
+         else
+            if Send_Command (CMD41, 0) <= 1 then
+               Ty := CT_SD1;
+               Command := Byte (ACMD41);
+            else
+               Ty := CT_MMC;
+               Command := CMD1;
+            end if;
+               while Timers.Timer1 /= 0 and then
+                 Send_Command (Command, 0) /= 0 loop
+                  null;
+            end loop;
+            if Timers.Timer1 = 0 or else Send_Command (CMD16, 512) /= 0 then
+               Ty := 0;
+            end if;
          end if;
+      end if;
+
+      Card_Type := Ty;
+      Deselect;
+      if Ty /= 0 then
+         Status :=
+           D_Status'Enum_Val (D_Status'Enum_Rep (SD_Card_Stat) -
+                                  D_Status'Enum_Rep (STA_NOINIT));
+--           FCLK_Fast;
       end if;
 
       return Status;
@@ -198,6 +222,7 @@ package body MMC_Pic32 is
 
    end Disk_Status;
 
+   --  xchg_spi
    procedure Exchange_SPI (Data_Out : Byte) is
       use Interfaces.C;
       use P32mx470f512h;
@@ -212,15 +237,15 @@ package body MMC_Pic32 is
    function Exchange_SPI (Data_Out : Byte) return Integer is
       use Interfaces.C;
       use P32mx470f512h;
-      Cl : Integer;
+      Clr : Integer;
    begin
       SPI2BUF := Unsigned (Data_Out);
       while (SPI2STAT and 16#80#) = 0 loop
          null;
       end loop;
 
-      Cl := Integer (SPI2BUF);
-      return Cl;
+      Clr := Integer (SPI2BUF);
+      return Clr;
 
    end Exchange_SPI;
 
@@ -251,7 +276,7 @@ package body MMC_Pic32 is
    function Receiver_Datablock (Buffer    : out Byte_Array; Buffer_Pos : Positive;
                                 Num_Bytes : Natural) return Natural is
       Token  : Byte := 16#FF#;
-      BTR    : Natural;
+      BTR    : Natural := 0;
       Result : Natural := 0;
    begin
       Timers.Timer1 := 100;
