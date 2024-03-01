@@ -163,8 +163,8 @@ package body Fat_File is
    end F_Mount;
 
    --  Find_Volume finds a logical drive and checks that the volume is mounted.
-   function Find_Volume (Path : String; RFS : in out Fat_FS;
-                         Mode : in out Word) return F_Result is
+   function Find_Volume (Path : String; RFS : out Fat_FS; Mode : in out Word)
+                         return F_Result is
       use Interfaces;
       use Disk_IO;
       Vol_ID       : constant Integer := Get_Logical_Drive_Num (Path);
@@ -195,7 +195,7 @@ package body Fat_File is
                --  ff.c 3135
                Result := FR_OK;
             end if;
-         else
+         else  --  FS.FS_Type = FS_FAT_Unknown
             --  ff.c 3142
             FS.FS_Type := FS_FAT_Unknown;
             FS.Drive_Num := LD2PD (Vol_ID);

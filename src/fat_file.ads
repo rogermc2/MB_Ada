@@ -90,8 +90,7 @@ package Fat_File is
                                return FS_Format_Check;
    function F_Mount (FS : in out Fat_FS; Path : String; Opt : Integer)
                      return F_Result;
-   function Find_Volume (Path : String; RFS : in out Fat_FS;
-                         Mode : in out Word)
+   function Find_Volume (Path : String; RFS : out Fat_FS; Mode : in out Word)
                          return F_Result;
 
 end Fat_File;
