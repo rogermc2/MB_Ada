@@ -50,7 +50,12 @@ package body MMC_Pic32 is
    procedure Rcvr_SPI_Multi (Buffer : out Byte_Array; Count : in out Natural);
    procedure Send_Command (Command : Byte; Arg : DWord);
    function Send_Command (Command : Byte; Arg : DWord) return Byte;
+   function Transmit_Datablock
+     (Buffer : Byte_Array; Buffer_Pos : Positive; Token  : Byte)
+      return Natural;
+   procedure Transmit_SPI_Multi (Buffer : Byte_Array; Count  : in out Natural);
    function Wait_Ready return Boolean;
+   procedure Xchg_SPI (Data : Byte);
    function Xchg_SPI (Data : Byte) return Byte;
 
    function Cmd0_Send return Integer is
@@ -155,9 +160,9 @@ package body MMC_Pic32 is
                Ty := CT_MMC;
                Command := CMD1;
             end if;
-               while Timers.Timer1 /= 0 and then
-                 Send_Command (Command, 0) /= 0 loop
-                  null;
+            while Timers.Timer1 /= 0 and then
+              Send_Command (Command, 0) /= 0 loop
+               null;
             end loop;
             if Timers.Timer1 = 0 or else Send_Command (CMD16, 512) /= 0 then
                Ty := 0;
@@ -171,7 +176,7 @@ package body MMC_Pic32 is
          Status :=
            D_Status'Enum_Val (D_Status'Enum_Rep (SD_Card_Stat) -
                                   D_Status'Enum_Rep (STA_NOINIT));
---           FCLK_Fast;
+         --           FCLK_Fast;
       end if;
 
       return Status;
@@ -221,6 +226,52 @@ package body MMC_Pic32 is
       end if;
 
    end Disk_Status;
+
+   function Disk_Write (Drive_Num : Natural; Buffer : Byte_Array;
+                        Sector    : in out DWord; Count : in out Natural)
+                      return D_Result is
+      Pos    : Positive := 1;
+      Token  : Byte;
+      Done   : Boolean := False;
+      Result : D_Result := Res_Parameter_Invalid;
+   begin
+      if Drive_Num /= 0 or Count > 0 then
+         Result := Res_Parameter_Invalid;
+      elsif SD_Card_Stat = STA_NOINIT then
+         Result := Res_Not_Ready;
+      elsif SD_Card_Stat = STA_PROTECT then
+         Result := Res_Write_Protected;
+      elsif (Card_Type and CT_BLOCK) = 0 then
+         Sector := 512 * Sector;
+         if Count = 1 then
+            --  Write a single block
+            Token := 16#FE#;
+            if Send_Command (CMD24, Sector) = 0 and then
+              Transmit_Datablock (Buffer, 1, Token) > 0 then
+               Count := 0;
+            end if;
+
+         else
+            if (Card_Type and CT_BLOCK) /= 0 then
+               Send_Command (CMD23, DWord (Count));
+            end if;
+
+            if Send_Command (CMD25, Sector) = 0 then
+               --  Write multiple blocks
+               Token := 16#FC#;
+               while not Done and then Count > 0 loop
+                  Done := Transmit_Datablock (Buffer, Pos, Token) = 0;
+                  Pos := Pos + 512;
+                  Count := Count - 1;
+               end loop;
+               Send_Command (CMD12, 0);
+            end if;
+         end if;
+      end if;
+
+      return Result;
+
+   end Disk_Write;
 
    --  xchg_spi
    procedure Exchange_SPI (Data_Out : Byte) is
@@ -382,6 +433,35 @@ package body MMC_Pic32 is
 
    end Send_Command;
 
+   function Transmit_Datablock (Buffer : Byte_Array; Buffer_Pos : Positive;
+                                Token  : Byte) return Natural is
+      BTR      : Natural := 0;
+      Response : Byte := 0;
+      Result   : Natural := 0;
+   begin
+      if Wait_Ready then
+         Xchg_SPI (Token);
+
+         if Token /= 16#FD# then
+            Transmit_SPI_Multi (Buffer, BTR);
+            Xchg_SPI (16#FF#);  --  Dummy CRC
+            Xchg_SPI (16#FF#);
+            Response := Xchg_SPI (16#FF#);
+            if Natural (Response and 16#1F#) = 5 then
+               Result := 1;
+            end if;
+         end if;
+      end if;
+
+      return Result;
+
+   end Transmit_Datablock;
+
+   procedure Transmit_SPI_Multi (Buffer : Byte_Array; Count : in out Natural) is
+   begin
+      null;
+   end Transmit_SPI_Multi;
+
    function Wait_Ready return Boolean is
       use Timers;
       D : Byte;
@@ -397,6 +477,17 @@ package body MMC_Pic32 is
       return D = 16#FF#;
 
    end Wait_Ready;
+
+   procedure Xchg_SPI (Data : Byte) is
+      use Interfaces.C;
+      use P32mx470f512h;
+   begin
+      SPI2BUF := unsigned (Data);
+      while (SPI2STAT and 16#80#) = 0 loop
+         null;
+      end loop;
+
+   end Xchg_SPI;
 
    function Xchg_SPI (Data : Byte) return Byte is
       use Interfaces.C;

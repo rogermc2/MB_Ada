@@ -53,11 +53,11 @@ package Disk_IO is
    function Disk_IO_Control (Drv_Typ : Drive_Type; Command : Integer;
                              Buffer  : in out String) return D_Result;
    function Disk_Read (Drv_Typ : Drive_Type; Buffer : Byte_Array;
-                       Sector  : Long_Integer; Count : Natural)
+                       Sector  : DWord; Count : Natural)
                        return D_Result;
    function Disk_Status (Drv_Typ : Drive_Type) return D_Status;
    function Disk_Write (Drv_Typ : Drive_Type; Buffer : Byte_Array;
-                        Sector  : Long_Integer; Count : Natural)
+                        Sector  : DWord; Count : Natural)
                         return D_Result;
 
 end Disk_IO;

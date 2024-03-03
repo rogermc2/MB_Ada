@@ -51,7 +51,7 @@ package Fat_File is
       Win_Flag            : Boolean := False;
       Fsi_Flag            : Word := 0;
       ID                  : Natural := 0;
-      Root_Dir_Size       : Long_Integer := 0;  --  n_rootdir
+      Root_Dir_Size       : DWord := 0;  --  n_rootdir
       Cluster_Size        : Byte := 0;
       --  diskio.h #define GET_SECTOR_SIZE 2, needed when _MAX_SS != _MIN_SS
       Sector_Size         : Long_Integer := 2;
@@ -65,14 +65,14 @@ package Fat_File is
       Cdc_Size            : Long_Integer := 0;  --  Size of containing directory
       --  Offset in the containing directory (invalid when cdir is 0)
       Cdc_Ofs             : Long_Integer := 0;
-      Num_Fat_Entries     : Long_Integer := 0;
-      Fat_Size            : Long_Integer := 0;
-      Volume_Base         : Long_Integer := 0;
-      Fat_Base            : Long_Integer := 0;
+      Num_Fat_Entries     : DWord := 0;
+      Fat_Size            : DWord := 0;
+      Volume_Base         : DWord := 0;
+      Fat_Base            : DWord := 0;
       Current_Dir_Cluster : Long_Integer := 0;
-      Dir_Base            : Long_Integer := 0;
-      Data_Base           : Long_Integer := 0;
-      Win_Sector          : Long_Integer := Long_Integer (16#FFFFFFFF#);
+      Dir_Base            : DWord := 0;
+      Data_Base           : DWord := 0;
+      Win_Sector          : DWord := DWord (16#FFFFFFFF#);
       Win                 : Byte_Array (1 .. Win_Size);
    end record;
 
@@ -86,7 +86,7 @@ package Fat_File is
                       FA_OPEN_ALWAYS   => Word (16#10#),
                       FA_OPEN_APPEND   => Word (16#30#));
 
-   function Check_File_System (FS : in out Fat_FS; Sect : in out Long_Integer)
+   function Check_File_System (FS : in out Fat_FS; Sect : in out DWord)
                                return FS_Format_Check;
    function F_Mount (FS : in out Fat_FS; Path : String; Opt : Integer)
                      return F_Result;

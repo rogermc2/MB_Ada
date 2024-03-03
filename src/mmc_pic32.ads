@@ -12,5 +12,8 @@ package MMC_Pic32 is
      (Drive_Num : Natural; Buffer : out Byte_Array; Sector : in out DWord;
       Count     : in out Natural) return D_Result;
    function Disk_Status (Drive_Num : Natural) return D_Status;
+   function Disk_Write
+     (Drive_Num : Natural; Buffer : Byte_Array; Sector : in out DWord;
+      Count     : in out Natural) return D_Result;
 
 end MMC_Pic32;
