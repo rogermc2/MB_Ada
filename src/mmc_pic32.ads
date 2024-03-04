@@ -9,11 +9,11 @@ package MMC_Pic32 is
    function Disk_Initialize (Drive_Num : Natural) return D_Status;
    function MDD_SDSPI_Card_Detect_State return Boolean;
    function Disk_Read
-     (Drive_Num : Natural; Buffer : out Unsigned_Buffer; Sector : in out DWord;
+     (Drive_Num : Natural; Buffer : out Byte_Array; Sector : in out DWord;
       Count     : in out Natural) return D_Result;
    function Disk_Status (Drive_Num : Natural) return D_Status;
    function Disk_Write
-     (Drive_Num : Natural; Buffer : Unsigned_Buffer; Sector : in out DWord;
+     (Drive_Num : Natural; Buffer : Byte_Array; Sector : in out DWord;
       Count     : in out Natural) return D_Result;
 
 end MMC_Pic32;

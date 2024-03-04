@@ -12,7 +12,7 @@ package body Fat_File is
 
    Current_Vol   : constant Natural := 0;
    FS_ID         : Natural := 0;
-   Fat_File_Sys  : array (0 .. Num_Volumes - 1) of Fat_FS;
+   Fat_File_Sys  : array (1 .. Num_Volumes) of Fat_FS;
    LFN_Buffer    : LFN_Buff;
    Dir_Buffer    : Dir_Buff;
 

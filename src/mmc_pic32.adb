@@ -45,17 +45,16 @@ package body MMC_Pic32 is
    pragma Inline (Exchange_SPI);
    procedure F_Clock_Slow;
    function Receiver_Datablock
-     (Buffer : out Unsigned_Buffer; Buffer_Pos : Positive; Num_Bytes : Natural)
+     (Buffer : out Byte_Array; Buffer_Pos : Positive; Num_Bytes : Natural)
       return Natural;
-   procedure Rcvr_SPI_Multi (Buffer : out Unsigned_Buffer;
+   procedure Rcvr_SPI_Multi (Buffer : out Byte_Array;
                              Count  : in out Natural);
    procedure Send_Command (Command : Byte; Arg : DWord);
    function Send_Command (Command : Byte; Arg : DWord) return Byte;
    function Transmit_Datablock
-     (Buffer : Unsigned_Buffer; Buffer_Pos : Positive; Token  : Byte)
-      return Natural;
-   procedure Transmit_SPI_Multi (Buffer : Unsigned_Buffer;
-                                 Count  : in out Natural);
+     (Data : Byte_Array; Pos : Long_Integer; Token : Byte) return Natural;
+   procedure Transmit_SPI_Multi (Data  : Byte_Array; Pos : Long_Integer;
+                                 Count : in out Natural);
    function Wait_Ready return Boolean;
    procedure Xchg_SPI (Data : Byte);
    function Xchg_SPI (Data : Byte) return Byte;
@@ -185,7 +184,7 @@ package body MMC_Pic32 is
 
    end Disk_Initialize;
 
-   function Disk_Read (Drive_Num : Natural; Buffer : out Unsigned_Buffer;
+   function Disk_Read (Drive_Num : Natural; Buffer : out Byte_Array;
                        Sector    : in out DWord; Count : in out Natural)
                        return D_Result is
       Pos    : Positive := 1;
@@ -229,11 +228,13 @@ package body MMC_Pic32 is
 
    end Disk_Status;
 
-   function Disk_Write (Drive_Num : Natural; Buffer : Unsigned_Buffer;
+   --  Sector: start sector number
+   --  Count:  Sector count, 1 .. 126
+   function Disk_Write (Drive_Num : Natural; Buffer : Byte_Array;
                         Sector    : in out DWord; Count : in out Natural)
                         return D_Result is
-      Pos    : Positive := 1;
       Token  : Byte;
+      Pos    : Long_Integer := 1;
       Done   : Boolean := False;
       Result : D_Result := Res_Parameter_Invalid;
    begin
@@ -243,13 +244,16 @@ package body MMC_Pic32 is
          Result := Res_Not_Ready;
       elsif SD_Card_Stat = STA_PROTECT then
          Result := Res_Write_Protected;
+
       elsif (Card_Type and CT_BLOCK) = 0 then
+         --  Convert to byte address
          Sector := 512 * Sector;
+
          if Count = 1 then
             --  Write a single block
             Token := 16#FE#;
             if Send_Command (CMD24, Sector) = 0 and then
-              Transmit_Datablock (Buffer, 1, Token) > 0 then
+              Transmit_Datablock (Buffer, Pos,Token) > 0 then
                Count := 0;
             end if;
 
@@ -327,7 +331,7 @@ package body MMC_Pic32 is
    end MDD_SDSPI_Card_Detect_State;
 
    function Receiver_Datablock
-     (Buffer : out Unsigned_Buffer; Buffer_Pos : Positive; Num_Bytes : Natural)
+     (Buffer : out Byte_Array; Buffer_Pos : Positive; Num_Bytes : Natural)
       return Natural is
       Token  : Byte := 16#FF#;
       BTR    : Natural := 0;
@@ -349,11 +353,12 @@ package body MMC_Pic32 is
 
    end Receiver_Datablock;
 
-   procedure Rcvr_SPI_Multi (Buffer : out Unsigned_Buffer;
+   procedure Rcvr_SPI_Multi (Buffer : out Byte_Array;
                              Count  : in out Natural) is
       use Interfaces.C;
       use p32mx470f512h;
       Old_SPI2CON : constant unsigned := SPI2CON;
+      Pos         : Long_Integer := 1;
       index       : Natural := Count;
    begin
       if Count < 16 then
@@ -362,12 +367,15 @@ package body MMC_Pic32 is
             while (SPI2STAT and 16#80#) = 0 loop
                null;
             end loop;
-            Buffer.Append (SPI2BUF);
+
+            Buffer (Pos) := Byte (SPI2BUF);
+            Pos := Pos + 1;
             SPI2BUF := 16#FF#;
             while (SPI2STAT and 16#80#) = 0 loop
                null;
             end loop;
-            Buffer.Append (SPI2BUF);
+            Buffer (Pos) := Byte (SPI2BUF);
+            Pos := Pos + 1;
             Count := Count - 2;
          end loop;
       else
@@ -381,7 +389,8 @@ package body MMC_Pic32 is
          while index > 0 loop
             if (SPI2STAT and 16#20#) = 0 then
                --  Something is in the receiver buffer so read it
-               Buffer.Append (SPI2BUF);
+            Buffer (Pos) := Byte (SPI2BUF);
+            Pos := Pos + 1;
                index := index - 1;
             end if;
 
@@ -479,17 +488,18 @@ package body MMC_Pic32 is
 
    end Send_Command;
 
-   function Transmit_Datablock (Buffer : Unsigned_Buffer; Buffer_Pos : Positive;
+   --  512 data block to be transmitted
+   function Transmit_Datablock (Data : Byte_Array; Pos : Long_Integer;
                                 Token  : Byte) return Natural is
-      BTR      : Natural := 0;
-      Response : Byte := 0;
-      Result   : Natural := 0;
+      Block_Size : Positive := 512;
+      Response   : Byte := 0;
+      Result     : Natural := 0;
    begin
       if Wait_Ready then
          Xchg_SPI (Token);
 
          if Token /= 16#FD# then
-            Transmit_SPI_Multi (Buffer, BTR);
+            Transmit_SPI_Multi (Data, Pos, Block_Size);
             Xchg_SPI (16#FF#);  --  Dummy CRC
             Xchg_SPI (16#FF#);
             Response := Xchg_SPI (16#FF#);
@@ -503,12 +513,12 @@ package body MMC_Pic32 is
 
    end Transmit_Datablock;
 
-   procedure Transmit_SPI_Multi (Buffer : Unsigned_Buffer;
-                                 Count  : in out Natural) is
+   procedure Transmit_SPI_Multi (Data  : Byte_Array; Pos : Long_Integer;
+                                 Count : in out Natural) is
       use Interfaces.C;
       use p32mx470f512h;
       Old_SPI2CON : constant unsigned := SPI2CON;
-      Pos         : Positive := Buffer.First_Index;
+      L_Pos       : Long_Integer := Pos;
       pragma Warnings (Off);
       index       : unsigned := 0;
       pragma Warnings (On);
@@ -517,13 +527,13 @@ package body MMC_Pic32 is
       while Count > 0 loop
          SPI2BUF := 16#FF#;
          while (SPI2STAT and 2) /= 0 loop
-            SPI2BUF := Buffer (Pos);
-            Pos := Pos + 1;
+            SPI2BUF := unsigned (Data (L_Pos));
+            L_Pos := L_Pos + 1;
          end loop;
 
          while (SPI2STAT and 2) /= 0 loop
-            SPI2BUF := Buffer (Pos);
-            Pos := Pos + 1;
+            SPI2BUF := unsigned (Data (L_Pos));
+            L_Pos := L_Pos + 1;
          end loop;
 
          Count := Count - 2;
