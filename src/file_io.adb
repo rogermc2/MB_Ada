@@ -15,11 +15,8 @@ with Fat_File;
 with Flash;
 with MMC_Pic32;
 with Serial_File_IO;
---  with Support;
 
 package body File_IO is
-
-   FS : Fat_File.Fat_FS;
 
    procedure Check_SD_Card is
       use Interfaces;
@@ -113,6 +110,7 @@ package body File_IO is
       use MMC_Pic32;
       use Serial_File_IO;
       Routine_Name : constant String := "File_IO.Init_SD_Card ";
+      FS           : Fat_File.Fat_FS;
       OK           : Boolean := Configuration.Bus_Speed >= 30000000;
    begin
       --  FileIO.c 792

@@ -38,10 +38,12 @@ package Fat_File is
                      FR_TOO_MANY_OPEN_FILES, --  (18) Number of open files > _FS_LOCK
                      FR_INVALID_PARAMETER);  --  (19) Given parameter is invalid
 
-   subtype Win_Range is Long_Integer range 1 .. Long_Integer'Max_Size_In_Storage_Elements;
+   subtype Win_Range is
+     Long_Integer range 1 .. Long_Integer'Max_Size_In_Storage_Elements;
 
    type LFN_Buff is array (0 .. Max_Long_FileName + 1) of Word;
-   type Dir_Buff is array (0 .. Max_Dir_Buff (Max_Long_FileName, SZDIRE)) of Byte;
+   type Dir_Buff is array (0 .. Max_Dir_Buff (Max_Long_FileName, SZDIRE))
+     of Byte;
 
    type Fat_FS (Win_Size : Win_Range := 1) is record
       FS_Type             : FS_FAT_Format := FS_FAT_Unknown;
@@ -90,7 +92,7 @@ package Fat_File is
                                return FS_Format_Check;
    function F_Mount (FS : in out Fat_FS; Path : String; Opt : Integer)
                      return F_Result;
-   function Find_Volume (Path : String; RFS : out Fat_FS; Mode : in out Word)
+   function Find_Volume (Path : String; FS : out Fat_FS; Mode : in out Word)
                          return F_Result;
 
 end Fat_File;

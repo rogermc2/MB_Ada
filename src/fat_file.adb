@@ -31,14 +31,14 @@ package body Fat_File is
    function Sector_Size (FS : Fat_FS) return DWord;
    function Sync_Window (FS : in out Fat_FS) return F_Result;
    function Try_EXFAT
-     (FS      : in out Fat_FS; B_Sect : DWord; Format : in out FS_FAT_Format;
+     (FS      : in out Fat_FS; Boot_Sect : DWord; Format : in out FS_FAT_Format;
       Max_LBA : out QWord) return F_Result;
    function Try_FAT
-     (FS           : in out Fat_FS; B_Sect : DWord;
+     (FS           : in out Fat_FS; Boot_Sect : DWord;
       Num_Clusters : out DWord; Max_LBA : QWord;
       Format  : in out FS_FAT_Format) return F_Result;
    function Try_FAT_Subtype
-     (FS          : in out Fat_FS; B_Sect : DWord;
+     (FS          : in out Fat_FS; Boot_Sect : DWord;
       Num_Reserve : DWord; Num_Clusters : out DWord;
       FA_Size     : DWord; Total_Sect : DWord)
       return F_Result;
@@ -77,7 +77,7 @@ package body Fat_File is
    --  Supports only generic partitioning rules, FDISK and SFD.
 
    function Check_Non_VBR
-     (FS : in out Fat_FS; Vol_ID : Integer; B_Sect : in out DWord)
+     (FS : in out Fat_FS; Vol_ID : Integer; Boot_Sect : in out DWord)
       return FS_Format_Check is
       use Interfaces;
       Format_Check : FS_Format_Check;
@@ -86,7 +86,7 @@ package body Fat_File is
       BR_Index     : Positive;
    begin
       --  ff.c 3164
-      Format_Check := Check_File_System (FS, B_Sect);
+      Format_Check := Check_File_System (FS, Boot_Sect);
       if Format_Check = Check_Not_FAT or else
         (FS_Format_Check'Enum_Rep (Format_Check) < 2 and then
          LD2PD (Vol_ID) /= 0) then
@@ -152,6 +152,7 @@ package body Fat_File is
          if Opt = 1 then
             --  Force mount the volume
             Result := Find_Volume (Path, FS, Mode);
+            Fat_File_Sys (Vol) := FS;
          else
             --  ff.c 3345 Do not mount now, it will be mounted later
             Result := FR_OK;
@@ -163,14 +164,13 @@ package body Fat_File is
    end F_Mount;
 
    --  Find_Volume finds a logical drive and checks that the volume is mounted.
-   function Find_Volume (Path : String; RFS : out Fat_FS; Mode : in out Word)
+   function Find_Volume (Path : String; FS : out Fat_FS; Mode : in out Word)
                          return F_Result is
       use Interfaces;
       use Disk_IO;
       Vol_ID       : constant Integer := Get_Logical_Drive_Num (Path);
       F_READ       : constant Word := FA_Status'Enum_Rep (FA_READ);
-      FS           : Fat_FS;
-      B_Sect       : DWord := 0;
+      Boot_Sect    : DWord := 0;
       Format       : FS_FAT_Format := FS_FAT_Unknown;
       Format_Check : FS_Format_Check;
       Max_LBA      : QWord := 0;
@@ -183,7 +183,6 @@ package body Fat_File is
          Result := FR_INVALID_DRIVE;
       else --  Vol_ID >= 0
          FS := Fat_File_Sys (Vol_ID);
-         RFS := FS;
          Mode := Mode and (not F_READ);
          if FS_FAT_Format'Enum_Rep (FS.FS_Type) > 0 then
             --  FS_FAT nknown
@@ -207,7 +206,7 @@ package body Fat_File is
                Result := FR_WRITE_PROTECTED;
             else
                --  ff.c 3164
-               Format_Check := Check_Non_VBR (FS, Vol_ID, B_Sect);
+               Format_Check := Check_Non_VBR (FS, Vol_ID, Boot_Sect);
 
                 --  ff.c 3182
                if Format_Check = Check_Disk_Error then
@@ -220,8 +219,8 @@ package body Fat_File is
                   --  3190 Otherwise, a FAT volume has been found (bsect).
                   --  The following code initializes the file system object.
                elsif FS_EXFAT_Support and then Format_Check = Check_EXFAT then
-                  if Try_EXFAT (FS, B_Sect, Format, Max_LBA) /= FR_OK then
-                     Result := Try_Not_EXFAT (FS, B_Sect, Num_Clusters);
+                  if Try_EXFAT (FS, Boot_Sect, Format, Max_LBA) /= FR_OK then
+                     Result := Try_Not_EXFAT (FS, Boot_Sect, Num_Clusters);
                   end if;
                end if;
             end if;
@@ -346,6 +345,7 @@ package body Fat_File is
 
    end Load_Word;
 
+   --  Move_Window loads FS.Win from disk
    function Move_Window (FS : in out Fat_FS; Sector : in out DWord)
                          return F_Result is
       use Interfaces;
@@ -354,6 +354,7 @@ package body Fat_File is
       Result : F_Result := FR_OK;
    begin
       if Sector /= FS.Win_Sector and then not FS_Read_Only then
+         --  Window offset has changed
          Result := Sync_Window (FS);
       end if;
 
@@ -418,7 +419,7 @@ package body Fat_File is
    end Sync_Window;
 
    function Try_EXFAT
-     (FS     : in out Fat_FS; B_Sect : DWord;
+     (FS     : in out Fat_FS; Boot_Sect : DWord;
       Format : in out FS_FAT_Format; Max_LBA : out QWord)
       return F_Result is
       use Interfaces;
@@ -448,14 +449,14 @@ package body Fat_File is
          Put_Line ("Invalid file  system sector size.");
       else
          --  ff.c 3206 Set Max_LBA to last LBA + 1 of the volume.
-         Max_LBA := Load_QWord (FS.Win, BPB_TotSecEx) + QWord (B_Sect);
+         Max_LBA := Load_QWord (FS.Win, BPB_TotSecEx) + QWord (Boot_Sect);
          if Max_LBA >= 16#100000000# then
             Result := FR_NO_FILESYSTEM;
             Put_Line
               ("Invalid file system cannot be processed as a 32 bit LBA.");
          else
             --  ff.c 3210
-            Result := Try_FAT (FS, B_Sect, Num_Clusters, Max_LBA, Format);
+            Result := Try_FAT (FS, Boot_Sect, Num_Clusters, Max_LBA, Format);
          end if;
       end if;
 
@@ -464,7 +465,7 @@ package body Fat_File is
    end Try_EXFAT;
 
    function Try_FAT_Subtype
-     (FS           : in out Fat_FS; B_Sect : DWord; Num_Reserve : DWord;
+     (FS           : in out Fat_FS; Boot_Sect : DWord; Num_Reserve : DWord;
       Num_Clusters : out DWord; FA_Size : DWord; Total_Sect : DWord)
       return F_Result is
       use Interfaces;
@@ -498,9 +499,9 @@ package body Fat_File is
 
          --  ff.c 3204
          FS.Num_Fat_Entries := DWord (Num_Clusters + 2);
-         FS.Volume_Base := B_Sect;
-         FS.Fat_Base := B_Sect + Num_Reserve;
-         FS.Data_Base := B_Sect + Sysect;
+         FS.Volume_Base := Boot_Sect;
+         FS.Fat_Base := Boot_Sect + Num_Reserve;
+         FS.Data_Base := Boot_Sect + Sysect;
          if FAT_Format = FS_FAT32 then
             if Load_Word (FS.Win, BPB_FSVer32) /= 0 then
                Result := FR_NO_FILESYSTEM;
@@ -520,7 +521,7 @@ package body Fat_File is
             Result := FR_NO_FILESYSTEM;
             Put_Line
               ("Root directory size must not be 0.");
-         else
+         else  --  not FS_FAT32
             --  ff.c 3221
             FS.Dir_Base := FS.Fat_Base + FA_Size;
             if FAT_Format = FS_FAT16 then
@@ -563,7 +564,7 @@ package body Fat_File is
    end Try_FAT_Subtype;
 
    function Try_FAT
-     (FS           : in out Fat_FS; B_Sect : DWord;
+     (FS           : in out Fat_FS; Boot_Sect : DWord;
       Num_Clusters : out DWord; Max_LBA : QWord;
       Format  : in out FS_FAT_Format) return F_Result is
       use Interfaces;
@@ -572,10 +573,11 @@ package body Fat_File is
       Done   : Boolean := False;
       Result : F_Result := FR_OK;
    begin
-      --  ff.c 3210
+      --  ff.c 3118
       FS.Fat_Size := Load_DWord (FS.Win, BPB_FatSzEx);
       FS.Num_Fats := FS.Win (BPB_NumFATsEx);
-      if FS.Num_Fats > 1 then
+      if FS.Num_Fats /= 1 then
+         --  Only one FAT supported
          Result := FR_NO_FILESYSTEM;
          Put_Line
            ("Invalid file system, more than one FAT.");
@@ -584,24 +586,25 @@ package body Fat_File is
          Put ("Invalid file system, Sectors per cluster must be ");
          Put_Line (" in the range 1 through 32768");
       else
+         --  ff.c 3128
          Num_Clusters := Load_DWord (FS.Win, BPB_NumClusEx);
          if Num_Clusters > MAX_EXFAT then
             Result := FR_NO_FILESYSTEM;
             Put_Line ("Invalid file system, too many clusters. ");
          else
-            --  ff.c 3222
+            --  ff.c 3131
             FS.Num_Fat_Entries := DWord (Num_Clusters + 2);
-            FS.Volume_Base := B_Sect;
-            FS.Data_Base := B_Sect +
+            FS.Volume_Base := Boot_Sect;
+            FS.Data_Base := Boot_Sect +
               Load_DWord (FS.Win, BPB_DataOfsEx);
             FS.Fat_Base :=
-              B_Sect + Load_DWord (fs.Win, BPB_FatOfsEx);
+              Boot_Sect + Load_DWord (fs.Win, BPB_FatOfsEx);
             if Max_LBA < QWord (FS.Data_Base) +
               QWord (Num_Clusters * DWord (FS.Cluster_Size)) then
                Result := FR_NO_FILESYSTEM;
                Put_Line ("Invalid file system.");
             else
-               --  ff.c 3231
+               --  ff.c 3139
                FS.Dir_Base := Load_DWord (FS.Win, BPB_RootClusEx);
                Sector := Clust2Sec (FS, FS.Dir_Base);
                if Move_Window (FS, Sector) /= FR_OK then
@@ -613,14 +616,13 @@ package body Fat_File is
                   while not Done and then
                     Idx < Long_Integer (Sector_Size (FS)) loop
                      Done := FS.Win (Idx) = 16#81# and then
-                       Load_DWord (FS.Win, Idx + 20) =
-                       Long_Integer (2);
+                       Load_DWord (FS.Win, Idx + 20) = Long_Integer (2);
                      if not Done then
                         Idx := Idx + SZDIRE;
                      end if;
                   end loop;
 
-                  --  ff.c 3242
+                  --  ff.c 3149
                   if Idx = Long_Integer (Sector_Size (FS)) then
                      Result := FR_NO_FILESYSTEM;
                      Put_Line ("Invalid file system.");

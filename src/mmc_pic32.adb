@@ -184,6 +184,8 @@ package body MMC_Pic32 is
 
    end Disk_Initialize;
 
+   --  Sector: Start sector number (LBA)
+   --  Count:  Sector count, 1 .. 128
    function Disk_Read (Drive_Num : Natural; Buffer : out Byte_Array;
                        Sector    : in out DWord; Count : in out Natural)
                        return D_Result is
@@ -195,6 +197,7 @@ package body MMC_Pic32 is
          if SD_Card_Stat = STA_NOINIT then
             Result := Res_Not_Ready;
          elsif (Card_Type and CT_BLOCK) = 0 then
+            --  not block addressing
             Sector := 512 * Sector;
             if Count = 1 then
                --  Read a single block
