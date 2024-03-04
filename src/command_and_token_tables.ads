@@ -3,8 +3,10 @@ with System; use System;
 with System.Address_To_Access_Conversions;
 
 with Interfaces; use Interfaces;
+with Interfaces.C; use Interfaces.C;
 
 with Ada.Containers.Indefinite_Vectors;
+with Ada.Containers.Vectors;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 
 with Command_And_Token_Functions; use Command_And_Token_Functions;
@@ -30,9 +32,13 @@ package Command_And_Token_Tables is
    subtype DWord is Unsigned_32;
    subtype QWord is Unsigned_64;
 
-   type Byte_Array is array (Long_Integer range <>) of Byte;
+   package Unsigned_Buffer_Package is
+     new Ada.Containers.Vectors (Positive, Unsigned);
+   subtype Unsigned_Buffer is Unsigned_Buffer_Package.Vector;
 
    subtype Function_Type is Unsigned_16;
+
+   type Byte_Array is array (Long_Integer range <>) of Byte;
 
    T_NOTYPE  : constant Function_Type := 0;
    T_NBR     : constant Function_Type := 1;

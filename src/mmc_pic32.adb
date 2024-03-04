@@ -45,15 +45,17 @@ package body MMC_Pic32 is
    pragma Inline (Exchange_SPI);
    procedure F_Clock_Slow;
    function Receiver_Datablock
-     (Buffer : out Byte_Array; Buffer_Pos : Positive; Num_Bytes : Natural)
+     (Buffer : out Unsigned_Buffer; Buffer_Pos : Positive; Num_Bytes : Natural)
       return Natural;
-   procedure Rcvr_SPI_Multi (Buffer : out Byte_Array; Count : in out Natural);
+   procedure Rcvr_SPI_Multi (Buffer : out Unsigned_Buffer;
+                             Count  : in out Natural);
    procedure Send_Command (Command : Byte; Arg : DWord);
    function Send_Command (Command : Byte; Arg : DWord) return Byte;
    function Transmit_Datablock
-     (Buffer : Byte_Array; Buffer_Pos : Positive; Token  : Byte)
+     (Buffer : Unsigned_Buffer; Buffer_Pos : Positive; Token  : Byte)
       return Natural;
-   procedure Transmit_SPI_Multi (Buffer : Byte_Array; Count  : in out Natural);
+   procedure Transmit_SPI_Multi (Buffer : Unsigned_Buffer;
+                                 Count  : in out Natural);
    function Wait_Ready return Boolean;
    procedure Xchg_SPI (Data : Byte);
    function Xchg_SPI (Data : Byte) return Byte;
@@ -183,12 +185,12 @@ package body MMC_Pic32 is
 
    end Disk_Initialize;
 
-   function Disk_Read (Drive_Num : Natural; Buffer : out Byte_Array;
+   function Disk_Read (Drive_Num : Natural; Buffer : out Unsigned_Buffer;
                        Sector    : in out DWord; Count : in out Natural)
                        return D_Result is
-      Pos        : Positive := 1;
-      Done       : Boolean := False;
-      Result     : D_Result := Res_Parameter_Invalid;
+      Pos    : Positive := 1;
+      Done   : Boolean := False;
+      Result : D_Result := Res_Parameter_Invalid;
    begin
       if Drive_Num = 0 or Count > 0 then
          if SD_Card_Stat = STA_NOINIT then
@@ -227,9 +229,9 @@ package body MMC_Pic32 is
 
    end Disk_Status;
 
-   function Disk_Write (Drive_Num : Natural; Buffer : Byte_Array;
+   function Disk_Write (Drive_Num : Natural; Buffer : Unsigned_Buffer;
                         Sector    : in out DWord; Count : in out Natural)
-                      return D_Result is
+                        return D_Result is
       Pos    : Positive := 1;
       Token  : Byte;
       Done   : Boolean := False;
@@ -324,8 +326,9 @@ package body MMC_Pic32 is
 
    end MDD_SDSPI_Card_Detect_State;
 
-   function Receiver_Datablock (Buffer    : out Byte_Array; Buffer_Pos : Positive;
-                                Num_Bytes : Natural) return Natural is
+   function Receiver_Datablock
+     (Buffer : out Unsigned_Buffer; Buffer_Pos : Positive; Num_Bytes : Natural)
+      return Natural is
       Token  : Byte := 16#FF#;
       BTR    : Natural := 0;
       Result : Natural := 0;
@@ -346,10 +349,53 @@ package body MMC_Pic32 is
 
    end Receiver_Datablock;
 
-   procedure Rcvr_SPI_Multi (Buffer : out Byte_Array;
+   procedure Rcvr_SPI_Multi (Buffer : out Unsigned_Buffer;
                              Count  : in out Natural) is
+      use Interfaces.C;
+      use p32mx470f512h;
+      Old_SPI2CON : constant unsigned := SPI2CON;
+      index       : Natural := Count;
    begin
-      null;
+      if Count < 16 then
+         while Count > 0 loop
+            SPI2BUF := 16#FF#;
+            while (SPI2STAT and 16#80#) = 0 loop
+               null;
+            end loop;
+            Buffer.Append (SPI2BUF);
+            SPI2BUF := 16#FF#;
+            while (SPI2STAT and 16#80#) = 0 loop
+               null;
+            end loop;
+            Buffer.Append (SPI2BUF);
+            Count := Count - 2;
+         end loop;
+      else
+         SPI2CON := Old_SPI2CON or SPI2CON_ENHBUF_MASK;
+         --  Preload the output buffer
+         for j in 1 .. 10 loop
+            SPI2BUF := 16#FF#;
+            Count := Count - 1;
+         end loop;
+
+         while index > 0 loop
+            if (SPI2STAT and 16#20#) = 0 then
+               --  Something is in the receiver buffer so read it
+               Buffer.Append (SPI2BUF);
+               index := index - 1;
+            end if;
+
+            if (index - Count < 10) and then Count > 0  then
+               --  Top of the output buffer is not too far ahead
+               SPI2BUF := 16#FF#;
+               Count := Count - 1;
+            end if;
+         end loop;
+
+         SPI2CON := Old_SPI2CON;
+
+      end if;
+
    end Rcvr_SPI_Multi;
 
    function Select_Card return Boolean is
@@ -433,7 +479,7 @@ package body MMC_Pic32 is
 
    end Send_Command;
 
-   function Transmit_Datablock (Buffer : Byte_Array; Buffer_Pos : Positive;
+   function Transmit_Datablock (Buffer : Unsigned_Buffer; Buffer_Pos : Positive;
                                 Token  : Byte) return Natural is
       BTR      : Natural := 0;
       Response : Byte := 0;
@@ -457,7 +503,8 @@ package body MMC_Pic32 is
 
    end Transmit_Datablock;
 
-   procedure Transmit_SPI_Multi (Buffer : Byte_Array; Count : in out Natural) is
+   procedure Transmit_SPI_Multi (Buffer : Unsigned_Buffer;
+                                 Count  : in out Natural) is
    begin
       null;
    end Transmit_SPI_Multi;
