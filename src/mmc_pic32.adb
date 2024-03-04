@@ -505,8 +505,49 @@ package body MMC_Pic32 is
 
    procedure Transmit_SPI_Multi (Buffer : Unsigned_Buffer;
                                  Count  : in out Natural) is
+      use Interfaces.C;
+      use p32mx470f512h;
+      Old_SPI2CON : constant unsigned := SPI2CON;
+      Pos         : Positive := Buffer.First_Index;
+      pragma Warnings (Off);
+      index       : unsigned := 0;
+      pragma Warnings (On);
    begin
-      null;
+      SPI2CON := Old_SPI2CON or SPI2CON_ENHBUF_MASK;
+      while Count > 0 loop
+         SPI2BUF := 16#FF#;
+         while (SPI2STAT and 2) /= 0 loop
+            SPI2BUF := Buffer (Pos);
+            Pos := Pos + 1;
+         end loop;
+
+         while (SPI2STAT and 2) /= 0 loop
+            SPI2BUF := Buffer (Pos);
+            Pos := Pos + 1;
+         end loop;
+
+         Count := Count - 2;
+      end loop;
+
+      --  Wait for all writes to complete
+      while (SPI2STAT and 16#80#) = 0 loop
+         index := SPI2BUF;
+      end loop;
+
+      --  Wait for all writes to complete
+      while (SPI2STAT and 16#80#) = 0 loop
+         null;
+      end loop;
+      --  Empty the receive FIFO
+      while (SPI2STAT and 16#20#) /= 0 loop
+         null;
+      end loop;
+
+      --  Clear the overflow flag
+      SPI2STATCLR := 16#40#;
+      --  Revert to enhanced SPI mode
+      SPI2CON := Old_SPI2CON;
+
    end Transmit_SPI_Multi;
 
    function Wait_Ready return Boolean is
