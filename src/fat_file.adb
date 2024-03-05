@@ -73,25 +73,23 @@ package body Fat_File is
 
    end Check_File_System;
 
-   --  	Check_Non_VBR finds a FAT partition on the drive.
+   --  Check_Non_VBR finds a FAT partition on the drive.
    --  Supports only generic partitioning rules, FDISK and SFD.
-
-   function Check_Non_VBR
-     (FS : in out Fat_FS; Vol_ID : Integer; Boot_Sect : in out DWord)
-      return FS_Format_Check is
+   procedure Check_Non_VBR
+     (FS           : in out Fat_FS; Vol_ID : Integer;
+      Format_Check : in out FS_Format_Check) is
       use Interfaces;
-      Format_Check : FS_Format_Check;
+
       Part_Ptr     : Long_Integer := 0;
       BR           : array (1 .. 4) of DWord := (others => 0);
       BR_Index     : Positive;
    begin
-      --  ff.c 3164
-      Format_Check := Check_File_System (FS, Boot_Sect);
+      --  ff.c 3083
       if Format_Check = Check_Not_FAT or else
         (FS_Format_Check'Enum_Rep (Format_Check) < 2 and then
          LD2PD (Vol_ID) /= 0) then
          --  Not a FAT-VBR or forced partition number
-         --  ff.c 3167
+         --  ff.c 3085
          for idx in 0 .. 3 loop
             --  Get partition offset
             Part_Ptr := Long_Integer (MBR_Table + idx * SZ_PTE);
@@ -118,8 +116,6 @@ package body Fat_File is
             end loop;
          end loop;  --  ff.c 3182
       end if;
-
-      return Format_Check;
 
    end Check_Non_VBR;
 
@@ -178,12 +174,13 @@ package body Fat_File is
       Status       : Disk_IO.D_Status;
       Result       : F_Result;
    begin
-      --  ff.c 3115
+      --  ff.c 3034
       if Vol_ID < 0 then
          Result := FR_INVALID_DRIVE;
       else --  Vol_ID >= 0
          FS := Fat_File_Sys (Vol_ID);
          Mode := Mode and (not F_READ);
+         --  ff.c 3049
          if FS_FAT_Format'Enum_Rep (FS.FS_Type) > 0 then
             --  FS_FAT nknown
             Status := MMC_Pic32.Disk_Status (FS.Drive_Num);
@@ -191,11 +188,11 @@ package body Fat_File is
               Status = STA_PROTECT then
                Result := FR_WRITE_PROTECTED;
             else --  FS_FAT_Unknown
-               --  ff.c 3135
+               --  ff.c 3055
                Result := FR_OK;
             end if;
          else  --  FS.FS_Type = FS_FAT_Unknown
-            --  ff.c 3142
+            --  ff.c 3062
             FS.FS_Type := FS_FAT_Unknown;
             FS.Drive_Num := LD2PD (Vol_ID);
             Status := MMC_Pic32.Disk_Initialize (FS.Drive_Num);
@@ -205,8 +202,9 @@ package body Fat_File is
               Status = STA_PROTECT then
                Result := FR_WRITE_PROTECTED;
             else
-               --  ff.c 3164
-               Format_Check := Check_Non_VBR (FS, Vol_ID, Boot_Sect);
+               --  ff.c 3082
+               Format_Check := Check_File_System (FS, Boot_Sect);
+               Check_Non_VBR (FS, Vol_ID, Format_Check);
 
                 --  ff.c 3182
                if Format_Check = Check_Disk_Error then
